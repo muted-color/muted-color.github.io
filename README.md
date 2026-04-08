@@ -80,7 +80,3 @@ excerpt: "포스트 목록에 보일 짧은 요약"
 - `_config.yml`의 `title`
 - `_config.yml`의 `description`
 - `_config.yml`의 `author.name`
-
-## 메모
-
-- `RTK.md`는 현재 레포에 없었습니다.
