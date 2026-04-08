@@ -71,8 +71,9 @@ a:hover,
   text-decoration: none;
 }
 
-.site-nav .page-link:not(:last-child) {
-  margin-right: 1rem;
+.site-header .wrapper {
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .home,
