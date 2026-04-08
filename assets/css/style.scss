@@ -4,27 +4,24 @@
 @import "minima";
 
 :root {
-  --bg-top: #f4f7fb;
-  --bg-bottom: #edf2f9;
-  --paper: rgba(255, 255, 255, 0.9);
-  --panel: rgba(255, 255, 255, 0.78);
-  --line: #d7dfec;
-  --ink: #17212b;
-  --muted: #506173;
-  --accent: #0f766e;
-  --accent-strong: #155e75;
-  --code-bg: #eef4fb;
-  --shadow: 0 18px 50px rgba(38, 55, 77, 0.08);
+  --page: #f7f7f3;
+  --surface: #fbfbf8;
+  --line: #d8d9d2;
+  --ink: #111318;
+  --muted: #5f6670;
+  --accent: #1b4d67;
+  --accent-strong: #0f3142;
+  --code-bg: #f1f3f4;
+  --max-page: 960px;
+  --max-copy: 720px;
 }
 
 body {
-  background:
-    radial-gradient(circle at top left, rgba(131, 197, 190, 0.16), transparent 22rem),
-    radial-gradient(circle at top right, rgba(59, 130, 246, 0.08), transparent 20rem),
-    linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+  background: var(--page);
   color: var(--ink);
   font-family: "IBM Plex Sans", "Inter", "Segoe UI", sans-serif;
-  line-height: 1.72;
+  line-height: 1.78;
+  text-rendering: optimizeLegibility;
 }
 
 h1,
@@ -33,27 +30,26 @@ h3,
 h4,
 h5,
 h6 {
-  color: #0f172a;
+  color: var(--ink);
   font-family: "IBM Plex Serif", "Source Serif 4", Georgia, serif;
   letter-spacing: -0.02em;
 }
 
 .site-header,
 .page-content {
-  max-width: 860px;
+  max-width: var(--max-page);
   margin-left: auto;
   margin-right: auto;
 }
 
 .site-header {
-  border-bottom: 1px solid var(--line);
-  padding-top: 1.25rem;
-  padding-bottom: 1rem;
+  padding-top: 1.6rem;
+  padding-bottom: 1.1rem;
 }
 
 .site-title,
 .post-link {
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.02em;
 }
 
@@ -76,109 +72,182 @@ a:hover,
   padding-right: 0;
 }
 
-.home,
-.post {
-  background: var(--paper);
-  backdrop-filter: blur(10px);
-  padding: 1.35rem 1.5rem;
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  box-shadow: var(--shadow);
-}
-
-.home {
-  position: relative;
-}
-
-.home::before {
-  content: "Applied LLM Research Log";
-  display: inline-block;
-  margin-bottom: 1rem;
-  padding: 0.22rem 0.65rem;
-  border: 1px solid rgba(15, 118, 110, 0.18);
-  border-radius: 999px;
-  background: rgba(15, 118, 110, 0.08);
-  color: var(--accent-strong);
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.post-list {
-  margin-left: 0;
-}
-
-.post-list > li {
-  margin-bottom: 0.9rem;
-  padding: 1rem 1.05rem;
-  list-style: none;
-  background: var(--panel);
-  border: 1px solid rgba(215, 223, 236, 0.95);
-  border-radius: 16px;
-  transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease;
-}
-
-.post-list > li:hover {
-  transform: translateY(-2px);
-  border-color: rgba(15, 118, 110, 0.22);
-  box-shadow: 0 14px 32px rgba(38, 55, 77, 0.08);
-}
-
-.post-meta,
-.post-list-heading,
-.footer-col,
-.rss-subscribe,
-.feed-subscribe,
-.post-categories,
-.post-tags {
-  color: var(--muted);
-}
-
-.home > p,
-.post-excerpt,
-.post-list > li p {
-  color: var(--muted);
+.page-content {
+  padding-top: 0.5rem;
 }
 
 .site-title {
-  font-size: 1.02rem;
+  font-size: 1rem;
 }
 
-.page-heading {
-  margin-bottom: 0.7rem;
-  font-size: clamp(2rem, 4vw, 2.8rem);
+.home-shell,
+.essay {
+  max-width: var(--max-page);
+  margin: 0 auto;
 }
 
-.post-link {
-  font-size: 1.12rem;
+.home-intro,
+.essay-header,
+.essay-body {
+  max-width: var(--max-copy);
 }
 
-.post-meta {
-  font-size: 0.92rem;
-  letter-spacing: 0.01em;
+.home-intro {
+  padding: 1rem 0 2rem;
 }
 
-.post-list-heading,
-.post-content h2,
-.post-content h3 {
-  margin-top: 2rem;
+.eyebrow {
+  margin: 0 0 1rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.page-heading,
+.essay-title {
+  margin: 0;
+  font-size: clamp(2.4rem, 5vw, 4.6rem);
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
+.home-copy,
+.essay-dek,
+.essay-meta,
+.essay-body,
+.post-stream-excerpt {
+  color: var(--muted);
+}
+
+.home-copy {
+  margin-top: 1.3rem;
+  max-width: 38rem;
+  font-size: 1.03rem;
+}
+
+.post-index {
+  margin-top: 1rem;
+}
+
+.section-head {
+  padding: 0.85rem 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.section-head h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-family: "IBM Plex Sans", "Inter", "Segoe UI", sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.post-stream {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.post-stream-item {
+  border-bottom: 1px solid var(--line);
+}
+
+.post-stream-link {
+  display: grid;
+  grid-template-columns: 12rem 1fr;
+  gap: 1.2rem;
+  padding: 1.1rem 0;
+  color: inherit;
+}
+
+.post-stream-meta {
+  color: var(--muted);
+  font-size: 0.93rem;
+}
+
+.post-stream-title {
+  display: block;
+  color: var(--ink);
+  font-family: "IBM Plex Serif", "Source Serif 4", Georgia, serif;
+  font-size: 1.35rem;
+  line-height: 1.18;
+}
+
+.post-stream-excerpt {
+  display: block;
+  margin-top: 0.35rem;
+  max-width: 42rem;
+  font-size: 0.98rem;
+  line-height: 1.62;
+}
+
+.essay {
+  padding: 0.4rem 0 4rem;
+}
+
+.essay-header {
+  padding-bottom: 1.8rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.essay-meta {
+  margin-top: 1rem;
+  font-size: 0.93rem;
+}
+
+.meta-sep {
+  margin: 0 0.45rem;
+}
+
+.essay-dek {
+  margin: 1rem 0 0;
+  max-width: 38rem;
+  font-size: 1.06rem;
+  line-height: 1.7;
+}
+
+.essay-body {
+  padding-top: 2rem;
+  color: var(--ink);
+  font-size: 1.08rem;
+}
+
+.essay-body h2,
+.essay-body h3 {
+  margin-top: 2.4rem;
+}
+
+.essay-body p,
+.essay-body ul,
+.essay-body ol,
+.essay-body blockquote,
+.essay-body pre,
+.essay-body table {
+  margin-bottom: 1.25rem;
+}
+
+.essay-body ul,
+.essay-body ol {
+  padding-left: 1.4rem;
 }
 
 code,
 pre {
-  border-radius: 8px;
+  border-radius: 0;
 }
 
 code {
   background: var(--code-bg);
-  color: #0f172a;
+  color: var(--ink);
   padding: 0.15rem 0.35rem;
 }
 
 pre {
   background: var(--code-bg);
-  border: 1px solid #d8e3f0;
+  border: 1px solid var(--line);
   padding: 1rem 1.1rem;
   overflow-x: auto;
 }
@@ -186,14 +255,14 @@ pre {
 blockquote {
   margin-left: 0;
   padding-left: 1rem;
-  border-left: 3px solid rgba(15, 118, 110, 0.3);
+  border-left: 2px solid var(--line);
   color: var(--muted);
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  background: rgba(255, 255, 255, 0.62);
+  background: transparent;
 }
 
 th,
@@ -209,13 +278,24 @@ hr {
 }
 
 @media (max-width: 640px) {
-  .home,
-  .post {
-    padding: 1rem;
-    border-radius: 14px;
+  .site-header {
+    padding-top: 1.2rem;
+    padding-bottom: 0.8rem;
   }
 
-  .post-list > li {
-    padding: 0.9rem;
+  .home-intro,
+  .essay-header,
+  .essay-body {
+    max-width: 100%;
+  }
+
+  .page-heading,
+  .essay-title {
+    font-size: clamp(2rem, 12vw, 3rem);
+  }
+
+  .post-stream-link {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
   }
 }

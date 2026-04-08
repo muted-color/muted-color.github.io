@@ -1,0 +1,23 @@
+---
+layout: default
+---
+<article class="essay">
+  <header class="essay-header">
+    {% if page.categories and page.categories.size > 0 %}
+      <p class="eyebrow">{{ page.categories[0] }}</p>
+    {% endif %}
+    <h1 class="essay-title">{{ page.title }}</h1>
+    <div class="essay-meta">
+      <span>{{ site.author.name }}</span>
+      <span class="meta-sep">/</span>
+      <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%b %d, %Y" }}</time>
+    </div>
+    {% if page.excerpt %}
+      <p class="essay-dek">{{ page.excerpt | strip_html }}</p>
+    {% endif %}
+  </header>
+
+  <section class="essay-body">
+    {{ content }}
+  </section>
+</article>
