@@ -1,0 +1,28 @@
+title: Mini Research Blog
+description: 짧은 실험, 메모, 탐색 기록을 쌓는 미니 리서치 블로그
+url: ""
+baseurl: ""
+lang: ko-KR
+timezone: Asia/Seoul
+theme: minima
+
+author:
+  name: Your Name
+
+markdown: kramdown
+permalink: /:categories/:year/:month/:day/:title/
+show_excerpts: true
+
+minima:
+  social_links: []
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post

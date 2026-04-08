@@ -1,0 +1,76 @@
+---
+---
+
+@import "minima";
+
+:root {
+  --paper: #fffdf8;
+  --warm-line: #e6dfd1;
+  --warm-bg: #f6f1e8;
+  --ink: #24303a;
+  --accent: #9a3412;
+}
+
+body {
+  background:
+    radial-gradient(circle at top left, rgba(237, 226, 209, 0.8), transparent 24rem),
+    linear-gradient(180deg, #f8f4ec 0%, var(--warm-bg) 100%);
+  color: var(--ink);
+}
+
+.site-header,
+.page-content,
+.site-footer {
+  max-width: 860px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.site-header {
+  border-bottom: 1px solid var(--warm-line);
+}
+
+.site-title,
+.post-link {
+  font-weight: 700;
+}
+
+.site-title,
+.post-link,
+.page-link,
+a {
+  color: var(--accent);
+}
+
+.home,
+.post,
+.page-content .wrapper > *:first-child {
+  background: var(--paper);
+}
+
+.home,
+.post {
+  padding: 1.25rem 1.4rem;
+  border: 1px solid rgba(230, 223, 209, 0.92);
+  border-radius: 18px;
+  box-shadow: 0 16px 40px rgba(60, 43, 19, 0.06);
+}
+
+.post-list-heading,
+.post-content h2,
+.post-content h3 {
+  margin-top: 2rem;
+}
+
+code,
+pre {
+  border-radius: 8px;
+}
+
+@media (max-width: 640px) {
+  .home,
+  .post {
+    padding: 1rem;
+    border-radius: 14px;
+  }
+}

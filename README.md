@@ -1,0 +1,74 @@
+# Mini Research Blog
+
+GitHub Pages로 운영하는 `미니 리서치 블로그`용 최소 템플릿입니다.
+
+## 포함된 것
+
+- GitHub Pages + Jekyll 기반 최소 구조
+- 홈 페이지 1개
+- 샘플 포스트 1개
+- 기본 스타일 1개
+- 404 페이지
+
+## 구조
+
+```text
+.
+|-- .gitignore
+|-- 404.html
+|-- Gemfile
+|-- README.md
+|-- _config.yml
+|-- _posts/
+|   `-- 2026-04-08-template-kickoff.md
+|-- assets/
+|   `-- css/
+|       `-- style.scss
+`-- index.md
+```
+
+## 로컬 실행
+
+```bash
+bundle install
+bundle exec jekyll serve
+```
+
+접속 주소:
+
+```text
+http://127.0.0.1:4000
+```
+
+## 글 작성 규칙
+
+- 위치: `_posts/`
+- 파일명: `YYYY-MM-DD-title.md`
+- Front matter 권장 필드:
+
+```yaml
+---
+title: "LLM Eval Notes"
+date: 2026-04-09 09:00:00 +0900
+categories: [research]
+tags: [llm, eval]
+excerpt: "포스트 목록에 보일 짧은 요약"
+---
+```
+
+## GitHub Pages 배포
+
+1. 이 저장소를 GitHub에 push
+2. `Settings > Pages` 이동
+3. 기본 브랜치 루트를 배포 소스로 선택
+4. 프로젝트 페이지라면 `_config.yml`의 `baseurl`을 `/<repo-name>`으로 수정
+
+## 시작 전에 바꿀 값
+
+- `_config.yml`의 `title`
+- `_config.yml`의 `description`
+- `_config.yml`의 `author.name`
+
+## 메모
+
+- `RTK.md`는 현재 레포에 없었습니다.
