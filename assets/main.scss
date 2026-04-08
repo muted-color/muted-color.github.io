@@ -8,6 +8,8 @@
   --page: #ffffff;
   --surface: #ffffff;
   --surface-strong: #f3f5f7;
+  --surface-tint: #fafbfc;
+  --code-surface: #eeefff;
   --line: rgba(17, 17, 17, 0.11);
   --line-strong: rgba(17, 17, 17, 0.22);
   --ink: #111111;
@@ -15,6 +17,9 @@
   --accent: #1d536d;
   --accent-strong: #11394a;
   --code-bg: #f4f6f8;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.04);
   --max-page: 1380px;
   --max-home: 980px;
   --max-copy: 760px;
@@ -101,7 +106,7 @@ h6 {
 }
 
 .page-content {
-  padding: 0 0 5rem;
+  padding: 0.35rem 0 5.5rem;
 }
 
 .site-title {
@@ -136,7 +141,7 @@ h6 {
 }
 
 .home-intro {
-  padding: 2.6rem 0 3.25rem;
+  padding: 3rem 0 3.6rem;
 }
 
 .eyebrow,
@@ -201,6 +206,7 @@ h6 {
   padding: 1.45rem 0;
   color: inherit;
   text-decoration: none;
+  transition: transform 140ms ease;
 }
 
 .post-stream-meta {
@@ -215,6 +221,7 @@ h6 {
   font-family: "Sora", "Avenir Next", "Segoe UI", sans-serif;
   font-size: 1.42rem;
   line-height: 1.18;
+  transition: transform 140ms ease, color 140ms ease;
 }
 
 .post-stream-excerpt {
@@ -228,6 +235,11 @@ h6 {
 
 .post-stream-link:hover .post-stream-title {
   color: var(--accent);
+  transform: translateX(4px);
+}
+
+.post-stream-link:hover .post-stream-meta {
+  color: var(--ink);
 }
 
 .essay {
@@ -289,8 +301,9 @@ h6 {
 .essay-hero-frame {
   aspect-ratio: 16 / 8.25;
   overflow: hidden;
-  border: 1px solid rgba(22, 21, 21, 0.06);
-  box-shadow: inset 0 0 0 18px rgba(255, 255, 255, 0.62);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: inset 0 0 0 18px rgba(255, 255, 255, 0.62), var(--shadow-soft);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(246, 248, 250, 1)),
     var(--surface);
@@ -335,12 +348,27 @@ h6 {
 
 .essay-sidebar {
   color: var(--muted);
+  align-self: start;
+  position: relative;
 }
 
 .essay-sidebar-inner {
   position: sticky;
-  top: 1.45rem;
+  top: 1.2rem;
+  max-height: calc(100vh - 2.4rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding-top: 0.2rem;
+  padding-left: 0.15rem;
+}
+
+.essay-sidebar-inner::-webkit-scrollbar {
+  width: 6px;
+}
+
+.essay-sidebar-inner::-webkit-scrollbar-thumb {
+  background: rgba(17, 17, 17, 0.12);
+  border-radius: 999px;
 }
 
 .toc-label {
@@ -365,7 +393,7 @@ h6 {
 
 .toc-item a {
   display: block;
-  padding-right: 0;
+  padding: 0.1rem 0;
   color: var(--muted);
   font-family: "Plus Jakarta Sans", "Avenir Next", "Segoe UI", sans-serif;
   font-size: 0.84rem;
@@ -434,13 +462,23 @@ h6 {
 .essay-body blockquote,
 .essay-body pre,
 .essay-body table,
-.essay-body figure {
+.essay-body figure,
+.essay-body details,
+.essay-body dl {
   margin: 0 0 1.55rem;
 }
 
 .essay-body ul,
 .essay-body ol {
   padding-left: 1.4rem;
+}
+
+.essay-body ul ul,
+.essay-body ol ol,
+.essay-body ul ol,
+.essay-body ol ul {
+  margin-top: 0.55rem;
+  margin-bottom: 0.2rem;
 }
 
 .essay-body li + li {
@@ -467,7 +505,7 @@ figcaption {
 
 code,
 pre {
-  border-radius: 0;
+  border-radius: var(--radius-md);
 }
 
 code {
@@ -476,33 +514,181 @@ code {
   padding: 0.15rem 0.35rem;
 }
 
+.highlighter-rouge,
+.highlight {
+  margin: 0 0 1.75rem;
+  border: 1px solid rgba(116, 125, 255, 0.12);
+  border-radius: 24px;
+  background: var(--code-surface);
+  overflow: hidden;
+}
+
+.highlight pre,
+pre.highlight,
 pre {
-  background: var(--code-bg);
-  border: 1px solid var(--line);
-  padding: 1rem 1.1rem;
+  margin: 0;
+  background: transparent;
+  border: 0;
+  padding: 1.55rem 1.7rem;
   overflow-x: auto;
-  font-size: 0.88rem;
+  font-size: 0.96rem;
+  line-height: 1.78;
 }
 
 blockquote {
   margin-left: 0;
-  padding-left: 1.2rem;
-  border-left: 1px solid var(--line-strong);
+  padding: 1rem 1.1rem 1rem 1.2rem;
+  border-left: 2px solid var(--line-strong);
+  background: var(--surface-tint);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
   color: var(--muted);
   font-size: 1.02rem;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: transparent;
+.table-shell {
+  margin: 0 0 1.55rem;
+  border: 0.5px solid rgba(17, 17, 17, 0.08);
+  background: var(--surface);
 }
 
-th,
-td {
-  padding: 0.7rem 0.8rem;
-  border-bottom: 1px solid var(--line);
+.essay-body .table-shell table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 0 !important;
+  background: var(--surface) !important;
+  color: inherit;
+  margin: 0;
+}
+
+.essay-body .table-shell th,
+.essay-body .table-shell td {
+  padding: 0.62rem 0.85rem;
+  border-bottom: 0.5px solid rgba(17, 17, 17, 0.05) !important;
   text-align: left;
+  vertical-align: middle;
+}
+
+.essay-body .table-shell th {
+  background: #f6f7f8 !important;
+  color: var(--ink);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.essay-body .table-shell th + th,
+.essay-body .table-shell td + td {
+  border-left: 0.5px solid rgba(17, 17, 17, 0.05) !important;
+}
+
+.essay-body .table-shell tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.essay-body .table-shell table tr,
+.essay-body .table-shell table tbody tr,
+.essay-body .table-shell table tbody tr:nth-child(even),
+.essay-body .table-shell table tbody tr:nth-child(odd) {
+  background: transparent !important;
+}
+
+.essay-body .table-shell table tbody tr:nth-child(even) td,
+.essay-body .table-shell table tbody tr:nth-child(odd) td {
+  background: transparent !important;
+}
+
+.essay-body details {
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--surface-tint);
+  overflow: hidden;
+}
+
+.essay-body details[open] {
+  background: var(--surface);
+}
+
+.essay-body summary {
+  cursor: pointer;
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 1.18rem;
+  list-style-position: outside;
+  padding: 1.15rem 1.25rem;
+}
+
+.essay-body details > *:not(summary) {
+  margin-left: 1.25rem;
+  margin-right: 1.25rem;
+}
+
+.essay-body summary + * {
+  margin-top: 0;
+  padding-top: 0.15rem;
+  padding-bottom: 1.1rem;
+}
+
+.task-list {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.task-list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+}
+
+.task-list-item-checkbox {
+  margin-top: 0.28rem;
+}
+
+dl dt {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+dl dd {
+  margin: 0.2rem 0 0.85rem 1.1rem;
+  color: var(--muted);
+}
+
+.footnotes {
+  margin-top: 2.8rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.page-layout-default .page-shell {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding-top: 2.8rem;
+}
+
+.page-layout-default .page-shell h1 {
+  margin-bottom: 1.2rem;
+  font-size: 2.3rem;
+  line-height: 1.02;
+}
+
+.page-layout-default .page-shell p {
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.page-layout-default .page-shell ul,
+.page-layout-default .page-shell ol {
+  padding-left: 1.25rem;
+}
+
+.page-layout-default .page-shell li + li {
+  margin-top: 0.45rem;
 }
 
 hr {
@@ -548,7 +734,7 @@ hr {
   }
 
   .essay {
-    padding-top: 1.4rem;
+    padding: 1.6rem 0 4rem;
   }
 
   .essay-header {
@@ -570,5 +756,9 @@ hr {
 
   .essay-sidebar {
     display: none;
+  }
+
+  .page-layout-default .page-shell {
+    padding-top: 1.7rem;
   }
 }

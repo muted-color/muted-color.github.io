@@ -50,6 +50,9 @@ layout: default
   (function () {
     var root = document.getElementById("essay-body");
     var toc = document.getElementById("toc");
+    var grid = document.querySelector(".essay-grid");
+    var sidebar = document.querySelector(".essay-sidebar");
+    var sidebarInner = document.querySelector(".essay-sidebar-inner");
     if (!root || !toc) return;
 
     var headings = root.querySelectorAll("h2, h3");
@@ -110,6 +113,68 @@ layout: default
     links.forEach(function (pair) {
       observer.observe(pair.heading);
     });
+
+    root.querySelectorAll("table").forEach(function (table) {
+      if (table.parentElement && table.parentElement.classList.contains("table-shell")) {
+        return;
+      }
+
+      var shell = document.createElement("div");
+      shell.className = "table-shell";
+      table.parentNode.insertBefore(shell, table);
+      shell.appendChild(table);
+    });
+
+    if (!grid || !sidebar || !sidebarInner) return;
+
+    function resetSidebarPosition() {
+      sidebarInner.style.position = "";
+      sidebarInner.style.top = "";
+      sidebarInner.style.left = "";
+      sidebarInner.style.width = "";
+      sidebarInner.style.bottom = "";
+    }
+
+    function syncSidebarPosition() {
+      if (window.innerWidth <= 860) {
+        resetSidebarPosition();
+        return;
+      }
+
+      var topOffset = 20;
+      var scrollTop = window.scrollY || window.pageYOffset;
+      var gridRect = grid.getBoundingClientRect();
+      var sidebarRect = sidebar.getBoundingClientRect();
+      var gridTop = scrollTop + gridRect.top;
+      var gridBottom = gridTop + grid.offsetHeight;
+      var innerHeight = sidebarInner.offsetHeight;
+      var fixedStart = gridTop - topOffset;
+      var fixedEnd = gridBottom - innerHeight - topOffset;
+
+      if (scrollTop <= fixedStart) {
+        resetSidebarPosition();
+        return;
+      }
+
+      if (scrollTop >= fixedEnd) {
+        sidebarInner.style.position = "absolute";
+        sidebarInner.style.top = "auto";
+        sidebarInner.style.left = "0";
+        sidebarInner.style.width = "100%";
+        sidebarInner.style.bottom = "0";
+        return;
+      }
+
+      sidebarInner.style.position = "fixed";
+      sidebarInner.style.top = topOffset + "px";
+      sidebarInner.style.left = sidebarRect.left + "px";
+      sidebarInner.style.width = sidebarRect.width + "px";
+      sidebarInner.style.bottom = "auto";
+    }
+
+    window.addEventListener("scroll", syncSidebarPosition, { passive: true });
+    window.addEventListener("resize", syncSidebarPosition);
+    syncSidebarPosition();
   })();
 </script>
 {% if page.math %}
