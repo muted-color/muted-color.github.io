@@ -1,6 +1,7 @@
 ---
 layout: home
 title: Applied LLM Research Notes
+eyebrow: ""
 ---
 
 Applied LLM 시스템, 평가, 제품화에 관한 짧은 메모를 기록합니다.

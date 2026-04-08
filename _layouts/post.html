@@ -4,7 +4,10 @@ layout: default
 <article class="essay">
   <header class="essay-header">
     <div class="essay-intro">
-      <p class="essay-kicker">{{ page.kicker | default: "Applied LLM Research" }}</p>
+      {% assign display_category = page.categories | first %}
+      {% if display_category %}
+        <p class="essay-kicker">{{ display_category | replace: "-", " " }}</p>
+      {% endif %}
       <h1 class="essay-title">{{ page.title }}</h1>
       <p class="essay-credit">
         {{ page.byline | default: site.author.name }}

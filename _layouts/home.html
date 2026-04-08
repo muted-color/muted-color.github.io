@@ -3,7 +3,9 @@ layout: default
 ---
 <section class="home-shell">
   <div class="home-intro">
-    <p class="eyebrow">Ilho Ahn / Applied LLM Research</p>
+    {% if page.eyebrow %}
+      <p class="eyebrow">{{ page.eyebrow }}</p>
+    {% endif %}
     <h1 class="page-heading">{{ page.title | default: site.title }}</h1>
     <div class="home-copy">
       {{ content }}
@@ -17,10 +19,14 @@ layout: default
     </div>
     <ol class="post-stream">
       {% for post in site.posts %}
+        {% assign display_category = post.categories | first %}
         <li class="post-stream-item">
           <a class="post-stream-link" href="{{ post.url | relative_url }}">
             <span class="post-stream-meta">{{ post.date | date: "%b %d, %Y" }}</span>
             <span class="post-stream-text">
+              {% if display_category %}
+                <span class="post-stream-category">{{ display_category | replace: "-", " " }}</span>
+              {% endif %}
               <span class="post-stream-title">{{ post.title }}</span>
               {% if post.excerpt %}
                 <span class="post-stream-excerpt">{{ post.excerpt | strip_html }}</span>

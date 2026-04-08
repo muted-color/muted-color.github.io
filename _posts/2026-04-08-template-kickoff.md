@@ -1,7 +1,7 @@
 ---
 title: "첫 글: 이 블로그를 어떻게 쓸지"
 date: 2026-04-08 19:00:00 +0900
-categories: [research]
+categories: [template]
 tags: [template, github-pages]
 excerpt: "미니 리서치 블로그를 어떤 단위의 글로 운영할지 정리한 시작 메모."
 hero_image: /assets/images/editorial-hero.svg

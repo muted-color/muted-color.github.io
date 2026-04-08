@@ -7,16 +7,21 @@
 :root {
   --page: #ffffff;
   --surface: #ffffff;
-  --surface-strong: #f3f5f7;
-  --surface-tint: #fafbfc;
-  --code-surface: #edf4f6;
+  --surface-strong: #f3f4f6;
+  --surface-tint: #f8f9fc;
+  --code-surface: #f4f5ff;
+  --inline-code-bg: #f1f3f5;
+  --inline-code-ink: #2f3440;
+  --code-block-bg: #10131a;
+  --code-block-line: rgba(255, 255, 255, 0.08);
+  --code-block-ink: #e8ecf8;
   --line: rgba(17, 17, 17, 0.11);
   --line-strong: rgba(17, 17, 17, 0.22);
   --ink: #111111;
-  --muted: #646b74;
-  --accent: #1d536d;
-  --accent-strong: #11394a;
-  --code-bg: #f4f6f8;
+  --muted: #5f6672;
+  --accent: #3f41ff;
+  --accent-strong: #2529d8;
+  --code-bg: #f6f7ff;
   --radius-md: 12px;
   --radius-lg: 18px;
   --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.04);
@@ -40,7 +45,7 @@ body {
 
 a {
   color: var(--ink);
-  text-decoration-color: rgba(29, 83, 109, 0.28);
+  text-decoration-color: rgba(63, 65, 255, 0.32);
   text-decoration-thickness: 0.08em;
   text-underline-offset: 0.16em;
 }
@@ -301,11 +306,8 @@ h6 {
 .essay-hero-frame {
   aspect-ratio: 16 / 8.25;
   overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  box-shadow: inset 0 0 0 18px rgba(255, 255, 255, 0.62), var(--shadow-soft);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(246, 248, 250, 1)),
+    linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(244, 246, 255, 1)),
     var(--surface);
 }
 
@@ -322,10 +324,10 @@ h6 {
 
 .essay-hero-placeholder {
   background:
-    radial-gradient(circle at 50% 48%, rgba(18, 57, 74, 0.05), transparent 16%),
-    linear-gradient(90deg, transparent 0 17%, rgba(144, 143, 209, 0.17) 17% 30%, transparent 30% 39%, rgba(29, 83, 109, 0.24) 39% 58%, transparent 58% 66%, rgba(102, 192, 147, 0.24) 66% 83%, transparent 83% 100%),
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.22) 0 7px, rgba(245, 243, 237, 0.22) 7px 14px),
-    linear-gradient(180deg, #f8f6f1 0%, #eeebe1 100%);
+    radial-gradient(circle at 50% 48%, rgba(63, 65, 255, 0.08), transparent 16%),
+    linear-gradient(90deg, transparent 0 18%, rgba(17, 17, 17, 0.06) 18% 31%, transparent 31% 40%, rgba(63, 65, 255, 0.24) 40% 59%, transparent 59% 69%, rgba(63, 65, 255, 0.12) 69% 84%, transparent 84% 100%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.28) 0 7px, rgba(241, 243, 248, 0.28) 7px 14px),
+    linear-gradient(180deg, #ffffff 0%, #f3f4f8 100%);
 }
 
 .essay-hero-caption {
@@ -503,26 +505,38 @@ figcaption {
   line-height: 1.5;
 }
 
-:not(pre) > code,
+:not(pre) > code {
+  background: var(--inline-code-bg);
+  color: var(--inline-code-ink);
+  padding: 0.16rem 0.4rem;
+  border: 0;
+  border-radius: 6px;
+  box-shadow: none;
+}
+
+code.highlighter-rouge {
+  margin: 0;
+  background: var(--inline-code-bg);
+  color: var(--inline-code-ink);
+  border: 0;
+  border-radius: 6px;
+  box-shadow: none;
+}
+
 pre {
   border-radius: var(--radius-md);
 }
 
-:not(pre) > code {
-  background: var(--code-bg);
-  color: var(--ink);
-  padding: 0.15rem 0.35rem;
-}
-
-.highlighter-rouge {
+div.highlighter-rouge {
   margin: 0 0 1.75rem;
-  border: 0;
+  border: 1px solid var(--code-block-line);
   border-radius: var(--radius-md);
-  background: var(--code-surface);
+  background: var(--code-block-bg);
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.14);
   overflow: hidden;
 }
 
-.highlighter-rouge .highlight {
+div.highlighter-rouge .highlight {
   margin: 0;
   background: transparent;
 }
@@ -531,12 +545,21 @@ pre {
 pre.highlight,
 pre {
   margin: 0;
-  background: transparent;
-  border: 0;
+  background: var(--code-block-bg);
+  border: 1px solid var(--code-block-line);
   padding: 1.55rem 1.7rem;
   overflow-x: auto;
   font-size: 0.96rem;
   line-height: 1.78;
+  color: var(--code-block-ink);
+}
+
+div.highlighter-rouge pre,
+div.highlighter-rouge pre.highlight,
+div.highlighter-rouge .highlight pre {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
 }
 
 pre code {
@@ -547,13 +570,101 @@ pre code {
   border-radius: 0;
 }
 
+.highlight,
+.highlight .w {
+  color: var(--code-block-ink);
+}
+
+.highlight .c,
+.highlight .cm,
+.highlight .cp,
+.highlight .c1,
+.highlight .cs,
+.highlight .gh,
+.highlight .go,
+.highlight .gp,
+.highlight .gu {
+  color: #8b92a8;
+}
+
+.highlight .k,
+.highlight .kc,
+.highlight .kd,
+.highlight .kn,
+.highlight .kp,
+.highlight .kr,
+.highlight .kt,
+.highlight .ow {
+  color: #aab4ff;
+}
+
+.highlight .na,
+.highlight .nb,
+.highlight .nc,
+.highlight .nd,
+.highlight .ne,
+.highlight .nf,
+.highlight .nl,
+.highlight .nn,
+.highlight .nt,
+.highlight .nv,
+.highlight .vc,
+.highlight .vg,
+.highlight .vi,
+.highlight .bp {
+  color: #7ed0ff;
+}
+
+.highlight .s,
+.highlight .sb,
+.highlight .sc,
+.highlight .sd,
+.highlight .s1,
+.highlight .s2,
+.highlight .se,
+.highlight .sh,
+.highlight .si,
+.highlight .sr,
+.highlight .ss,
+.highlight .sx {
+  color: #8ef7c6;
+}
+
+.highlight .m,
+.highlight .mf,
+.highlight .mh,
+.highlight .mi,
+.highlight .mo,
+.highlight .il {
+  color: #ffca7a;
+}
+
+.highlight .err,
+.highlight .gr,
+.highlight .gt {
+  color: #ff8b8b;
+  background: transparent;
+}
+
+.highlight .gd,
+.highlight .gd .x {
+  color: #ffb4b4;
+  background-color: rgba(255, 107, 107, 0.12);
+}
+
+.highlight .gi,
+.highlight .gi .x {
+  color: #a6f3c7;
+  background-color: rgba(16, 185, 129, 0.14);
+}
+
 blockquote {
   margin-left: 0;
   padding: 1.1rem 1.2rem 1.1rem 1.35rem;
   border-left: 2px solid var(--line-strong);
   background: var(--surface-tint);
   border-radius: 0 var(--radius-md) var(--radius-md) 0;
-  color: #4f5863;
+  color: #4b5160;
   font-family: "Plus Jakarta Sans", "Apple SD Gothic Neo", "Malgun Gothic", "Segoe UI", sans-serif;
   font-size: 1.05rem;
   font-weight: 500;
@@ -596,7 +707,7 @@ blockquote p + p {
 }
 
 .essay-body .table-shell th {
-  background: #f6f7f8 !important;
+  background: #f5f6fb !important;
   color: var(--ink);
   font-size: 0.82rem;
   font-weight: 700;
@@ -679,7 +790,7 @@ blockquote p + p {
 }
 
 .essay-body summary:focus-visible {
-  outline: 2px solid rgba(29, 83, 109, 0.28);
+  outline: 2px solid rgba(63, 65, 255, 0.32);
   outline-offset: -2px;
 }
 
