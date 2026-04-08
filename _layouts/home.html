@@ -3,15 +3,18 @@ layout: default
 ---
 <section class="home-shell">
   <div class="home-intro">
-    <p class="eyebrow">Applied LLM Research</p>
+    <p class="eyebrow">Ilho Ahn / Applied LLM Research</p>
     <h1 class="page-heading">{{ page.title | default: site.title }}</h1>
-    <p class="home-note">Notes, experiments, and implementation findings by {{ site.author.name }}</p>
     <div class="home-copy">
       {{ content }}
     </div>
   </div>
 
   <section class="post-index">
+    <div class="section-head">
+      <h2>Latest Writing</h2>
+      <p class="section-copy">Short notes on experiments, evaluation, and model behavior.</p>
+    </div>
     <ol class="post-stream">
       {% for post in site.posts %}
         <li class="post-stream-item">

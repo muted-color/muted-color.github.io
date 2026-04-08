@@ -43,8 +43,8 @@ h6 {
 }
 
 .site-header {
-  padding-top: 1.6rem;
-  padding-bottom: 1.1rem;
+  padding-top: 1.85rem;
+  padding-bottom: 1rem;
 }
 
 .site-title,
@@ -55,16 +55,22 @@ h6 {
 
 .site-title,
 .post-link,
-.page-link,
+.page-link {
+  color: var(--ink);
+}
+
 a {
-  color: var(--accent);
+  color: var(--ink);
+  text-decoration-color: rgba(32, 78, 100, 0.24);
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.15em;
 }
 
 a:hover,
 .post-link:hover,
-.page-link:hover {
+.page-link:hover,
+.site-title:hover {
   color: var(--accent-strong);
-  text-decoration: none;
 }
 
 .site-header .wrapper {
@@ -73,7 +79,7 @@ a:hover,
 }
 
 .page-content {
-  padding-top: 0.35rem;
+  padding-top: 0.9rem;
 }
 
 .site-title {
@@ -93,7 +99,7 @@ a:hover,
 }
 
 .home-intro {
-  padding: 1rem 0 2.6rem;
+  padding: 2.2rem 0 3.1rem;
 }
 
 .eyebrow {
@@ -108,6 +114,7 @@ a:hover,
 .page-heading,
 .essay-title {
   margin: 0;
+  max-width: 14ch;
   font-size: clamp(2.6rem, 5vw, 4.9rem);
   line-height: 0.98;
   text-wrap: balance;
@@ -121,20 +128,39 @@ a:hover,
   color: var(--muted);
 }
 
-.home-note {
-  margin: 1rem 0 0;
-  color: var(--muted);
-  font-size: 0.96rem;
-}
-
 .home-copy {
-  margin-top: 1rem;
-  max-width: 39rem;
+  margin-top: 1.3rem;
+  max-width: 34rem;
   font-size: 1.04rem;
+  line-height: 1.72;
 }
 
 .post-index {
   border-top: 1px solid var(--line);
+}
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.95rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.section-head h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.98rem;
+  font-family: "IBM Plex Sans", "Inter", "Segoe UI", sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.section-copy {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
 }
 
 .post-stream {
@@ -149,10 +175,11 @@ a:hover,
 
 .post-stream-link {
   display: grid;
-  grid-template-columns: 12rem 1fr;
+  grid-template-columns: 10rem 1fr;
   gap: 1.35rem;
-  padding: 1.25rem 0;
+  padding: 1.4rem 0;
   color: inherit;
+  text-decoration: none;
 }
 
 .post-stream-meta {
@@ -165,28 +192,39 @@ a:hover,
   display: block;
   color: var(--ink);
   font-family: "IBM Plex Serif", "Source Serif 4", Georgia, serif;
-  font-size: 1.42rem;
+  font-size: 1.54rem;
   line-height: 1.14;
 }
 
 .post-stream-excerpt {
   display: block;
   margin-top: 0.45rem;
-  max-width: 42rem;
-  font-size: 0.97rem;
+  max-width: 36rem;
+  font-size: 0.96rem;
   line-height: 1.64;
 }
 
+.post-stream-link:hover .post-stream-title {
+  color: var(--accent);
+}
+
 .essay {
-  padding: 0.55rem 0 4rem;
+  padding: 1.7rem 0 4.8rem;
 }
 
 .essay-header {
-  padding-bottom: 2.1rem;
+  padding-bottom: 2.4rem;
 }
 
+.essay-kicker-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.essay-date,
 .essay-meta {
-  margin-top: 1rem;
   font-size: 0.92rem;
   color: var(--muted);
 }
@@ -196,22 +234,27 @@ a:hover,
   font-weight: 600;
 }
 
-.meta-sep {
-  margin: 0 0.35rem;
-  color: var(--muted);
+.essay-meta {
+  margin-top: 1.1rem;
 }
 
 .essay-dek {
   margin: 1.25rem 0 0;
-  max-width: 39rem;
+  max-width: 35rem;
   font-size: 1.08rem;
   line-height: 1.72;
 }
 
 .essay-body {
-  padding-top: 0;
+  padding-top: 2.35rem;
   color: var(--ink);
   font-size: 1.09rem;
+  line-height: 1.84;
+}
+
+.essay-body > p:first-of-type {
+  font-size: 1.14rem;
+  line-height: 1.8;
 }
 
 .essay-body h2,
@@ -305,6 +348,17 @@ hr {
   .page-heading,
   .essay-title {
     font-size: clamp(2rem, 12vw, 3rem);
+  }
+
+  .section-head,
+  .essay-kicker-row {
+    display: block;
+  }
+
+  .section-copy,
+  .essay-date {
+    display: block;
+    margin-top: 0.35rem;
   }
 
   .post-stream-link {

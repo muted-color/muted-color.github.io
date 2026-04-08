@@ -3,20 +3,21 @@ layout: default
 ---
 <article class="essay">
   <header class="essay-header">
-    <p class="eyebrow">Applied LLM Research</p>
-    <h1 class="essay-title">{{ page.title }}</h1>
-    <div class="essay-meta">
-      <span class="essay-author">{{ site.author.name }}</span>
+    <div class="essay-kicker-row">
       {% if page.categories and page.categories.size > 0 %}
-        <span class="meta-sep">in</span>
-        <span>{{ page.categories[0] }}</span>
+        <p class="eyebrow">{{ page.categories[0] }}</p>
+      {% else %}
+        <p class="eyebrow">Applied LLM Research</p>
       {% endif %}
-      <span class="meta-sep">·</span>
-      <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%b %d, %Y" }}</time>
+      <time class="essay-date" datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%b %d, %Y" }}</time>
     </div>
+    <h1 class="essay-title">{{ page.title }}</h1>
     {% if page.excerpt %}
       <p class="essay-dek">{{ page.excerpt | strip_html }}</p>
     {% endif %}
+    <div class="essay-meta">
+      <span class="essay-author">{{ site.author.name }}</span>
+    </div>
   </header>
 
   <section class="essay-body">
