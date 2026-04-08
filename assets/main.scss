@@ -9,7 +9,7 @@
   --surface: #ffffff;
   --surface-strong: #f3f5f7;
   --surface-tint: #fafbfc;
-  --code-surface: #eeefff;
+  --code-surface: #edf4f6;
   --line: rgba(17, 17, 17, 0.11);
   --line-strong: rgba(17, 17, 17, 0.22);
   --ink: #111111;
@@ -27,11 +27,12 @@
 }
 
 html {
+  background-color: #ffffff;
   scroll-behavior: smooth;
 }
 
 body {
-  background: var(--page);
+  background-color: #ffffff;
   color: var(--ink);
   font-family: "Plus Jakarta Sans", "Avenir Next", "Segoe UI", sans-serif;
   line-height: 1.72;
@@ -503,24 +504,28 @@ figcaption {
   line-height: 1.5;
 }
 
-code,
+:not(pre) > code,
 pre {
   border-radius: var(--radius-md);
 }
 
-code {
+:not(pre) > code {
   background: var(--code-bg);
   color: var(--ink);
   padding: 0.15rem 0.35rem;
 }
 
-.highlighter-rouge,
-.highlight {
+.highlighter-rouge {
   margin: 0 0 1.75rem;
-  border: 1px solid rgba(116, 125, 255, 0.12);
-  border-radius: 24px;
+  border: 0;
+  border-radius: var(--radius-md);
   background: var(--code-surface);
   overflow: hidden;
+}
+
+.highlighter-rouge .highlight {
+  margin: 0;
+  background: transparent;
 }
 
 .highlight pre,
@@ -533,6 +538,14 @@ pre {
   overflow-x: auto;
   font-size: 0.96rem;
   line-height: 1.78;
+}
+
+pre code {
+  display: block;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  border-radius: 0;
 }
 
 blockquote {
