@@ -49,7 +49,7 @@ http://127.0.0.1:8666
 
 ```bash
 bundle install
-bundle exec jekyll serve --livereload --port 8666
+bundle exec jekyll serve --port 8666
 ```
 
 ## 글 작성 규칙
