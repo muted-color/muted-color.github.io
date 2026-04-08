@@ -3,21 +3,16 @@ layout: default
 ---
 <article class="essay">
   <header class="essay-header">
-    <div class="essay-kicker-row">
-      {% if page.categories and page.categories.size > 0 %}
-        <p class="eyebrow">{{ page.categories[0] }}</p>
-      {% else %}
-        <p class="eyebrow">Applied LLM Research</p>
-      {% endif %}
+    <p class="eyebrow">Applied LLM Research</p>
+    <h1 class="essay-title">{{ page.title }}</h1>
+    <div class="essay-meta">
+      <span class="essay-author">{{ site.author.name }}</span>
+      <span class="meta-sep">·</span>
       <time class="essay-date" datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%b %d, %Y" }}</time>
     </div>
-    <h1 class="essay-title">{{ page.title }}</h1>
     {% if page.excerpt %}
       <p class="essay-dek">{{ page.excerpt | strip_html }}</p>
     {% endif %}
-    <div class="essay-meta">
-      <span class="essay-author">{{ site.author.name }}</span>
-    </div>
   </header>
 
   <div class="essay-hero" aria-hidden="true">
@@ -57,6 +52,8 @@ layout: default
     var list = document.createElement("ol");
     list.className = "toc-list";
 
+    var links = [];
+
     headings.forEach(function (heading, index) {
       if (!heading.id) {
         heading.id = "section-" + (index + 1);
@@ -71,8 +68,38 @@ layout: default
 
       item.appendChild(link);
       list.appendChild(item);
+      links.push({ heading: heading, link: link });
     });
 
     toc.appendChild(list);
+
+    if (!("IntersectionObserver" in window)) return;
+
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          var matched = links.find(function (pair) {
+            return pair.heading === entry.target;
+          });
+
+          if (!matched) return;
+
+          if (entry.isIntersecting) {
+            links.forEach(function (pair) {
+              pair.link.classList.remove("is-active");
+            });
+            matched.link.classList.add("is-active");
+          }
+        });
+      },
+      {
+        rootMargin: "-20% 0px -65% 0px",
+        threshold: 0
+      }
+    );
+
+    links.forEach(function (pair) {
+      observer.observe(pair.heading);
+    });
   })();
 </script>

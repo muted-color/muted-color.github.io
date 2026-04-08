@@ -4,6 +4,7 @@ date: 2026-04-08 19:00:00 +0900
 categories: [research]
 tags: [template, github-pages]
 excerpt: "미니 리서치 블로그를 어떤 단위의 글로 운영할지 정리한 시작 메모."
+hero_image: /assets/images/editorial-hero.svg
 ---
 
 이 저장소는 아주 작은 단위의 연구 메모를 빠르게 쌓기 위한 GitHub Pages 템플릿으로 시작합니다.
