@@ -3,30 +3,39 @@ layout: default
 ---
 <article class="essay">
   <header class="essay-header">
-    <p class="eyebrow">Applied LLM Research</p>
-    <h1 class="essay-title">{{ page.title }}</h1>
-    <div class="essay-meta">
-      <span class="essay-author">{{ site.author.name }}</span>
-      <span class="meta-sep">·</span>
+    <div class="essay-intro">
+      <p class="essay-kicker">{{ page.kicker | default: "Applied LLM Research" }}</p>
+      <h1 class="essay-title">{{ page.title }}</h1>
+      <p class="essay-credit">
+        {{ page.byline | default: site.author.name }}
+        {% if page.affiliation %}
+          <span class="essay-affiliation"> {{ page.affiliation }}</span>
+        {% endif %}
+      </p>
       <time class="essay-date" datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%b %d, %Y" }}</time>
+      {% if page.excerpt %}
+        <p class="essay-dek">{{ page.excerpt | strip_html }}</p>
+      {% endif %}
     </div>
-    {% if page.excerpt %}
-      <p class="essay-dek">{{ page.excerpt | strip_html }}</p>
-    {% endif %}
-  </header>
 
-  <div class="essay-hero" aria-hidden="true">
-    {% if page.hero_image %}
-      <img class="essay-hero-image" src="{{ page.hero_image | relative_url }}" alt="">
-    {% else %}
-      <div class="essay-hero-placeholder"></div>
-    {% endif %}
-  </div>
+    <figure class="essay-hero"{% unless page.hero_caption %} aria-hidden="true"{% endunless %}>
+      <div class="essay-hero-frame">
+        {% if page.hero_image %}
+          <img class="essay-hero-image" src="{{ page.hero_image | relative_url }}" alt="{{ page.hero_alt | default: '' | escape }}">
+        {% else %}
+          <div class="essay-hero-placeholder"></div>
+        {% endif %}
+      </div>
+      {% if page.hero_caption %}
+        <figcaption class="essay-hero-caption">{{ page.hero_caption }}</figcaption>
+      {% endif %}
+    </figure>
+  </header>
 
   <div class="essay-grid">
     <aside class="essay-sidebar">
       <div class="essay-sidebar-inner">
-        <p class="toc-label">Contents</p>
+        <p class="toc-label">On this page</p>
         <nav class="toc-nav" id="toc"></nav>
       </div>
     </aside>
@@ -103,3 +112,20 @@ layout: default
     });
   })();
 </script>
+{% if page.math %}
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+{% endif %}
