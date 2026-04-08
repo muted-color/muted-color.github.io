@@ -5,16 +5,13 @@ layout: default
   <div class="home-intro">
     <p class="eyebrow">Applied LLM Research</p>
     <h1 class="page-heading">{{ page.title | default: site.title }}</h1>
+    <p class="home-note">Notes, experiments, and implementation findings by {{ site.author.name }}</p>
     <div class="home-copy">
       {{ content }}
     </div>
   </div>
 
   <section class="post-index">
-    <div class="section-head">
-      <h2>Recent Writing</h2>
-    </div>
-
     <ol class="post-stream">
       {% for post in site.posts %}
         <li class="post-stream-item">
