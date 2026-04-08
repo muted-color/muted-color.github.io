@@ -125,6 +125,40 @@ layout: default
       shell.appendChild(table);
     });
 
+    root.querySelectorAll("details").forEach(function (details) {
+      var summary = details.querySelector("summary");
+      if (!summary) return;
+
+      var hasWrappedContent = Array.prototype.some.call(details.children, function (child) {
+        return child.classList && child.classList.contains("details-content");
+      });
+
+      if (hasWrappedContent) return;
+
+      var content = document.createElement("div");
+      content.className = "details-content";
+
+      var node = summary.nextSibling;
+      var hasContent = false;
+
+      while (node) {
+        var next = node.nextSibling;
+
+        if (node.nodeType === Node.TEXT_NODE && !node.textContent.trim()) {
+          details.removeChild(node);
+          node = next;
+          continue;
+        }
+
+        content.appendChild(node);
+        hasContent = true;
+        node = next;
+      }
+
+      if (!hasContent) return;
+      details.appendChild(content);
+    });
+
     if (!grid || !sidebar || !sidebarInner) return;
 
     function resetSidebarPosition() {

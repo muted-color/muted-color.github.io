@@ -625,35 +625,84 @@ blockquote p + p {
 }
 
 .essay-body details {
+  margin: 0 0 1.75rem;
   padding: 0;
   border: 1px solid var(--line);
-  border-radius: 22px;
+  border-radius: var(--radius-md);
   background: var(--surface-tint);
   overflow: hidden;
+  transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
 }
 
 .essay-body details[open] {
-  background: var(--surface);
+  border-color: var(--line-strong);
+  background: var(--surface-tint);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .essay-body summary {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
   cursor: pointer;
   color: var(--ink);
   font-weight: 600;
-  font-size: 1.18rem;
-  list-style-position: outside;
-  padding: 1.15rem 1.25rem;
+  font-size: 1.08rem;
+  line-height: 1.45;
+  list-style: none;
+  padding: 1.05rem 1.2rem;
+  background: transparent;
+  transition: background-color 180ms ease, color 180ms ease;
 }
 
-.essay-body details > *:not(summary) {
-  margin-left: 1.25rem;
-  margin-right: 1.25rem;
+.essay-body summary::-webkit-details-marker {
+  display: none;
 }
 
-.essay-body summary + * {
+.essay-body summary::marker {
+  content: "";
+}
+
+.essay-body summary::before {
+  content: "";
+  width: 0.72rem;
+  height: 0.72rem;
+  flex-shrink: 0;
+  margin-top: -0.05rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform 180ms ease;
+}
+
+.essay-body summary:hover {
+  background: rgba(17, 17, 17, 0.025);
+}
+
+.essay-body summary:focus-visible {
+  outline: 2px solid rgba(29, 83, 109, 0.28);
+  outline-offset: -2px;
+}
+
+.essay-body details[open] summary {
+  background: rgba(17, 17, 17, 0.03);
+  border-bottom: 1px solid var(--line);
+}
+
+.essay-body details[open] summary::before {
+  transform: rotate(45deg);
+}
+
+.essay-body .details-content {
+  padding: 0.95rem 1.25rem 1.1rem;
+}
+
+.essay-body .details-content > :first-child {
   margin-top: 0;
-  padding-top: 0.15rem;
-  padding-bottom: 1.1rem;
+}
+
+.essay-body .details-content > :last-child {
+  margin-bottom: 0;
 }
 
 .task-list {
