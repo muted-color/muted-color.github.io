@@ -20,7 +20,59 @@ layout: default
     </div>
   </header>
 
-  <section class="essay-body">
-    {{ content }}
-  </section>
+  <div class="essay-hero" aria-hidden="true">
+    {% if page.hero_image %}
+      <img class="essay-hero-image" src="{{ page.hero_image | relative_url }}" alt="">
+    {% else %}
+      <div class="essay-hero-placeholder"></div>
+    {% endif %}
+  </div>
+
+  <div class="essay-grid">
+    <aside class="essay-sidebar">
+      <div class="essay-sidebar-inner">
+        <p class="toc-label">Contents</p>
+        <nav class="toc-nav" id="toc"></nav>
+      </div>
+    </aside>
+
+    <section class="essay-body" id="essay-body">
+      {{ content }}
+    </section>
+  </div>
 </article>
+
+<script>
+  (function () {
+    var root = document.getElementById("essay-body");
+    var toc = document.getElementById("toc");
+    if (!root || !toc) return;
+
+    var headings = root.querySelectorAll("h2, h3");
+    if (!headings.length) {
+      toc.innerHTML = '<p class="toc-empty">No sections yet.</p>';
+      return;
+    }
+
+    var list = document.createElement("ol");
+    list.className = "toc-list";
+
+    headings.forEach(function (heading, index) {
+      if (!heading.id) {
+        heading.id = "section-" + (index + 1);
+      }
+
+      var item = document.createElement("li");
+      item.className = "toc-item toc-" + heading.tagName.toLowerCase();
+
+      var link = document.createElement("a");
+      link.href = "#" + heading.id;
+      link.textContent = heading.textContent;
+
+      item.appendChild(link);
+      list.appendChild(item);
+    });
+
+    toc.appendChild(list);
+  })();
+</script>
