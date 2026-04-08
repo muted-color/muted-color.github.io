@@ -1,4 +1,4 @@
-# Mini Research Blog
+# Ilho Ahn Research Blog
 
 GitHub Pages로 운영하는 `미니 리서치 블로그`용 최소 템플릿입니다.
 
@@ -19,8 +19,12 @@ GitHub Pages로 운영하는 `미니 리서치 블로그`용 최소 템플릿입
 |-- Gemfile
 |-- README.md
 |-- _config.yml
+|-- _includes/
+|   `-- footer.html
 |-- _posts/
 |   `-- 2026-04-08-template-kickoff.md
+|-- scripts/
+|   `-- dev-serve.sh
 |-- assets/
 |   `-- css/
 |       `-- style.scss
@@ -29,15 +33,23 @@ GitHub Pages로 운영하는 `미니 리서치 블로그`용 최소 템플릿입
 
 ## 로컬 실행
 
+권장 실행 스크립트:
+
 ```bash
-bundle install
-bundle exec jekyll serve
+bash scripts/dev-serve.sh
 ```
 
 접속 주소:
 
 ```text
-http://127.0.0.1:4000
+http://127.0.0.1:8666
+```
+
+직접 실행하고 싶다면:
+
+```bash
+bundle install
+bundle exec jekyll serve --livereload --port 8666
 ```
 
 ## 글 작성 규칙
