@@ -1,5 +1,5 @@
 title: Mini Research Blog
-description: 짧은 실험, 메모, 탐색 기록을 쌓는 미니 리서치 블로그
+description: Applied LLM research notes, experiments, and implementation findings
 url: ""
 baseurl: ""
 lang: ko-KR
@@ -7,7 +7,7 @@ timezone: Asia/Seoul
 theme: minima
 
 author:
-  name: Your Name
+  name: Ilho Ahn
 
 markdown: kramdown
 permalink: /:categories/:year/:month/:day/:title/
