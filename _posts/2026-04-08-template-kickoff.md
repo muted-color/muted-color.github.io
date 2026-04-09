@@ -7,6 +7,7 @@ excerpt: "미니 리서치 블로그를 어떤 단위의 글로 운영할지 정
 hero_image: /assets/images/editorial-hero.svg
 math: true
 mermaid: true
+plotly: true
 ---
 
 이 저장소는 아주 작은 단위의 연구 메모를 빠르게 쌓기 위한 GitHub Pages 템플릿으로 시작합니다.
@@ -31,17 +32,203 @@ mermaid: true
 
 ### Plot
 
-![샘플 plot](/assets/images/template-plot.svg)
+<figure class="media-figure">
+  <img src="/assets/images/template-plot.svg" alt="실험 step에 따른 validation score 추이를 단순화한 샘플 plot">
+  <figcaption><strong>Figure 1.</strong> 실험 step에 따라 validation score가 완만하게 상승하는 모습을 단순화한 예시 플롯입니다.</figcaption>
+</figure>
 
-위 플롯은 실험 step에 따른 validation score 변화를 단순화해서 그린 예시입니다.
+### Interactive Plotly Sample
+
+템플릿에서 interactive chart가 어떻게 보이는지 확인하기 위한 샘플입니다. hover, zoom, pan, legend toggle이 기본으로 동작합니다.
+
+<figure class="plot-card">
+  <div class="plot-frame">
+    <div id="template-plotly-demo" class="js-plotly-chart" aria-label="Interactive validation score plot"></div>
+  </div>
+
+  <figcaption><strong>Figure 2.</strong> Baseline과 retrieval 설정의 validation score 변화를 비교하는 interactive line chart 예시입니다.</figcaption>
+</figure>
+
+<script>
+  window.addEventListener("load", function () {
+    var target = document.getElementById("template-plotly-demo");
+    if (!target || !window.Plotly) return;
+
+    var steps = [0, 400, 800, 1200, 1600, 2000, 2400, 2800, 3200];
+    var baseline = [61.8, 63.4, 64.5, 65.2, 65.8, 66.0, 66.2, 66.1, 66.3];
+    var retrieval = [61.7, 64.8, 66.7, 68.6, 70.1, 71.2, 72.0, 72.6, 72.9];
+
+    var traces = [
+      {
+        x: steps,
+        y: baseline,
+        type: "scatter",
+        mode: "lines+markers",
+        name: "Baseline",
+        line: {
+          color: "#9aa1ad",
+          width: 2.2,
+          shape: "spline",
+          smoothing: 0.65
+        },
+        marker: {
+          size: 7,
+          color: "#ffffff",
+          line: {
+            color: "#9aa1ad",
+            width: 2
+          }
+        },
+        hovertemplate: "Baseline<br>step %{x}<br>score %{y:.1f}<extra></extra>"
+      },
+      {
+        x: steps,
+        y: retrieval,
+        type: "scatter",
+        mode: "lines+markers",
+        name: "Retrieval + Rerank",
+        line: {
+          color: "#3f41ff",
+          width: 2.8,
+          shape: "spline",
+          smoothing: 0.75
+        },
+        marker: {
+          size: 8,
+          color: "#ffffff",
+          line: {
+            color: "#3f41ff",
+            width: 2.4
+          }
+        },
+        hovertemplate: "Retrieval + Rerank<br>step %{x}<br>score %{y:.1f}<extra></extra>"
+      }
+    ];
+
+    var layout = {
+      margin: { t: 22, r: 18, b: 54, l: 56 },
+      paper_bgcolor: "rgba(0,0,0,0)",
+      plot_bgcolor: "#f8f9fc",
+      showlegend: true,
+      legend: {
+        orientation: "h",
+        x: 0,
+        y: 1.15,
+        xanchor: "left",
+        yanchor: "bottom",
+        font: {
+          family: "\"Plus Jakarta Sans\", \"Avenir Next\", \"Segoe UI\", sans-serif",
+          size: 12,
+          color: "#5f6672"
+        }
+      },
+      font: {
+        family: "\"Plus Jakarta Sans\", \"Avenir Next\", \"Segoe UI\", sans-serif",
+        size: 13,
+        color: "#5f6672"
+      },
+      hoverlabel: {
+        bgcolor: "#ffffff",
+        bordercolor: "#d9dde6",
+        font: {
+          family: "\"IBM Plex Mono\", \"SFMono-Regular\", monospace",
+          size: 12,
+          color: "#243042"
+        }
+      },
+      xaxis: {
+        title: {
+          text: "Training Step",
+          standoff: 10,
+          font: {
+            family: "\"Plus Jakarta Sans\", \"Avenir Next\", \"Segoe UI\", sans-serif",
+            size: 12,
+            color: "#5f6672"
+          }
+        },
+        tickvals: steps,
+        tickfont: {
+          family: "\"IBM Plex Mono\", \"SFMono-Regular\", monospace",
+          size: 12,
+          color: "#5f6672"
+        },
+        gridcolor: "#e8ebf2",
+        linecolor: "#d9dde6",
+        zeroline: false,
+        fixedrange: false
+      },
+      yaxis: {
+        title: {
+          text: "Validation Score",
+          standoff: 10,
+          font: {
+            family: "\"Plus Jakarta Sans\", \"Avenir Next\", \"Segoe UI\", sans-serif",
+            size: 12,
+            color: "#5f6672"
+          }
+        },
+        tickfont: {
+          family: "\"IBM Plex Mono\", \"SFMono-Regular\", monospace",
+          size: 12,
+          color: "#5f6672"
+        },
+        gridcolor: "#e8ebf2",
+        linecolor: "#d9dde6",
+        zeroline: false,
+        range: [60, 75]
+      }
+    };
+
+    var config = {
+      responsive: true,
+      displaylogo: false,
+      modeBarButtonsToRemove: ["lasso2d", "select2d", "autoScale2d"],
+      toImageButtonOptions: {
+        format: "png",
+        filename: "template-plotly-demo",
+        scale: 2
+      }
+    };
+
+    window.Plotly.newPlot(target, traces, layout, config);
+  });
+</script>
 
 ### Table
 
-| Setting | Train Loss | Eval Score | Note |
-|:--|--:|--:|:--|
-| Baseline | 1.92 | 68.4 | no retrieval |
-| Retrieval + Rerank | 1.71 | 72.9 | stable |
-| Retrieval + Rerank + CoT | 1.66 | 74.1 | best latency/quality tradeoff |
+<figure class="table-figure">
+  <figcaption><strong>Table 1.</strong> Retrieval 설정별 학습 손실과 평가 점수를 비교한 샘플 테이블입니다.</figcaption>
+  <table>
+    <thead>
+      <tr>
+        <th>Setting</th>
+        <th>Train Loss</th>
+        <th>Eval Score</th>
+        <th>Note</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Baseline</td>
+        <td>1.92</td>
+        <td>68.4</td>
+        <td>no retrieval</td>
+      </tr>
+      <tr>
+        <td>Retrieval + Rerank</td>
+        <td>1.71</td>
+        <td>72.9</td>
+        <td>stable</td>
+      </tr>
+      <tr>
+        <td>Retrieval + Rerank + CoT</td>
+        <td>1.66</td>
+        <td>74.1</td>
+        <td>best latency/quality tradeoff</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
 
 ### LaTeX
 

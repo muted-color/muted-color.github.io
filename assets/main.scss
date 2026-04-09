@@ -29,6 +29,7 @@
   --max-home: 980px;
   --max-copy: 760px;
   --toc-width: 17rem;
+  --page-gutter: clamp(1.5rem, 4vw, 2.25rem);
 }
 
 html {
@@ -79,11 +80,12 @@ h6 {
 
 .site-header .wrapper,
 .page-content > .wrapper {
-  width: calc(100vw - 3rem);
+  width: 100%;
   max-width: var(--max-page);
   margin: 0 auto;
-  padding-left: 0;
-  padding-right: 0;
+  padding-left: var(--page-gutter);
+  padding-right: var(--page-gutter);
+  box-sizing: border-box;
 }
 
 .site-header .wrapper {
@@ -273,7 +275,7 @@ h6 {
 }
 
 .essay {
-  padding: 2.8rem 1.5rem 6rem;
+  padding: 2.8rem var(--page-gutter) 6rem;
 }
 
 .essay-header {
@@ -331,9 +333,7 @@ h6 {
 .essay-hero-frame {
   aspect-ratio: 16 / 8.25;
   overflow: hidden;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(244, 246, 255, 1)),
-    var(--surface);
+  background: var(--surface);
 }
 
 .essay-hero-image,
@@ -528,6 +528,68 @@ figcaption {
   font-family: "Plus Jakarta Sans", "Avenir Next", "Segoe UI", sans-serif;
   font-size: 0.8rem;
   line-height: 1.5;
+}
+
+.plot-card {
+  margin: 0 0 2rem;
+  padding: 0;
+}
+
+.plot-frame {
+  padding: 0;
+}
+
+.js-plotly-chart {
+  width: 100%;
+  min-height: clamp(320px, 52vw, 420px);
+}
+
+.essay-body .media-figure,
+.essay-body .table-figure {
+  margin: 0 0 1.85rem;
+}
+
+.essay-body .media-figure > figcaption,
+.essay-body .table-figure > figcaption {
+  max-width: 42rem;
+  padding-left: clamp(1rem, 2.6vw, 1.75rem);
+  padding-right: clamp(1rem, 2.6vw, 1.75rem);
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.55;
+  letter-spacing: 0.005em;
+  box-sizing: border-box;
+}
+
+.essay-body .media-figure > figcaption {
+  margin-top: 0.65rem;
+}
+
+.essay-body .table-figure > figcaption {
+  margin-top: 0;
+  margin-bottom: 0.65rem;
+}
+
+.essay-body .media-figure > figcaption strong,
+.essay-body .table-figure > figcaption strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.essay-body .table-figure .table-shell {
+  margin: 0;
+}
+
+.essay-body table caption {
+  caption-side: top;
+  padding: 0 0 0.8rem;
+  color: var(--muted);
+  font-family: "Plus Jakarta Sans", "Avenir Next", "Segoe UI", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  text-align: left;
 }
 
 :not(pre) > code {
@@ -1059,9 +1121,8 @@ hr {
 }
 
 @media (max-width: 860px) {
-  .site-header .wrapper,
-  .page-content > .wrapper {
-    width: calc(100vw - 2rem);
+  :root {
+    --page-gutter: clamp(1.25rem, 6vw, 1.75rem);
   }
 
   .site-header {
@@ -1088,7 +1149,7 @@ hr {
   }
 
   .essay {
-    padding: 1.6rem 0 4rem;
+    padding: 1.6rem var(--page-gutter) 4rem;
   }
 
   .essay-header {
@@ -1145,5 +1206,13 @@ hr {
 
   .page-layout-default .page-shell {
     padding-top: 1.7rem;
+  }
+
+  .plot-card {
+    padding: 0;
+  }
+
+  .js-plotly-chart {
+    min-height: 320px;
   }
 }
