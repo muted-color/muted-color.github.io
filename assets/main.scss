@@ -554,11 +554,12 @@ pre {
 
 div.highlighter-rouge {
   margin: 0 0 1.75rem;
-  border: 1px solid var(--code-block-line);
+  border: 0;
   border-radius: var(--radius-md);
   background: var(--code-block-bg);
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+  box-shadow: none;
   overflow: hidden;
+  position: relative;
 }
 
 div.highlighter-rouge .highlight {
@@ -571,7 +572,7 @@ pre.highlight,
 pre {
   margin: 0;
   background: var(--code-block-bg);
-  border: 1px solid var(--code-block-line);
+  border: 0;
   padding: 1.55rem 1.7rem;
   overflow-x: auto;
   font-size: 0.96rem;
@@ -586,7 +587,47 @@ div.highlighter-rouge .highlight pre {
   border: 0;
   box-shadow: none;
   font-size: 13px;
-  line-height: 1.65;
+  line-height: 1.4;
+  font-family: "IBM Plex Mono", "SFMono-Regular", "JetBrains Mono", monospace;
+}
+
+.code-copy-button {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.7rem;
+  z-index: 1;
+  padding: 0.14rem 0.38rem;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(247, 248, 252, 0.92);
+  color: #7a8497;
+  font-family: "IBM Plex Mono", "SFMono-Regular", "JetBrains Mono", monospace;
+  font-size: 0.62rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease, background-color 120ms ease, color 120ms ease;
+}
+
+div.highlighter-rouge:hover .code-copy-button,
+div.highlighter-rouge:focus-within .code-copy-button {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.code-copy-button:hover,
+.code-copy-button:focus-visible {
+  background: rgba(63, 65, 255, 0.12);
+  color: var(--accent-strong);
+  outline: none;
+}
+
+.code-copy-button.is-copied {
+  background: rgba(21, 132, 102, 0.12);
+  color: #158466;
 }
 
 pre code {

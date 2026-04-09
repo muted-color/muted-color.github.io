@@ -82,6 +82,27 @@ print(summarize_run({"baseline": 68.4, "retrieval_cot": 74.1}))
 }
 ```
 
+```text
+project-root/
+|-- _posts/
+|   `-- 2026-04-08-template-kickoff.md
+|-- assets/
+|   |-- css/
+|   |   `-- style.scss
+|   |-- images/
+|   |   |-- editorial-hero.svg
+|   |   `-- template-plot.svg
+|   `-- main.scss
+|-- _layouts/
+|   |-- default.html
+|   `-- post.html
+|-- _includes/
+|   |-- head.html
+|   |-- header.html
+|   `-- footer.html
+`-- _config.yml
+```
+
 ### Mermaid
 
 실험 파이프라인이나 모델 구조를 빠르게 남길 때는 Mermaid 다이어그램도 바로 넣을 수 있습니다. 아래는 Transformer 계열 구조를 테스트하기 위한 두 가지 예시입니다.
