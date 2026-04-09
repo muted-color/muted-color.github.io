@@ -427,5 +427,25 @@ Reranking
 
 간단한 각주도 테스트합니다.[^latency-note]
 
+## Citation
+
+이 글을 인용할 때는 아래 형식을 사용할 수 있습니다.
+
+```text
+Ilho Ahn, "첫 글: 이 블로그를 어떻게 쓸지", Ilho Ahn, Mini Research, Apr 2026.
+```
+
+또는 BibTeX 형식으로는 다음처럼 적을 수 있습니다.
+
+```bibtex
+@article{ahn2026templatekickoff,
+  author = {Ilho Ahn},
+  title = {첫 글: 이 블로그를 어떻게 쓸지},
+  journal = {Ilho Ahn, Mini Research},
+  year = {2026},
+  month = apr
+}
+```
+
 [^sample-note]: 실제 운영에서는 이 섹션을 복사해서 새 글 초안의 출발점으로 써도 됩니다.
 [^latency-note]: latency는 모델 크기, prompt 길이, retrieval depth에 모두 영향을 받습니다.

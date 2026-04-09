@@ -191,6 +191,62 @@ layout: default
       });
     }
 
+    function enhanceHeadingAnchors() {
+      var headingNodes = root.querySelectorAll("h2, h3, h4, h5, h6");
+
+      headingNodes.forEach(function (heading, index) {
+        if (!heading.id) {
+          heading.id = "section-" + (index + 1);
+        }
+
+        if (!heading.dataset.headingLabel) {
+          heading.dataset.headingLabel = heading.textContent.trim();
+        }
+
+        if (heading.querySelector(".heading-anchor")) return;
+
+        var anchor = document.createElement("a");
+        var headingLabel = heading.dataset.headingLabel;
+        var hash = "#" + heading.id;
+        var resetStateTimer = null;
+
+        anchor.className = "heading-anchor";
+        anchor.href = hash;
+        anchor.textContent = "#";
+        anchor.setAttribute("aria-label", "Copy link to section: " + headingLabel);
+
+        anchor.addEventListener("click", function (event) {
+          if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+            return;
+          }
+
+          event.preventDefault();
+
+          var url = window.location.origin + window.location.pathname + window.location.search + hash;
+
+          copyTextToClipboard(url).then(function () {
+            window.history.replaceState(null, "", hash);
+            anchor.classList.add("is-copied");
+            anchor.setAttribute("aria-label", "Copied link to section: " + headingLabel);
+
+            if (resetStateTimer) {
+              window.clearTimeout(resetStateTimer);
+            }
+
+            resetStateTimer = window.setTimeout(function () {
+              anchor.classList.remove("is-copied");
+              anchor.setAttribute("aria-label", "Copy link to section: " + headingLabel);
+            }, 1400);
+          }).catch(function (error) {
+            console.error("Heading link copy failed:", error);
+            window.location.hash = heading.id;
+          });
+        });
+
+        heading.insertBefore(anchor, heading.firstChild);
+      });
+    }
+
     function enhanceCodeBlocks() {
       var blocks = root.querySelectorAll("div.highlighter-rouge");
 
@@ -231,6 +287,7 @@ layout: default
       });
     }
 
+    enhanceHeadingAnchors();
     enhanceCodeBlocks();
 
     var headings = root.querySelectorAll("h2, h3");
@@ -254,7 +311,7 @@ layout: default
 
       var link = document.createElement("a");
       link.href = "#" + heading.id;
-      link.textContent = heading.textContent;
+      link.textContent = heading.dataset.headingLabel || heading.textContent.trim();
 
       item.appendChild(link);
       list.appendChild(item);
