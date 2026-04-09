@@ -5,6 +5,9 @@
   {%- seo -%}
   <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
   {%- feed_meta -%}
+  {%- if page.mermaid -%}
+    <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  {%- endif -%}
   {%- if page.math -%}
     <script>
       window.MathJax = {

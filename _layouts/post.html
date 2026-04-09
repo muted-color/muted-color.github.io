@@ -58,6 +58,114 @@ layout: default
     var sidebarInner = document.querySelector(".essay-sidebar-inner");
     if (!root || !toc) return;
 
+    function renderMermaidBlocks() {
+      if (!window.mermaid) return;
+
+      var selectors = [
+        "div.highlighter-rouge[class*='language-mermaid']",
+        "pre code.language-mermaid",
+        "pre code[class*='language-mermaid']"
+      ];
+      var sources = root.querySelectorAll(selectors.join(", "));
+      var containers = [];
+      var visited = new Set();
+
+      sources.forEach(function (source) {
+        var container = source.closest("div.highlighter-rouge[class*='language-mermaid']") || source.closest("pre");
+        if (!container || visited.has(container)) return;
+
+        visited.add(container);
+
+        var code = container.querySelector("code");
+        var definition = code ? code.textContent.trim() : container.textContent.trim();
+        if (!definition) return;
+
+        var block = document.createElement("div");
+        block.className = "mermaid";
+        block.textContent = definition;
+
+        var shell = document.createElement("div");
+        shell.className = "mermaid-shell";
+        shell.appendChild(block);
+
+        container.replaceWith(shell);
+        containers.push(block);
+      });
+
+      if (!containers.length) return;
+
+      window.mermaid.initialize({
+        startOnLoad: false,
+        securityLevel: "loose",
+        theme: "base",
+        flowchart: {
+          htmlLabels: true,
+          curve: "linear",
+          nodeSpacing: 52,
+          rankSpacing: 58,
+          padding: 14,
+          useMaxWidth: true
+        },
+        themeVariables: {
+          background: "#ffffff",
+          mainBkg: "#ffffff",
+          primaryColor: "#ffffff",
+          primaryTextColor: "#1b1d22",
+          primaryBorderColor: "#dfdcd6",
+          secondaryColor: "#ffffff",
+          secondaryTextColor: "#1b1d22",
+          secondaryBorderColor: "#dfdcd6",
+          tertiaryColor: "#f2f4ff",
+          tertiaryTextColor: "#3f41ff",
+          tertiaryBorderColor: "#3f41ff",
+          lineColor: "#e3e0da",
+          edgeLabelBackground: "#ffffff",
+          fontFamily: "\"IBM Plex Mono\", \"SFMono-Regular\", \"JetBrains Mono\", monospace",
+          fontSize: "13px"
+        }
+      });
+
+      if (typeof window.mermaid.run === "function") {
+        Promise.resolve(window.mermaid.run({ nodes: containers })).catch(function (error) {
+          console.error("Mermaid render failed:", error);
+        });
+        return;
+      }
+
+      try {
+        window.mermaid.init(undefined, containers);
+      } catch (error) {
+        console.error("Mermaid init failed:", error);
+      }
+    }
+
+    function scheduleMermaidRender() {
+      var hasMermaid = root.querySelector(
+        "div.highlighter-rouge[class*='language-mermaid'], pre code.language-mermaid, pre code[class*='language-mermaid']"
+      );
+      if (!hasMermaid) return;
+
+      var attempts = 0;
+
+      function tryRender() {
+        if (window.mermaid) {
+          try {
+            renderMermaidBlocks();
+          } catch (error) {
+            console.error("Mermaid render failed:", error);
+          }
+          return;
+        }
+
+        attempts += 1;
+        if (attempts < 40) {
+          window.setTimeout(tryRender, 50);
+        }
+      }
+
+      tryRender();
+    }
+
     var headings = root.querySelectorAll("h2, h3");
     if (!headings.length) {
       toc.innerHTML = '<p class="toc-empty">No sections yet.</p>';
@@ -162,56 +270,7 @@ layout: default
       details.appendChild(content);
     });
 
-    if (!grid || !sidebar || !sidebarInner) return;
-
-    function resetSidebarPosition() {
-      sidebarInner.style.position = "";
-      sidebarInner.style.top = "";
-      sidebarInner.style.left = "";
-      sidebarInner.style.width = "";
-      sidebarInner.style.bottom = "";
-    }
-
-    function syncSidebarPosition() {
-      if (window.innerWidth <= 860) {
-        resetSidebarPosition();
-        return;
-      }
-
-      var topOffset = 20;
-      var scrollTop = window.scrollY || window.pageYOffset;
-      var gridRect = grid.getBoundingClientRect();
-      var sidebarRect = sidebar.getBoundingClientRect();
-      var gridTop = scrollTop + gridRect.top;
-      var gridBottom = gridTop + grid.offsetHeight;
-      var innerHeight = sidebarInner.offsetHeight;
-      var fixedStart = gridTop - topOffset;
-      var fixedEnd = gridBottom - innerHeight - topOffset;
-
-      if (scrollTop <= fixedStart) {
-        resetSidebarPosition();
-        return;
-      }
-
-      if (scrollTop >= fixedEnd) {
-        sidebarInner.style.position = "absolute";
-        sidebarInner.style.top = "auto";
-        sidebarInner.style.left = "0";
-        sidebarInner.style.width = "100%";
-        sidebarInner.style.bottom = "0";
-        return;
-      }
-
-      sidebarInner.style.position = "fixed";
-      sidebarInner.style.top = topOffset + "px";
-      sidebarInner.style.left = sidebarRect.left + "px";
-      sidebarInner.style.width = sidebarRect.width + "px";
-      sidebarInner.style.bottom = "auto";
-    }
-
-    window.addEventListener("scroll", syncSidebarPosition, { passive: true });
-    window.addEventListener("resize", syncSidebarPosition);
-    syncSidebarPosition();
+    scheduleMermaidRender();
   })();
 </script>
 {% if page.math %}

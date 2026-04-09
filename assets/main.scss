@@ -1,7 +1,7 @@
 ---
 ---
 
-@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap");
 @import "minima";
 
 :root {
@@ -12,9 +12,9 @@
   --code-surface: #f4f5ff;
   --inline-code-bg: #f1f3f5;
   --inline-code-ink: #2f3440;
-  --code-block-bg: #10131a;
-  --code-block-line: rgba(255, 255, 255, 0.08);
-  --code-block-ink: #e8ecf8;
+  --code-block-bg: #f7f8fc;
+  --code-block-line: rgba(17, 17, 17, 0.08);
+  --code-block-ink: #243042;
   --line: rgba(17, 17, 17, 0.11);
   --line-strong: rgba(17, 17, 17, 0.22);
   --ink: #111111;
@@ -376,12 +376,12 @@ h6 {
 .essay-sidebar {
   color: var(--muted);
   align-self: start;
-  position: relative;
+  position: sticky;
+  top: 1.2rem;
 }
 
 .essay-sidebar-inner {
-  position: sticky;
-  top: 1.2rem;
+  position: static;
   max-height: calc(100vh - 2.4rem);
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -557,7 +557,7 @@ div.highlighter-rouge {
   border: 1px solid var(--code-block-line);
   border-radius: var(--radius-md);
   background: var(--code-block-bg);
-  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.14);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
   overflow: hidden;
 }
 
@@ -585,6 +585,8 @@ div.highlighter-rouge .highlight pre {
   background: transparent;
   border: 0;
   box-shadow: none;
+  font-size: 13px;
+  line-height: 1.65;
 }
 
 pre code {
@@ -592,6 +594,9 @@ pre code {
   padding: 0;
   background: transparent;
   color: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  border: 0;
   border-radius: 0;
 }
 
@@ -609,7 +614,7 @@ pre code {
 .highlight .go,
 .highlight .gp,
 .highlight .gu {
-  color: #8b92a8;
+  color: #7f8899;
 }
 
 .highlight .k,
@@ -620,7 +625,7 @@ pre code {
 .highlight .kr,
 .highlight .kt,
 .highlight .ow {
-  color: #aab4ff;
+  color: #5767d8;
 }
 
 .highlight .na,
@@ -637,7 +642,7 @@ pre code {
 .highlight .vg,
 .highlight .vi,
 .highlight .bp {
-  color: #7ed0ff;
+  color: #1f6fb2;
 }
 
 .highlight .s,
@@ -652,7 +657,7 @@ pre code {
 .highlight .sr,
 .highlight .ss,
 .highlight .sx {
-  color: #8ef7c6;
+  color: #158466;
 }
 
 .highlight .m,
@@ -661,26 +666,111 @@ pre code {
 .highlight .mi,
 .highlight .mo,
 .highlight .il {
-  color: #ffca7a;
+  color: #b26a10;
 }
 
 .highlight .err,
 .highlight .gr,
 .highlight .gt {
-  color: #ff8b8b;
+  color: #c53b3b;
   background: transparent;
 }
 
 .highlight .gd,
 .highlight .gd .x {
-  color: #ffb4b4;
-  background-color: rgba(255, 107, 107, 0.12);
+  color: #b94a4a;
+  background-color: rgba(197, 59, 59, 0.1);
 }
 
 .highlight .gi,
 .highlight .gi .x {
-  color: #a6f3c7;
-  background-color: rgba(16, 185, 129, 0.14);
+  color: #1b7a5d;
+  background-color: rgba(21, 132, 102, 0.1);
+}
+
+.essay-body .mermaid-shell {
+  margin: 0 0 1.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow-x: auto;
+}
+
+.essay-body .mermaid {
+  min-width: min-content;
+  text-align: center;
+  background: transparent;
+}
+
+.essay-body .mermaid svg {
+  display: block;
+  width: 100% !important;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  background: transparent;
+  overflow: visible;
+}
+
+.essay-body .mermaid svg .node rect,
+.essay-body .mermaid svg .node polygon,
+.essay-body .mermaid svg .node path {
+  filter: none;
+}
+
+.essay-body .mermaid svg .arrowheadPath {
+  transform: scale(0.68);
+  transform-box: fill-box;
+  transform-origin: center;
+  fill: none !important;
+  stroke: #c8c3bb !important;
+  stroke-width: 1.2px !important;
+}
+
+.essay-body .mermaid svg .nodeLabel,
+.essay-body .mermaid svg .edgeLabel {
+  font-family: "IBM Plex Mono", "SFMono-Regular", "JetBrains Mono", monospace;
+}
+
+.essay-body .mermaid svg .label,
+.essay-body .mermaid svg foreignObject div {
+  font-size: 13px !important;
+  line-height: 1.2 !important;
+}
+
+.essay-body .mermaid svg .nodeLabel p,
+.essay-body .mermaid svg .edgeLabel p {
+  margin: 0;
+  font-size: 13px !important;
+  line-height: 1.2 !important;
+}
+
+.essay-body .mermaid svg .nodeLabel span,
+.essay-body .mermaid svg .edgeLabel span {
+  font-size: 0.84em !important;
+}
+
+.essay-body .mermaid svg .edgeLabel rect {
+  fill: #ffffff !important;
+  opacity: 1 !important;
+}
+
+.essay-body .mermaid svg .cluster rect {
+  fill: transparent !important;
+  stroke: #e7e3dd !important;
+  rx: 0;
+  ry: 0;
+}
+
+.essay-body .mermaid svg .cluster-label foreignObject div,
+.essay-body .mermaid svg .clusterLabel foreignObject div {
+  background: #ffffff;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 0;
+  box-shadow: none;
 }
 
 blockquote {
@@ -874,6 +964,18 @@ dl dd {
   font-size: 0.88rem;
 }
 
+.footnotes ol {
+  margin-bottom: 0;
+}
+
+.footnotes li + li {
+  margin-top: 0.35rem;
+}
+
+.footnotes p {
+  margin: 0;
+}
+
 .page-layout-default .page-shell {
   width: 100%;
   max-width: 760px;
@@ -966,7 +1068,38 @@ hr {
   }
 
   .essay-sidebar {
-    display: none;
+    display: block;
+    order: -1;
+    position: static;
+    top: auto;
+  }
+
+  .essay-sidebar-inner {
+    position: static;
+    top: auto;
+    max-height: none;
+    overflow: visible;
+    padding-top: 0;
+    padding-left: 0;
+  }
+
+  .toc-label {
+    margin-bottom: 0.5rem;
+  }
+
+  .toc-list {
+    padding-left: 0;
+    border-left: 0;
+    border-top: 1px solid var(--line);
+    padding-top: 0.85rem;
+  }
+
+  .toc-item {
+    margin-bottom: 0.5rem;
+  }
+
+  .toc-h3 {
+    padding-left: 0.75rem;
   }
 
   .page-layout-default .page-shell {
