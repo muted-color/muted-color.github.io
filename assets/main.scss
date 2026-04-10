@@ -644,12 +644,14 @@ figcaption {
 }
 
 .essay-body .media-figure,
-.essay-body .table-figure {
+.essay-body .table-figure,
+.essay-body .sample-compare {
   margin: 0 0 1.85rem;
 }
 
 .essay-body .media-figure > figcaption,
-.essay-body .table-figure > figcaption {
+.essay-body .table-figure > figcaption,
+.essay-body .sample-compare > figcaption {
   max-width: 42rem;
   padding-left: clamp(1rem, 2.6vw, 1.75rem);
   padding-right: clamp(1rem, 2.6vw, 1.75rem);
@@ -665,18 +667,216 @@ figcaption {
 }
 
 .essay-body .table-figure > figcaption {
-  margin-top: 0;
+  margin-top: 0.8rem;
+  margin-bottom: 0.65rem;
+}
+
+.essay-body .sample-compare > figcaption {
+  margin-top: 0.85rem;
   margin-bottom: 0.65rem;
 }
 
 .essay-body .media-figure > figcaption strong,
-.essay-body .table-figure > figcaption strong {
+.essay-body .table-figure > figcaption strong,
+.essay-body .sample-compare > figcaption strong {
   color: var(--ink);
   font-weight: 600;
 }
 
+.essay-body figcaption code,
+.essay-body figcaption code.highlighter-rouge {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+}
+
+.essay-body figcaption code::before,
+.essay-body figcaption code.highlighter-rouge::before,
+.essay-body figcaption code::after,
+.essay-body figcaption code.highlighter-rouge::after {
+  color: inherit;
+  font: inherit;
+}
+
+.essay-body figcaption code::before,
+.essay-body figcaption code.highlighter-rouge::before {
+  content: "`";
+}
+
+.essay-body figcaption code::after,
+.essay-body figcaption code.highlighter-rouge::after {
+  content: "`";
+}
+
+.essay-body .sample-compare__question {
+  padding: 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+  padding-top: 0.9rem;
+}
+
+.essay-body .sample-compare__question strong {
+  display: block;
+  padding: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.essay-body .sample-compare__question p {
+  margin: 0.55rem 0 0;
+  color: var(--ink);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.essay-body .sample-compare__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+  margin-top: 1rem;
+}
+
+.essay-body .sample-compare__card {
+  min-width: 0;
+  padding: 0.95rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: none;
+}
+
+.essay-body .sample-compare__label {
+  display: block;
+  margin: 0 0 0.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.essay-body .sample-compare__body {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font-size: 0.9rem;
+  line-height: 1.68;
+  word-break: keep-all;
+}
+
+.essay-body .sample-compare__body p {
+  margin: 0 0 0.8rem;
+}
+
+.essay-body .sample-compare__body p:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 760px) {
+  .essay-body .sample-compare__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .essay-body .table-figure .table-shell {
   margin: 0;
+}
+
+.essay-body .table-figure--comparison th[rowspan] {
+  width: 28%;
+}
+
+.essay-body .table-figure--comparison td strong {
+  display: block;
+  color: var(--ink);
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.essay-body .table-figure--comparison .metric-note {
+  display: block;
+  margin-top: 0.22rem;
+  color: var(--muted);
+  font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+.essay-body .table-figure--comparison .comparison-note {
+  display: block;
+  color: var(--ink);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.essay-body .table-figure--comparison th[colspan] {
+  text-align: center;
+}
+
+.essay-body .table-figure--comparison thead tr:nth-child(2) th,
+.essay-body .table-figure--comparison tbody td:not(:first-child) {
+  text-align: center;
+}
+
+.essay-body .table-figure--comparison tbody td:not(:first-child) {
+  font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+  font-size: 0.84rem;
+}
+
+.essay-body .table-figure--comparison tbody td.is-better {
+  color: var(--ink);
+  font-weight: 700;
+  background: rgba(63, 65, 255, 0.05);
+}
+
+.essay-body .table-figure--metrics th[rowspan] {
+  width: 18%;
+  font-size: 0.78rem;
+}
+
+.essay-body .table-figure--metrics th[colspan] {
+  text-align: center;
+}
+
+.essay-body .table-figure--metrics thead tr:nth-child(2) th,
+.essay-body .table-figure--metrics tbody td:not(:first-child) {
+  text-align: center;
+}
+
+.essay-body .table-figure--metrics tbody td:not(:first-child) {
+  font-family: "IBM Plex Mono", "SFMono-Regular", "JetBrains Mono", monospace;
+  font-size: 0.84rem;
+  white-space: nowrap;
+}
+
+.essay-body .table-figure--metrics tbody td:first-child {
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.essay-body .table-figure--metrics tbody td.is-better {
+  color: var(--ink);
+  font-weight: 700;
+  background: rgba(63, 65, 255, 0.05);
 }
 
 .essay-body table caption {

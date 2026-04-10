@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 420" role="img" aria-labelledby="title desc">
+  <title id="title">Gemma 4와 Gemma 3의 single-to-multi 변화 비교 plot</title>
+  <desc id="desc">왼쪽은 Judge Win Rate, 오른쪽은 Reference Match를 보여주는 2패널 slope plot이다. Single에서 Multi로 갈 때 Gemma 3의 변화가 더 크게 나타난다.</desc>
+
+  <rect width="1040" height="420" fill="#ffffff"/>
+
+  <g font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+    <g transform="translate(392 368)">
+      <line x1="0" y1="12" x2="26" y2="12" stroke="#1f6a4f" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="13" cy="12" r="5" fill="#ffffff" stroke="#1f6a4f" stroke-width="2.5"/>
+      <text x="38" y="17" font-size="14" fill="#111111">Gemma 4</text>
+
+      <line x1="122" y1="12" x2="148" y2="12" stroke="#2563eb" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="135" cy="12" r="5" fill="#ffffff" stroke="#2563eb" stroke-width="2.5"/>
+      <text x="160" y="17" font-size="14" fill="#111111">Gemma 3</text>
+    </g>
+  </g>
+
+  <g transform="translate(56 62)">
+    <text x="185" y="0" text-anchor="middle" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#111111">Judge Win Rate</text>
+
+    <g stroke="#dfe4ea" stroke-width="1">
+      <line x1="42" y1="30" x2="42" y2="280"/>
+      <line x1="42" y1="280" x2="328" y2="280"/>
+      <line x1="42" y1="30" x2="328" y2="30" stroke-dasharray="4 6"/>
+      <line x1="42" y1="155" x2="328" y2="155" stroke-dasharray="4 6"/>
+    </g>
+
+    <g font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#6b7280">
+      <text x="28" y="284" text-anchor="end">0.0</text>
+      <text x="28" y="159" text-anchor="end">0.5</text>
+      <text x="28" y="34" text-anchor="end">1.0</text>
+      <text x="118" y="304" text-anchor="middle">Single</text>
+      <text x="252" y="304" text-anchor="middle">Multi</text>
+    </g>
+
+    <g fill="none" stroke-linecap="round" stroke-width="3.5">
+      <line x1="118" y1="55" x2="252" y2="96.7" stroke="#1f6a4f"/>
+      <line x1="118" y1="255" x2="252" y2="221.7" stroke="#2563eb"/>
+    </g>
+
+    <g font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="12" font-weight="700">
+      <circle cx="118" cy="55" r="5.5" fill="#ffffff" stroke="#1f6a4f" stroke-width="2.5"/>
+      <circle cx="252" cy="96.7" r="5.5" fill="#ffffff" stroke="#1f6a4f" stroke-width="2.5"/>
+      <text x="98" y="46" fill="#1f6a4f">0.90</text>
+      <text x="264" y="89" fill="#1f6a4f">0.73</text>
+
+      <circle cx="118" cy="255" r="5.5" fill="#ffffff" stroke="#2563eb" stroke-width="2.5"/>
+      <circle cx="252" cy="221.7" r="5.5" fill="#ffffff" stroke="#2563eb" stroke-width="2.5"/>
+      <text x="93" y="247" fill="#2563eb">0.10</text>
+      <text x="264" y="214" fill="#2563eb">0.23</text>
+    </g>
+  </g>
+
+  <g transform="translate(528 62)">
+    <text x="185" y="0" text-anchor="middle" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#111111">Reference Match</text>
+
+    <g stroke="#dfe4ea" stroke-width="1">
+      <line x1="42" y1="30" x2="42" y2="280"/>
+      <line x1="42" y1="280" x2="328" y2="280"/>
+      <line x1="42" y1="155" x2="328" y2="155" stroke-dasharray="4 6"/>
+      <line x1="42" y1="30" x2="328" y2="30" stroke-dasharray="4 6"/>
+    </g>
+
+    <g font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#6b7280">
+      <text x="28" y="284" text-anchor="end">0.28</text>
+      <text x="28" y="159" text-anchor="end">0.32</text>
+      <text x="28" y="34" text-anchor="end">0.36</text>
+      <text x="118" y="304" text-anchor="middle">Single</text>
+      <text x="252" y="304" text-anchor="middle">Multi</text>
+    </g>
+
+    <g fill="none" stroke-linecap="round" stroke-width="3.5">
+      <line x1="118" y1="157.9" x2="252" y2="157.9" stroke="#1f6a4f"/>
+      <line x1="118" y1="123.8" x2="252" y2="98.1" stroke="#2563eb"/>
+    </g>
+
+    <g font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="12" font-weight="700">
+      <circle cx="118" cy="157.9" r="5.5" fill="#ffffff" stroke="#1f6a4f" stroke-width="2.5"/>
+      <circle cx="252" cy="157.9" r="5.5" fill="#ffffff" stroke="#1f6a4f" stroke-width="2.5"/>
+      <text x="84" y="150" fill="#1f6a4f">0.300</text>
+      <text x="264" y="150" fill="#1f6a4f">0.300</text>
+
+      <circle cx="118" cy="123.8" r="5.5" fill="#ffffff" stroke="#2563eb" stroke-width="2.5"/>
+      <circle cx="252" cy="98.1" r="5.5" fill="#ffffff" stroke="#2563eb" stroke-width="2.5"/>
+      <text x="84" y="116" fill="#2563eb">0.327</text>
+      <text x="264" y="91" fill="#2563eb">0.338</text>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 560" role="img" aria-labelledby="title desc">
+  <title id="title">Axis heatmap for Gemma 4 versus Gemma 3</title>
+  <desc id="desc">Axis-based heatmap summarizing which model looked stronger on LLM judge preference, reference match, and signal following across the main experimental slices. Green marks Gemma 4, blue marks Gemma 3, amber marks mixed or caution, and gray marks not applicable.</desc>
+  <rect width="1040" height="560" fill="#ffffff"/>
+
+  <g font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#202123">
+    <rect x="56" y="24" width="14" height="14" rx="2" fill="#10a37f"/>
+    <text x="78" y="36">G4</text>
+    <rect x="126" y="24" width="14" height="14" rx="2" fill="#4263eb"/>
+    <text x="148" y="36">G3</text>
+    <rect x="196" y="24" width="14" height="14" rx="2" fill="#f4b740"/>
+    <text x="218" y="36">Mix</text>
+    <rect x="282" y="24" width="14" height="14" rx="2" fill="#f3f4f6" stroke="#d8dde3"/>
+    <text x="304" y="36">n/a</text>
+    <text x="366" y="36" fill="#5f6b76">Winner by axis, not overall winner.</text>
+  </g>
+
+  <g stroke="#e6e7e9" stroke-width="1">
+    <line x1="56" y1="88" x2="984" y2="88"/>
+    <line x1="56" y1="148" x2="984" y2="148"/>
+    <line x1="56" y1="208" x2="984" y2="208"/>
+    <line x1="56" y1="268" x2="984" y2="268"/>
+    <line x1="56" y1="328" x2="984" y2="328"/>
+    <line x1="56" y1="388" x2="984" y2="388"/>
+    <line x1="56" y1="448" x2="984" y2="448"/>
+    <line x1="56" y1="508" x2="984" y2="508"/>
+    <line x1="280" y1="88" x2="280" y2="508"/>
+    <line x1="516" y1="88" x2="516" y2="508"/>
+    <line x1="752" y1="88" x2="752" y2="508"/>
+    <line x1="984" y1="88" x2="984" y2="508"/>
+  </g>
+
+  <g font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" fill="#202123">
+    <text x="76" y="76" font-size="15" font-weight="700">Run</text>
+    <text x="318" y="76" font-size="15" font-weight="700">LLM Judge</text>
+    <text x="544" y="76" font-size="15" font-weight="700">Reference Match</text>
+    <text x="774" y="76" font-size="15" font-weight="700">Signal Following</text>
+  </g>
+
+  <g font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="15" fill="#202123">
+    <text x="76" y="124">Learning Curve</text>
+    <text x="76" y="184">Curated Reference</text>
+    <text x="76" y="244">Dual Reference</text>
+    <text x="76" y="304">Multi-Answer Pilot</text>
+    <text x="76" y="364">Multi-Answer Training</text>
+    <text x="76" y="424">Prompt Rewriting</text>
+    <text x="76" y="484">Body Corruption</text>
+  </g>
+
+  <g font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="700">
+    <rect x="328" y="102" width="140" height="32" rx="8" fill="#10a37f"/>
+    <text x="398" y="123" text-anchor="middle" fill="#ffffff">G4</text>
+    <rect x="564" y="102" width="140" height="32" rx="8" fill="#4263eb"/>
+    <text x="634" y="123" text-anchor="middle" fill="#ffffff">G3</text>
+    <rect x="798" y="102" width="140" height="32" rx="8" fill="#f3f4f6" stroke="#d8dde3"/>
+    <text x="868" y="123" text-anchor="middle" fill="#6a6f73">n/a</text>
+
+    <rect x="328" y="162" width="140" height="32" rx="8" fill="#10a37f"/>
+    <text x="398" y="183" text-anchor="middle" fill="#ffffff">G4</text>
+    <rect x="564" y="162" width="140" height="32" rx="8" fill="#4263eb"/>
+    <text x="634" y="183" text-anchor="middle" fill="#ffffff">G3</text>
+    <rect x="798" y="162" width="140" height="32" rx="8" fill="#f3f4f6" stroke="#d8dde3"/>
+    <text x="868" y="183" text-anchor="middle" fill="#6a6f73">n/a</text>
+
+    <rect x="328" y="222" width="140" height="32" rx="8" fill="#10a37f"/>
+    <text x="398" y="243" text-anchor="middle" fill="#ffffff">G4</text>
+    <rect x="564" y="222" width="140" height="32" rx="8" fill="#4263eb"/>
+    <text x="634" y="243" text-anchor="middle" fill="#ffffff">G3</text>
+    <rect x="798" y="222" width="140" height="32" rx="8" fill="#f3f4f6" stroke="#d8dde3"/>
+    <text x="868" y="243" text-anchor="middle" fill="#6a6f73">n/a</text>
+
+    <rect x="328" y="282" width="140" height="32" rx="8" fill="#10a37f"/>
+    <text x="398" y="303" text-anchor="middle" fill="#ffffff">G4</text>
+    <rect x="564" y="282" width="140" height="32" rx="8" fill="#4263eb"/>
+    <text x="634" y="303" text-anchor="middle" fill="#ffffff">G3</text>
+    <rect x="798" y="282" width="140" height="32" rx="8" fill="#f4b740"/>
+    <text x="868" y="303" text-anchor="middle" fill="#6b4a00">Mix</text>
+
+    <rect x="328" y="342" width="140" height="32" rx="8" fill="#10a37f"/>
+    <text x="398" y="363" text-anchor="middle" fill="#ffffff">G4</text>
+    <rect x="564" y="342" width="140" height="32" rx="8" fill="#4263eb"/>
+    <text x="634" y="363" text-anchor="middle" fill="#ffffff">G3</text>
+    <rect x="798" y="342" width="140" height="32" rx="8" fill="#4263eb"/>
+    <text x="868" y="363" text-anchor="middle" fill="#ffffff">G3</text>
+
+    <rect x="328" y="402" width="140" height="32" rx="8" fill="#f4b740"/>
+    <text x="398" y="423" text-anchor="middle" fill="#6b4a00">Mix</text>
+    <rect x="564" y="402" width="140" height="32" rx="8" fill="#4263eb"/>
+    <text x="634" y="423" text-anchor="middle" fill="#ffffff">G3</text>
+    <rect x="798" y="402" width="140" height="32" rx="8" fill="#4263eb"/>
+    <text x="868" y="423" text-anchor="middle" fill="#ffffff">G3</text>
+
+    <rect x="328" y="462" width="140" height="32" rx="8" fill="#f4b740"/>
+    <text x="398" y="483" text-anchor="middle" fill="#6b4a00">Mix</text>
+    <rect x="564" y="462" width="140" height="32" rx="8" fill="#f3f4f6" stroke="#d8dde3"/>
+    <text x="634" y="483" text-anchor="middle" fill="#6a6f73">n/a</text>
+    <rect x="798" y="462" width="140" height="32" rx="8" fill="#f4b740"/>
+    <text x="868" y="483" text-anchor="middle" fill="#6b4a00">Mix</text>
+  </g>
+</svg>
