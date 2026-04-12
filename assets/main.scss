@@ -1719,12 +1719,13 @@ blockquote p + p {
     align-items: center;
     gap: 0.35rem;
     margin-bottom: 0.75rem;
-    padding: 0.35rem;
+    padding: 0.5rem;
     border: 1px solid var(--line);
     border-radius: 8px;
     background: var(--surface-tint);
     overflow-x: auto;
     overscroll-behavior-x: contain;
+    scroll-padding-inline: 0.5rem;
     scroll-snap-type: x proximity;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
