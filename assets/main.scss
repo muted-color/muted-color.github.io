@@ -100,18 +100,26 @@ h6 {
   display: flex;
   align-items: center;
   margin-left: auto;
+  margin-right: -0.75rem;
   gap: 1.8rem;
 }
 
 .site-nav-link {
   color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
   font-size: 0.84rem;
-  letter-spacing: 0.01em;
+  letter-spacing: 0;
+  line-height: 1;
+  margin: 0;
+  padding: 0;
   text-decoration: none;
+  width: max-content;
 }
 
 .site-nav-link:hover {
-  color: var(--ink);
+  color: var(--accent-strong);
   text-decoration: none;
 }
 
@@ -180,6 +188,7 @@ h6 {
   align-items: center;
   flex-wrap: wrap;
   gap: 0.38rem;
+  line-height: 1;
   min-width: 0;
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -211,6 +220,16 @@ h6 {
   color: var(--muted);
   font-size: 0.86rem;
   font-weight: 500;
+}
+
+.page-link.site-nav-link,
+.page-link.site-nav-link:visited {
+  color: var(--ink);
+}
+
+.page-link.site-nav-link:hover,
+.page-link.site-nav-link:focus-visible {
+  color: var(--accent-strong);
 }
 
 .home-shell {
@@ -2106,7 +2125,7 @@ hr {
 
 @media (max-width: 520px) {
   .site-header .wrapper {
-    align-items: flex-start;
+    align-items: center;
     gap: 0.75rem;
   }
 
