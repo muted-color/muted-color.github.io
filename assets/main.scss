@@ -838,8 +838,10 @@ figcaption {
   font-weight: 600;
 }
 
-.essay-body figcaption code,
-.essay-body figcaption code.highlighter-rouge {
+.essay figcaption code,
+.essay figcaption code.highlighter-rouge,
+.essay-body table code,
+.essay-body table code.highlighter-rouge {
   margin: 0;
   padding: 0;
   border: 0;
@@ -851,22 +853,17 @@ figcaption {
   letter-spacing: inherit;
 }
 
-.essay-body figcaption code::before,
-.essay-body figcaption code.highlighter-rouge::before,
-.essay-body figcaption code::after,
-.essay-body figcaption code.highlighter-rouge::after {
+.essay figcaption code::before,
+.essay figcaption code.highlighter-rouge::before,
+.essay figcaption code::after,
+.essay figcaption code.highlighter-rouge::after,
+.essay-body table code::before,
+.essay-body table code.highlighter-rouge::before,
+.essay-body table code::after,
+.essay-body table code.highlighter-rouge::after {
+  content: none;
   color: inherit;
   font: inherit;
-}
-
-.essay-body figcaption code::before,
-.essay-body figcaption code.highlighter-rouge::before {
-  content: "`";
-}
-
-.essay-body figcaption code::after,
-.essay-body figcaption code.highlighter-rouge::after {
-  content: "`";
 }
 
 .essay-body .sample-compare__question {
