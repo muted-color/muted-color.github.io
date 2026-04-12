@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 420" role="img" aria-labelledby="title desc">
-  <title id="title">Readability under raw and body-noise inputs</title>
-  <desc id="desc">A two-panel grouped bar plot comparing raw and body-noise readability average scores for Gemma4 and Gemma3 under mild and hard body-noise. Higher values indicate more readable answers.</desc>
+  <title id="title">Noise readability absolute score and raw delta comparison</title>
+  <desc id="desc">A two-panel plot comparing Gemma4 and Gemma3 under Real typo and ASR noise. The left panel shows noisy-input Readability average scores, and the right panel shows Readability delta from raw inputs.</desc>
   <rect width="1040" height="420" fill="#ffffff"/>
 
   <defs>
@@ -12,7 +12,7 @@
 
   <g font-family="Plus Jakarta Sans, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
     <g transform="translate(96 62)">
-      <text x="180" y="0" text-anchor="middle" font-size="15" font-weight="700" fill="#111111">Mild Body-Noise</text>
+      <text x="180" y="0" text-anchor="middle" font-size="15" font-weight="700" fill="#111111">Noisy-input Readability</text>
 
       <g transform="translate(0 26)">
         <g stroke="#e6e8ee" stroke-width="1">
@@ -30,72 +30,54 @@
           <text x="-15" y="114" text-anchor="end">4</text>
           <text x="-15" y="59" text-anchor="end">6</text>
           <text x="-15" y="4" text-anchor="end">8</text>
-          <text x="92" y="252" text-anchor="middle">Gemma4</text>
-          <text x="268" y="252" text-anchor="middle">Gemma3</text>
+          <text x="115" y="252" text-anchor="middle">Real typo</text>
+          <text x="255" y="252" text-anchor="middle">ASR noise</text>
         </g>
 
         <g>
-          <rect x="57" y="41.42" width="30" height="178.58" rx="8" fill="#3f41ff"/>
-          <rect x="95" y="55" width="30" height="165" rx="8" fill="#cfd3ff"/>
-          <rect x="233" y="83.6" width="30" height="136.4" rx="8" fill="url(#gemma3-hatch)" stroke="#3f41ff" stroke-width="0.9"/>
-          <rect x="271" y="94.23" width="30" height="125.77" rx="8" fill="url(#gemma3-hatch)" stroke="#3f41ff" stroke-width="0.9" opacity="0.68"/>
-        </g>
+          <rect x="87" y="73.7" width="24" height="146.3" rx="7" fill="#3f41ff"/>
+          <rect x="119" y="113.8" width="24" height="106.2" rx="7" fill="url(#gemma3-hatch)" stroke="#3f41ff" stroke-width="0.9"/>
 
-        <g fill="#5f6672" font-size="11" font-weight="600">
-          <text x="72" y="236" text-anchor="middle">raw</text>
-          <text x="110" y="236" text-anchor="middle">noise</text>
-          <text x="248" y="236" text-anchor="middle">raw</text>
-          <text x="286" y="236" text-anchor="middle">noise</text>
+          <rect x="227" y="63.8" width="24" height="156.2" rx="7" fill="#3f41ff"/>
+          <rect x="259" y="110.0" width="24" height="110.0" rx="7" fill="url(#gemma3-hatch)" stroke="#3f41ff" stroke-width="0.9"/>
         </g>
       </g>
     </g>
 
     <g transform="translate(590 62)">
-      <text x="180" y="0" text-anchor="middle" font-size="15" font-weight="700" fill="#111111">Hard Body-Noise</text>
+      <text x="180" y="0" text-anchor="middle" font-size="15" font-weight="700" fill="#111111">Readability Delta</text>
 
       <g transform="translate(0 26)">
         <g stroke="#e6e8ee" stroke-width="1">
-          <line x1="0" y1="220" x2="360" y2="220"/>
-          <line x1="0" y1="165" x2="360" y2="165" stroke-dasharray="4 8"/>
-          <line x1="0" y1="110" x2="360" y2="110" stroke-dasharray="4 8"/>
-          <line x1="0" y1="55" x2="360" y2="55" stroke-dasharray="4 8"/>
-          <line x1="0" y1="0" x2="360" y2="0" stroke-dasharray="4 8"/>
-          <line x1="0" y1="0" x2="0" y2="220"/>
+          <line x1="78" y1="130" x2="360" y2="130"/>
+          <line x1="78" y1="220" x2="360" y2="220"/>
+          <line x1="360" y1="34" x2="360" y2="220"/>
         </g>
 
         <g fill="#5f6672" font-size="12" font-weight="500">
-          <text x="-15" y="224" text-anchor="end">0</text>
-          <text x="-15" y="169" text-anchor="end">2</text>
-          <text x="-15" y="114" text-anchor="end">4</text>
-          <text x="-15" y="59" text-anchor="end">6</text>
-          <text x="-15" y="4" text-anchor="end">8</text>
-          <text x="92" y="252" text-anchor="middle">Gemma4</text>
-          <text x="268" y="252" text-anchor="middle">Gemma3</text>
+          <text x="0" y="88" text-anchor="start">Real typo</text>
+          <text x="0" y="168" text-anchor="start">ASR noise</text>
+          <text x="78" y="252" text-anchor="middle">-0.6</text>
+          <text x="172" y="252" text-anchor="middle">-0.4</text>
+          <text x="266" y="252" text-anchor="middle">-0.2</text>
+          <text x="360" y="252" text-anchor="middle">0</text>
         </g>
 
         <g>
-          <rect x="57" y="48.4" width="30" height="171.6" rx="8" fill="#3f41ff"/>
-          <rect x="95" y="63.43" width="30" height="156.57" rx="8" fill="#cfd3ff"/>
-          <rect x="233" y="82.87" width="30" height="137.13" rx="8" fill="url(#gemma3-hatch)" stroke="#3f41ff" stroke-width="0.9"/>
-          <rect x="271" y="103.22" width="30" height="116.78" rx="8" fill="url(#gemma3-hatch)" stroke="#3f41ff" stroke-width="0.9" opacity="0.68"/>
-        </g>
+          <rect x="106.2" y="70" width="253.8" height="14" rx="7" fill="#3f41ff"/>
+          <rect x="115.6" y="92" width="244.4" height="14" rx="7" fill="url(#gemma3-hatch)" stroke="#3f41ff" stroke-width="0.9"/>
 
-        <g fill="#5f6672" font-size="11" font-weight="600">
-          <text x="72" y="236" text-anchor="middle">raw</text>
-          <text x="110" y="236" text-anchor="middle">noise</text>
-          <text x="248" y="236" text-anchor="middle">raw</text>
-          <text x="286" y="236" text-anchor="middle">noise</text>
+          <rect x="125.0" y="150" width="235.0" height="14" rx="7" fill="#3f41ff"/>
+          <rect x="256.6" y="172" width="103.4" height="14" rx="7" fill="url(#gemma3-hatch)" stroke="#3f41ff" stroke-width="0.9"/>
         </g>
       </g>
     </g>
 
-    <g transform="translate(331 374)" font-size="14" font-weight="500" fill="#111111">
+    <g transform="translate(389 374)" font-size="14" font-weight="500" fill="#111111">
       <rect x="0" y="-9" width="18" height="14" rx="4" fill="#3f41ff"/>
-      <text x="30" y="3">Gemma4 raw</text>
-      <rect x="158" y="-9" width="18" height="14" rx="4" fill="#cfd3ff"/>
-      <text x="188" y="3">Gemma4 noise</text>
-      <rect x="338" y="-9" width="18" height="14" rx="4" fill="url(#gemma3-hatch)" stroke="#3f41ff" stroke-width="0.9"/>
-      <text x="368" y="3">Gemma3</text>
+      <text x="30" y="3">Gemma4</text>
+      <rect x="148" y="-9" width="18" height="14" rx="4" fill="url(#gemma3-hatch)" stroke="#3f41ff" stroke-width="0.9"/>
+      <text x="178" y="3">Gemma3</text>
     </g>
   </g>
 </svg>

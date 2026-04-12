@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 420" role="img" aria-labelledby="title desc">
-  <title id="title">Judge win and ROUGE-L across QLoRA SFT steps</title>
-  <desc id="desc">A two-panel line plot comparing Gemma4 and Gemma3 across base, step50, step200, and step500. The left panel shows LLM Judge win rate, and the right panel shows ROUGE-L.</desc>
+  <title id="title">Judge Preference and ROUGE-L across QLoRA SFT steps</title>
+  <desc id="desc">A two-panel line plot comparing Gemma4 and Gemma3 across base, step50, step200, and step500. The left panel shows judge preference, and the right panel shows ROUGE-L.</desc>
   <rect width="1040" height="420" fill="#ffffff"/>
 
   <defs>
@@ -12,7 +12,7 @@
 
   <g font-family="Plus Jakarta Sans, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
     <g transform="translate(96 62)">
-      <text x="180" y="0" text-anchor="middle" font-size="15" font-weight="700" fill="#111111">LLM Judge Win</text>
+      <text x="180" y="0" text-anchor="middle" font-size="15" font-weight="700" fill="#111111">Judge Preference</text>
 
       <g transform="translate(0 26)">
         <g stroke="#e6e8ee" stroke-width="1">

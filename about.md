@@ -20,11 +20,11 @@ Applied AI Researcher로서 자연어와 비전 모델링을 통해 다양한 �
 ## Awards & Sharing
 
 - AWS Summit Seoul 2019 Speaker
-  MMORPG 이상 행위 탐지 모델 사례를 발표했습니다. [Video](https://www.youtube.com/watch?v=9tkGgR9xyNs){:target="_blank" rel="noopener noreferrer"}, [Slides](https://www.slideshare.net/awskorea/mmorpg-abuser-detection-with-sagemaker-krafton-krafton-aws-summit-seoul-2019-141257125){:target="_blank" rel="noopener noreferrer"}
+  MMORPG 이상 행위 탐지 모델 사례를 발표 [Video](https://www.youtube.com/watch?v=9tkGgR9xyNs){:target="_blank" rel="noopener noreferrer"}, [Slides](https://www.slideshare.net/awskorea/mmorpg-abuser-detection-with-sagemaker-krafton-krafton-aws-summit-seoul-2019-141257125){:target="_blank" rel="noopener noreferrer"}
 - Big Contest 2016 한국정보화진흥원장상
-  보험 사기 예측 모델 프로젝트로 수상했습니다.
+  보험 사기 예측 모델 프로젝트로 수상
 - OSS World Challenge 2015 금상
-  서버 로그 시각화 서비스 [ErRabbit](https://github.com/soleaf/ErRabbit){:target="_blank" rel="noopener noreferrer"} 프로젝트로 수상했습니다.
+  서버 로그 시각화 서비스 [ErRabbit](https://github.com/soleaf/ErRabbit){:target="_blank" rel="noopener noreferrer"} 프로젝트로 수상
 
 ## Links
 
