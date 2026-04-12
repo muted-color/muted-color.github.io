@@ -2,6 +2,7 @@ title: Ilho Ahn
 description: Applied LLM research notes, experiments, and implementation findings by Ilho Ahn
 url: ""
 baseurl: ""
+google_analytics: "G-JKZPX3S49D"
 lang: ko-KR
 timezone: Asia/Seoul
 theme: minima
