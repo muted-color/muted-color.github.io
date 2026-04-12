@@ -13,12 +13,13 @@ layout: default
   </div>
 
   <section class="post-index" id="posts">
+    {% assign visible_posts = site.posts | where_exp: "post", "post.hidden != true" %}
     <div class="post-index-head">
       <span>Latest</span>
-      <span>{{ site.posts | size }} posts</span>
+      <span>{{ visible_posts | size }} posts</span>
     </div>
     <ol class="post-stream">
-      {% for post in site.posts %}
+      {% for post in visible_posts %}
         {% assign display_category = post.categories | first %}
         <li class="post-stream-item">
           <a class="post-stream-link" href="{{ post.url | relative_url }}">

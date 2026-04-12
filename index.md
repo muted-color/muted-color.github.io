@@ -1,7 +1,7 @@
 ---
 layout: home
-title: MINI Research
+title: Articles
 eyebrow: ""
 ---
 
-작은 실험과 관찰을 남깁니다.
+Tiny personal research logs

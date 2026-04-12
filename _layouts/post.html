@@ -287,8 +287,159 @@ layout: default
       });
     }
 
+    function normalizeReferenceLabel(label) {
+      return label.toLowerCase().replace(/\s+/g, " ").trim();
+    }
+
+    function referenceIdFor(prefix, number) {
+      return prefix.toLowerCase().replace(/\s+/g, "-") + "-" + number;
+    }
+
+    function captionReferenceLabel(caption) {
+      var text = caption.textContent.trim();
+      var match = text.match(/^(Appendix\s+Table|Figure|Table|Sample)\s+(\d+)\s*\./i);
+
+      if (!match) return null;
+
+      var prefix = match[1].replace(/\s+/g, " ");
+      var number = match[2];
+      var label = prefix + " " + number;
+
+      return {
+        key: normalizeReferenceLabel(label),
+        label: label,
+        id: referenceIdFor(prefix, number)
+      };
+    }
+
+    function uniqueReferenceId(baseId, target) {
+      var existing = document.getElementById(baseId);
+      var suffix = 2;
+      var candidate = baseId;
+
+      if (!existing || existing === target) return baseId;
+
+      while (document.getElementById(candidate)) {
+        candidate = baseId + "-" + suffix;
+        suffix += 1;
+      }
+
+      return candidate;
+    }
+
+    function enhanceFigureTableReferences() {
+      var references = new Map();
+      var captions = [];
+      var heroCaption = document.querySelector(".essay-hero > figcaption");
+
+      if (heroCaption) captions.push(heroCaption);
+
+      root.querySelectorAll("figure > figcaption").forEach(function (caption) {
+        captions.push(caption);
+      });
+
+      captions.forEach(function (caption) {
+        var parsed = captionReferenceLabel(caption);
+        var target = caption.closest("figure");
+
+        if (!parsed || !target) return;
+
+        if (!target.id) {
+          target.id = uniqueReferenceId(parsed.id, target);
+        }
+
+        if (!references.has(parsed.key)) {
+          references.set(parsed.key, {
+            href: "#" + target.id,
+            label: parsed.label
+          });
+        }
+      });
+
+      if (!references.size) return;
+
+      var referencePattern = /\b(Appendix\s+Table|Figure|Table|Sample)\s+(\d+)\b/g;
+      var skippedSelector = [
+        "a",
+        "button",
+        "code",
+        "figcaption",
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6",
+        "pre",
+        "script",
+        "style",
+        "textarea"
+      ].join(", ");
+
+      var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+        acceptNode: function (node) {
+          var parent = node.parentElement;
+
+          if (!node.nodeValue || !parent || parent.closest(skippedSelector)) {
+            return NodeFilter.FILTER_REJECT;
+          }
+
+          referencePattern.lastIndex = 0;
+          if (!referencePattern.test(node.nodeValue)) {
+            return NodeFilter.FILTER_REJECT;
+          }
+
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      });
+
+      var textNodes = [];
+
+      while (walker.nextNode()) {
+        textNodes.push(walker.currentNode);
+      }
+
+      textNodes.forEach(function (node) {
+        var fragment = document.createDocumentFragment();
+        var text = node.nodeValue;
+        var lastIndex = 0;
+        var match;
+
+        referencePattern.lastIndex = 0;
+
+        while ((match = referencePattern.exec(text)) !== null) {
+          var label = match[1].replace(/\s+/g, " ") + " " + match[2];
+          var reference = references.get(normalizeReferenceLabel(label));
+
+          if (!reference) continue;
+
+          if (match.index > lastIndex) {
+            fragment.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+          }
+
+          var link = document.createElement("a");
+          link.className = "figure-ref";
+          link.href = reference.href;
+          link.textContent = match[0];
+          link.setAttribute("aria-label", "Jump to " + reference.label);
+          fragment.appendChild(link);
+
+          lastIndex = referencePattern.lastIndex;
+        }
+
+        if (lastIndex === 0) return;
+
+        if (lastIndex < text.length) {
+          fragment.appendChild(document.createTextNode(text.slice(lastIndex)));
+        }
+
+        node.parentNode.replaceChild(fragment, node);
+      });
+    }
+
     enhanceHeadingAnchors();
     enhanceCodeBlocks();
+    enhanceFigureTableReferences();
 
     var headings = root.querySelectorAll("h2, h3");
     if (!headings.length) {
