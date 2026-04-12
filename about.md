@@ -7,7 +7,7 @@ permalink: /about/
 <img class="about-profile__photo" src="/assets/images/common/ilho-ahn-profile.png" alt="안일호 Ilho Ahn 프로필 사진">
 <p class="about-profile__eyebrow">About Me</p>
 <h1>안일호 (ILHO AHN)</h1>
-Applied AI Researcher로서 자연어와 비전 모델링을 통해 다양한 도메인의 문제를 해결해왔습니다.
+Applied AI Researcher로서 자연어와 비전 모델링을 통해 다양한 도메인의 문제를 해결하고 있습니다.
 
 ## Experience
 
