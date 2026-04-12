@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 610" role="img" aria-labelledby="title desc">
   <title id="title">Gemma4 and Gemma3 Korean SFT comparison bars</title>
-  <desc id="desc">A compact horizontal bar comparison of Gemma4 and Gemma3 across base judge win, reference match, format alignment, SFT judge win, training speed, and hard noise readability. Each row is scaled within its own metric so the relative difference is easy to scan.</desc>
+  <desc id="desc">A compact horizontal bar comparison of Gemma4 and Gemma3 across base judge preference, reference match, format alignment, SFT judge preference, training speed, and noise readability. Each row is scaled within its own metric so the relative difference is easy to scan.</desc>
   <rect width="1040" height="610" fill="#ffffff"/>
 
   <defs>
@@ -35,12 +35,12 @@
       </g>
 
       <g font-size="15" font-weight="700">
-        <text x="32" y="43">Base judge win</text>
+        <text x="32" y="43">Base preference</text>
         <text x="32" y="118">Reference match</text>
         <text x="32" y="193">Format alignment</text>
-        <text x="32" y="268">SFT judge win</text>
+        <text x="32" y="268">SFT preference</text>
         <text x="32" y="343">Training speed</text>
-        <text x="32" y="418">Hard-noise readability</text>
+        <text x="32" y="418">Noise readability</text>
       </g>
 
       <g fill="#5f6672" font-size="12">
@@ -49,7 +49,7 @@
         <text x="32" y="211">1 - violation rate</text>
         <text x="32" y="286">step500 preference</text>
         <text x="32" y="361">100-step runtime ratio</text>
-        <text x="32" y="436">hard-noise judge avg</text>
+        <text x="32" y="436">Real typo + ASR noise</text>
       </g>
 
       <g transform="translate(296 25)">
@@ -89,9 +89,9 @@
 
       <g transform="translate(296 400)">
         <rect x="0" y="0" width="560" height="16" rx="8" fill="#3f41ff"/>
-        <text x="576" y="13" font-size="13" font-weight="700" fill="#3f41ff">5.69</text>
-        <rect x="0" y="24" width="418" height="16" rx="8" fill="url(#gemma3-hatch)"/>
-        <text x="434" y="37" font-size="13" font-weight="700" fill="#3f41ff">4.25</text>
+        <text x="576" y="13" font-size="13" font-weight="700" fill="#3f41ff">5.50</text>
+        <rect x="0" y="24" width="400" height="16" rx="8" fill="url(#gemma3-hatch)"/>
+        <text x="416" y="37" font-size="13" font-weight="700" fill="#3f41ff">3.93</text>
       </g>
     </g>
   </g>

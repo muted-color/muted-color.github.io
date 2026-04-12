@@ -1,0 +1,23 @@
+{%- assign cards = include.models | split: ";" -%}
+{%- assign label = include.label | default: "비교 대상 모델" -%}
+{%- assign aria_label = include.aria_label | default: label -%}
+
+<p class="model-mention-eyebrow">{{ label }}</p>
+
+<div class="model-mention-grid" aria-label="{{ aria_label }}">
+  {%- for card in cards -%}
+    {%- assign fields = card | split: "|" -%}
+    {%- assign name = fields[0] | strip -%}
+    {%- assign repo = fields[1] | strip -%}
+    {%- assign url = fields[2] | strip -%}
+    {%- if url == "" -%}
+      {%- assign url = repo | prepend: "https://huggingface.co/" -%}
+    {%- endif -%}
+    <a class="model-mention-card" href="{{ url }}" target="_blank" rel="noopener noreferrer">
+      <span class="model-mention-card__text">
+        <span class="model-mention-card__name">{{ name }}</span>
+        <span class="model-mention-card__repo">{{ repo }}</span>
+      </span>
+    </a>
+  {%- endfor -%}
+</div>

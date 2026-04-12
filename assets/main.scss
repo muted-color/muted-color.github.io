@@ -100,18 +100,26 @@ h6 {
   display: flex;
   align-items: center;
   margin-left: auto;
+  margin-right: -0.75rem;
   gap: 1.8rem;
 }
 
 .site-nav-link {
   color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
   font-size: 0.84rem;
-  letter-spacing: 0.01em;
+  letter-spacing: 0;
+  line-height: 1;
+  margin: 0;
+  padding: 0;
   text-decoration: none;
+  width: max-content;
 }
 
 .site-nav-link:hover {
-  color: var(--ink);
+  color: var(--accent-strong);
   text-decoration: none;
 }
 
@@ -180,6 +188,7 @@ h6 {
   align-items: center;
   flex-wrap: wrap;
   gap: 0.38rem;
+  line-height: 1;
   min-width: 0;
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -211,6 +220,16 @@ h6 {
   color: var(--muted);
   font-size: 0.86rem;
   font-weight: 500;
+}
+
+.page-link.site-nav-link,
+.page-link.site-nav-link:visited {
+  color: var(--ink);
+}
+
+.page-link.site-nav-link:hover,
+.page-link.site-nav-link:focus-visible {
+  color: var(--accent-strong);
 }
 
 .home-shell {
@@ -655,11 +674,22 @@ h6 {
   outline: none;
 }
 
+.essay-body .model-mention-eyebrow {
+  margin: 1.35rem 0 0.55rem;
+  color: var(--muted);
+  font-family: "IBM Plex Mono", "SFMono-Regular", "JetBrains Mono", monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
 .essay-body .model-mention-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.75rem;
-  margin: -0.3rem 0 1.75rem;
+  margin: 0 0 1.75rem;
 }
 
 .essay-body .model-mention-card {
@@ -1499,14 +1529,14 @@ blockquote p + p {
   padding: 0;
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
-  background: var(--surface-tint);
+  background: var(--surface);
   overflow: hidden;
   transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
 }
 
 .essay-body details[open] {
   border-color: var(--line-strong);
-  background: var(--surface-tint);
+  background: var(--surface);
   box-shadow: 0 16px 34px rgba(17, 17, 17, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
@@ -1522,25 +1552,25 @@ blockquote p + p {
 .essay-body summary {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.58rem;
   cursor: pointer;
   color: var(--ink);
   font-weight: 600;
-  font-size: 1.08rem;
+  font-size: 0.92rem;
   line-height: 1.45;
   list-style: none;
-  padding: 1.05rem 1.2rem;
-  background: transparent;
+  padding: 0.68rem 0.9rem;
+  background: var(--surface);
   transition: background-color 180ms ease, color 180ms ease;
 }
 
 .essay-body details.metric-detail summary {
-  padding: 0.82rem 1.05rem;
-  font-size: 0.96rem;
+  padding: 0.62rem 0.85rem;
+  font-size: 0.88rem;
 }
 
 .essay-body details.metric-detail .details-content {
-  padding: 0.85rem 1.05rem 1rem;
+  padding: 0.78rem 0.9rem 0.9rem;
 }
 
 .essay-body .metric-detail__eyebrow {
@@ -1719,12 +1749,13 @@ blockquote p + p {
     align-items: center;
     gap: 0.35rem;
     margin-bottom: 0.75rem;
-    padding: 0.35rem;
+    padding: 0.5rem;
     border: 1px solid var(--line);
     border-radius: 8px;
     background: var(--surface-tint);
     overflow-x: auto;
     overscroll-behavior-x: contain;
+    scroll-padding-inline: 0.5rem;
     scroll-snap-type: x proximity;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
@@ -1778,25 +1809,26 @@ blockquote p + p {
 
 .essay-body summary::before {
   content: "";
-  width: 0.56rem;
-  height: 0.56rem;
+  width: 0.42rem;
+  height: 0.42rem;
   flex-shrink: 0;
-  margin-top: -0.05rem;
-  border-right: 1.5px solid currentColor;
-  border-bottom: 1.5px solid currentColor;
+  margin-top: -0.03rem;
+  border-right: 1.3px solid currentColor;
+  border-bottom: 1.3px solid currentColor;
   transform: rotate(-45deg);
   transition: transform 180ms ease;
 }
 
 .essay-body details.metric-detail summary::before {
-  width: 0.44rem;
-  height: 0.44rem;
-  border-right-width: 1.4px;
-  border-bottom-width: 1.4px;
+  width: 0.38rem;
+  height: 0.38rem;
+  border-right-width: 1.2px;
+  border-bottom-width: 1.2px;
 }
 
 .essay-body summary:hover {
-  background: rgba(17, 17, 17, 0.025);
+  color: var(--accent-strong);
+  background: var(--surface-strong);
 }
 
 .essay-body summary:focus-visible {
@@ -1805,7 +1837,7 @@ blockquote p + p {
 }
 
 .essay-body details[open] summary {
-  background: rgba(17, 17, 17, 0.03);
+  background: var(--surface-tint);
   border-bottom: 1px solid var(--line);
 }
 
@@ -1815,6 +1847,7 @@ blockquote p + p {
 
 .essay-body .details-content {
   padding: 0.95rem 1.25rem 1.1rem;
+  background: var(--surface);
 }
 
 .essay-body .details-content > :first-child {
@@ -2031,23 +2064,31 @@ hr {
     top: auto;
     max-height: none;
     overflow: visible;
-    padding-top: 0;
-    padding-left: 0;
+    padding: 1rem 1rem 0.45rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--surface-tint);
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.04);
   }
 
   .toc-label {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.62rem;
+    color: var(--ink);
   }
 
   .toc-list {
     padding-left: 0;
     border-left: 0;
     border-top: 1px solid var(--line);
-    padding-top: 0.85rem;
+    padding-top: 0.8rem;
   }
 
   .toc-item {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.42rem;
+  }
+
+  .toc-item a {
+    padding: 0.14rem 0;
   }
 
   .toc-h3 {
@@ -2097,7 +2138,7 @@ hr {
 
 @media (max-width: 520px) {
   .site-header .wrapper {
-    align-items: flex-start;
+    align-items: center;
     gap: 0.75rem;
   }
 
