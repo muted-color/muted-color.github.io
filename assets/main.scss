@@ -2032,23 +2032,31 @@ hr {
     top: auto;
     max-height: none;
     overflow: visible;
-    padding-top: 0;
-    padding-left: 0;
+    padding: 1rem 1rem 0.45rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--surface-tint);
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.04);
   }
 
   .toc-label {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.62rem;
+    color: var(--ink);
   }
 
   .toc-list {
     padding-left: 0;
     border-left: 0;
     border-top: 1px solid var(--line);
-    padding-top: 0.85rem;
+    padding-top: 0.8rem;
   }
 
   .toc-item {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.42rem;
+  }
+
+  .toc-item a {
+    padding: 0.14rem 0;
   }
 
   .toc-h3 {
