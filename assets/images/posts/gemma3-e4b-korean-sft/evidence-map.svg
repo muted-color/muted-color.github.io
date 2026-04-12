@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 610" role="img" aria-labelledby="title desc">
+  <title id="title">Gemma4 and Gemma3 Korean SFT comparison bars</title>
+  <desc id="desc">A compact horizontal bar comparison of Gemma4 and Gemma3 across base judge win, reference match, format alignment, SFT judge win, training speed, and hard noise readability. Each row is scaled within its own metric so the relative difference is easy to scan.</desc>
+  <rect width="1040" height="610" fill="#ffffff"/>
+
+  <defs>
+    <filter id="shadow" x="-12%" y="-18%" width="124%" height="136%">
+      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#111111" flood-opacity="0.07"/>
+    </filter>
+    <pattern id="gemma3-hatch" width="6" height="6" patternUnits="userSpaceOnUse">
+      <rect width="6" height="6" fill="#eef0ff"/>
+      <path d="M-1 -1 L7 7 M7 -1 L-1 7" stroke="#3f41ff" stroke-width="1.15" opacity="0.58"/>
+    </pattern>
+  </defs>
+
+  <g font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+    <g transform="translate(58 28)" font-size="14" fill="#111111">
+      <rect x="0" y="0" width="14" height="14" rx="4" fill="#3f41ff"/>
+      <text x="22" y="12">Gemma4</text>
+      <rect x="112" y="0" width="14" height="14" rx="4" fill="url(#gemma3-hatch)" stroke="#3f41ff" stroke-width="0.8"/>
+      <text x="134" y="12">Gemma3</text>
+    </g>
+
+    <g transform="translate(52 66)" filter="url(#shadow)">
+      <rect x="0" y="0" width="936" height="465" rx="24" fill="#ffffff" stroke="#e6e8ee"/>
+    </g>
+
+    <g transform="translate(52 66)" fill="#111111">
+      <g stroke="#e6e8ee" stroke-width="1">
+        <line x1="0" y1="80" x2="936" y2="80"/>
+        <line x1="0" y1="155" x2="936" y2="155"/>
+        <line x1="0" y1="230" x2="936" y2="230"/>
+        <line x1="0" y1="305" x2="936" y2="305"/>
+        <line x1="0" y1="380" x2="936" y2="380"/>
+      </g>
+
+      <g font-size="15" font-weight="700">
+        <text x="32" y="43">Base judge win</text>
+        <text x="32" y="118">Reference match</text>
+        <text x="32" y="193">Format alignment</text>
+        <text x="32" y="268">SFT judge win</text>
+        <text x="32" y="343">Training speed</text>
+        <text x="32" y="418">Hard-noise readability</text>
+      </g>
+
+      <g fill="#5f6672" font-size="12">
+        <text x="32" y="61">pairwise preference</text>
+        <text x="32" y="136">ROUGE-L F1</text>
+        <text x="32" y="211">1 - violation rate</text>
+        <text x="32" y="286">step500 preference</text>
+        <text x="32" y="361">100-step runtime ratio</text>
+        <text x="32" y="436">hard-noise judge avg</text>
+      </g>
+
+      <g transform="translate(296 25)">
+        <rect x="0" y="0" width="392" height="16" rx="8" fill="#3f41ff"/>
+        <text x="408" y="13" font-size="13" font-weight="700" fill="#3f41ff">0.70</text>
+        <rect x="0" y="24" width="168" height="16" rx="8" fill="url(#gemma3-hatch)"/>
+        <text x="184" y="37" font-size="13" font-weight="700" fill="#3f41ff">0.30</text>
+      </g>
+
+      <g transform="translate(296 100)">
+        <rect x="0" y="0" width="543" height="16" rx="8" fill="#3f41ff"/>
+        <text x="559" y="13" font-size="13" font-weight="700" fill="#3f41ff">0.318</text>
+        <rect x="0" y="24" width="560" height="16" rx="8" fill="url(#gemma3-hatch)"/>
+        <text x="576" y="37" font-size="13" font-weight="700" fill="#3f41ff">0.327</text>
+      </g>
+
+      <g transform="translate(296 175)">
+        <rect x="0" y="0" width="560" height="16" rx="8" fill="#3f41ff"/>
+        <text x="576" y="13" font-size="13" font-weight="700" fill="#3f41ff">0.89</text>
+        <rect x="0" y="24" width="63" height="16" rx="8" fill="url(#gemma3-hatch)"/>
+        <text x="79" y="37" font-size="13" font-weight="700" fill="#3f41ff">0.10</text>
+      </g>
+
+      <g transform="translate(296 250)">
+        <rect x="0" y="0" width="442" height="16" rx="8" fill="#3f41ff"/>
+        <text x="458" y="13" font-size="13" font-weight="700" fill="#3f41ff">0.79</text>
+        <rect x="0" y="24" width="118" height="16" rx="8" fill="url(#gemma3-hatch)"/>
+        <text x="134" y="37" font-size="13" font-weight="700" fill="#3f41ff">0.21</text>
+      </g>
+
+      <g transform="translate(296 325)">
+        <rect x="0" y="0" width="560" height="16" rx="8" fill="#3f41ff"/>
+        <text x="576" y="13" font-size="13" font-weight="700" fill="#3f41ff">~1.8x</text>
+        <rect x="0" y="24" width="311" height="16" rx="8" fill="url(#gemma3-hatch)"/>
+        <text x="327" y="37" font-size="13" font-weight="700" fill="#3f41ff">1.0x</text>
+      </g>
+
+      <g transform="translate(296 400)">
+        <rect x="0" y="0" width="560" height="16" rx="8" fill="#3f41ff"/>
+        <text x="576" y="13" font-size="13" font-weight="700" fill="#3f41ff">5.69</text>
+        <rect x="0" y="24" width="418" height="16" rx="8" fill="url(#gemma3-hatch)"/>
+        <text x="434" y="37" font-size="13" font-weight="700" fill="#3f41ff">4.25</text>
+      </g>
+    </g>
+  </g>
+</svg>

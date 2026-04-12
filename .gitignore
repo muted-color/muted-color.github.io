@@ -5,4 +5,5 @@ _site/
 .bundle/
 vendor/
 vendor/bundle/
+.ipynb_checkpoints/
 .DS_Store

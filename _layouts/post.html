@@ -3,30 +3,42 @@ layout: default
 ---
 <article class="essay">
   <header class="essay-header">
-    <p class="eyebrow">Applied LLM Research</p>
-    <h1 class="essay-title">{{ page.title }}</h1>
-    <div class="essay-meta">
-      <span class="essay-author">{{ site.author.name }}</span>
-      <span class="meta-sep">·</span>
+    <div class="essay-intro">
+      {% assign display_category = page.categories | first %}
+      {% if display_category %}
+        <p class="essay-kicker">{{ display_category | replace: "-", " " }}</p>
+      {% endif %}
+      <h1 class="essay-title">{{ page.title }}</h1>
+      <p class="essay-credit">
+        {{ page.byline | default: site.author.name }}
+        {% if page.affiliation %}
+          <span class="essay-affiliation"> {{ page.affiliation }}</span>
+        {% endif %}
+      </p>
       <time class="essay-date" datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%b %d, %Y" }}</time>
+      {% if page.excerpt %}
+        <p class="essay-dek">{{ page.excerpt | strip_html }}</p>
+      {% endif %}
     </div>
-    {% if page.excerpt %}
-      <p class="essay-dek">{{ page.excerpt | strip_html }}</p>
-    {% endif %}
-  </header>
 
-  <div class="essay-hero" aria-hidden="true">
-    {% if page.hero_image %}
-      <img class="essay-hero-image" src="{{ page.hero_image | relative_url }}" alt="">
-    {% else %}
-      <div class="essay-hero-placeholder"></div>
-    {% endif %}
-  </div>
+    <figure class="essay-hero"{% unless page.hero_caption %} aria-hidden="true"{% endunless %}>
+      <div class="essay-hero-frame">
+        {% if page.hero_image %}
+          <img class="essay-hero-image" src="{{ page.hero_image | relative_url }}" alt="{{ page.hero_alt | default: '' | escape }}">
+        {% else %}
+          <div class="essay-hero-placeholder"></div>
+        {% endif %}
+      </div>
+      {% if page.hero_caption %}
+        <figcaption class="essay-hero-caption">{{ page.hero_caption }}</figcaption>
+      {% endif %}
+    </figure>
+  </header>
 
   <div class="essay-grid">
     <aside class="essay-sidebar">
       <div class="essay-sidebar-inner">
-        <p class="toc-label">Contents</p>
+        <p class="toc-label">On this page</p>
         <nav class="toc-nav" id="toc"></nav>
       </div>
     </aside>
@@ -41,7 +53,393 @@ layout: default
   (function () {
     var root = document.getElementById("essay-body");
     var toc = document.getElementById("toc");
+    var grid = document.querySelector(".essay-grid");
+    var sidebar = document.querySelector(".essay-sidebar");
+    var sidebarInner = document.querySelector(".essay-sidebar-inner");
     if (!root || !toc) return;
+
+    function renderMermaidBlocks() {
+      if (!window.mermaid) return;
+
+      var selectors = [
+        "div.highlighter-rouge[class*='language-mermaid']",
+        "pre code.language-mermaid",
+        "pre code[class*='language-mermaid']"
+      ];
+      var sources = root.querySelectorAll(selectors.join(", "));
+      var containers = [];
+      var visited = new Set();
+
+      sources.forEach(function (source) {
+        var container = source.closest("div.highlighter-rouge[class*='language-mermaid']") || source.closest("pre");
+        if (!container || visited.has(container)) return;
+
+        visited.add(container);
+
+        var code = container.querySelector("code");
+        var definition = code ? code.textContent.trim() : container.textContent.trim();
+        if (!definition) return;
+
+        var block = document.createElement("div");
+        block.className = "mermaid";
+        block.textContent = definition;
+
+        var shell = document.createElement("div");
+        shell.className = "mermaid-shell";
+        shell.appendChild(block);
+
+        container.replaceWith(shell);
+        containers.push(block);
+      });
+
+      if (!containers.length) return;
+
+      window.mermaid.initialize({
+        startOnLoad: false,
+        securityLevel: "loose",
+        theme: "base",
+        flowchart: {
+          htmlLabels: true,
+          curve: "linear",
+          nodeSpacing: 52,
+          rankSpacing: 58,
+          padding: 14,
+          useMaxWidth: true
+        },
+        themeVariables: {
+          background: "#ffffff",
+          mainBkg: "#ffffff",
+          primaryColor: "#ffffff",
+          primaryTextColor: "#1b1d22",
+          primaryBorderColor: "#dfdcd6",
+          secondaryColor: "#ffffff",
+          secondaryTextColor: "#1b1d22",
+          secondaryBorderColor: "#dfdcd6",
+          tertiaryColor: "#f2f4ff",
+          tertiaryTextColor: "#3f41ff",
+          tertiaryBorderColor: "#3f41ff",
+          lineColor: "#e3e0da",
+          edgeLabelBackground: "#ffffff",
+          fontFamily: "\"IBM Plex Mono\", \"SFMono-Regular\", \"JetBrains Mono\", monospace",
+          fontSize: "13px"
+        }
+      });
+
+      if (typeof window.mermaid.run === "function") {
+        Promise.resolve(window.mermaid.run({ nodes: containers })).catch(function (error) {
+          console.error("Mermaid render failed:", error);
+        });
+        return;
+      }
+
+      try {
+        window.mermaid.init(undefined, containers);
+      } catch (error) {
+        console.error("Mermaid init failed:", error);
+      }
+    }
+
+    function scheduleMermaidRender() {
+      var hasMermaid = root.querySelector(
+        "div.highlighter-rouge[class*='language-mermaid'], pre code.language-mermaid, pre code[class*='language-mermaid']"
+      );
+      if (!hasMermaid) return;
+
+      var attempts = 0;
+
+      function tryRender() {
+        if (window.mermaid) {
+          try {
+            renderMermaidBlocks();
+          } catch (error) {
+            console.error("Mermaid render failed:", error);
+          }
+          return;
+        }
+
+        attempts += 1;
+        if (attempts < 40) {
+          window.setTimeout(tryRender, 50);
+        }
+      }
+
+      tryRender();
+    }
+
+    function copyTextToClipboard(text) {
+      if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+        return navigator.clipboard.writeText(text);
+      }
+
+      return new Promise(function (resolve, reject) {
+        var textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "absolute";
+        textarea.style.left = "-9999px";
+        document.body.appendChild(textarea);
+        textarea.select();
+
+        try {
+          document.execCommand("copy");
+          document.body.removeChild(textarea);
+          resolve();
+        } catch (error) {
+          document.body.removeChild(textarea);
+          reject(error);
+        }
+      });
+    }
+
+    function enhanceHeadingAnchors() {
+      var headingNodes = root.querySelectorAll("h2, h3, h4, h5, h6");
+
+      headingNodes.forEach(function (heading, index) {
+        if (!heading.id) {
+          heading.id = "section-" + (index + 1);
+        }
+
+        if (!heading.dataset.headingLabel) {
+          heading.dataset.headingLabel = heading.textContent.trim();
+        }
+
+        if (heading.querySelector(".heading-anchor")) return;
+
+        var anchor = document.createElement("a");
+        var headingLabel = heading.dataset.headingLabel;
+        var hash = "#" + heading.id;
+        var resetStateTimer = null;
+
+        anchor.className = "heading-anchor";
+        anchor.href = hash;
+        anchor.textContent = "#";
+        anchor.setAttribute("aria-label", "Copy link to section: " + headingLabel);
+
+        anchor.addEventListener("click", function (event) {
+          if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+            return;
+          }
+
+          event.preventDefault();
+
+          var url = window.location.origin + window.location.pathname + window.location.search + hash;
+
+          copyTextToClipboard(url).then(function () {
+            window.history.replaceState(null, "", hash);
+            anchor.classList.add("is-copied");
+            anchor.setAttribute("aria-label", "Copied link to section: " + headingLabel);
+
+            if (resetStateTimer) {
+              window.clearTimeout(resetStateTimer);
+            }
+
+            resetStateTimer = window.setTimeout(function () {
+              anchor.classList.remove("is-copied");
+              anchor.setAttribute("aria-label", "Copy link to section: " + headingLabel);
+            }, 1400);
+          }).catch(function (error) {
+            console.error("Heading link copy failed:", error);
+            window.location.hash = heading.id;
+          });
+        });
+
+        heading.insertBefore(anchor, heading.firstChild);
+      });
+    }
+
+    function enhanceCodeBlocks() {
+      var blocks = root.querySelectorAll("div.highlighter-rouge");
+
+      blocks.forEach(function (block) {
+        if (block.className.indexOf("language-mermaid") !== -1) return;
+        if (block.querySelector(".code-copy-button")) return;
+
+        var code = block.querySelector("code");
+        if (!code) return;
+
+        var button = document.createElement("button");
+        button.type = "button";
+        button.className = "code-copy-button";
+        button.textContent = "COPY";
+        button.setAttribute("aria-label", "Copy code block");
+
+        var resetLabelTimer = null;
+
+        button.addEventListener("click", function () {
+          copyTextToClipboard(code.textContent).then(function () {
+            button.textContent = "COPIED";
+            button.classList.add("is-copied");
+
+            if (resetLabelTimer) {
+              window.clearTimeout(resetLabelTimer);
+            }
+
+            resetLabelTimer = window.setTimeout(function () {
+              button.textContent = "COPY";
+              button.classList.remove("is-copied");
+            }, 1400);
+          }).catch(function (error) {
+            console.error("Copy failed:", error);
+          });
+        });
+
+        block.appendChild(button);
+      });
+    }
+
+    function normalizeReferenceLabel(label) {
+      return label.toLowerCase().replace(/\s+/g, " ").trim();
+    }
+
+    function referenceIdFor(prefix, number) {
+      return prefix.toLowerCase().replace(/\s+/g, "-") + "-" + number;
+    }
+
+    function captionReferenceLabel(caption) {
+      var text = caption.textContent.trim();
+      var match = text.match(/^(Appendix\s+Table|Figure|Table|Sample)\s+(\d+)\s*\./i);
+
+      if (!match) return null;
+
+      var prefix = match[1].replace(/\s+/g, " ");
+      var number = match[2];
+      var label = prefix + " " + number;
+
+      return {
+        key: normalizeReferenceLabel(label),
+        label: label,
+        id: referenceIdFor(prefix, number)
+      };
+    }
+
+    function uniqueReferenceId(baseId, target) {
+      var existing = document.getElementById(baseId);
+      var suffix = 2;
+      var candidate = baseId;
+
+      if (!existing || existing === target) return baseId;
+
+      while (document.getElementById(candidate)) {
+        candidate = baseId + "-" + suffix;
+        suffix += 1;
+      }
+
+      return candidate;
+    }
+
+    function enhanceFigureTableReferences() {
+      var references = new Map();
+      var captions = [];
+      var heroCaption = document.querySelector(".essay-hero > figcaption");
+
+      if (heroCaption) captions.push(heroCaption);
+
+      root.querySelectorAll("figure > figcaption").forEach(function (caption) {
+        captions.push(caption);
+      });
+
+      captions.forEach(function (caption) {
+        var parsed = captionReferenceLabel(caption);
+        var target = caption.closest("figure");
+
+        if (!parsed || !target) return;
+
+        if (!target.id) {
+          target.id = uniqueReferenceId(parsed.id, target);
+        }
+
+        if (!references.has(parsed.key)) {
+          references.set(parsed.key, {
+            href: "#" + target.id,
+            label: parsed.label
+          });
+        }
+      });
+
+      if (!references.size) return;
+
+      var referencePattern = /\b(Appendix\s+Table|Figure|Table|Sample)\s+(\d+)\b/g;
+      var skippedSelector = [
+        "a",
+        "button",
+        "code",
+        "figcaption",
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6",
+        "pre",
+        "script",
+        "style",
+        "textarea"
+      ].join(", ");
+
+      var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+        acceptNode: function (node) {
+          var parent = node.parentElement;
+
+          if (!node.nodeValue || !parent || parent.closest(skippedSelector)) {
+            return NodeFilter.FILTER_REJECT;
+          }
+
+          referencePattern.lastIndex = 0;
+          if (!referencePattern.test(node.nodeValue)) {
+            return NodeFilter.FILTER_REJECT;
+          }
+
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      });
+
+      var textNodes = [];
+
+      while (walker.nextNode()) {
+        textNodes.push(walker.currentNode);
+      }
+
+      textNodes.forEach(function (node) {
+        var fragment = document.createDocumentFragment();
+        var text = node.nodeValue;
+        var lastIndex = 0;
+        var match;
+
+        referencePattern.lastIndex = 0;
+
+        while ((match = referencePattern.exec(text)) !== null) {
+          var label = match[1].replace(/\s+/g, " ") + " " + match[2];
+          var reference = references.get(normalizeReferenceLabel(label));
+
+          if (!reference) continue;
+
+          if (match.index > lastIndex) {
+            fragment.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+          }
+
+          var link = document.createElement("a");
+          link.className = "figure-ref";
+          link.href = reference.href;
+          link.textContent = match[0];
+          link.setAttribute("aria-label", "Jump to " + reference.label);
+          fragment.appendChild(link);
+
+          lastIndex = referencePattern.lastIndex;
+        }
+
+        if (lastIndex === 0) return;
+
+        if (lastIndex < text.length) {
+          fragment.appendChild(document.createTextNode(text.slice(lastIndex)));
+        }
+
+        node.parentNode.replaceChild(fragment, node);
+      });
+    }
+
+    enhanceHeadingAnchors();
+    enhanceCodeBlocks();
+    enhanceFigureTableReferences();
 
     var headings = root.querySelectorAll("h2, h3");
     if (!headings.length) {
@@ -64,7 +462,7 @@ layout: default
 
       var link = document.createElement("a");
       link.href = "#" + heading.id;
-      link.textContent = heading.textContent;
+      link.textContent = heading.dataset.headingLabel || heading.textContent.trim();
 
       item.appendChild(link);
       list.appendChild(item);
@@ -101,5 +499,69 @@ layout: default
     links.forEach(function (pair) {
       observer.observe(pair.heading);
     });
+
+    root.querySelectorAll("table").forEach(function (table) {
+      if (table.parentElement && table.parentElement.classList.contains("table-shell")) {
+        return;
+      }
+
+      var shell = document.createElement("div");
+      shell.className = "table-shell";
+      table.parentNode.insertBefore(shell, table);
+      shell.appendChild(table);
+    });
+
+    root.querySelectorAll("details").forEach(function (details) {
+      var summary = details.querySelector("summary");
+      if (!summary) return;
+
+      var hasWrappedContent = Array.prototype.some.call(details.children, function (child) {
+        return child.classList && child.classList.contains("details-content");
+      });
+
+      if (hasWrappedContent) return;
+
+      var content = document.createElement("div");
+      content.className = "details-content";
+
+      var node = summary.nextSibling;
+      var hasContent = false;
+
+      while (node) {
+        var next = node.nextSibling;
+
+        if (node.nodeType === Node.TEXT_NODE && !node.textContent.trim()) {
+          details.removeChild(node);
+          node = next;
+          continue;
+        }
+
+        content.appendChild(node);
+        hasContent = true;
+        node = next;
+      }
+
+      if (!hasContent) return;
+      details.appendChild(content);
+    });
+
+    scheduleMermaidRender();
   })();
 </script>
+{% if page.math %}
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+{% endif %}

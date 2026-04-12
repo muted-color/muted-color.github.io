@@ -39,6 +39,12 @@ GitHub Pages로 운영하는 `미니 리서치 블로그`용 최소 템플릿입
 bash scripts/dev-serve.sh
 ```
 
+필수 조건:
+
+- Ruby 3.2 이상
+- macOS 기본 `/usr/bin/ruby` 2.6 환경은 `github-pages` 의존성과 호환되지 않음
+- Homebrew 사용 시 `brew install ruby@3.2`
+
 접속 주소:
 
 ```text
@@ -48,8 +54,8 @@ http://127.0.0.1:8666
 직접 실행하고 싶다면:
 
 ```bash
-bundle install
-bundle exec jekyll serve --port 8666
+PATH="/opt/homebrew/opt/ruby@3.2/bin:$PATH" bundle _2.4.22_ install
+PATH="/opt/homebrew/opt/ruby@3.2/bin:$PATH" bundle _2.4.22_ exec jekyll serve --port 8666
 ```
 
 ## 글 작성 규칙
