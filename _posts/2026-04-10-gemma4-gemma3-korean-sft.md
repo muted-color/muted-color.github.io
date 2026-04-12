@@ -10,7 +10,7 @@ hero_alt: "Gemma4와 Gemma3 한국어 비교의 핵심 질문별 결과 요약"
 hero_caption: "<strong>Figure 1.</strong> 전체 결과를 먼저 압축한 요약이다. 각 행은 서로 다른 단위의 지표이므로 행 안에서 두 모델의 상대 차이만 읽으면 된다. 모든 행은 값이 클수록 좋은 방향으로 맞췄고, <code>Format alignment</code>는 <code>1 - Violation</code>으로 계산했다. 세부 수치는 본문에서 따로 설명한다."
 ---
 
-이 글은 <code>google/gemma-3-4b-it</code>와 <code>google/gemma-4-E4B-it</code>를 같은 한국어 instruction 평가 조건에서 비교한다. Gemma4는 judge 기반 선호도, 형식 제어, 노이즈 조건의 절대 <code>Readability</code>, 100-step QLoRA SFT runtime에서 더 일관되게 앞섰다. Gemma3는 일부 reference overlap 지표와 다중 답안 SFT의 상대 개선폭에서 볼 만한 신호를 보였다. 그래서 이 비교는 단순한 승패보다 응답 품질, 학습 반응, 입력 노이즈 안정성이 어디서 갈라지는지를 본다.
+이 글은 <code>google/gemma-3-4b-it</code>와 <code>google/gemma-4-E4B-it</code>를 같은 한국어 instruction 평가 조건에서 비교한다. Gemma4는 judge가 더 자주 선택했고, 출력 형식도 더 잘 지켰다. 질문에 오타나 전사 오류가 섞여도 답변이 더 읽을 만하게 남았고, 같은 100-step QLoRA SFT도 더 빨리 끝났다. Gemma3는 일부 reference overlap 지표와 다중 답안 SFT의 상대 개선폭에서 볼 만한 신호를 보였다. 그래서 이 비교는 단순한 승패보다 응답 품질, 학습 반응, 입력 노이즈 안정성이 어디서 갈라지는지를 본다.
 
 {% include model-mention-cards.html label="비교 대상 모델" aria_label="비교 대상 Hugging Face 모델" models="Gemma3|google/gemma-3-4b-it|https://huggingface.co/google/gemma-3-4b-it;Gemma4|google/gemma-4-E4B-it|https://huggingface.co/google/gemma-4-E4B-it" %}
 
