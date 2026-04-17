@@ -1,0 +1,8 @@
+{% assign category_key = include.category | default: "" | downcase %}
+{% assign icon = site.data.category_icons[category_key] %}
+{% unless icon %}
+  {% assign icon = site.data.category_icons.default %}
+{% endunless %}
+<svg viewBox="0 -960 960 960" focusable="false" role="img" aria-label="{{ icon.label | escape }}">
+  <path d="{{ icon.path }}"/>
+</svg>
