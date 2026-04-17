@@ -11,6 +11,8 @@ author:
   name: Ilho Ahn
 
 markdown: kramdown
+kramdown:
+  footnote_backlink: "↩︎"
 permalink: /:categories/:year/:month/:day/:title/
 show_excerpts: true
 

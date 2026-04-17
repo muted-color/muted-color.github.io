@@ -703,6 +703,18 @@ h6 {
   margin-top: 0.85rem;
 }
 
+.essay-body .reference-list li {
+  scroll-margin-top: 1.5rem;
+}
+
+.essay-body .reference-list li:target {
+  color: var(--ink);
+}
+
+.essay-body .reference-list li:target::marker {
+  color: var(--accent-strong);
+}
+
 .essay-body .reference-list p {
   margin: 0;
 }
@@ -715,6 +727,26 @@ h6 {
 .essay-body .reference-list a {
   color: var(--ink);
   text-decoration-color: rgba(63, 65, 255, 0.28);
+}
+
+.essay-body .citation-ref {
+  color: var(--accent-strong);
+  font-family: "IBM Plex Mono", "SFMono-Regular", "JetBrains Mono", monospace;
+  font-size: 0.78em;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.essay-body .citation-ref:hover,
+.essay-body .citation-ref:focus-visible {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-color: rgba(63, 65, 255, 0.5);
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.18em;
+  outline: none;
 }
 
 .essay-body strong {
