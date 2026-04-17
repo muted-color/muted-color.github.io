@@ -46,5 +46,6 @@ hero_image: /assets/images/posts/post-slug/hero.svg
 ## Citation
 
 - 관련 논문, 데이터셋, 모델, 실험 리소스가 있으면 끝부분에 `## References` 또는 `## Experiment Resources`로 정리한다.
+- `References`와 `Experiment Resources`의 목록은 공통 CSS가 적용되도록 `<div class="reference-list" markdown="1">`로 감싼다.
 - 공개 글은 마지막 섹션을 반드시 `## Citation`으로 끝낸다.
 - `Citation`에는 사람이 바로 복사할 수 있는 text citation과 BibTeX를 함께 둔다.

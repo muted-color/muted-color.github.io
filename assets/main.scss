@@ -649,6 +649,37 @@ h6 {
   margin-top: 0.4rem;
 }
 
+.essay-body .reference-list {
+  margin: 0.55rem 0 2.1rem;
+  color: var(--muted);
+  font-size: 0.94rem;
+  line-height: 1.68;
+}
+
+.essay-body .reference-list ul,
+.essay-body .reference-list ol {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.essay-body .reference-list li + li {
+  margin-top: 0.85rem;
+}
+
+.essay-body .reference-list p {
+  margin: 0;
+}
+
+.essay-body .reference-list strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.essay-body .reference-list a {
+  color: var(--ink);
+  text-decoration-color: rgba(63, 65, 255, 0.28);
+}
+
 .essay-body strong {
   color: var(--ink);
 }
@@ -1112,6 +1143,48 @@ figcaption {
 .essay-body .table-figure--metrics .metrics-table--numeric-first tbody td:first-child {
   font-family: "IBM Plex Mono", "SFMono-Regular", "JetBrains Mono", monospace;
   font-size: 0.84rem;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--budget-split {
+  min-width: 360px;
+  table-layout: fixed;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--budget-split th,
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--budget-split td {
+  width: 33.333%;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--gb1-batch-ablation {
+  min-width: 620px;
+  table-layout: fixed;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--gb1-batch-ablation th:nth-child(1),
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--gb1-batch-ablation td:nth-child(1) {
+  width: 16%;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--gb1-batch-ablation th:nth-child(2),
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--gb1-batch-ablation td:nth-child(2) {
+  width: 14%;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--gb1-batch-ablation th:nth-child(3),
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--gb1-batch-ablation td:nth-child(3),
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--gb1-batch-ablation th:nth-child(4),
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--gb1-batch-ablation td:nth-child(4) {
+  width: 19%;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--gb1-batch-ablation th:nth-child(5),
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--gb1-batch-ablation td:nth-child(5) {
+  width: 17%;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--gb1-batch-ablation th:nth-child(6),
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--gb1-batch-ablation td:nth-child(6) {
+  width: 15%;
 }
 
 .essay-body .table-figure--metrics .metrics-table--mixed thead th:nth-child(1),
