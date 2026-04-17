@@ -1199,6 +1199,36 @@ figcaption {
   width: 37%;
 }
 
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--main-comparison {
+  table-layout: fixed;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--main-comparison .main-comparison__dataset {
+  width: 13%;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--main-comparison .main-comparison__budget {
+  width: 12%;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--main-comparison .main-comparison__score,
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--main-comparison .main-comparison__delta {
+  width: 20%;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--main-comparison .main-comparison__wins {
+  width: 15%;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--main-comparison th:nth-child(1),
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--main-comparison td:nth-child(1),
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--main-comparison th:nth-child(2),
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--main-comparison td:nth-child(2),
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--main-comparison th:nth-child(6),
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--main-comparison td:nth-child(6) {
+  text-align: center;
+}
+
 .essay-body .table-figure--metrics table.metrics-table.metrics-table--gb1-batch-ablation {
   min-width: 620px;
   table-layout: fixed;
@@ -2061,6 +2091,29 @@ dl dd {
 
 .footnotes p {
   margin: 0;
+}
+
+.footnotes code,
+.footnotes code.highlighter-rouge {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+  font: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+}
+
+.footnotes code::before,
+.footnotes code.highlighter-rouge::before,
+.footnotes code::after,
+.footnotes code.highlighter-rouge::after {
+  content: none;
+  color: inherit;
+  font: inherit;
 }
 
 .page-layout-default .page-shell {
