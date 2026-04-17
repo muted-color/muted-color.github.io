@@ -24,6 +24,9 @@ layout: default
         <li class="post-stream-item">
           <a class="post-stream-link" href="{{ post.url | relative_url }}">
             <span class="post-stream-meta">{{ post.date | date: "%b %d, %Y" }}</span>
+            <span class="post-stream-icon" aria-hidden="true">
+              {% include category-icon.html category=display_category %}
+            </span>
             <span class="post-stream-text">
               {% if display_category %}
                 <span class="post-stream-category">{{ display_category | replace: "-", " " }}</span>

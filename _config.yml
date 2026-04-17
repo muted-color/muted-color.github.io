@@ -14,6 +14,12 @@ markdown: kramdown
 permalink: /:categories/:year/:month/:day/:title/
 show_excerpts: true
 
+exclude:
+  - AGENTS.md
+  - .bundle
+  - vendor
+  - vendor/bundle
+
 minima:
   social_links: []
 

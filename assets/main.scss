@@ -298,8 +298,10 @@ h6 {
 
 .post-stream-link {
   display: grid;
-  grid-template-columns: 10rem 1fr;
-  gap: 1.6rem;
+  grid-template-columns: 10rem 2rem minmax(0, 1fr);
+  column-gap: 0.95rem;
+  row-gap: 0.45rem;
+  align-items: start;
   padding: 1.45rem 0;
   color: inherit;
   text-decoration: none;
@@ -314,6 +316,28 @@ h6 {
   color: var(--muted);
   font-size: 0.86rem;
   letter-spacing: 0.01em;
+}
+
+.post-stream-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  margin-top: 0.02rem;
+  border: 1px solid rgba(63, 65, 255, 0.14);
+  border-radius: 8px;
+  background: rgba(63, 65, 255, 0.055);
+  color: var(--accent);
+  box-shadow: inset 0 -1px 0 rgba(63, 65, 255, 0.08);
+  transition: border-color 140ms ease, background-color 140ms ease, color 140ms ease, transform 140ms ease;
+}
+
+.post-stream-icon svg {
+  display: block;
+  width: 1.08rem;
+  height: 1.08rem;
+  fill: currentColor;
 }
 
 .post-stream-category {
@@ -350,6 +374,13 @@ h6 {
 
 .post-stream-link:hover .post-stream-meta {
   color: var(--ink);
+}
+
+.post-stream-link:hover .post-stream-icon {
+  border-color: rgba(37, 41, 216, 0.22);
+  background: rgba(63, 65, 255, 0.09);
+  color: var(--accent-strong);
+  transform: translateY(-1px);
 }
 
 .essay {
@@ -647,6 +678,37 @@ h6 {
 
 .essay-body li + li {
   margin-top: 0.4rem;
+}
+
+.essay-body .reference-list {
+  margin: 0.55rem 0 2.1rem;
+  color: var(--muted);
+  font-size: 0.94rem;
+  line-height: 1.68;
+}
+
+.essay-body .reference-list ul,
+.essay-body .reference-list ol {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.essay-body .reference-list li + li {
+  margin-top: 0.85rem;
+}
+
+.essay-body .reference-list p {
+  margin: 0;
+}
+
+.essay-body .reference-list strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.essay-body .reference-list a {
+  color: var(--ink);
+  text-decoration-color: rgba(63, 65, 255, 0.28);
 }
 
 .essay-body strong {
@@ -1019,7 +1081,7 @@ figcaption {
 }
 
 .essay-body .table-figure .table-shell {
-  margin: 0;
+  margin: 0 auto;
 }
 
 .essay-body .table-figure--comparison th[rowspan] {
@@ -1095,6 +1157,136 @@ figcaption {
 .essay-body .table-figure--metrics tbody td:first-child {
   font-size: 0.78rem;
   white-space: nowrap;
+}
+
+.essay-body .table-figure--metrics .metrics-table--numeric-columns thead th:not(:first-child),
+.essay-body .table-figure--metrics .metrics-table--numeric-columns tbody td:not(:first-child),
+.essay-body .table-figure--metrics .metrics-table--numeric-first thead th:not(:first-child),
+.essay-body .table-figure--metrics .metrics-table--numeric-first tbody td:not(:first-child) {
+  text-align: right;
+}
+
+.essay-body .table-figure--metrics .metrics-table--numeric-first thead th:first-child,
+.essay-body .table-figure--metrics .metrics-table--numeric-first tbody td:first-child {
+  text-align: right;
+}
+
+.essay-body .table-figure--metrics .metrics-table--numeric-first tbody td:first-child {
+  font-family: "IBM Plex Mono", "SFMono-Regular", "JetBrains Mono", monospace;
+  font-size: 0.84rem;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--budget-split {
+  min-width: 0;
+  table-layout: fixed;
+}
+
+.essay-body .table-figure--budget-split .table-shell {
+  max-width: 34rem;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--budget-split th,
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--budget-split td {
+  text-align: center;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--budget-split .budget-split__budget {
+  width: 26%;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--budget-split .budget-split__train,
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--budget-split .budget-split__validation {
+  width: 37%;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--main-comparison {
+  table-layout: fixed;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--main-comparison .main-comparison__dataset {
+  width: 13%;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--main-comparison .main-comparison__budget {
+  width: 12%;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--main-comparison .main-comparison__score,
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--main-comparison .main-comparison__delta {
+  width: 20%;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--main-comparison .main-comparison__wins {
+  width: 15%;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--main-comparison th:nth-child(1),
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--main-comparison td:nth-child(1),
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--main-comparison th:nth-child(2),
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--main-comparison td:nth-child(2),
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--main-comparison th:nth-child(6),
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--main-comparison td:nth-child(6) {
+  text-align: center;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--gb1-batch-ablation {
+  min-width: 620px;
+  table-layout: fixed;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--gb1-batch-ablation th:nth-child(1),
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--gb1-batch-ablation td:nth-child(1) {
+  width: 16%;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--gb1-batch-ablation th:nth-child(2),
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--gb1-batch-ablation td:nth-child(2) {
+  width: 14%;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--gb1-batch-ablation th:nth-child(3),
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--gb1-batch-ablation td:nth-child(3),
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--gb1-batch-ablation th:nth-child(4),
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--gb1-batch-ablation td:nth-child(4) {
+  width: 19%;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--gb1-batch-ablation th:nth-child(5),
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--gb1-batch-ablation td:nth-child(5) {
+  width: 17%;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--gb1-batch-ablation th:nth-child(6),
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--gb1-batch-ablation td:nth-child(6) {
+  width: 15%;
+}
+
+.essay-body .table-figure--metrics .metrics-table--mixed thead th:nth-child(1),
+.essay-body .table-figure--metrics .metrics-table--mixed thead th:nth-child(3),
+.essay-body .table-figure--metrics .metrics-table--mixed tbody td:nth-child(1),
+.essay-body .table-figure--metrics .metrics-table--mixed tbody td:nth-child(3) {
+  text-align: right;
+}
+
+.essay-body .table-figure--metrics .metrics-table--mixed thead th:nth-child(2),
+.essay-body .table-figure--metrics .metrics-table--mixed thead th:nth-child(4),
+.essay-body .table-figure--metrics .metrics-table--mixed tbody td:nth-child(2),
+.essay-body .table-figure--metrics .metrics-table--mixed tbody td:nth-child(4) {
+  text-align: left;
+}
+
+.essay-body .table-figure--metrics .metrics-table--mixed tbody td:nth-child(1),
+.essay-body .table-figure--metrics .metrics-table--mixed tbody td:nth-child(3) {
+  font-family: "IBM Plex Mono", "SFMono-Regular", "JetBrains Mono", monospace;
+  font-size: 0.84rem;
+  white-space: nowrap;
+}
+
+.essay-body .table-figure--metrics .metrics-table--mixed tbody td:nth-child(2),
+.essay-body .table-figure--metrics .metrics-table--mixed tbody td:nth-child(4) {
+  font-family: inherit;
+  font-size: inherit;
+  white-space: normal;
 }
 
 .essay-body .table-figure--metrics tbody td.is-better {
@@ -1901,6 +2093,29 @@ dl dd {
   margin: 0;
 }
 
+.footnotes code,
+.footnotes code.highlighter-rouge {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+  font: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+}
+
+.footnotes code::before,
+.footnotes code.highlighter-rouge::before,
+.footnotes code::after,
+.footnotes code.highlighter-rouge::after {
+  content: none;
+  color: inherit;
+  font: inherit;
+}
+
 .page-layout-default .page-shell {
   width: 100%;
   max-width: 760px;
@@ -2022,9 +2237,25 @@ hr {
   }
 
   .post-stream-link {
-    grid-template-columns: 1fr;
-    gap: 0.45rem;
+    grid-template-columns: 1.85rem minmax(0, 1fr);
+    column-gap: 0.65rem;
+    row-gap: 0.45rem;
     padding: 1rem 0;
+  }
+
+  .post-stream-meta {
+    grid-column: 1 / -1;
+  }
+
+  .post-stream-icon {
+    width: 1.85rem;
+    height: 1.85rem;
+    margin-top: 0;
+  }
+
+  .post-stream-icon svg {
+    width: 1rem;
+    height: 1rem;
   }
 
   .essay {

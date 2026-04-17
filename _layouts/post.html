@@ -80,6 +80,8 @@ layout: default
         var definition = code ? code.textContent.trim() : container.textContent.trim();
         if (!definition) return;
 
+        definition = applyMermaidDefaults(definition);
+
         var block = document.createElement("div");
         block.className = "mermaid";
         block.textContent = definition;
@@ -137,6 +139,24 @@ layout: default
       } catch (error) {
         console.error("Mermaid init failed:", error);
       }
+    }
+
+    function applyMermaidDefaults(definition) {
+      if (!/^\s*(?:%%\{[\s\S]*?\}%%\s*)?(?:flowchart|graph)\s+/m.test(definition)) {
+        return definition;
+      }
+
+      if (/^\s*classDef\s+(?:card|accent|muted)\b/m.test(definition)) {
+        return definition;
+      }
+
+      return definition + [
+        "",
+        "classDef card fill:#ffffff,stroke:#dfdcd6,color:#1b1d22,stroke-width:1.4px;",
+        "classDef accent fill:#f2f4ff,stroke:#3f41ff,color:#3f41ff,stroke-width:1.8px;",
+        "classDef muted fill:#faf9f7,stroke:#d8d4cd,color:#6f6a64,stroke-width:1.2px;",
+        "linkStyle default stroke:#e3e0da,stroke-width:1.2px;"
+      ].join("\n");
     }
 
     function scheduleMermaidRender() {
