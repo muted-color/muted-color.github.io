@@ -1097,6 +1097,51 @@ figcaption {
   white-space: nowrap;
 }
 
+.essay-body .table-figure--metrics .metrics-table--numeric-columns thead th:not(:first-child),
+.essay-body .table-figure--metrics .metrics-table--numeric-columns tbody td:not(:first-child),
+.essay-body .table-figure--metrics .metrics-table--numeric-first thead th:not(:first-child),
+.essay-body .table-figure--metrics .metrics-table--numeric-first tbody td:not(:first-child) {
+  text-align: right;
+}
+
+.essay-body .table-figure--metrics .metrics-table--numeric-first thead th:first-child,
+.essay-body .table-figure--metrics .metrics-table--numeric-first tbody td:first-child {
+  text-align: right;
+}
+
+.essay-body .table-figure--metrics .metrics-table--numeric-first tbody td:first-child {
+  font-family: "IBM Plex Mono", "SFMono-Regular", "JetBrains Mono", monospace;
+  font-size: 0.84rem;
+}
+
+.essay-body .table-figure--metrics .metrics-table--mixed thead th:nth-child(1),
+.essay-body .table-figure--metrics .metrics-table--mixed thead th:nth-child(3),
+.essay-body .table-figure--metrics .metrics-table--mixed tbody td:nth-child(1),
+.essay-body .table-figure--metrics .metrics-table--mixed tbody td:nth-child(3) {
+  text-align: right;
+}
+
+.essay-body .table-figure--metrics .metrics-table--mixed thead th:nth-child(2),
+.essay-body .table-figure--metrics .metrics-table--mixed thead th:nth-child(4),
+.essay-body .table-figure--metrics .metrics-table--mixed tbody td:nth-child(2),
+.essay-body .table-figure--metrics .metrics-table--mixed tbody td:nth-child(4) {
+  text-align: left;
+}
+
+.essay-body .table-figure--metrics .metrics-table--mixed tbody td:nth-child(1),
+.essay-body .table-figure--metrics .metrics-table--mixed tbody td:nth-child(3) {
+  font-family: "IBM Plex Mono", "SFMono-Regular", "JetBrains Mono", monospace;
+  font-size: 0.84rem;
+  white-space: nowrap;
+}
+
+.essay-body .table-figure--metrics .metrics-table--mixed tbody td:nth-child(2),
+.essay-body .table-figure--metrics .metrics-table--mixed tbody td:nth-child(4) {
+  font-family: inherit;
+  font-size: inherit;
+  white-space: normal;
+}
+
 .essay-body .table-figure--metrics tbody td.is-better {
   color: var(--ink);
   font-weight: 700;

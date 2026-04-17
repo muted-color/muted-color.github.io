@@ -64,9 +64,26 @@ title: "Post Title"
 date: 2026-04-12 09:00:00 +0900
 categories: [research]
 tags: [llm, eval]
-excerpt: "포스트 목록에 표시될 짧은 요약"
+lab_path: "experiment-lab/projects/project-slug"
+excerpt: "포스트 목록과 소셜 미리보기에 쓰일 짧은 요약"
+image: /assets/images/posts/post-slug/social-thumbnail.png
+hero_image: /assets/images/posts/post-slug/hero.svg
+hero_alt: "이미지 대체 텍스트"
 ---
 ```
+
+소셜 썸네일 규칙:
+
+- `image:`는 Open Graph, LinkedIn, Twitter/X 공유 썸네일용입니다.
+- `hero_image:`는 글 본문 상단 hero 이미지용이며 `image:`를 대체하지 않습니다.
+- `image:`에는 SVG 대신 PNG 또는 JPG를 사용합니다.
+- 권장 크기는 `1200x627`이고, 비율은 약 `1.91:1`입니다.
+
+실험 경로 규칙:
+
+- 실험 기반 글은 `lab_path:`를 둡니다.
+- 값은 로컬 전체 경로가 아니라 `~/lab/` 뒤쪽 상대 경로만 적습니다.
+- 예: `~/lab/experiment-lab/projects/flip-esm2-lowlabel-lora` -> `experiment-lab/projects/flip-esm2-lowlabel-lora`
 
 ## Project Structure
 
