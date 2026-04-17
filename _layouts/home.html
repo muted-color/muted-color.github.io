@@ -14,23 +14,21 @@ layout: default
 
   <section class="post-index" id="posts">
     {% assign visible_posts = site.posts | where_exp: "post", "post.hidden != true" %}
-    <div class="post-index-head">
-      <span>Latest</span>
-      <span>{{ visible_posts | size }} posts</span>
-    </div>
     <ol class="post-stream">
       {% for post in visible_posts %}
         {% assign display_category = post.categories | first %}
         <li class="post-stream-item">
           <a class="post-stream-link" href="{{ post.url | relative_url }}">
-            <span class="post-stream-meta">{{ post.date | date: "%b %d, %Y" }}</span>
             <span class="post-stream-icon" aria-hidden="true">
               {% include category-icon.html category=display_category %}
             </span>
             <span class="post-stream-text">
-              {% if display_category %}
-                <span class="post-stream-category">{{ display_category | replace: "-", " " }}</span>
-              {% endif %}
+              <span class="post-stream-kicker">
+                {% if display_category %}
+                  <span class="post-stream-category">{{ display_category | replace: "-", " " }}</span>
+                {% endif %}
+                <span class="post-stream-meta">{{ post.date | date: "%b %d, %Y" }}</span>
+              </span>
               <span class="post-stream-title">{{ post.title }}</span>
               {% if post.excerpt %}
                 <span class="post-stream-excerpt">{{ post.excerpt | strip_html }}</span>
