@@ -133,9 +133,14 @@ primary metric은 fixed test set의 **Spearman correlation**이다. 여기서는
 
 이 실험에서 budget은 train만 뜻하지 않는다. validation도 budget 안에 포함했다.
 
-<figure class="table-figure table-figure--metrics">
+<figure class="table-figure table-figure--metrics table-figure--budget-split">
   <div class="table-shell">
     <table class="metrics-table metrics-table--numeric-columns metrics-table--budget-split">
+      <colgroup>
+        <col class="budget-split__budget">
+        <col class="budget-split__train">
+        <col class="budget-split__validation">
+      </colgroup>
       <thead>
         <tr>
           <th>Budget</th>

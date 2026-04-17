@@ -1050,7 +1050,7 @@ figcaption {
 }
 
 .essay-body .table-figure .table-shell {
-  margin: 0;
+  margin: 0 auto;
 }
 
 .essay-body .table-figure--comparison th[rowspan] {
@@ -1146,13 +1146,26 @@ figcaption {
 }
 
 .essay-body .table-figure--metrics table.metrics-table.metrics-table--budget-split {
-  min-width: 360px;
+  min-width: 0;
   table-layout: fixed;
+}
+
+.essay-body .table-figure--budget-split .table-shell {
+  max-width: 34rem;
 }
 
 .essay-body .table-figure--metrics table.metrics-table.metrics-table--budget-split th,
 .essay-body .table-figure--metrics table.metrics-table.metrics-table--budget-split td {
-  width: 33.333%;
+  text-align: center;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--budget-split .budget-split__budget {
+  width: 26%;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--budget-split .budget-split__train,
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--budget-split .budget-split__validation {
+  width: 37%;
 }
 
 .essay-body .table-figure--metrics table.metrics-table.metrics-table--gb1-batch-ablation {
