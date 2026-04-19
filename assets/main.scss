@@ -124,7 +124,7 @@ h6 {
 }
 
 .page-content {
-  padding: 0.35rem 0 1.25rem;
+  padding: 0.35rem 0 0.55rem;
 }
 
 .site-footer {
@@ -146,7 +146,9 @@ h6 {
   justify-content: center;
 }
 
-.back-to-top {
+.back-to-top,
+.back-to-top:link,
+.back-to-top:visited {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -155,7 +157,7 @@ h6 {
   border: 0;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.92);
-  color: var(--muted);
+  color: #000000;
   font-family: "IBM Plex Mono", "SFMono-Regular", "JetBrains Mono", monospace;
   font-size: 0.76rem;
   font-weight: 600;
@@ -175,7 +177,7 @@ h6 {
 .back-to-top:hover,
 .back-to-top:focus-visible {
   background: rgba(63, 65, 255, 0.06);
-  color: var(--accent-strong);
+  color: #000000;
   text-decoration: none;
   transform: translateY(-1px);
   outline: none;
@@ -367,7 +369,7 @@ h6 {
 .post-stream-excerpt {
   display: block;
   margin-top: 0.35rem;
-  max-width: 35rem;
+  max-width: none;
   color: var(--muted);
   font-size: 0.88rem;
   line-height: 1.62;
@@ -389,7 +391,7 @@ h6 {
 }
 
 .essay {
-  padding: 2.8rem var(--page-gutter) 2.75rem;
+  padding: 2.8rem var(--page-gutter) 1.35rem;
 }
 
 .essay-header {
@@ -674,6 +676,19 @@ h6 {
   padding-left: 1.4rem;
 }
 
+.essay-body ul {
+  list-style-type: square;
+}
+
+.essay-body ul > li::marker {
+  color: rgba(95, 102, 114, 0.66);
+  font-size: 0.82em;
+}
+
+.essay-body ol > li::marker {
+  color: rgba(95, 102, 114, 0.66);
+}
+
 .essay-body ul ul,
 .essay-body ol ol,
 .essay-body ul ol,
@@ -700,7 +715,7 @@ h6 {
 }
 
 .essay-body .reference-list li + li {
-  margin-top: 0.85rem;
+  margin-top: 0.5rem;
 }
 
 .essay-body .reference-list li {
@@ -802,9 +817,10 @@ h6 {
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   background: var(--surface-tint);
+  box-shadow: inset 0 0 0 0 rgba(63, 65, 255, 0);
   color: var(--ink);
   text-decoration: none;
-  transition: border-color 140ms ease, background-color 140ms ease, transform 140ms ease;
+  transition: border-color 140ms ease, background-color 140ms ease, box-shadow 140ms ease, transform 140ms ease;
 }
 
 .essay-body .model-mention-card::before {
@@ -827,6 +843,7 @@ h6 {
 .essay-body .model-mention-card:focus-visible {
   border-color: rgba(63, 65, 255, 0.28);
   background: #ffffff;
+  box-shadow: inset 0 0 0 1px rgba(63, 65, 255, 0.28);
   color: var(--ink);
   text-decoration: none;
   transform: translateY(-1px);
@@ -918,6 +935,17 @@ figcaption {
 
 .essay-body .media-figure > figcaption {
   margin-top: 0.65rem;
+}
+
+.essay-body .media-figure--compact {
+  max-width: 24rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.essay-body .media-figure--compact > figcaption {
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .essay-body .table-figure > figcaption {
@@ -1163,6 +1191,26 @@ figcaption {
   line-height: 1.55;
 }
 
+.essay-body .table-figure--comparison .comparison-table--claim-scope {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.essay-body .table-figure--comparison .comparison-table--claim-scope th,
+.essay-body .table-figure--comparison .comparison-table--claim-scope td {
+  width: 50%;
+}
+
+.essay-body .table-figure--comparison .comparison-table--score-terms {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.essay-body .table-figure--comparison .comparison-table--score-terms th:first-child,
+.essay-body .table-figure--comparison .comparison-table--score-terms td:first-child {
+  width: 42%;
+}
+
 .essay-body .table-figure--comparison tbody td.is-better {
   color: var(--ink);
   font-weight: 700;
@@ -1212,6 +1260,40 @@ figcaption {
 .essay-body .table-figure--metrics .metrics-table--numeric-first tbody td:first-child {
   font-family: "IBM Plex Mono", "SFMono-Regular", "JetBrains Mono", monospace;
   font-size: 0.84rem;
+}
+
+.essay-body .table-figure--metrics .metrics-table--risk-diagnostics th:not(:last-child),
+.essay-body .table-figure--metrics .metrics-table--risk-diagnostics tbody td:not(:last-child) {
+  text-align: left;
+  font-family: inherit;
+  font-size: 0.78rem;
+}
+
+.essay-body .table-figure--metrics .metrics-table--risk-diagnostics td[rowspan] {
+  color: var(--muted);
+  font-weight: 700;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.essay-body .table-figure--metrics .metrics-table--risk-diagnostics th:last-child,
+.essay-body .table-figure--metrics .metrics-table--risk-diagnostics tbody td:last-child {
+  text-align: right;
+}
+
+.essay-body .table-figure--metrics .metrics-table--risk-diagnostics tbody td:last-child {
+  font-family: "IBM Plex Mono", "SFMono-Regular", "JetBrains Mono", monospace;
+  font-size: 0.84rem;
+  white-space: nowrap;
+}
+
+.essay-body .table-figure--compact-metrics .table-shell {
+  max-width: 30rem;
+}
+
+.essay-body .table-figure--metrics table.metrics-table.metrics-table--compact-two-col {
+  min-width: 0;
+  table-layout: fixed;
 }
 
 .essay-body .table-figure--metrics table.metrics-table.metrics-table--budget-split {
@@ -1650,28 +1732,75 @@ pre code {
   min-width: min-content;
 }
 
-blockquote {
-  margin-left: 0;
-  padding: 1.1rem 1.2rem 1.1rem 1.35rem;
-  border-left: 2px solid var(--line-strong);
-  background: var(--surface-tint);
-  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+.essay-body blockquote {
+  position: relative;
+  margin: 0 0 1.35rem 1rem;
+  padding: 0.55rem 0.9rem 0.55rem 1rem;
+  border-left: 0;
+  background: transparent;
   color: #4b5160;
   font-family: "Plus Jakarta Sans", "Apple SD Gothic Neo", "Malgun Gothic", "Segoe UI", sans-serif;
-  font-size: 1.05rem;
+  font-size: 0.96rem;
   font-weight: 500;
-  line-height: 1.88;
+  line-height: 1.72;
   font-style: normal;
   letter-spacing: 0.01em;
   word-spacing: 0.08em;
 }
 
-blockquote > :last-child {
+.essay-body blockquote::before {
+  position: absolute;
+  top: 0.55rem;
+  bottom: 0.55rem;
+  left: 0;
+  width: 2px;
+  background: var(--line-strong);
+  content: "";
+}
+
+.essay-body blockquote > :last-child {
   margin-bottom: 0;
 }
 
-blockquote p + p {
+.essay-body blockquote p + p {
   margin-top: 0.45rem;
+}
+
+.essay-body p + blockquote {
+  margin-top: -0.9rem;
+}
+
+.essay-body .research-question {
+  margin: 0 0 1.75rem;
+  padding: 0.95rem 0 1rem;
+  border-top: 0;
+  border-bottom: 0;
+  background: transparent;
+  color: var(--ink);
+}
+
+.essay-body .research-question__label {
+  display: inline-block;
+  margin: 0 0 0.55rem;
+  padding: 0.28rem 0.48rem;
+  background: var(--accent);
+  color: #ffffff;
+  font-family: "IBM Plex Mono", "SFMono-Regular", "JetBrains Mono", monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.essay-body .research-question p:not(.research-question__label) {
+  margin: 0;
+  color: var(--ink);
+  font-family: "Plus Jakarta Sans", "Avenir Next", "Segoe UI", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.78;
+  letter-spacing: 0;
 }
 
 .table-shell {
@@ -2075,6 +2204,8 @@ blockquote p + p {
 .essay-body .details-content {
   padding: 0.95rem 1.25rem 1.1rem;
   background: var(--surface);
+  font-size: 0.98rem;
+  line-height: 1.72;
 }
 
 .essay-body .details-content > :first-child {
@@ -2307,7 +2438,7 @@ hr {
   }
 
   .essay {
-    padding: 1.6rem var(--page-gutter) 2.25rem;
+    padding: 1.6rem var(--page-gutter) 1.05rem;
   }
 
   .essay-header {
