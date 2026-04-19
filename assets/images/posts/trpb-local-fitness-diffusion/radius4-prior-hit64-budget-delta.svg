@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 420" role="img" aria-labelledby="title desc">
+  <title id="title">Radius4 Prior Hit@64 Delta by Label Budget</title>
+  <desc id="desc">A horizontal divergent bar plot showing Hit@64 deltas for label budgets 64, 128, and 256 when learned prior weight 0.25 is added inside the radius4 candidate set.</desc>
+  <rect width="1040" height="420" fill="#ffffff"/>
+
+  <defs>
+    <style>
+      text { font-family: 'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+      .title { fill: #111111; font-size: 15px; font-weight: 700; }
+      .axis { fill: #5f6672; font-size: 12px; font-weight: 600; }
+      .tick { fill: #5f6672; font-size: 12px; font-weight: 500; }
+      .value { fill: #ffffff; font-size: 13px; font-weight: 700; }
+      .value-outside { fill: #5f6672; font-size: 13px; font-weight: 700; }
+      .grid { stroke: #e6e8ee; stroke-width: 1; stroke-dasharray: 4 8; }
+      .zero { stroke: #111111; stroke-width: 1.4; }
+      .bar-positive { fill: #3f41ff; }
+      .bar-negative { fill: #9097a3; }
+    </style>
+  </defs>
+
+  <g transform="translate(0 34)">
+    <text x="520" y="0" text-anchor="middle" class="title">Radius4 Prior Hit@64 Delta by Label Budget</text>
+  </g>
+
+  <g transform="translate(132 86)">
+    <g>
+      <line x1="120" y1="0" x2="120" y2="250" class="grid"/>
+      <line x1="320" y1="0" x2="320" y2="250" class="zero"/>
+      <line x1="520" y1="0" x2="520" y2="250" class="grid"/>
+      <line x1="720" y1="0" x2="720" y2="250" class="grid"/>
+      <line x1="120" y1="250" x2="720" y2="250" stroke="#e6e8ee" stroke-width="1"/>
+    </g>
+
+    <g class="axis">
+      <text x="420" y="304" text-anchor="middle">Hit@64 delta vs radius4 oracle</text>
+      <text x="62" y="128" text-anchor="middle" transform="rotate(-90 62 128)">Label budget</text>
+    </g>
+
+    <g class="tick">
+      <text x="120" y="278" text-anchor="middle">-0.02</text>
+      <text x="320" y="278" text-anchor="middle">0</text>
+      <text x="520" y="278" text-anchor="middle">+0.02</text>
+      <text x="720" y="278" text-anchor="middle">+0.04</text>
+
+      <text x="98" y="60" text-anchor="end">64</text>
+      <text x="98" y="140" text-anchor="end">128</text>
+      <text x="98" y="220" text-anchor="end">256</text>
+    </g>
+
+    <g>
+      <rect x="320" y="39" width="370" height="28" rx="7" class="bar-positive"/>
+      <rect x="320" y="119" width="130" height="28" rx="7" class="bar-positive"/>
+      <rect x="170" y="199" width="150" height="28" rx="7" class="bar-negative"/>
+    </g>
+
+    <g class="value">
+      <text x="332" y="58" text-anchor="start">+0.037</text>
+      <text x="332" y="138" text-anchor="start">+0.013</text>
+      <text x="308" y="218" text-anchor="end">-0.015</text>
+    </g>
+
+    <text x="308" y="58" text-anchor="end" class="value-outside">low-label에서 남은 작은 이득</text>
+    <text x="332" y="218" text-anchor="start" class="value-outside">256 label에서는 반전</text>
+  </g>
+</svg>

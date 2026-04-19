@@ -27,7 +27,6 @@ layout: default
                 {% if display_category %}
                   <span class="post-stream-category">{{ display_category | replace: "-", " " }}</span>
                 {% endif %}
-                <span class="post-stream-meta">{{ post.date | date: "%b %d, %Y" }}</span>
               </span>
               <span class="post-stream-title">{{ post.title }}</span>
               {% if post.excerpt %}
