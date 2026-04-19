@@ -1,7 +1,7 @@
 ---
 layout: home
-title: Articles
-eyebrow: ""
+title: Mini Research
+eyebrow_author: true
 ---
 
-Tiny personal research logs
+Experiments driven by personal curiosity

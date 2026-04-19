@@ -1,12 +1,15 @@
 ---
 title: "TrpB low-label 후보 reranking: 전역 prior 실패와 radius4 안의 작은 보정 신호"
 date: 2026-04-19 10:50:00 +0900
+last_modified_at: 2026-04-19 15:45:00 +0900
 categories: ["PROTEIN ML"]
 tags: [protein, trpb, flip2, esm2, diffusion, fitness-prediction, low-label, reranking]
 lab_path: "experiment-lab/projects/trpb-local-fitness-diffusion"
 excerpt: "FLIP2 TrpB two-to-many에서 local denoising prior를 low-label ESM2/Ridge oracle에 섞어 봤다. 전역 보상 신호로는 실패했지만, radius4로 후보 공간을 통제하면 작은 랭킹 보정 신호가 남았다."
+description: "FLIP2 TrpB two-to-many 후보 reranking에서 frozen ESM2/Ridge oracle과 local denoising prior를 섞었을 때 남는 신호와 한계를 정리한 실험 노트."
 permalink: /research/2026/04/19/trpb-local-fitness-diffusion-prior-reranking/
 image: /assets/images/posts/trpb-local-fitness-diffusion/trpb-5e0k-ribbon-featured.png
+image_alt: "PDB 5E0K 구조에서 TrpB beta chain을 강조한 low-label reranking 글 대표 이미지"
 hero_image: /assets/images/posts/trpb-local-fitness-diffusion/trpb-5e0k-ribbon-featured.png
 hero_alt: "PDB 5E0K tryptophan synthase complex에서 TrpB beta chain을 파란색 ribbon으로 강조한 구조 렌더링 이미지"
 hero_caption: "<strong>Figure 1.</strong> PDB 5E0K의 <em>Pyrococcus furiosus</em> tryptophan synthase complex 구조를 ribbon으로 렌더링했다. 파란색으로 강조한 부분은 complex 전체 중 TrpB에 해당하는 beta chain B이다."

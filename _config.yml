@@ -1,5 +1,5 @@
 title: Ilho Ahn
-description: Applied LLM research notes, experiments, and implementation findings by Ilho Ahn
+description: Applied LLM research notes, experiments, and implementation findings by Ilho Ahn (안일호)
 url: "https://muted-color.github.io"
 baseurl: ""
 google_analytics: "G-JKZPX3S49D"
@@ -9,6 +9,12 @@ theme: minima
 
 author:
   name: Ilho Ahn
+  name_ko: 안일호
+  alternate_names:
+    - 안일호
+  same_as:
+    - https://www.linkedin.com/in/soleaf/
+    - https://github.com/oy-ilho
 
 markdown: kramdown
 kramdown:

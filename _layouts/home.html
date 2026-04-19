@@ -3,7 +3,11 @@ layout: default
 ---
 <section class="home-shell">
   <div class="home-intro">
-    {% if page.eyebrow %}
+    {% if page.eyebrow_author %}
+      <p class="eyebrow">
+        {{ site.author.name | default: site.title | upcase }}
+      </p>
+    {% elsif page.eyebrow %}
       <p class="eyebrow">{{ page.eyebrow }}</p>
     {% endif %}
     <h1 class="page-heading">{{ page.title | default: site.title }}</h1>

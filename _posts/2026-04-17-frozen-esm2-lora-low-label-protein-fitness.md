@@ -1,12 +1,15 @@
 ---
 title: "Low-label Protein Fitness 실험: Frozen ESM2와 LoRA의 label budget 비교"
 date: 2026-04-17 19:00:00 +0900
+last_modified_at: 2026-04-19 15:45:00 +0900
 categories: ["PROTEIN ML"]
 tags: [protein, esm2, lora, flip, fitness-prediction, low-label]
 lab_path: "experiment-lab/projects/flip-esm2-lowlabel-lora"
 excerpt: "라벨을 많이 모으기 어려운 protein fitness 예측에서 frozen ESM2 embedding만 쓰는 방법과 LoRA로 조금 적응시키는 방법을 같은 label budget 안에서 비교한다."
+description: "Low-label protein fitness 예측에서 frozen ESM2 embedding baseline과 ESM2 LoRA adapter를 같은 label budget과 seed grid로 비교한 실험 노트."
 permalink: /research/2026/04/17/frozen-esm2-lora-low-label-protein-fitness/
 image: /assets/images/posts/frozen-esm2-lora-low-label-protein-fitness/featured-result-map-social.png
+image_alt: "GB1과 AAV low-label protein fitness 실험에서 frozen ESM2와 LoRA 결과 분포를 요약한 소셜 썸네일"
 hero_image: /assets/images/posts/frozen-esm2-lora-low-label-protein-fitness/featured-result-map.svg
 hero_alt: "GB1과 AAV에서 label budget별 LoRA와 frozen Spearman의 seed-pair 분포를 함께 비교한 Figure 1"
 hero_caption: "<strong>Figure 1.</strong> GB1/AAV에서 ESM2-35M LoRA batch8 recipe와 같은 seed grid의 frozen baseline을 test Spearman 기준으로 비교했다. y축의 128/192/256은 label budget이며, train과 validation에 쓴 labeled sample 수를 합친 값이다. 작은 점은 9개 seed-pair run, 큰 점은 평균, 가로선은 seed-pair min-max 범위다. 두 panel은 실제 seed-pair 값 범위에 맞춘 local x-axis를 사용한다."
