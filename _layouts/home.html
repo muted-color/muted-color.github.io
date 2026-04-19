@@ -14,8 +14,40 @@ layout: default
 
   <section class="post-index" id="posts">
     {% assign visible_posts = site.posts | where_exp: "post", "post.hidden != true" %}
-    <ol class="post-stream">
-      {% for post in visible_posts %}
+    {% if visible_posts.size > 0 %}
+      <div class="post-featured-grid">
+        {% for post in visible_posts limit: 2 %}
+          {% assign display_category = post.categories | first %}
+          <article class="post-featured-card">
+            <a class="post-featured-link" href="{{ post.url | relative_url }}">
+              {% if post.image %}
+                <span class="post-featured-media" aria-hidden="true">
+                  <img src="{{ post.image | relative_url }}" alt="" loading="lazy">
+                </span>
+              {% endif %}
+              <span class="post-featured-content">
+                <span class="post-featured-kicker">
+                  <span class="post-featured-icon" aria-hidden="true">
+                    {% include category-icon.html category=display_category %}
+                  </span>
+                  {% if display_category %}
+                    <span class="post-featured-category">{{ display_category | replace: "-", " " }}</span>
+                  {% endif %}
+                </span>
+                <span class="post-featured-title">{{ post.title }}</span>
+                {% if post.excerpt %}
+                  <span class="post-featured-excerpt">{{ post.excerpt | strip_html }}</span>
+                {% endif %}
+              </span>
+            </a>
+          </article>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if visible_posts.size > 2 %}
+      <ol class="post-stream">
+        {% for post in visible_posts offset: 2 %}
         {% assign display_category = post.categories | first %}
         <li class="post-stream-item">
           <a class="post-stream-link" href="{{ post.url | relative_url }}">
@@ -35,7 +67,8 @@ layout: default
             </span>
           </a>
         </li>
-      {% endfor %}
-    </ol>
+        {% endfor %}
+      </ol>
+    {% endif %}
   </section>
 </section>
