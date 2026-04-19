@@ -23,12 +23,17 @@
 - 공개 글은 `image:`를 반드시 둔다.
 - `image:`는 Open Graph, LinkedIn, Twitter/X 썸네일용이며 PNG/JPG를 사용한다.
 - `hero_image:`는 본문 hero용이며 `image:`를 대체하지 않는다.
+- 공개 글은 `description:`, `last_modified_at:`, `image_alt:`를 둔다.
+- SEO 관련 세부 규칙은 `SEO.md`를 참고한다.
 - 실험 기반 글은 `lab_path:`를 둔다.
 - `lab_path:`는 로컬 전체 경로가 아니라 `~/lab/` 뒤쪽 상대 경로만 기록한다.
 
 ```yaml
 lab_path: "experiment-lab/projects/project-slug"
+description: "검색 결과에 노출될 수 있도록 실험 질문, 대상, 핵심 결론과 한계를 한 문장으로 정리한다."
+last_modified_at: 2026-04-19 15:45:00 +0900
 image: /assets/images/posts/post-slug/social-thumbnail.png
+image_alt: "소셜/검색 대표 이미지가 무엇을 요약하는지 설명"
 hero_image: /assets/images/posts/post-slug/hero.svg
 ```
 

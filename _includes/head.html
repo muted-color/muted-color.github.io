@@ -3,6 +3,65 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   {%- seo -%}
+  {%- if site.author.name and site.author.alternate_names -%}
+    {%- assign site_person_url = site.url | append: site.baseurl | append: "/" -%}
+    {%- assign site_person_id = site_person_url | append: "#person" -%}
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "@id": {{ site_person_id | jsonify }},
+        "name": {{ site.author.name | jsonify }},
+        "alternateName": {{ site.author.alternate_names | jsonify }},
+        "url": {{ site_person_url | jsonify }}{% if site.author.same_as %},
+        "sameAs": {{ site.author.same_as | jsonify }}{% endif %}
+      }
+    </script>
+  {%- endif -%}
+  {%- if page.layout == 'post' -%}
+    {%- assign site_person_url = site.url | append: site.baseurl | append: "/" -%}
+    {%- assign site_person_id = site_person_url | append: "#person" -%}
+    {%- assign page_url = page.url | absolute_url -%}
+    {%- assign article_id = page_url | append: "#article" -%}
+    {%- assign article_description = page.description | default: page.excerpt | default: site.description | strip_html | strip_newlines -%}
+    {%- assign article_modified = page.last_modified_at | default: page.date -%}
+    {%- assign article_section = page.categories | first -%}
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "@id": {{ article_id | jsonify }},
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": {{ page_url | jsonify }}
+        },
+        "headline": {{ page.title | jsonify }},
+        "description": {{ article_description | jsonify }},
+        "datePublished": {{ page.date | date_to_xmlschema | jsonify }},
+        "dateModified": {{ article_modified | date_to_xmlschema | jsonify }},
+        "author": {
+          "@type": "Person",
+          "@id": {{ site_person_id | jsonify }},
+          "name": {{ site.author.name | jsonify }},
+          "url": {{ site_person_url | jsonify }}{% if site.author.alternate_names %},
+          "alternateName": {{ site.author.alternate_names | jsonify }}{% endif %}{% if site.author.same_as %},
+          "sameAs": {{ site.author.same_as | jsonify }}{% endif %}
+        },
+        "publisher": {
+          "@type": "Person",
+          "@id": {{ site_person_id | jsonify }},
+          "name": {{ site.author.name | jsonify }}
+        }{% if page.image %},
+        "image": {
+          "@type": "ImageObject",
+          "url": {{ page.image | absolute_url | jsonify }}{% if page.image_alt %},
+          "caption": {{ page.image_alt | jsonify }}{% endif %}
+        }{% endif %}{% if page.tags %},
+        "keywords": {{ page.tags | join: ", " | jsonify }}{% endif %}{% if article_section %},
+        "articleSection": {{ article_section | jsonify }}{% endif %}
+      }
+    </script>
+  {%- endif -%}
   {%- assign asset_version = site.github.build_revision -%}
   {%- unless asset_version -%}
     {%- assign asset_version = site.time | date: "%s" -%}

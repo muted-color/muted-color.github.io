@@ -1,11 +1,14 @@
 ---
 title: "4B급 Gemma3와 Gemma4 한국어 SFT 비교: 품질, 학습, 노이즈"
 date: 2026-04-12 09:00:00 +0900
+last_modified_at: 2026-04-19 15:45:00 +0900
 categories: ["LLM EVAL"]
 tags: [gemma, korean, sft, eval]
 excerpt: "Gemma3와 Gemma4를 한국어 instruction 환경에서 비교했다. base 품질, QLoRA SFT 후 성능, 학습 효율, 입력 노이즈 안정성을 정리한다."
+description: "Gemma3와 Gemma4 4B급 한국어 instruction 모델을 base 품질, QLoRA SFT 반응, 입력 노이즈 안정성 관점에서 비교한 실험 노트."
 permalink: /research/2026/04/12/gemma3-e4b-korean-sft/
 image: /assets/images/posts/gemma3-e4b-korean-sft/social-thumbnail.png
+image_alt: "Gemma3와 Gemma4 한국어 SFT 비교 결과를 질문별 evidence map으로 요약한 소셜 썸네일"
 hero_image: /assets/images/posts/gemma3-e4b-korean-sft/evidence-map.svg
 hero_alt: "Gemma4와 Gemma3 한국어 비교의 핵심 질문별 결과 요약"
 hero_caption: "<strong>Figure 1.</strong> 전체 결과를 먼저 압축한 요약이다. 각 행은 서로 다른 단위의 지표이므로 행 안에서 두 모델의 상대 차이만 읽으면 된다. 모든 행은 값이 클수록 좋은 방향으로 맞췄고, <code>Format alignment</code>는 <code>1 - Violation</code>으로 계산했다. 세부 수치는 본문에서 따로 설명한다."

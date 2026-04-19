@@ -1,9 +1,11 @@
 <header class="site-header" role="banner">
   <div class="wrapper site-header-inner">
-    <a class="site-title" rel="author" href="{{ '/' | relative_url }}">
-      <span class="site-title-primary">ILHO AHN</span>
-      <span class="site-title-secondary">MINI RESEARCH</span>
-    </a>
+    {% unless page.layout == 'home' %}
+      <a class="site-title" rel="author" href="{{ '/' | relative_url }}">
+        <span class="site-title-primary">{{ site.author.name | default: site.title | upcase }}</span>
+        <span class="site-title-secondary">MINI RESEARCH</span>
+      </a>
+    {% endunless %}
     <nav class="site-nav-lite" aria-label="Primary">
       <a class="page-link site-nav-link" href="{{ '/about/' | relative_url }}">About</a>
     </nav>
