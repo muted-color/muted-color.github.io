@@ -1833,7 +1833,14 @@ pre code {
   box-shadow: none;
 }
 
-.essay-body mjx-container,
+.essay-body mjx-container:not([display="true"]) {
+  display: inline-block;
+  max-width: none;
+  overflow: visible !important;
+  vertical-align: -0.08em;
+}
+
+.essay-body mjx-container[display="true"],
 .essay-body mjx-container[jax="CHTML"][display="true"] {
   display: block;
   max-width: 100%;
@@ -2085,6 +2092,42 @@ pre code {
   font-size: 0.84rem;
   line-height: 1.45;
   overflow-wrap: anywhere;
+}
+
+.essay-body .model-flow {
+  margin: 1.05rem 0 1.85rem;
+  padding: 0.78rem 0 0.2rem;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px dotted rgba(95, 102, 114, 0.34);
+}
+
+.essay-body .model-flow .metric-detail__eyebrow {
+  margin-top: 0;
+}
+
+.essay-body .model-flow p:not(.metric-detail__eyebrow) {
+  color: #555c68;
+  font-size: 0.91rem;
+  line-height: 1.68;
+}
+
+.essay-body .model-flow__diagram {
+  margin: 0.55rem 0 1rem;
+  padding: 0.2rem 0 0.2rem 1rem;
+  border-left: 2px solid rgba(95, 102, 114, 0.58);
+  border-radius: 0;
+  background: transparent;
+  color: #454b57;
+  font-family: "IBM Plex Mono", "SFMono-Regular", "JetBrains Mono", monospace;
+  font-size: 0.82rem;
+  line-height: 1.62;
+  overflow-x: auto;
+}
+
+.essay-body .model-flow__diagram code {
+  padding: 0;
+  background: transparent;
+  color: inherit;
 }
 
 .essay-body .content-tabs {
