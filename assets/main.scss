@@ -570,6 +570,17 @@ h6 {
   background: var(--surface);
 }
 
+.essay-hero--framed .essay-hero-frame {
+  aspect-ratio: 1672 / 941;
+  overflow: hidden;
+  border: 1px solid rgba(17, 17, 17, 0.09);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(247, 248, 252, 1)),
+    var(--surface);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+}
+
 .essay-hero-image,
 .essay-hero-placeholder {
   width: 100%;

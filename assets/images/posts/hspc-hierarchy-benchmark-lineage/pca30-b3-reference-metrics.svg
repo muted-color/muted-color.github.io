@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 560" role="img" aria-labelledby="title desc">
+  <title id="title">pca30-B3 reference metric comparison</title>
+  <desc id="desc">A three-row dumbbell plot comparing pca50-B3 and pca30-B3 on primary score, mean ECE, and MEBEMP-L to ERYP pair confusion.</desc>
+  <rect width="1040" height="560" fill="#ffffff"/>
+
+  <defs>
+    <style>
+      text { font-family: 'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+      .title { fill: #111111; font-size: 15px; font-weight: 700; }
+      .metric { fill: #111111; font-size: 13px; font-weight: 700; }
+      .submetric { fill: #5f6672; font-size: 12px; font-weight: 500; }
+      .tick { fill: #5f6672; font-size: 12px; font-weight: 500; }
+      .value { fill: #111111; font-size: 13px; font-weight: 700; }
+      .note { fill: #5f6672; font-size: 12px; font-weight: 500; }
+      .axis-line { stroke: #d9dde5; stroke-width: 1.2; }
+      .grid { stroke: #e6e8ee; stroke-width: 1; stroke-dasharray: 4 8; }
+      .connector { stroke: #3f41ff; stroke-width: 2.4; stroke-linecap: round; }
+      .pca50-point { fill: #ffffff; stroke: #9aa1ad; stroke-width: 2.4; }
+      .pca30-point { fill: #3f41ff; stroke: #3f41ff; stroke-width: 2.4; }
+      .legend-pca50 { fill: #ffffff; stroke: #9aa1ad; stroke-width: 2; }
+      .legend-pca30 { fill: #3f41ff; stroke: #3f41ff; stroke-width: 2; }
+      .badge { fill: #f4f5f8; }
+      .badge-text { fill: #111111; font-size: 12px; font-weight: 700; }
+    </style>
+  </defs>
+
+  <g transform="translate(0 34)">
+    <text x="520" y="0" text-anchor="middle" class="title">pca30-B3 as a Calibrated In-domain Reference</text>
+  </g>
+
+  <g transform="translate(96 86)">
+    <g transform="translate(0 0)">
+      <text x="0" y="42" class="metric">Primary score</text>
+      <text x="0" y="62" class="submetric">higher is better</text>
+      <line x1="300" y1="52" x2="780" y2="52" class="axis-line"/>
+      <line x1="300" y1="26" x2="300" y2="78" class="grid"/>
+      <line x1="780" y1="26" x2="780" y2="78" class="grid"/>
+      <text x="300" y="102" text-anchor="middle" class="tick">0.895</text>
+      <text x="780" y="102" text-anchor="middle" class="tick">0.904</text>
+      <line x1="388" y1="52" x2="690" y2="52" class="connector"/>
+      <circle cx="388" cy="52" r="7" class="pca50-point"/>
+      <circle cx="690" cy="52" r="7.5" class="pca30-point"/>
+      <text x="388" y="28" text-anchor="middle" class="value">0.8967</text>
+      <text x="690" y="28" text-anchor="middle" class="value">0.9023</text>
+      <rect x="820" y="34" width="88" height="28" rx="8" class="badge"/>
+      <text x="864" y="53" text-anchor="middle" class="badge-text">+0.0057</text>
+    </g>
+
+    <g transform="translate(0 138)">
+      <text x="0" y="42" class="metric">Mean ECE</text>
+      <text x="0" y="62" class="submetric">lower is better</text>
+      <line x1="300" y1="52" x2="780" y2="52" class="axis-line"/>
+      <line x1="300" y1="26" x2="300" y2="78" class="grid"/>
+      <line x1="780" y1="26" x2="780" y2="78" class="grid"/>
+      <text x="300" y="102" text-anchor="middle" class="tick">0.022</text>
+      <text x="780" y="102" text-anchor="middle" class="tick">0.028</text>
+      <line x1="430" y1="52" x2="713" y2="52" class="connector"/>
+      <circle cx="713" cy="52" r="7" class="pca50-point"/>
+      <circle cx="430" cy="52" r="7.5" class="pca30-point"/>
+      <text x="713" y="28" text-anchor="middle" class="value">0.0272</text>
+      <text x="430" y="28" text-anchor="middle" class="value">0.0236</text>
+      <rect x="820" y="34" width="88" height="28" rx="8" class="badge"/>
+      <text x="864" y="53" text-anchor="middle" class="badge-text">-0.0035</text>
+    </g>
+
+    <g transform="translate(0 276)">
+      <text x="0" y="34" class="metric">MEBEMP-L / ERYP</text>
+      <text x="0" y="54" class="metric">pair confusion</text>
+      <text x="0" y="74" class="submetric">lower is better</text>
+      <line x1="300" y1="52" x2="780" y2="52" class="axis-line"/>
+      <line x1="300" y1="26" x2="300" y2="78" class="grid"/>
+      <line x1="780" y1="26" x2="780" y2="78" class="grid"/>
+      <text x="300" y="102" text-anchor="middle" class="tick">0.260</text>
+      <text x="780" y="102" text-anchor="middle" class="tick">0.282</text>
+      <line x1="433" y1="52" x2="707" y2="52" class="connector"/>
+      <circle cx="707" cy="52" r="7" class="pca50-point"/>
+      <circle cx="433" cy="52" r="7.5" class="pca30-point"/>
+      <text x="707" y="28" text-anchor="middle" class="value">0.2787</text>
+      <text x="433" y="28" text-anchor="middle" class="value">0.2661</text>
+      <rect x="820" y="34" width="88" height="28" rx="8" class="badge"/>
+      <text x="864" y="53" text-anchor="middle" class="badge-text">-0.0126</text>
+    </g>
+
+    <g transform="translate(312 436)" class="tick">
+      <circle cx="0" cy="0" r="6.5" class="pca50-point"/>
+      <text x="18" y="4">pca50-B3</text>
+      <circle cx="128" cy="0" r="6.5" class="pca30-point"/>
+      <text x="146" y="4">pca30-B3</text>
+      <rect x="292" y="-13" width="92" height="26" rx="8" class="badge"/>
+      <text x="338" y="4" text-anchor="middle" class="badge-text">pca30 - pca50</text>
+    </g>
+  </g>
+</svg>
