@@ -523,6 +523,30 @@ code.highlighter-rouge {
   box-shadow: none;
 }
 
+h1 code:not(.highlight),
+h2 code:not(.highlight),
+h3 code:not(.highlight),
+h4 code:not(.highlight),
+h5 code:not(.highlight),
+h6 code:not(.highlight),
+h1 code.highlighter-rouge,
+h2 code.highlighter-rouge,
+h3 code.highlighter-rouge,
+h4 code.highlighter-rouge,
+h5 code.highlighter-rouge,
+h6 code.highlighter-rouge {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  font: inherit;
+  letter-spacing: inherit;
+  overflow-wrap: inherit;
+  word-break: inherit;
+}
+
 pre {
   border-radius: var(--radius-md);
 }

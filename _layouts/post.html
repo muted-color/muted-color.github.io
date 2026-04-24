@@ -37,9 +37,12 @@ layout: default
 
   <div class="essay-grid">
     <aside class="essay-sidebar">
+      <button class="toc-backdrop" type="button" aria-hidden="true" tabindex="-1"></button>
       <div class="essay-sidebar-inner">
-        <p class="toc-label">On this page</p>
-        <nav class="toc-nav" id="toc"></nav>
+        <button class="toc-label toc-toggle" type="button" aria-expanded="false" aria-controls="toc"><span class="toc-toggle-label">On this page</span></button>
+        <div class="toc-sheet">
+          <nav class="toc-nav" id="toc"></nav>
+        </div>
       </div>
     </aside>
 
@@ -461,6 +464,122 @@ layout: default
     enhanceCodeBlocks();
     enhanceFigureTableReferences();
 
+    var tocToggle = sidebar ? sidebar.querySelector(".toc-toggle") : null;
+    var tocToggleLabel = tocToggle ? tocToggle.querySelector(".toc-toggle-label") : null;
+    var tocDefaultLabel = tocToggleLabel ? tocToggleLabel.textContent.trim() : "On this page";
+    var activeTocLabel = tocDefaultLabel;
+
+    function renderTocToggleLabel() {
+      if (!tocToggleLabel || !sidebar) return;
+
+      tocToggleLabel.textContent = sidebar.classList.contains("is-toc-stuck") ? activeTocLabel : tocDefaultLabel;
+    }
+
+    function enhanceTocDisclosure() {
+      var toggle = tocToggle;
+      var mobileQuery = window.matchMedia ? window.matchMedia("(max-width: 860px)") : null;
+      var hasUserChoice = false;
+
+      if (!toggle || !sidebar || !mobileQuery) return;
+
+      function setOpen(isOpen) {
+        sidebar.classList.toggle("is-toc-open", isOpen);
+        toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      }
+
+      function syncForViewport() {
+        if (mobileQuery.matches) {
+          if (!hasUserChoice) setOpen(false);
+        } else {
+          setOpen(true);
+          hasUserChoice = false;
+        }
+      }
+
+      toggle.addEventListener("click", function () {
+        if (!mobileQuery.matches) {
+          setOpen(true);
+          return;
+        }
+
+        hasUserChoice = true;
+        setOpen(!sidebar.classList.contains("is-toc-open"));
+      });
+
+      toc.addEventListener("click", function (event) {
+        if (!mobileQuery.matches || !event.target.closest("a")) return;
+        hasUserChoice = false;
+        setOpen(false);
+      });
+
+      var backdrop = sidebar.querySelector(".toc-backdrop");
+
+      if (backdrop) {
+        backdrop.addEventListener("click", function () {
+          hasUserChoice = false;
+          setOpen(false);
+        });
+      }
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key !== "Escape" || !mobileQuery.matches) return;
+        if (!sidebar.classList.contains("is-toc-open")) return;
+
+        hasUserChoice = false;
+        setOpen(false);
+        toggle.focus();
+      });
+
+      if (mobileQuery.addEventListener) {
+        mobileQuery.addEventListener("change", syncForViewport);
+      } else if (mobileQuery.addListener) {
+        mobileQuery.addListener(syncForViewport);
+      }
+
+      syncForViewport();
+    }
+
+    enhanceTocDisclosure();
+
+    function enhanceStickyTocState() {
+      var mobileQuery = window.matchMedia ? window.matchMedia("(max-width: 860px)") : null;
+      var ticking = false;
+
+      if (!sidebar || !mobileQuery) return;
+
+      function syncStickyState() {
+        ticking = false;
+
+        if (!mobileQuery.matches) {
+          sidebar.classList.remove("is-toc-stuck");
+          renderTocToggleLabel();
+          return;
+        }
+
+        sidebar.classList.toggle("is-toc-stuck", sidebar.getBoundingClientRect().top <= 13);
+        renderTocToggleLabel();
+      }
+
+      function requestSync() {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(syncStickyState);
+      }
+
+      window.addEventListener("scroll", requestSync, { passive: true });
+      window.addEventListener("resize", requestSync);
+
+      if (mobileQuery.addEventListener) {
+        mobileQuery.addEventListener("change", requestSync);
+      } else if (mobileQuery.addListener) {
+        mobileQuery.addListener(requestSync);
+      }
+
+      requestSync();
+    }
+
+    enhanceStickyTocState();
+
     var headings = root.querySelectorAll("h2, h3");
     if (!headings.length) {
       toc.innerHTML = '<p class="toc-empty">No sections yet.</p>';
@@ -490,6 +609,8 @@ layout: default
     });
 
     toc.appendChild(list);
+    activeTocLabel = links[0] ? links[0].link.textContent : tocDefaultLabel;
+    renderTocToggleLabel();
 
     if (!("IntersectionObserver" in window)) return;
 
@@ -507,6 +628,8 @@ layout: default
               pair.link.classList.remove("is-active");
             });
             matched.link.classList.add("is-active");
+            activeTocLabel = matched.link.textContent;
+            renderTocToggleLabel();
           }
         });
       },
