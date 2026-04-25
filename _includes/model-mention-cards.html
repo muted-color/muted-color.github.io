@@ -13,7 +13,11 @@
     {%- if url == "" -%}
       {%- assign url = repo | prepend: "https://huggingface.co/" -%}
     {%- endif -%}
-    <a class="model-mention-card" href="{{ url }}" target="_blank" rel="noopener noreferrer">
+    {%- assign card_class = "model-mention-card model-mention-card--resource" -%}
+    {%- if url contains "huggingface.co" -%}
+      {%- assign card_class = "model-mention-card model-mention-card--hf" -%}
+    {%- endif -%}
+    <a class="{{ card_class }}" href="{{ url }}" target="_blank" rel="noopener noreferrer">
       <span class="model-mention-card__text">
         <span class="model-mention-card__name">{{ name }}</span>
         <span class="model-mention-card__repo">{{ repo }}</span>
