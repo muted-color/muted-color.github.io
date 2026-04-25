@@ -150,7 +150,7 @@ h6 {
 }
 
 .eyebrow,
-.essay-kicker {
+.research-kicker {
   margin: 0 0 1rem;
   color: var(--muted);
   font-size: 0.8rem;
@@ -247,21 +247,21 @@ h6 {
   color: var(--ink);
 }
 
-.essay {
+.research {
   padding: 2.8rem 1.5rem 6rem;
 }
 
-.essay-header {
+.research-header {
   padding-bottom: 4.9rem;
 }
 
-.essay-intro {
+.research-intro {
   max-width: 44rem;
   margin: 0 auto;
   text-align: center;
 }
 
-.essay-title {
+.research-title {
   margin: 0 auto;
   max-width: 8.4em;
   font-size: 3.25rem;
@@ -271,25 +271,25 @@ h6 {
   text-wrap: balance;
 }
 
-.essay-credit {
+.research-credit {
   margin: 1.4rem 0 0;
   color: var(--ink);
   font-size: 0.92rem;
   font-weight: 500;
 }
 
-.essay-affiliation {
+.research-affiliation {
   color: var(--muted);
 }
 
-.essay-date {
+.research-date {
   display: block;
   margin-top: 0.3rem;
   color: var(--muted);
   font-size: 0.88rem;
 }
 
-.essay-dek {
+.research-dek {
   margin: 1.2rem auto 0;
   max-width: 33rem;
   color: var(--muted);
@@ -297,13 +297,13 @@ h6 {
   line-height: 1.68;
 }
 
-.essay-hero {
+.research-hero {
   margin: 3.5rem auto 0;
   width: 100%;
   max-width: 1120px;
 }
 
-.essay-hero-frame {
+.research-hero-frame {
   aspect-ratio: 16 / 8.25;
   overflow: hidden;
   background:
@@ -311,18 +311,18 @@ h6 {
     var(--surface);
 }
 
-.essay-hero-image,
-.essay-hero-placeholder {
+.research-hero-image,
+.research-hero-placeholder {
   width: 100%;
   height: 100%;
 }
 
-.essay-hero-image {
+.research-hero-image {
   display: block;
   object-fit: contain;
 }
 
-.essay-hero-placeholder {
+.research-hero-placeholder {
   background:
     radial-gradient(circle at 50% 48%, rgba(63, 65, 255, 0.08), transparent 16%),
     linear-gradient(90deg, transparent 0 18%, rgba(17, 17, 17, 0.06) 18% 31%, transparent 31% 40%, rgba(63, 65, 255, 0.24) 40% 59%, transparent 59% 69%, rgba(63, 65, 255, 0.12) 69% 84%, transparent 84% 100%),
@@ -330,7 +330,7 @@ h6 {
     linear-gradient(180deg, #ffffff 0%, #f3f4f8 100%);
 }
 
-.essay-hero-caption {
+.research-hero-caption {
   margin-top: 0.8rem;
   color: var(--muted);
   font-size: 0.8rem;
@@ -338,7 +338,7 @@ h6 {
   text-align: center;
 }
 
-.essay-grid {
+.research-grid {
   display: grid;
   width: 100%;
   max-width: 1080px;
@@ -348,13 +348,13 @@ h6 {
   align-items: start;
 }
 
-.essay-sidebar {
+.research-sidebar {
   color: var(--muted);
   align-self: start;
   position: relative;
 }
 
-.essay-sidebar-inner {
+.research-sidebar-inner {
   position: sticky;
   top: 1.2rem;
   max-height: calc(100vh - 2.4rem);
@@ -364,11 +364,11 @@ h6 {
   padding-left: 0.15rem;
 }
 
-.essay-sidebar-inner::-webkit-scrollbar {
+.research-sidebar-inner::-webkit-scrollbar {
   width: 6px;
 }
 
-.essay-sidebar-inner::-webkit-scrollbar-thumb {
+.research-sidebar-inner::-webkit-scrollbar-thumb {
   background: rgba(17, 17, 17, 0.12);
   border-radius: 999px;
 }
@@ -423,75 +423,75 @@ h6 {
   font-size: 0.94rem;
 }
 
-.essay-body {
+.research-body {
   color: var(--ink);
   font-family: "Plus Jakarta Sans", "Avenir Next", "Segoe UI", sans-serif;
   font-size: 1.08rem;
   line-height: 1.78;
 }
 
-.essay-body > * {
+.research-body > * {
   max-width: 100%;
 }
 
-.essay-body > p:first-of-type {
+.research-body > p:first-of-type {
   font-size: 1.22rem;
   line-height: 1.74;
 }
 
-.essay-body h2,
-.essay-body h3 {
+.research-body h2,
+.research-body h3 {
   scroll-margin-top: 1.5rem;
 }
 
-.essay-body h2 {
+.research-body h2 {
   margin-top: 3.7rem;
   margin-bottom: 1rem;
   font-size: 1.82rem;
   line-height: 1.08;
 }
 
-.essay-body h3 {
+.research-body h3 {
   margin-top: 2.5rem;
   margin-bottom: 0.8rem;
   font-size: 1.28rem;
   line-height: 1.2;
 }
 
-.essay-body p,
-.essay-body ul,
-.essay-body ol,
-.essay-body blockquote,
-.essay-body pre,
-.essay-body table,
-.essay-body figure,
-.essay-body details,
-.essay-body dl {
+.research-body p,
+.research-body ul,
+.research-body ol,
+.research-body blockquote,
+.research-body pre,
+.research-body table,
+.research-body figure,
+.research-body details,
+.research-body dl {
   margin: 0 0 1.55rem;
 }
 
-.essay-body ul,
-.essay-body ol {
+.research-body ul,
+.research-body ol {
   padding-left: 1.4rem;
 }
 
-.essay-body ul ul,
-.essay-body ol ol,
-.essay-body ul ol,
-.essay-body ol ul {
+.research-body ul ul,
+.research-body ol ol,
+.research-body ul ol,
+.research-body ol ul {
   margin-top: 0.55rem;
   margin-bottom: 0.2rem;
 }
 
-.essay-body li + li {
+.research-body li + li {
   margin-top: 0.4rem;
 }
 
-.essay-body strong {
+.research-body strong {
   color: var(--ink);
 }
 
-.essay-body img {
+.research-body img {
   display: block;
   width: 100%;
   height: auto;
@@ -712,7 +712,7 @@ blockquote p + p {
   background: transparent;
 }
 
-.essay-body .table-shell table {
+.research-body .table-shell table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
@@ -722,43 +722,43 @@ blockquote p + p {
   margin: 0;
 }
 
-.essay-body .table-shell th,
-.essay-body .table-shell td {
+.research-body .table-shell th,
+.research-body .table-shell td {
   padding: 0.62rem 0.85rem;
   border-bottom: 0.5px solid rgba(17, 17, 17, 0.05) !important;
   text-align: left;
   vertical-align: middle;
 }
 
-.essay-body .table-shell th {
+.research-body .table-shell th {
   background: transparent !important;
   color: var(--ink);
   font-size: 0.82rem;
   font-weight: 700;
 }
 
-.essay-body .table-shell th + th,
-.essay-body .table-shell td + td {
+.research-body .table-shell th + th,
+.research-body .table-shell td + td {
   border-left: 0.5px solid rgba(17, 17, 17, 0.05) !important;
 }
 
-.essay-body .table-shell tbody tr:last-child td {
+.research-body .table-shell tbody tr:last-child td {
   border-bottom: 0;
 }
 
-.essay-body .table-shell table tr,
-.essay-body .table-shell table tbody tr,
-.essay-body .table-shell table tbody tr:nth-child(even),
-.essay-body .table-shell table tbody tr:nth-child(odd) {
+.research-body .table-shell table tr,
+.research-body .table-shell table tbody tr,
+.research-body .table-shell table tbody tr:nth-child(even),
+.research-body .table-shell table tbody tr:nth-child(odd) {
   background: transparent !important;
 }
 
-.essay-body .table-shell table tbody tr:nth-child(even) td,
-.essay-body .table-shell table tbody tr:nth-child(odd) td {
+.research-body .table-shell table tbody tr:nth-child(even) td,
+.research-body .table-shell table tbody tr:nth-child(odd) td {
   background: transparent !important;
 }
 
-.essay-body details {
+.research-body details {
   margin: 0 0 1.75rem;
   padding: 0;
   border: 1px solid var(--line);
@@ -768,13 +768,13 @@ blockquote p + p {
   transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
 }
 
-.essay-body details[open] {
+.research-body details[open] {
   border-color: var(--line-strong);
   background: transparent;
   box-shadow: none;
 }
 
-.essay-body summary {
+.research-body summary {
   display: flex;
   align-items: center;
   gap: 0.62rem;
@@ -789,15 +789,15 @@ blockquote p + p {
   transition: background-color 180ms ease, color 180ms ease;
 }
 
-.essay-body summary::-webkit-details-marker {
+.research-body summary::-webkit-details-marker {
   display: none;
 }
 
-.essay-body summary::marker {
+.research-body summary::marker {
   content: "";
 }
 
-.essay-body summary::before {
+.research-body summary::before {
   content: "";
   width: 0.52rem;
   height: 0.52rem;
@@ -809,33 +809,33 @@ blockquote p + p {
   transition: transform 180ms ease;
 }
 
-.essay-body summary:hover {
+.research-body summary:hover {
   background: transparent;
 }
 
-.essay-body summary:focus-visible {
+.research-body summary:focus-visible {
   outline: 2px solid rgba(63, 65, 255, 0.32);
   outline-offset: -2px;
 }
 
-.essay-body details[open] summary {
+.research-body details[open] summary {
   background: transparent;
   border-bottom: 1px solid var(--line);
 }
 
-.essay-body details[open] summary::before {
+.research-body details[open] summary::before {
   transform: rotate(45deg);
 }
 
-.essay-body .details-content {
+.research-body .details-content {
   padding: 0.95rem 1.25rem 1.1rem;
 }
 
-.essay-body .details-content > :first-child {
+.research-body .details-content > :first-child {
   margin-top: 0;
 }
 
-.essay-body .details-content > :last-child {
+.research-body .details-content > :last-child {
   margin-bottom: 0;
 }
 
@@ -908,7 +908,7 @@ hr {
 }
 
 @media (max-width: 1100px) {
-  .essay-grid {
+  .research-grid {
     grid-template-columns: 11.5rem minmax(0, 1fr);
     gap: 2rem;
   }
@@ -933,7 +933,7 @@ hr {
   }
 
   .page-heading,
-  .essay-title {
+  .research-title {
     font-size: 2.45rem;
   }
 
@@ -943,28 +943,28 @@ hr {
     padding: 1rem 0;
   }
 
-  .essay {
+  .research {
     padding: 1.6rem 0 4rem;
   }
 
-  .essay-header {
+  .research-header {
     padding-bottom: 2.7rem;
   }
 
-  .essay-hero {
+  .research-hero {
     margin-top: 2.8rem;
   }
 
-  .essay-hero-frame {
+  .research-hero-frame {
     aspect-ratio: 16 / 10.5;
   }
 
-  .essay-grid {
+  .research-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
 
-  .essay-sidebar {
+  .research-sidebar {
     display: none;
   }
 
