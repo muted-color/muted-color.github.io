@@ -18,6 +18,30 @@
 - 표, 모델 카드, 탭, 비교 샘플, 수식, appendix, citation 형식은 템플릿 예시를 따른다.
 - 새 표현 형식을 만들었다면 재사용 가능하도록 템플릿에도 짧은 예시를 추가한다.
 
+## 서식 폴리싱
+
+- 글 초안이나 큰 수정 뒤에는 필요시 프로젝트 커스텀 Sub Agent인 `format_polisher`에게 **서식 폴리싱 리뷰**를 맡긴다.
+- `format_polisher` 설정은 `.codex/agents/format-polisher.toml`에 둔다. Sub Agent 설정을 바꿀 때는 이 파일을 먼저 수정한다.
+- 서식 폴리싱 Sub Agent는 `_posts/2026-04-08-template.md`와 비슷한 성격의 기존 글 1-2개를 먼저 확인한 뒤, 현재 글에 적용할 수 있는 서식만 제안하거나 수정한다.
+- 폴리싱 범위는 문체, 구조, 표/그림/수식/appendix/readability에 한정한다. 실험 결론, 수치, 방법론의 의미를 바꾸지 않는다.
+- 표는 column명, 본문 설명, caption의 용어가 서로 맞는지 확인한다. 긴 method명은 `<br>`와 `table-note-inline`으로 의미 단위 줄바꿈을 넣고, 숫자 column은 `align-right`를 사용한다.
+- 작은 2-column 숫자표는 `table-figure--compact-metrics`와 `metrics-table--compact-two-col`을 우선 검토한다.
+- Figure와 Table은 본문에서 번호로 언급하고, caption은 “무엇을 보여주며 어떻게 읽어야 하는지”를 짧게 설명한다.
+- 수식은 `<code>`로 쓰지 않고 LaTeX로 작성한다. 수식이 있는 글은 front matter에 `math: true`를 둔다.
+- Mermaid를 쓰는 글은 front matter에 `mermaid: true`를 두고, `<figure class="media-figure" markdown="1">` 안에 넣어 caption을 붙인다.
+- 모델, 데이터셋, 약어가 처음 등장할 때 독자 이해에 필요한 최소 정의를 짧은 blockquote나 문단으로 추가한다. 단, 글을 튜토리얼처럼 길게 만들지 않는다.
+- Appendix는 내부 실험 경로 목록보다 공개 독자가 필요한 benchmark contract, method glossary, metric caveat를 우선한다. 내부 경로는 front matter의 `lab_path`로 충분한지 먼저 판단한다.
+- 공통 CSS를 바꿀 때는 기존 글에 미치는 영향을 고려하고, 재사용 가능한 작은 utility로 만든다.
+- 폴리싱 후에는 `rg`로 용어 불일치와 내부 경로 노출을 확인하고, 로컬 서버가 떠 있으면 `curl`로 HTML 반영 여부를 확인한다.
+
+Sub Agent에게 맡길 때는 다음처럼 구체적으로 요청한다.
+
+```text
+format_polisher를 사용해서 이 글을 공개용 미니 리서치 노트 기준으로 서식 폴리싱해줘.
+범위는 표/그림 caption, 용어 통일, 수식/mermaid/front matter, appendix, 긴 table cell 줄바꿈, 읽기 흐름이다.
+실험 결론이나 수치는 바꾸지 말고, 필요한 경우 파일을 직접 수정한 뒤 변경한 위치를 요약해줘.
+```
+
 ## Front Matter
 
 - 공개 글은 `image:`를 반드시 둔다.
