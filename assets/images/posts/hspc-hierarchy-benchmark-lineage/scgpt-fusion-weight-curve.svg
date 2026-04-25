@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 520" role="img" aria-labelledby="title desc">
+  <title id="title">scGPT fusion weight curve</title>
+  <desc id="desc">A line plot showing primary score by scGPT fusion weight. Intermediate weights outperform the pca30-B3 reference, while scGPT alone is lower.</desc>
+  <rect width="1040" height="520" fill="#ffffff"/>
+
+  <defs>
+    <style>
+      text { font-family: 'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+      .title { fill: #111111; font-size: 15px; font-weight: 700; }
+      .axis { fill: #5f6672; font-size: 12px; font-weight: 600; }
+      .tick { fill: #5f6672; font-size: 12px; font-weight: 500; }
+      .note { fill: #5f6672; font-size: 12px; font-weight: 500; }
+      .label { fill: #111111; font-size: 13px; font-weight: 700; }
+      .grid { stroke: #e6e8ee; stroke-width: 1; stroke-dasharray: 4 8; }
+      .axis-line { stroke: #cfd4dd; stroke-width: 1; }
+      .curve { fill: none; stroke: #3f41ff; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+      .ref-line { stroke: #9097a3; stroke-width: 1.4; stroke-dasharray: 6 7; }
+      .leader { stroke: #9097a3; stroke-width: 1.2; fill: none; }
+      .point { fill: #ffffff; stroke: #3f41ff; stroke-width: 2.6; }
+      .point-best { fill: #3f41ff; stroke: #3f41ff; stroke-width: 2.6; }
+      .point-muted { fill: #ffffff; stroke: #9097a3; stroke-width: 2.2; }
+    </style>
+  </defs>
+
+  <g transform="translate(0 34)">
+    <text x="520" y="0" text-anchor="middle" class="title">scGPT Fusion Weight vs Primary Score</text>
+  </g>
+
+  <g transform="translate(132 86)">
+    <g>
+      <line x1="0" y1="0" x2="760" y2="0" class="grid"/>
+      <line x1="0" y1="75" x2="760" y2="75" class="grid"/>
+      <line x1="0" y1="150" x2="760" y2="150" class="grid"/>
+      <line x1="0" y1="225" x2="760" y2="225" class="grid"/>
+      <line x1="0" y1="300" x2="760" y2="300" class="axis-line"/>
+      <line x1="0" y1="0" x2="0" y2="300" class="axis-line"/>
+      <line x1="0" y1="197.7" x2="760" y2="197.7" class="ref-line"/>
+    </g>
+
+    <g class="tick">
+      <text x="-16" y="4" text-anchor="end">0.920</text>
+      <text x="-16" y="79" text-anchor="end">0.9125</text>
+      <text x="-16" y="154" text-anchor="end">0.905</text>
+      <text x="-16" y="229" text-anchor="end">0.8975</text>
+      <text x="-16" y="304" text-anchor="end">0.890</text>
+
+      <text x="0" y="328" text-anchor="middle">0.0</text>
+      <text x="228" y="328" text-anchor="middle">0.3</text>
+      <text x="304" y="328" text-anchor="middle">0.4</text>
+      <text x="380" y="328" text-anchor="middle">0.5</text>
+      <text x="456" y="328" text-anchor="middle">0.6</text>
+      <text x="760" y="328" text-anchor="middle">1.0</text>
+    </g>
+
+    <g class="axis">
+      <text x="380" y="374" text-anchor="middle">scGPT probability weight</text>
+      <text x="-88" y="150" text-anchor="middle" transform="rotate(-90 -88 150)">Primary score</text>
+    </g>
+
+    <path class="curve" d="M0,197.7 L228,83.1 L304,73.0 L380,69.0 L418,69.6 L456,73.0 L760,250.5"/>
+
+    <g>
+      <circle cx="0" cy="197.7" r="6.5" class="point-muted"/>
+      <circle cx="228" cy="83.1" r="6.5" class="point"/>
+      <circle cx="304" cy="73.0" r="6.5" class="point"/>
+      <circle cx="380" cy="69.0" r="7.5" class="point-best"/>
+      <circle cx="418" cy="69.6" r="6.5" class="point"/>
+      <circle cx="456" cy="73.0" r="6.5" class="point"/>
+      <circle cx="760" cy="250.5" r="6.5" class="point-muted"/>
+    </g>
+
+    <g>
+      <path d="M380 69 L380 34 L520 34" class="leader"/>
+      <text x="532" y="38" class="label">best observed: w=0.5, 0.9151</text>
+      <path d="M0 197.7 L0 166 L124 166" class="leader"/>
+      <text x="136" y="170" class="note">pca30-B3 reference</text>
+      <path d="M760 250.5 L760 224 L636 224" class="leader"/>
+      <text x="624" y="228" text-anchor="end" class="note">scGPT alone</text>
+    </g>
+
+    <g transform="translate(254 414)" class="axis">
+      <line x1="0" y1="0" x2="38" y2="0" class="curve"/>
+      <text x="50" y="4">fusion score</text>
+      <line x1="186" y1="0" x2="224" y2="0" class="ref-line"/>
+      <text x="236" y="4">pca30-B3 reference</text>
+    </g>
+  </g>
+</svg>

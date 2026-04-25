@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 590" role="img" aria-labelledby="title desc">
+  <title id="title">Primary score for representative method settings</title>
+  <desc id="desc">Horizontal bar chart comparing representative primary scores for centroid, cheap linear classifier, label propagation, scVI, scGPT, pca30-B3 reference, and late fusion.</desc>
+  <rect width="1040" height="500" fill="#ffffff"/>
+  <defs>
+    <pattern id="baseline-stripe" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="8" height="8" fill="#eef0f4"/>
+      <line x1="0" y1="0" x2="0" y2="8" stroke="#9aa1ad" stroke-width="3"/>
+    </pattern>
+    <pattern id="reference-stripe" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="8" height="8" fill="#eef0ff"/>
+      <line x1="0" y1="0" x2="0" y2="8" stroke="#3f41ff" stroke-width="3"/>
+    </pattern>
+    <style>
+      text { font-family: 'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+      .title { fill: #111111; font-size: 15px; font-weight: 700; }
+      .subtitle { fill: #5f6672; font-size: 12px; font-weight: 500; }
+      .label { fill: #111111; font-size: 12.5px; font-weight: 650; }
+      .group { fill: #5f6672; font-size: 11px; font-weight: 600; }
+      .value { fill: #111111; font-size: 12px; font-weight: 700; }
+      .tick { fill: #5f6672; font-size: 12px; font-weight: 500; }
+      .axis { stroke: #cfd4dd; stroke-width: 1; }
+      .grid { stroke: #e6e8ee; stroke-width: 1; stroke-dasharray: 4 8; }
+      .ref-line { stroke: #3f41ff; stroke-width: 1.5; stroke-dasharray: 6 7; }
+      .bar-muted { fill: url(#baseline-stripe); }
+      .bar-foundation { fill: #b9c0cc; }
+      .bar-representation { fill: #7f8796; }
+      .bar-reference { fill: url(#reference-stripe); }
+      .bar-fusion { fill: #3f41ff; }
+      .legend-text { fill: #5f6672; font-size: 11.5px; font-weight: 600; }
+    </style>
+  </defs>
+
+  <g transform="translate(0 34)">
+    <text x="520" y="0" text-anchor="middle" class="title">Representative Method Settings by Primary Score</text>
+  </g>
+  <line x1="340.0" y1="70" x2="340.0" y2="462" class="grid"/>
+  <text x="340.0" y="486" text-anchor="middle" class="tick">0.80</text>
+  <line x1="526.7" y1="70" x2="526.7" y2="462" class="grid"/>
+  <text x="526.7" y="486" text-anchor="middle" class="tick">0.84</text>
+  <line x1="713.3" y1="70" x2="713.3" y2="462" class="grid"/>
+  <text x="713.3" y="486" text-anchor="middle" class="tick">0.88</text>
+  <line x1="900.0" y1="70" x2="900.0" y2="462" class="grid"/>
+  <text x="900.0" y="486" text-anchor="middle" class="tick">0.92</text>
+  <line x1="340" y1="462" x2="900" y2="462" class="axis"/>
+  <line x1="817.5" y1="70" x2="817.5" y2="462" class="ref-line"/>
+  <text x="826" y="80" text-anchor="start" class="subtitle">pca30-B3 reference</text>
+  <g transform="translate(0 88)">
+    <text x="34" y="16" class="label">nearest centroid</text>
+    <text x="34" y="33" class="group">baseline</text>
+    <rect x="340" y="0" width="367.3" height="26" rx="5" class="bar-muted"/>
+    <text x="717.3" y="18" text-anchor="start" class="value">0.8787</text>
+  </g>
+  <g transform="translate(0 142)">
+    <text x="34" y="16" class="label">cheap linear classifier</text>
+    <text x="34" y="33" class="group">baseline</text>
+    <rect x="340" y="0" width="101.3" height="26" rx="5" class="bar-muted"/>
+    <text x="451.3" y="18" text-anchor="start" class="value">0.8217</text>
+  </g>
+  <g transform="translate(0 196)">
+    <text x="34" y="16" class="label">inductive kNN label propagation</text>
+    <text x="34" y="33" class="group">baseline</text>
+    <rect x="340" y="0" width="451.3" height="26" rx="5" class="bar-muted"/>
+    <text x="801.3" y="18" text-anchor="start" class="value">0.8967</text>
+  </g>
+  <g transform="translate(0 250)">
+    <text x="34" y="16" class="label">fast scVI latent + label propagation</text>
+    <text x="34" y="33" class="group">representation</text>
+    <rect x="340" y="0" width="438.5" height="26" rx="5" class="bar-representation"/>
+    <text x="788.5" y="18" text-anchor="start" class="value">0.8940</text>
+  </g>
+  <g transform="translate(0 304)">
+    <text x="34" y="16" class="label">whole-human scGPT PCA400-linear</text>
+    <text x="34" y="33" class="group">foundation</text>
+    <rect x="340" y="0" width="443.1" height="26" rx="5" class="bar-foundation"/>
+    <text x="793.1" y="18" text-anchor="start" class="value">0.8950</text>
+  </g>
+  <g transform="translate(0 358)">
+    <text x="34" y="16" class="label">pca30-B3</text>
+    <text x="34" y="33" class="group">reference</text>
+    <rect x="340" y="0" width="477.5" height="26" rx="5" class="bar-reference"/>
+    <text x="827.5" y="18" text-anchor="start" class="value">0.9023</text>
+  </g>
+  <g transform="translate(0 412)">
+    <text x="34" y="16" class="label">pca30-B3 + scGPT PCA400-linear fusion</text>
+    <text x="34" y="33" class="group">fusion</text>
+    <rect x="340" y="0" width="537.2" height="26" rx="5" class="bar-fusion"/>
+    <text x="887.2" y="18" text-anchor="start" class="value">0.9151</text>
+  </g>
+  <rect x="270" y="540" width="12" height="12" rx="3" fill="url(#baseline-stripe)"/>
+  <text x="288" y="550" class="legend-text">baseline</text>
+  <rect x="390" y="540" width="12" height="12" rx="3" fill="#7f8796"/>
+  <text x="408" y="550" class="legend-text">representation</text>
+  <rect x="540" y="540" width="12" height="12" rx="3" fill="#b9c0cc"/>
+  <text x="558" y="550" class="legend-text">scGPT</text>
+  <rect x="660" y="540" width="12" height="12" rx="3" fill="url(#reference-stripe)"/>
+  <text x="678" y="550" class="legend-text">reference</text>
+  <rect x="780" y="540" width="12" height="12" rx="3" fill="#3f41ff"/>
+  <text x="798" y="550" class="legend-text">fusion</text>
+</svg>
