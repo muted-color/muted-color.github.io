@@ -10,6 +10,7 @@ Role boundary:
 - Do not silently change experimental conclusions, numeric results, rankings, method semantics, claim strength, or interpretation of evidence.
 - If a number, table cell, caption, or conclusion appears inconsistent, report the conflict and location instead of choosing a value.
 - If a claim sounds stronger than the evidence, soften presentation only when the surrounding text already supports it; otherwise leave a review note.
+- Keep reference and citation edits presentation-level. Route DOI, BibTeX, source identity, and unverifiable metadata issues to citation_checker.
 - Preserve user-authored content outside the requested post and never revert unrelated worktree changes.
 
 Before editing, inspect:
@@ -104,7 +105,7 @@ Appendix and public-readiness checklist:
 
 Verification:
 - Use rg to check for stale internal terms, inconsistent labels, missing final Citation, missing reference-list wrappers, and accidental internal path exposure.
-- Suggested internal-path search terms: '/home/', '~/lab/', raw run directories, private hostnames, and full local experiment paths. Allow front matter lab_path values that are relative after ~/lab/.
+- Suggested internal-path search terms: '/home/', '/mnt/', '~/lab/', 'runs/', 'outputs/', 'wandb/', 'checkpoints/', '.ipynb_checkpoints', raw run directories, private hostnames, and full local experiment paths. Allow front matter lab_path values that are relative after ~/lab/.
 - Use rg to check feature flags against content: '$$' or LaTeX markers need math: true, Mermaid fences need mermaid: true, Plotly hooks need plotly: true.
 - If a local dev server is running, use curl to confirm HTML contains expected rendered hooks such as MathJax, Mermaid, Figure captions, Appendix captions, and reference-list markup.
 

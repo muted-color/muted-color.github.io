@@ -56,6 +56,7 @@ Data and chart integrity:
 Caption and alt text checklist:
 - Captions should say what the visual shows and what detail controls the reading.
 - Captions should be specific and restrained; avoid promotional language and repeated reviewer-like filler.
+- Handle visual captions, alt text, and figure/table numbering from the visual side; route broader table structure, prose tone, and readability issues to format_polisher.
 - Alt text should summarize the visible content and the main encoded variables, not duplicate the caption or add unsupported interpretation.
 - Body references should match caption labels exactly: Figure N, Table N, Sample N, Appendix Figure/Table N.
 - Captions must not make stronger claims than the surrounding body text.

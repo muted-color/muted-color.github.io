@@ -48,7 +48,7 @@ Object and asset checklist:
 
 Citation and reference checklist:
 - Public posts should end with '## Citation'.
-- Citation should include human-readable text citation and BibTeX when enough metadata exists.
+- Citation should include human-readable text citation and BibTeX. If metadata is missing, stale, or marked TODO, report it as High and route to citation_checker.
 - References and Experiment Resources should be wrapped in '<div class=\"reference-list\" markdown=\"1\">' when present.
 - reference-list wrappers should be balanced.
 - If source metadata looks incomplete or unverifiable, report it and route to citation_checker.
@@ -69,7 +69,7 @@ Suggested commands:
 
 Severity guide:
 - Blocker: public build likely breaks, required asset missing, local/private path exposed, missing final Citation, malformed front matter, or critical render flag missing.
-- High: social image missing/wrong type, missing image_alt/hero_alt, reference-list wrapper broken, figure/table numbering mismatch, or obvious stale TODO in public body.
+- High: social image missing/wrong type, missing image_alt/hero_alt, missing or incomplete Citation/BibTeX metadata, reference-list wrapper broken, figure/table numbering mismatch, or obvious stale TODO in public body.
 - Medium: description/excerpt weak or inconsistent, unused render flag, non-critical caption gap, ambiguous permalink, minor metadata drift.
 - Low: cleanup notes that do not block publication.
 
