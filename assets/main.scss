@@ -581,6 +581,18 @@ h6 {
   box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
 }
 
+.research-hero--compact .research-hero-frame,
+.research-hero--compact.research-hero--framed .research-hero-frame {
+  aspect-ratio: 1040 / 620;
+  background: #fff;
+}
+
+.research-hero--compact.research-hero--framed .research-hero-frame {
+  border-color: rgba(17, 17, 17, 0.08);
+  border-radius: 30px;
+  box-shadow: 0 28px 68px rgba(15, 23, 42, 0.08);
+}
+
 .research-hero-image,
 .research-hero-placeholder {
   width: 100%;
@@ -1111,6 +1123,15 @@ figcaption {
 .research-body .media-figure--compact > figcaption {
   padding-left: 0;
   padding-right: 0;
+}
+
+.research-body .media-figure--wide-visual {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.research-body .media-figure--wide-visual > img {
+  min-width: 720px;
 }
 
 .research-body .table-figure > figcaption {
@@ -2724,6 +2745,11 @@ hr {
 
   .research-hero-frame {
     aspect-ratio: 16 / 10.5;
+  }
+
+  .research-hero--compact .research-hero-frame,
+  .research-hero--compact.research-hero--framed .research-hero-frame {
+    aspect-ratio: 1040 / 620;
   }
 
   .research-grid {

@@ -21,7 +21,7 @@ layout: default
       {% endif %}
     </div>
 
-    <figure class="research-hero{% if page.hero_frame %} research-hero--framed{% endif %}"{% unless page.hero_caption %} aria-hidden="true"{% endunless %}>
+    <figure class="research-hero{% if page.hero_frame %} research-hero--framed{% endif %}{% if page.hero_compact %} research-hero--compact{% endif %}"{% unless page.hero_caption %} aria-hidden="true"{% endunless %}>
       <div class="research-hero-frame">
         {% if page.hero_image %}
           <img class="research-hero-image" src="{{ page.hero_image | relative_url }}" alt="{{ page.hero_alt | default: '' | escape }}">
