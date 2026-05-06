@@ -2166,6 +2166,13 @@ pre code {
   padding: 0.78rem 0.9rem 0.9rem;
 }
 
+.research-body details.appendix-detail summary,
+.research-body details.appendix-detail summary:hover,
+.research-body details.appendix-detail[open] summary {
+  color: var(--ink);
+  font-weight: 400;
+}
+
 .research-body .metric-detail__eyebrow {
   margin: 0.95rem 0 0.4rem;
   color: var(--ink);
