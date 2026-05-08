@@ -1,7 +1,11 @@
 ---
 title: "DPO로 본 단백질 변이 reranking의 preference learning 신호"
 date: 2026-05-03 10:08:36 +0900
-last_modified_at: 2026-05-05 19:37:59 +0900
+last_modified_at: 2026-05-07 09:48:37 +0900
+hidden: true
+published: false
+publication_status: "unpublished"
+hide_reason: "현재 결과만으로 preference learning의 protein variant reranking 적용성을 일반화하기는 어렵다. 다만 일반화 주장 없이 이 케이스에 한정한 실험 노트로 정리해 발행할 가능성은 남긴다."
 categories: ["PROTEIN ML"]
 tags: [protein, proteingym, dms, dpo, preference-learning, reranking, protein-language-model, lora]
 lab_path: "experiment-lab/projects/proteingym-dms-dpo"
