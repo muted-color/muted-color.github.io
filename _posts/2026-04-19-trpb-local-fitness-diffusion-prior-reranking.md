@@ -1,7 +1,11 @@
 ---
 title: "TrpB low-label fitness 예측에서 mutation-site local prior가 실패한 이유"
 date: 2026-04-19 10:50:00 +0900
-last_modified_at: 2026-04-25 20:21:04 +0900
+last_modified_at: 2026-05-09 00:00:00 +0900
+hidden: true
+published: false
+publication_status: "unpublished"
+hide_reason: "초기 가설이 mutation-pattern likelihood와 high-fitness discovery 신호를 같은 방향으로 놓았지만, TrpB two-to-many에서는 train-like local pattern과 higher-order fitness 탐색이 구조적으로 어긋날 수 있어 공개 글로 두지 않는다."
 categories: ["PROTEIN ML"]
 tags: [protein, trpb, flip2, esm2, fitness-prediction, regression, low-label, ranking, local-prior]
 lab_path: "experiment-lab/projects/trpb-local-fitness-diffusion"
@@ -16,6 +20,12 @@ hero_frame: true
 math: true
 mermaid: true
 ---
+
+## 비공개 메모
+
+이 글은 공개하지 않는다. 핵심 이유는 결과가 약해서가 아니라, 초기 가설 배경이 충분히 정교하지 않았기 때문이다. 이 실험은 `mutation-site local prior`가 관찰된 mutable-site amino acid pattern의 그럴듯함을 잡으면, low-label ESM2/Ridge fitness ranking에서 high-fitness 후보 선택을 보조할 수 있다고 가정했다. 그러나 FLIP2 TrpB `two-to-many`는 `0/1/2`-mutation train label에서 `3/4`-mutation test 후보로 넘어가는 설정이며, 이 구조에서는 train-like pattern likelihood와 higher-order high-fitness discovery가 같은 방향으로 움직인다는 보장이 없다.
+
+따라서 이 글의 공개 가능한 결론은 제한적이다. 실험은 local prior나 mutation pattern 정보 일반의 무용성을 보인 것이 아니라, **pattern-only prior를 positive fitness bonus처럼 더하는 가설 자체가 TrpB `two-to-many`의 후보 공간 구조와 맞지 않았다**는 내부 실패 기록에 가깝다. 후속 실험은 prior를 전역 reward로 두기보다, mutation radius를 고정한 후보 공간 안의 약한 regularizer, oracle failure support signal, 또는 fitness-aware reranker로 역할을 다시 정의해야 한다.
 
 Protein engineering에서는 fitness label이 충분하지 않은 경우가 많다. 변이 단백질을 만들고 기능이나 활성을 실험으로 측정하는 데 비용이 들기 때문에, 수십 개에서 수백 개 label만 보고 다음 후보를 골라야 하는 상황이 자주 생긴다.
 
