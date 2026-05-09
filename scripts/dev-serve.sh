@@ -2,6 +2,10 @@
 set -euo pipefail
 
 MIN_RUBY_VERSION="3.2.0"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+cd "$PROJECT_ROOT"
 
 version_ge() {
   [ "$(printf '%s\n%s\n' "$1" "$2" | sort -V | head -n 1)" = "$2" ]
@@ -77,9 +81,9 @@ LOCKFILE_BUNDLER_VERSION="$(
   '
 )"
 BUNDLER_VERSION="${BUNDLER_VERSION:-${LOCKFILE_BUNDLER_VERSION:-2.4.22}}"
-export BUNDLE_PATH="${BUNDLE_PATH:-$PWD/vendor/bundle}"
-export BUNDLE_CACHE_PATH="${BUNDLE_CACHE_PATH:-$PWD/vendor/cache}"
-export BUNDLE_APP_CONFIG="${BUNDLE_APP_CONFIG:-$PWD/.bundle}"
+export BUNDLE_PATH="$PROJECT_ROOT/vendor/bundle"
+export BUNDLE_CACHE_PATH="$PROJECT_ROOT/vendor/cache"
+export BUNDLE_APP_CONFIG="$PROJECT_ROOT/.bundle"
 export BUNDLE_DISABLE_SHARED_GEMS="true"
 
 if [ -d "$USER_GEM_BIN" ]; then

@@ -1017,6 +1017,10 @@ h6 {
   letter-spacing: 0.03em;
 }
 
+.research-body .model-mention-card--arxiv::before {
+  background: rgba(63, 65, 255, 0.08) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 -960 960 960' width='24px' fill='%233f41ff'%3E%3Cpath d='M240-80q-50 0-85-35t-35-85v-120h120v-560h600v680q0 50-35 85t-85 35H240Zm480-80q17 0 28.5-11.5T760-200v-600H320v480h360v120q0 17 11.5 28.5T720-160ZM360-600v-80h360v80H360Zm0 120v-80h360v80H360ZM240-160h360v-80H200v40q0 17 11.5 28.5T240-160Zm0 0h-40 400-360Z'/%3E%3C/svg%3E") center / 1.18rem 1.18rem no-repeat;
+}
+
 .research-body .model-mention-card:hover,
 .research-body .model-mention-card:focus-visible {
   border-color: rgba(63, 65, 255, 0.28);
@@ -1366,6 +1370,15 @@ figcaption {
   line-height: 1.5;
 }
 
+.research-body .table-figure--comparison .table-section-row td {
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
 .research-body .table-figure--comparison th[colspan] {
   text-align: center;
 }
@@ -1434,8 +1447,8 @@ figcaption {
   white-space: nowrap;
 }
 
-.research-body .table-figure--metrics .metrics-table--numeric-columns thead th:not(:first-child),
-.research-body .table-figure--metrics .metrics-table--numeric-columns tbody td:not(:first-child),
+.research-body .table-figure--metrics .metrics-table--numeric-columns thead th.align-right,
+.research-body .table-figure--metrics .metrics-table--numeric-columns tbody td.align-right,
 .research-body .table-figure--metrics .metrics-table--numeric-first thead th:not(:first-child),
 .research-body .table-figure--metrics .metrics-table--numeric-first tbody td:not(:first-child) {
   text-align: right;
@@ -1449,6 +1462,16 @@ figcaption {
 .research-body .table-figure--metrics .metrics-table--numeric-first tbody td:first-child {
   font-family: "IBM Plex Mono", "SFMono-Regular", "JetBrains Mono", monospace;
   font-size: 0.84rem;
+}
+
+.research-body .table-figure--metrics .metrics-table--paired-rows tbody tr.metric-pair-start td:not([rowspan]) {
+  border-bottom: 0 !important;
+}
+
+.research-body .table-figure--metrics .metrics-table--paired-rows tbody td.metric-label {
+  text-align: left !important;
+  font-family: inherit;
+  font-size: 0.78rem;
 }
 
 .research-body .table-figure--metrics .metrics-table--risk-diagnostics th:not(:last-child),

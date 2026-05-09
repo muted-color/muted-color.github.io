@@ -16,6 +16,8 @@
     {%- assign card_class = "model-mention-card model-mention-card--resource" -%}
     {%- if url contains "huggingface.co" -%}
       {%- assign card_class = "model-mention-card model-mention-card--hf" -%}
+    {%- elsif url contains "arxiv.org" -%}
+      {%- assign card_class = "model-mention-card model-mention-card--arxiv" -%}
     {%- endif -%}
     <a class="{{ card_class }}" href="{{ url }}" target="_blank" rel="noopener noreferrer">
       <span class="model-mention-card__text">
