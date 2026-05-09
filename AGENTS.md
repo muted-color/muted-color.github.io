@@ -61,6 +61,13 @@ image_alt: "소셜/검색 대표 이미지가 무엇을 요약하는지 설명"
 hero_image: /assets/images/posts/post-slug/hero.svg
 ```
 
+## Featured Image
+
+- 새 대표 이미지, 소셜 썸네일, Open Graph 이미지, hero 이미지를 만들 때는 `$blog-featured-image` 스킬을 우선 사용한다.
+- 스킬 본체는 `~/.codex/skills/blog-featured-image`에 둔다. 이 repo에는 생성된 결과물과 front matter 경로만 기록한다.
+- 이 블로그의 기본 대표 이미지 스타일은 HSPC hierarchy 글과 TrpB local fitness 글처럼 흰 배경, 반투명 glass/gel 과학 오브젝트, 옅은 파란색 강조 신호, 텍스트 없는 `1200x627` PNG/JPG를 우선한다.
+- 기본 저장 경로는 `assets/images/posts/<post-slug>/social-thumbnail.png`이고, front matter의 `image:`와 `image_alt:`를 함께 갱신한다.
+
 ## 문체
 
 - Gemma4 비교 글과 ESM2/LoRA 글처럼 담백한 연구 노트 톤을 따른다.

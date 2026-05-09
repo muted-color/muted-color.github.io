@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 360" role="img" aria-labelledby="title desc">
+  <title id="title">SQSTM label-flip control</title>
+  <desc id="desc">A horizontal bar chart compares true preference and label-flip DPO on SQSTM top-25 high-fitness hit rate.</desc>
+  <rect width="1040" height="360" fill="#ffffff"/>
+  <defs>
+    <style>
+      text { font-family: 'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+      .title { fill: #111111; font-size: 15px; font-weight: 700; }
+      .subtitle { fill: #5f6672; font-size: 12px; font-weight: 500; }
+      .label { fill: #111111; font-size: 12.5px; font-weight: 650; }
+      .group { fill: #5f6672; font-size: 11px; font-weight: 600; }
+      .tick { fill: #5f6672; font-size: 12px; font-weight: 500; }
+      .grid { stroke: #e6e8ee; stroke-width: 1; stroke-dasharray: 4 8; }
+      .axis { stroke: #cfd4dd; stroke-width: 1; }
+      .value { fill: #111111; font-size: 12px; font-weight: 700; }
+      .legend-text { fill: #5f6672; font-size: 11.5px; font-weight: 600; }
+    </style>
+  </defs>
+  <g font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+<text x="520.0" y="34" text-anchor="middle" font-size="15" font-weight="700" fill="#111111" class="title">SQSTM label-flip control</text>
+<text x="520.0" y="56" text-anchor="middle" font-size="12" font-weight="500" fill="#5f6672" class="subtitle">Top-25 hit rate under true and flipped preference</text>
+<line x1="250.0" y1="78" x2="250.0" y2="236" class="grid"/>
+<text x="250" y="264" text-anchor="middle" font-size="12" font-weight="500" fill="#5f6672" class="tick">0</text>
+<line x1="407.5" y1="78" x2="407.5" y2="236" class="grid"/>
+<text x="407.5" y="264" text-anchor="middle" font-size="12" font-weight="500" fill="#5f6672" class="tick">0.25</text>
+<line x1="565.0" y1="78" x2="565.0" y2="236" class="grid"/>
+<text x="565.0" y="264" text-anchor="middle" font-size="12" font-weight="500" fill="#5f6672" class="tick">0.5</text>
+<line x1="722.5" y1="78" x2="722.5" y2="236" class="grid"/>
+<text x="722.5" y="264" text-anchor="middle" font-size="12" font-weight="500" fill="#5f6672" class="tick">0.75</text>
+<line x1="880.0" y1="78" x2="880.0" y2="236" class="grid"/>
+<text x="880.0" y="264" text-anchor="middle" font-size="12" font-weight="500" fill="#5f6672" class="tick">1</text>
+<line x1="410.9" y1="78" x2="410.9" y2="236" stroke="#5f6672" stroke-width="1.5" stroke-dasharray="6 7"/>
+<text x="418.851063807" y="88" text-anchor="start" font-size="11.5" font-weight="600" fill="#5f6672" >random 0.255</text>
+<text x="64" y="116" text-anchor="start" font-size="13" font-weight="650" fill="#111111" >true preference</text>
+<rect x="250" y="96" width="394.8" height="28" rx="6" fill="#3f41ff"/>
+<line x1="630.3" y1="110" x2="659.3" y2="110" stroke="#2f333a" stroke-width="2" opacity="0.9"/>
+<line x1="630.3" y1="104" x2="630.3" y2="116" stroke="#2f333a" stroke-width="1.7" opacity="0.95"/>
+<line x1="659.3" y1="104" x2="659.3" y2="116" stroke="#2f333a" stroke-width="1.7" opacity="0.95"/>
+<text x="672" y="115" text-anchor="start" font-size="12" font-weight="700" fill="#111111" class="value">0.627</text>
+<text x="64" y="196" text-anchor="start" font-size="13" font-weight="650" fill="#111111" >label flip</text>
+<rect x="250" y="176" width="50.4" height="28" rx="6" fill="#9aa1ad"/>
+<text x="310.4" y="195" text-anchor="start" font-size="12" font-weight="700" fill="#111111" class="value">0.080</text>
+<line x1="250" y1="236" x2="880" y2="236" class="axis"/>
+<text x="565.0" y="306" text-anchor="middle" font-size="12" font-weight="600" fill="#5f6672" >Top-25 high-fitness hit rate</text>
+  </g>
+</svg>

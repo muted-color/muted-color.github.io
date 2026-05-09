@@ -1,44 +1,44 @@
 ---
 layout: default
 ---
-<article class="essay">
-  <header class="essay-header">
-    <div class="essay-intro">
+<article class="research">
+  <header class="research-header">
+    <div class="research-intro">
       {% assign display_category = page.categories | first %}
       {% if display_category %}
-        <p class="essay-kicker">{{ display_category | replace: "-", " " }}</p>
+        <p class="research-kicker">{{ display_category | replace: "-", " " }}</p>
       {% endif %}
-      <h1 class="essay-title">{{ page.title }}</h1>
-      <p class="essay-credit">
+      <h1 class="research-title">{{ page.title }}</h1>
+      <p class="research-credit">
         {{ page.byline | default: site.author.name }}
         {% if page.affiliation %}
-          <span class="essay-affiliation"> {{ page.affiliation }}</span>
+          <span class="research-affiliation"> {{ page.affiliation }}</span>
         {% endif %}
       </p>
-      <time class="essay-date" datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%b %d, %Y" }}</time>
+      <time class="research-date" datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%b %d, %Y" }}</time>
       {% if page.excerpt %}
-        <p class="essay-dek">{{ page.excerpt | strip_html }}</p>
+        <p class="research-dek">{{ page.excerpt | strip_html }}</p>
       {% endif %}
     </div>
 
-    <figure class="essay-hero{% if page.hero_frame %} essay-hero--framed{% endif %}"{% unless page.hero_caption %} aria-hidden="true"{% endunless %}>
-      <div class="essay-hero-frame">
+    <figure class="research-hero{% if page.hero_frame %} research-hero--framed{% endif %}{% if page.hero_compact %} research-hero--compact{% endif %}"{% unless page.hero_caption %} aria-hidden="true"{% endunless %}>
+      <div class="research-hero-frame">
         {% if page.hero_image %}
-          <img class="essay-hero-image" src="{{ page.hero_image | relative_url }}" alt="{{ page.hero_alt | default: '' | escape }}">
+          <img class="research-hero-image" src="{{ page.hero_image | relative_url }}" alt="{{ page.hero_alt | default: '' | escape }}">
         {% else %}
-          <div class="essay-hero-placeholder"></div>
+          <div class="research-hero-placeholder"></div>
         {% endif %}
       </div>
       {% if page.hero_caption %}
-        <figcaption class="essay-hero-caption">{{ page.hero_caption }}</figcaption>
+        <figcaption class="research-hero-caption">{{ page.hero_caption }}</figcaption>
       {% endif %}
     </figure>
   </header>
 
-  <div class="essay-grid">
-    <aside class="essay-sidebar">
+  <div class="research-grid">
+    <aside class="research-sidebar">
       <button class="toc-backdrop" type="button" aria-hidden="true" tabindex="-1"></button>
-      <div class="essay-sidebar-inner">
+      <div class="research-sidebar-inner">
         <button class="toc-label toc-toggle" type="button" aria-expanded="false" aria-controls="toc"><span class="toc-toggle-label">On this page</span></button>
         <div class="toc-sheet">
           <nav class="toc-nav" id="toc"></nav>
@@ -46,7 +46,7 @@ layout: default
       </div>
     </aside>
 
-    <section class="essay-body" id="essay-body">
+    <section class="research-body" id="research-body">
       {{ content }}
     </section>
   </div>
@@ -54,11 +54,11 @@ layout: default
 
 <script>
   (function () {
-    var root = document.getElementById("essay-body");
+    var root = document.getElementById("research-body");
     var toc = document.getElementById("toc");
-    var grid = document.querySelector(".essay-grid");
-    var sidebar = document.querySelector(".essay-sidebar");
-    var sidebarInner = document.querySelector(".essay-sidebar-inner");
+    var grid = document.querySelector(".research-grid");
+    var sidebar = document.querySelector(".research-sidebar");
+    var sidebarInner = document.querySelector(".research-sidebar-inner");
     if (!root || !toc) return;
 
     function renderMermaidBlocks() {
@@ -353,7 +353,7 @@ layout: default
     function enhanceFigureTableReferences() {
       var references = new Map();
       var captions = [];
-      var heroCaption = document.querySelector(".essay-hero > figcaption");
+      var heroCaption = document.querySelector(".research-hero > figcaption");
 
       if (heroCaption) captions.push(heroCaption);
 
