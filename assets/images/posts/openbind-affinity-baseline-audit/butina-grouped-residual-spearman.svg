@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 650" role="img" aria-labelledby="title desc">
+  <title id="title">Grouped residual Spearman sensitivity</title>
+  <desc id="desc">Horizontal bar chart showing Butina Tanimoto 0.6 grouped residual Spearman means with bootstrap 95 percent intervals.</desc>
+  <rect width="1120" height="650" fill="#ffffff"/>
+  <defs>
+    <pattern id="control-stripe" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="8" height="8" fill="#3f41ff"/>
+      <line x1="0" y1="0" x2="0" y2="8" stroke="#ffffff" stroke-width="2.2" opacity="0.45"/>
+    </pattern>
+    <style>
+      text { font-family: 'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+      .title { fill: #111111; font-size: 15px; font-weight: 700; }
+      .method { fill: #111111; font-size: 12.5px; font-weight: 650; }
+      .role { fill: #5f6672; font-size: 9.6px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
+      .tick { fill: #5f6672; font-size: 12px; font-weight: 500; }
+      .axis-label { fill: #5f6672; font-size: 12.5px; font-weight: 600; }
+      .grid { stroke: #e6e8ee; stroke-width: 1; stroke-dasharray: 4 8; }
+      .axis { stroke: #cfd4dd; stroke-width: 1.2; }
+      .zero { stroke: #5f6672; stroke-width: 1.35; }
+      .ci { stroke: #5f6672; stroke-width: 1.15; }
+      .bar-control { fill: url(#control-stripe); }
+      .bar-property { fill: #b9c0cc; }
+      .bar-published { fill: #7f8796; }
+      .divider { stroke: #e6e8ee; stroke-width: 1; }
+    </style>
+  </defs>
+  <text x="560" y="42" text-anchor="middle" class="title">Grouped sensitivity preserves the residual gap</text>
+  <text x="356.0" y="584" text-anchor="middle" class="tick">-0.2</text>
+  <line x1="446.8" y1="98" x2="446.8" y2="556" class="grid"/>
+  <text x="446.8" y="584" text-anchor="middle" class="tick">-0.1</text>
+  <line x1="537.7" y1="98" x2="537.7" y2="556" class="zero"/>
+  <text x="537.7" y="584" text-anchor="middle" class="tick">0</text>
+  <line x1="628.5" y1="98" x2="628.5" y2="556" class="grid"/>
+  <text x="628.5" y="584" text-anchor="middle" class="tick">0.1</text>
+  <line x1="810.2" y1="98" x2="810.2" y2="556" class="grid"/>
+  <text x="810.2" y="584" text-anchor="middle" class="tick">0.3</text>
+  <line x1="991.8" y1="98" x2="991.8" y2="556" class="grid"/>
+  <text x="991.8" y="584" text-anchor="middle" class="tick">0.5</text>
+  <line x1="356" y1="556" x2="1010" y2="556" class="axis"/>
+  <line x1="174" y1="112" x2="174" y2="552" class="divider"/>
+  <text x="683.0" y="620" text-anchor="middle" class="axis-label">Grouped residual Spearman mean</text>
+  <text x="48" y="163.0" class="role">SAME-CAMPAIGN</text>
+  <text x="48" y="176.0" class="role">CONTROLS</text>
+  <text x="196" y="130" class="method">ECFP ridge</text>
+  <line x1="780.5" y1="128" x2="994.2" y2="128" class="ci"/>
+  <line x1="780.5" y1="122" x2="780.5" y2="134" class="ci"/>
+  <line x1="994.2" y1="122" x2="994.2" y2="134" class="ci"/>
+  <rect x="537.7" y="122" width="358.6" height="12" rx="4" class="bar-control"/>
+  <text x="196" y="168" class="method">RDKit RF</text>
+  <line x1="623.3" y1="166" x2="912.9" y2="166" class="ci"/>
+  <line x1="623.3" y1="160" x2="623.3" y2="172" class="ci"/>
+  <line x1="912.9" y1="160" x2="912.9" y2="172" class="ci"/>
+  <rect x="537.7" y="160" width="271.5" height="12" rx="4" class="bar-control"/>
+  <text x="196" y="206" class="method">RDKit ridge</text>
+  <line x1="510.6" y1="204" x2="870.4" y2="204" class="ci"/>
+  <line x1="510.6" y1="198" x2="510.6" y2="210" class="ci"/>
+  <line x1="870.4" y1="198" x2="870.4" y2="210" class="ci"/>
+  <rect x="537.7" y="198" width="210.2" height="12" rx="4" class="bar-control"/>
+  <text x="48" y="277.0" class="role">PROPERTY</text>
+  <text x="48" y="290.0" class="role">BASELINES</text>
+  <line x1="48" y1="222" x2="1010" y2="222" class="divider"/>
+  <text x="196" y="244" class="method">molecular weight</text>
+  <line x1="356.0" y1="242" x2="668.1" y2="242" class="ci"/>
+  <line x1="356.0" y1="236" x2="356.0" y2="248" class="ci"/>
+  <line x1="668.1" y1="236" x2="668.1" y2="248" class="ci"/>
+  <rect x="479.1" y="236" width="58.5" height="12" rx="4" class="bar-property"/>
+  <text x="196" y="282" class="method">MW+cLogP ridge</text>
+  <line x1="356.0" y1="280" x2="670.4" y2="280" class="ci"/>
+  <line x1="356.0" y1="274" x2="356.0" y2="286" class="ci"/>
+  <line x1="670.4" y1="274" x2="670.4" y2="286" class="ci"/>
+  <rect x="471.0" y="274" width="66.6" height="12" rx="4" class="bar-property"/>
+  <text x="196" y="320" class="method">cLogP</text>
+  <line x1="402.4" y1="318" x2="684.5" y2="318" class="ci"/>
+  <line x1="402.4" y1="312" x2="402.4" y2="324" class="ci"/>
+  <line x1="684.5" y1="312" x2="684.5" y2="324" class="ci"/>
+  <rect x="537.7" y="312" width="4.3" height="12" rx="4" class="bar-property"/>
+  <text x="48" y="440.0" class="role">PUBLISHED</text>
+  <text x="48" y="453.0" class="role">PREDICTION FILES</text>
+  <line x1="48" y1="336" x2="1010" y2="336" class="divider"/>
+  <text x="196" y="358" class="method">gnina crystal</text>
+  <line x1="356.0" y1="356" x2="701.0" y2="356" class="ci"/>
+  <line x1="356.0" y1="350" x2="356.0" y2="362" class="ci"/>
+  <line x1="701.0" y1="350" x2="701.0" y2="362" class="ci"/>
+  <rect x="517.5" y="350" width="20.2" height="12" rx="4" class="bar-published"/>
+  <text x="196" y="396" class="method">Boltz-2</text>
+  <line x1="415.3" y1="394" x2="744.7" y2="394" class="ci"/>
+  <line x1="415.3" y1="388" x2="415.3" y2="400" class="ci"/>
+  <line x1="744.7" y1="388" x2="744.7" y2="400" class="ci"/>
+  <rect x="537.7" y="388" width="68.2" height="12" rx="4" class="bar-published"/>
+  <text x="196" y="434" class="method">smina crystal</text>
+  <line x1="390.4" y1="432" x2="687.9" y2="432" class="ci"/>
+  <line x1="390.4" y1="426" x2="390.4" y2="438" class="ci"/>
+  <line x1="687.9" y1="426" x2="687.9" y2="438" class="ci"/>
+  <rect x="537.7" y="426" width="21.2" height="12" rx="4" class="bar-published"/>
+  <text x="196" y="472" class="method">AEV-PLIG</text>
+  <line x1="356.0" y1="470" x2="619.3" y2="470" class="ci"/>
+  <line x1="356.0" y1="464" x2="356.0" y2="476" class="ci"/>
+  <line x1="619.3" y1="464" x2="619.3" y2="476" class="ci"/>
+  <rect x="457.7" y="464" width="80.0" height="12" rx="4" class="bar-published"/>
+  <text x="196" y="510" class="method">AqAffinity</text>
+  <line x1="359.6" y1="508" x2="574.9" y2="508" class="ci"/>
+  <line x1="359.6" y1="502" x2="359.6" y2="514" class="ci"/>
+  <line x1="574.9" y1="502" x2="574.9" y2="514" class="ci"/>
+  <rect x="481.0" y="502" width="56.7" height="12" rx="4" class="bar-published"/>
+</svg>
