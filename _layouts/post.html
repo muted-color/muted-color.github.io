@@ -21,7 +21,16 @@ layout: default
       {% endif %}
     </div>
 
-    <figure class="research-hero{% if page.hero_frame %} research-hero--framed{% endif %}{% if page.hero_compact %} research-hero--compact{% endif %}"{% unless page.hero_caption %} aria-hidden="true"{% endunless %}>
+    {% assign hero_image_path = page.hero_image | default: "" | downcase %}
+    {% assign hero_cover = false %}
+    {% if page.hero_fit == "cover" %}
+      {% assign hero_cover = true %}
+    {% elsif page.hero_fit != "contain" %}
+      {% if hero_image_path contains ".png" or hero_image_path contains ".jpg" or hero_image_path contains ".jpeg" or hero_image_path contains ".webp" %}
+        {% assign hero_cover = true %}
+      {% endif %}
+    {% endif %}
+    <figure class="research-hero{% if page.hero_frame %} research-hero--framed{% endif %}{% if page.hero_compact %} research-hero--compact{% endif %}{% if hero_cover %} research-hero--cover{% endif %}"{% unless page.hero_caption %} aria-hidden="true"{% endunless %}>
       <div class="research-hero-frame">
         {% if page.hero_image %}
           <img class="research-hero-image" src="{{ page.hero_image | relative_url }}" alt="{{ page.hero_alt | default: '' | escape }}">

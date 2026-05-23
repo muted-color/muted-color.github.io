@@ -21,13 +21,16 @@ R002 = LAB / "experiments/exp_02_mw_property_baseline_stress/artifacts/runs/r002
 R003 = LAB / "experiments/exp_03_scaffold_cluster_sensitivity/artifacts/runs/r003"
 
 BLUE = "#3f41ff"
+HATCH_STROKE = "#EAEAFC"
+HATCH_OUTLINE = "#3f41ff"
+HATCH_FILL = "#EAEAFC"
 INK = "#111111"
 MUTED = "#5f6672"
 GRID = "#e6e8ee"
 AXIS = "#cfd4dd"
 GRAY = "#9aa1ad"
 DARK_GRAY = "#7f8796"
-LIGHT_BLUE = "#dfe3ff"
+LIGHT_BLUE = "#eef0ff"
 LIGHT_GRAY = "#eef0f4"
 
 PUBLISHED = {
@@ -164,9 +167,9 @@ def write_raw_vs_residual_svg(metrics: pd.DataFrame) -> None:
         "aqaffinity": "published prediction file",
     }
     role_label = {
-        "cv_ecfp_ridge": ("SAME-CAMPAIGN", "CONTROLS"),
-        "molecular_weight": ("PROPERTY", "BASELINES"),
-        "gnina_crystal": ("PUBLISHED", "PREDICTION FILES"),
+        "cv_ecfp_ridge": ("EV-A71 TRAINED", "LIGAND-ONLY"),
+        "molecular_weight": ("SIMPLE PROPERTY", "BASELINES"),
+        "gnina_crystal": ("PUBLISHED", "BENCHMARK SCORES"),
     }
     rows = metrics.set_index("method").loc[method_order].reset_index()
     width, height = 1120, 650
@@ -176,16 +179,16 @@ def write_raw_vs_residual_svg(metrics: pd.DataFrame) -> None:
     group_rule_x = FIG1_GROUP_RULE_X
     zero = sx(0, left=plot_left, right=plot_right)
     y0, step = 126, 38
-    row_h = 11
+    row_h = 14
     lines: list[str] = [
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">',
         '  <title id="title">Raw and residual OpenBind affinity score comparison</title>',
-        '  <desc id="desc">Horizontal bar chart comparing raw pKD Spearman and MW+cLogP residual Spearman for same-campaign ligand-only controls, property baselines, and published prediction files.</desc>',
+        '  <desc id="desc">Horizontal bar chart comparing Spearman correlation with original pKD and Spearman correlation after removing MW+cLogP trend for EV-A71 trained ligand-only controls, simple property baselines, and published benchmark scores.</desc>',
         f'  <rect width="{width}" height="{height}" fill="#ffffff"/>',
         "  <defs>",
-        '    <pattern id="control-stripe" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">',
-        f'      <rect width="8" height="8" fill="{BLUE}"/>',
-        '      <line x1="0" y1="0" x2="0" y2="8" stroke="#ffffff" stroke-width="2.2" opacity="0.45"/>',
+        '    <pattern id="removal-hatch" width="6" height="6" patternUnits="userSpaceOnUse">',
+        f'      <rect width="6" height="6" fill="{HATCH_FILL}"/>',
+        f'      <path d="M-1 -1 L7 7 M7 -1 L-1 7" stroke="{HATCH_STROKE}" stroke-width="1.15" opacity="0.68"/>',
         "    </pattern>",
         "    <style>",
         "      text { font-family: 'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }",
@@ -197,21 +200,17 @@ def write_raw_vs_residual_svg(metrics: pd.DataFrame) -> None:
         "      .grid { stroke: #e6e8ee; stroke-width: 1; stroke-dasharray: 4 8; }",
         "      .axis { stroke: #cfd4dd; stroke-width: 1.2; }",
         "      .zero { stroke: #5f6672; stroke-width: 1.35; }",
-        "      .raw { fill: #eef0ff; stroke: #3f41ff; stroke-width: 1.4; }",
-        "      .res-control { fill: url(#control-stripe); }",
-        "      .res-property { fill: #b9c0cc; }",
-        "      .res-published { fill: #7f8796; }",
+        "      .raw { fill: #3f41ff; }",
+        "      .adjusted { fill: url(#removal-hatch); stroke: #3f41ff; stroke-width: 0.9; }",
         "      .divider { stroke: #e6e8ee; stroke-width: 1; }",
         "      .legend { fill: #5f6672; font-size: 11.5px; font-weight: 600; }",
         "    </style>",
         "  </defs>",
-        '  <text x="560" y="42" text-anchor="middle" class="title">Raw pKD correlation is not the residual signal</text>',
-        '  <rect x="500" y="76" width="18" height="10" rx="3" class="raw"/>',
-        '  <text x="526" y="86" class="legend">raw pKD</text>',
-        '  <rect x="598" y="76" width="18" height="10" rx="3" class="res-control"/>',
-        '  <text x="624" y="86" class="legend">ligand-only residual</text>',
-        '  <rect x="764" y="76" width="18" height="10" rx="3" class="res-published"/>',
-        '  <text x="790" y="86" class="legend">published residual</text>',
+        '  <text x="560" y="42" text-anchor="middle" class="title">pKD correlation is not the residual signal</text>',
+        '  <rect x="438" y="74" width="18" height="14" rx="4" class="raw"/>',
+        '  <text x="464" y="86" class="legend">original pKD</text>',
+        '  <rect x="572" y="74" width="18" height="14" rx="4" class="adjusted"/>',
+        '  <text x="598" y="86" class="legend">after MW+cLogP removal</text>',
     ]
     for tick in [-0.1, 0.0, 0.1, 0.3, 0.5, 0.7]:
         x = sx(tick, left=plot_left, right=plot_right)
@@ -243,13 +242,8 @@ def write_raw_vs_residual_svg(metrics: pd.DataFrame) -> None:
         raw_w = abs(sx(raw, left=plot_left, right=plot_right) - zero)
         res_x0 = min(zero, sx(residual, left=plot_left, right=plot_right))
         res_w = abs(sx(residual, left=plot_left, right=plot_right) - zero)
-        cls = {
-            "same-campaign ligand-only control": "res-control",
-            "property baseline": "res-property",
-            "published prediction file": "res-published",
-        }[role[method]]
-        lines.append(f'  <rect x="{raw_x0:.1f}" y="{y - 12}" width="{raw_w:.1f}" height="{row_h}" rx="4" class="raw"/>')
-        lines.append(f'  <rect x="{res_x0:.1f}" y="{y + 4}" width="{res_w:.1f}" height="{row_h}" rx="4" class="{cls}"/>')
+        lines.append(f'  <rect x="{raw_x0:.1f}" y="{y - 15}" width="{raw_w:.1f}" height="{row_h}" rx="7" class="raw"/>')
+        lines.append(f'  <rect x="{res_x0:.1f}" y="{y + 5}" width="{res_w:.1f}" height="{row_h}" rx="7" class="adjusted"/>')
 
     lines.append("</svg>\n")
     (OUT / "raw-vs-residual-spearman.svg").write_text("\n".join(lines), encoding="utf-8")
@@ -308,9 +302,9 @@ def write_raw_vs_residual_png(metrics: pd.DataFrame) -> None:
         "aqaffinity": "published",
     }
     role_label = {
-        "cv_ecfp_ridge": ("SAME-CAMPAIGN", "CONTROLS"),
-        "molecular_weight": ("PROPERTY", "BASELINES"),
-        "gnina_crystal": ("PUBLISHED", "PREDICTION FILES"),
+        "cv_ecfp_ridge": ("EV-A71 TRAINED", "LIGAND-ONLY"),
+        "molecular_weight": ("SIMPLE PROPERTY", "BASELINES"),
+        "gnina_crystal": ("PUBLISHED", "BENCHMARK SCORES"),
     }
     rows = metrics.set_index("method").loc[method_order].reset_index()
     scale = 1.6
@@ -324,8 +318,34 @@ def write_raw_vs_residual_png(metrics: pd.DataFrame) -> None:
     def tx(v: float) -> int:
         return sc(sx(v, left=FIG1_PLOT_LEFT, right=FIG1_PLOT_RIGHT))
 
-    def rect(x0: float, y0: float, x1: float, y1: float, fill: str, outline: str | None = None, width_px: int = 1) -> None:
-        draw.rounded_rectangle((sc(x0), sc(y0), sc(x1), sc(y1)), radius=sc(4), fill=fill, outline=outline, width=width_px)
+    def rect(
+        x0: float,
+        y0: float,
+        x1: float,
+        y1: float,
+        fill: str,
+        outline: str | None = None,
+        width_px: int = 1,
+        radius: int = 7,
+    ) -> None:
+        draw.rounded_rectangle((sc(x0), sc(y0), sc(x1), sc(y1)), radius=sc(radius), fill=fill, outline=outline, width=width_px)
+
+    def hatch_rect(x0: float, y0: float, x1: float, y1: float) -> None:
+        px0, py0, px1, py1 = sc(x0), sc(y0), sc(x1), sc(y1)
+        if px1 <= px0 or py1 <= py0:
+            return
+        hatch = Image.new("RGB", image.size, HATCH_FILL)
+        hatch_draw = ImageDraw.Draw(hatch)
+        mask = Image.new("L", image.size, 0)
+        mask_draw = ImageDraw.Draw(mask)
+        mask_draw.rounded_rectangle((px0, py0, px1, py1), radius=sc(7), fill=255)
+        step = max(3, sc(6))
+        span = max(px1 - px0, py1 - py0) + step * 2
+        for x in range(px0 - span, px1 + span, step):
+            hatch_draw.line((x, py0 - step, x + span, py1 + step), fill=HATCH_STROKE, width=max(1, sc(1)))
+            hatch_draw.line((x, py1 + step, x + span, py0 - step), fill=HATCH_STROKE, width=max(1, sc(1)))
+        image.paste(hatch, (0, 0), mask)
+        draw.rounded_rectangle((px0, py0, px1, py1), radius=sc(7), outline=HATCH_OUTLINE, width=max(1, sc(1)))
 
     title_font = font(sc(15), "bold")
     method_font = font(sc(12), "semibold")
@@ -333,14 +353,11 @@ def write_raw_vs_residual_png(metrics: pd.DataFrame) -> None:
     tick_font = font(sc(12), "regular")
     axis_font = font(sc(12), "semibold")
 
-    draw_center(draw, (sc(560), sc(42)), "Raw pKD correlation is not the residual signal", title_font, INK)
-    for x, label, fill, outline in [
-        (500, "raw pKD", "#eef0ff", BLUE),
-        (598, "ligand-only residual", BLUE, None),
-        (764, "published residual", DARK_GRAY, None),
-    ]:
-        rect(x, 76, x + 18, 86, fill, outline)
-        draw.text((sc(x + 26), sc(73)), label, font=role_font, fill=MUTED)
+    draw_center(draw, (sc(560), sc(42)), "pKD correlation is not the residual signal", title_font, INK)
+    rect(438, 74, 456, 88, BLUE, radius=4)
+    draw.text((sc(464), sc(73)), "original pKD", font=role_font, fill=MUTED)
+    hatch_rect(572, 74, 590, 88)
+    draw.text((sc(598), sc(73)), "after MW+cLogP removal", font=role_font, fill=MUTED)
 
     for tick in [-0.1, 0.0, 0.1, 0.3, 0.5, 0.7]:
         x = tx(tick)
@@ -364,7 +381,7 @@ def write_raw_vs_residual_png(metrics: pd.DataFrame) -> None:
     draw_center(draw, (sc((FIG1_PLOT_LEFT + FIG1_PLOT_RIGHT) / 2), sc(620)), "Spearman correlation", axis_font, MUTED)
 
     zero = tx(0)
-    y0, step, row_h = 126, 38, 11
+    y0, step, row_h = 126, 38, 14
     for idx, row in rows.iterrows():
         method = str(row["method"])
         raw = float(row["raw_spearman"])
@@ -380,13 +397,8 @@ def write_raw_vs_residual_png(metrics: pd.DataFrame) -> None:
         draw.text((sc(FIG1_LABEL_LEFT), sc(y - 7)), DISPLAY_METHOD.get(method, method), font=method_font, fill=INK)
         raw_end = tx(raw)
         res_end = tx(residual)
-        rect(min(zero, raw_end) / scale, y - 12, max(zero, raw_end) / scale, y - 1, "#eef0ff", BLUE, sc(1))
-        res_fill = {"control": BLUE, "property": "#b9c0cc", "published": DARK_GRAY}[role[method]]
-        rect(min(zero, res_end) / scale, y + 4, max(zero, res_end) / scale, y + 15, res_fill)
-        if role[method] == "control":
-            x0, x1 = min(zero, res_end), max(zero, res_end)
-            for x in range(x0 - sc(20), x1 + sc(20), sc(8)):
-                draw.line((x, sc(y + 15), x + sc(20), sc(y + 4)), fill=(255, 255, 255, 90), width=sc(2))
+        rect(min(zero, raw_end) / scale, y - 15, max(zero, raw_end) / scale, y - 1, BLUE)
+        hatch_rect(min(zero, res_end) / scale, y + 5, max(zero, res_end) / scale, y + 19)
 
     image.convert("RGB").save(OUT / "raw-vs-residual-spearman.png", quality=95)
 
@@ -552,9 +564,9 @@ def write_grouped_residual_svg(grouped: pd.DataFrame) -> None:
         "aqaffinity": "published",
     }
     role_label = {
-        "cv_ecfp_ridge": ("SAME-CAMPAIGN", "CONTROLS"),
-        "molecular_weight": ("PROPERTY", "BASELINES"),
-        "gnina_crystal": ("PUBLISHED", "PREDICTION FILES"),
+        "cv_ecfp_ridge": ("EV-A71 TRAINED", "LIGAND-ONLY"),
+        "molecular_weight": ("SIMPLE PROPERTY", "BASELINES"),
+        "gnina_crystal": ("PUBLISHED", "BENCHMARK SCORES"),
     }
     rows = grouped[grouped["group_col"].eq("butina_tanimoto_0p6_cluster")].set_index("method").loc[method_order].reset_index()
     width, height = 1120, 650
@@ -667,9 +679,9 @@ def write_grouped_residual_png(grouped: pd.DataFrame) -> None:
         "aqaffinity": "published",
     }
     role_label = {
-        "cv_ecfp_ridge": ("SAME-CAMPAIGN", "CONTROLS"),
-        "molecular_weight": ("PROPERTY", "BASELINES"),
-        "gnina_crystal": ("PUBLISHED", "PREDICTION FILES"),
+        "cv_ecfp_ridge": ("EV-A71 TRAINED", "LIGAND-ONLY"),
+        "molecular_weight": ("SIMPLE PROPERTY", "BASELINES"),
+        "gnina_crystal": ("PUBLISHED", "BENCHMARK SCORES"),
     }
     rows = grouped[grouped["group_col"].eq("butina_tanimoto_0p6_cluster")].set_index("method").loc[method_order].reset_index()
     scale = 1.6
@@ -753,7 +765,7 @@ def raw_vs_residual() -> None:
     y = np.arange(len(methods))
 
     fig, ax = plt.subplots(figsize=(9.8, 5.2))
-    raw = ax.barh(y + 0.18, metrics["raw_spearman"], height=0.30, color=LIGHT_BLUE, edgecolor=BLUE, linewidth=1.0, label="raw pKD")
+    raw = ax.barh(y + 0.18, metrics["raw_spearman"], height=0.30, color=LIGHT_BLUE, edgecolor=BLUE, linewidth=1.0, label="pKD Spearman")
     residual_colors = [BLUE if m not in PUBLISHED else DARK_GRAY for m in methods]
     residual = ax.barh(y - 0.18, metrics["residual_spearman"], height=0.30, color=residual_colors, label="MW+cLogP residual")
     for bar, method in zip(residual, methods):

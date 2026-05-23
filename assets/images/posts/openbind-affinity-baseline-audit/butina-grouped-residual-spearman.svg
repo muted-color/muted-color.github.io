@@ -39,8 +39,8 @@
   <line x1="356" y1="556" x2="1010" y2="556" class="axis"/>
   <line x1="174" y1="112" x2="174" y2="552" class="divider"/>
   <text x="683.0" y="620" text-anchor="middle" class="axis-label">Grouped residual Spearman mean</text>
-  <text x="48" y="163.0" class="role">SAME-CAMPAIGN</text>
-  <text x="48" y="176.0" class="role">CONTROLS</text>
+  <text x="48" y="163.0" class="role">EV-A71 TRAINED</text>
+  <text x="48" y="176.0" class="role">LIGAND-ONLY</text>
   <text x="196" y="130" class="method">ECFP ridge</text>
   <line x1="780.5" y1="128" x2="994.2" y2="128" class="ci"/>
   <line x1="780.5" y1="122" x2="780.5" y2="134" class="ci"/>
@@ -56,7 +56,7 @@
   <line x1="510.6" y1="198" x2="510.6" y2="210" class="ci"/>
   <line x1="870.4" y1="198" x2="870.4" y2="210" class="ci"/>
   <rect x="537.7" y="198" width="210.2" height="12" rx="4" class="bar-control"/>
-  <text x="48" y="277.0" class="role">PROPERTY</text>
+  <text x="48" y="277.0" class="role">SIMPLE PROPERTY</text>
   <text x="48" y="290.0" class="role">BASELINES</text>
   <line x1="48" y1="222" x2="1010" y2="222" class="divider"/>
   <text x="196" y="244" class="method">molecular weight</text>
@@ -75,7 +75,7 @@
   <line x1="684.5" y1="312" x2="684.5" y2="324" class="ci"/>
   <rect x="537.7" y="312" width="4.3" height="12" rx="4" class="bar-property"/>
   <text x="48" y="440.0" class="role">PUBLISHED</text>
-  <text x="48" y="453.0" class="role">PREDICTION FILES</text>
+  <text x="48" y="453.0" class="role">BENCHMARK SCORES</text>
   <line x1="48" y1="336" x2="1010" y2="336" class="divider"/>
   <text x="196" y="358" class="method">gnina crystal</text>
   <line x1="356.0" y1="356" x2="701.0" y2="356" class="ci"/>

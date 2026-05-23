@@ -604,6 +604,10 @@ h6 {
   object-fit: contain;
 }
 
+.research-hero--cover .research-hero-image {
+  object-fit: cover;
+}
+
 .research-hero-placeholder {
   background:
     radial-gradient(circle at 50% 48%, rgba(63, 65, 255, 0.08), transparent 16%),
@@ -2080,6 +2084,46 @@ pre code {
 
 .research-body .table-shell table.comparison-table {
   min-width: 560px;
+}
+
+.research-body .table-figure--compact-metrics .table-shell table.metrics-table,
+.research-body .table-figure--compact-metrics .table-shell table.comparison-table {
+  min-width: 0;
+}
+
+.research-body .table-figure--compact-metrics .table-shell table.metrics-table--compact-two-col {
+  table-layout: fixed;
+}
+
+.research-body .table-figure--compact-metrics .table-shell table.metrics-table--compact-two-col th:first-child,
+.research-body .table-figure--compact-metrics .table-shell table.metrics-table--compact-two-col td:first-child {
+  width: 72%;
+}
+
+.research-body .table-figure--compact-metrics .table-shell table.metrics-table--compact-two-col th:last-child,
+.research-body .table-figure--compact-metrics .table-shell table.metrics-table--compact-two-col td:last-child {
+  width: 28%;
+  white-space: nowrap;
+}
+
+.research-body .table-figure--compact-metrics .table-shell table.metrics-table--analysis-scope {
+  table-layout: fixed;
+}
+
+.research-body .table-figure--compact-metrics .table-shell table.metrics-table--analysis-scope th:nth-child(1),
+.research-body .table-figure--compact-metrics .table-shell table.metrics-table--analysis-scope td:nth-child(1) {
+  width: 30%;
+}
+
+.research-body .table-figure--compact-metrics .table-shell table.metrics-table--analysis-scope th:nth-child(2),
+.research-body .table-figure--compact-metrics .table-shell table.metrics-table--analysis-scope td:nth-child(2) {
+  width: 52%;
+}
+
+.research-body .table-figure--compact-metrics .table-shell table.metrics-table--analysis-scope th:nth-child(3),
+.research-body .table-figure--compact-metrics .table-shell table.metrics-table--analysis-scope td:nth-child(3) {
+  width: 18%;
+  white-space: nowrap;
 }
 
 .research-body .table-shell th,
