@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="500" viewBox="0 0 1040 500" role="img" aria-labelledby="title desc">
+  <title id="title">Moderate designability pass rate by structural context</title>
+  <desc id="desc">A minimal horizontal bar chart showing moderate designability pass rates for local geometry, weak topology, natural topology, natural protein backbone, and edited natural structure core conditions.</desc>
+  <rect width="1040" height="500" fill="#ffffff"/>
+  <defs>
+    <style>
+      text { font-family: 'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+      .label { fill: #111111; font-size: 12.5px; font-weight: 650; }
+      .tick { fill: #626a76; font-size: 11px; font-weight: 520; }
+      .axis { stroke: #cfd4dd; stroke-width: 1.2; }
+      .grid { stroke: #e8ebf1; stroke-width: 1; stroke-dasharray: 4 8; }
+      .bar-zero { fill: #cfd4dd; }
+      .bar-neutral { fill: #aeb7c4; }
+      .bar-accent { fill: #3f41ff; }
+      .zero-marker { fill: #ffffff; stroke: #cfd4dd; stroke-width: 2; }
+      .count { fill: #111111; font-size: 12px; font-weight: 720; }
+    </style>
+  </defs>
+
+  <g>
+    <line x1="302" y1="58" x2="302" y2="398" class="axis"/>
+    <line x1="442" y1="58" x2="442" y2="398" class="grid"/>
+    <line x1="582" y1="58" x2="582" y2="398" class="grid"/>
+    <line x1="722" y1="58" x2="722" y2="398" class="grid"/>
+    <line x1="862" y1="58" x2="862" y2="398" class="grid"/>
+
+    <text x="302" y="432" text-anchor="middle" class="tick">0</text>
+    <text x="442" y="432" text-anchor="middle" class="tick">25%</text>
+    <text x="582" y="432" text-anchor="middle" class="tick">50%</text>
+    <text x="722" y="432" text-anchor="middle" class="tick">75%</text>
+    <text x="862" y="432" text-anchor="middle" class="tick">100%</text>
+
+    <g transform="translate(0 74)">
+      <text x="88" y="7" class="label">Local geom.</text>
+      <circle cx="302" cy="2" r="4" class="zero-marker"/>
+      <text x="936" y="7" text-anchor="end" class="count">0/8</text>
+    </g>
+
+    <g transform="translate(0 118)">
+      <text x="88" y="7" class="label">Weak topo A</text>
+      <circle cx="302" cy="2" r="4" class="zero-marker"/>
+      <text x="936" y="7" text-anchor="end" class="count">0/8</text>
+    </g>
+
+    <g transform="translate(0 162)">
+      <text x="88" y="7" class="label">Weak topo B</text>
+      <circle cx="302" cy="2" r="4" class="zero-marker"/>
+      <text x="936" y="7" text-anchor="end" class="count">0/8</text>
+    </g>
+
+    <g transform="translate(0 206)">
+      <text x="88" y="7" class="label">Natural topo</text>
+      <rect x="302" y="-8" width="280" height="20" rx="10" class="bar-neutral"/>
+      <text x="936" y="7" text-anchor="end" class="count">4/8</text>
+    </g>
+
+    <g transform="translate(0 250)">
+      <text x="88" y="7" class="label">Natural backbone</text>
+      <rect x="302" y="-8" width="280" height="20" rx="10" class="bar-neutral"/>
+      <text x="936" y="7" text-anchor="end" class="count">10/20</text>
+    </g>
+
+    <g transform="translate(0 294)">
+      <text x="88" y="7" class="label">Smooth edit</text>
+      <rect x="302" y="-8" width="420" height="20" rx="10" class="bar-accent"/>
+      <text x="936" y="7" text-anchor="end" class="count">6/8</text>
+    </g>
+
+    <g transform="translate(0 338)">
+      <text x="88" y="7" class="label">Straight edit</text>
+      <circle cx="302" cy="2" r="4" class="zero-marker"/>
+      <text x="936" y="7" text-anchor="end" class="count">0/8</text>
+    </g>
+
+    <g transform="translate(0 382)">
+      <text x="88" y="7" class="label">Fragment edit</text>
+      <rect x="302" y="-8" width="70" height="20" rx="10" class="bar-zero"/>
+      <text x="936" y="7" text-anchor="end" class="count">1/8</text>
+    </g>
+  </g>
+</svg>

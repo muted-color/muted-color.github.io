@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 650" role="img" aria-labelledby="title desc">
+  <title id="title">Raw and residual OpenBind affinity score comparison</title>
+  <desc id="desc">Horizontal bar chart comparing Spearman correlation with original pKD and Spearman correlation after removing MW+cLogP trend for EV-A71 trained ligand-only controls, simple property baselines, and published benchmark scores.</desc>
+  <rect width="1120" height="650" fill="#ffffff"/>
+  <defs>
+    <pattern id="removal-hatch" width="6" height="6" patternUnits="userSpaceOnUse">
+      <rect width="6" height="6" fill="#EAEAFC"/>
+      <path d="M-1 -1 L7 7 M7 -1 L-1 7" stroke="#EAEAFC" stroke-width="1.15" opacity="0.68"/>
+    </pattern>
+    <style>
+      text { font-family: 'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+      .title { fill: #111111; font-size: 15px; font-weight: 700; }
+      .method { fill: #111111; font-size: 12.5px; font-weight: 650; }
+      .role { fill: #5f6672; font-size: 9.6px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
+      .tick { fill: #5f6672; font-size: 12px; font-weight: 500; }
+      .axis-label { fill: #5f6672; font-size: 12.5px; font-weight: 600; }
+      .grid { stroke: #e6e8ee; stroke-width: 1; stroke-dasharray: 4 8; }
+      .axis { stroke: #cfd4dd; stroke-width: 1.2; }
+      .zero { stroke: #5f6672; stroke-width: 1.35; }
+      .raw { fill: #3f41ff; }
+      .adjusted { fill: url(#removal-hatch); stroke: #3f41ff; stroke-width: 0.9; }
+      .divider { stroke: #e6e8ee; stroke-width: 1; }
+      .legend { fill: #5f6672; font-size: 11.5px; font-weight: 600; }
+    </style>
+  </defs>
+  <text x="560" y="42" text-anchor="middle" class="title">pKD correlation is not the residual signal</text>
+  <rect x="438" y="74" width="18" height="14" rx="4" class="raw"/>
+  <text x="464" y="86" class="legend">original pKD</text>
+  <rect x="572" y="74" width="18" height="14" rx="4" class="adjusted"/>
+  <text x="598" y="86" class="legend">after MW+cLogP removal</text>
+  <text x="287.6" y="584" text-anchor="middle" class="tick">-0.1</text>
+  <line x1="375.7" y1="98" x2="375.7" y2="556" class="zero"/>
+  <text x="375.7" y="584" text-anchor="middle" class="tick">0</text>
+  <line x1="463.8" y1="98" x2="463.8" y2="556" class="grid"/>
+  <text x="463.8" y="584" text-anchor="middle" class="tick">0.1</text>
+  <line x1="640.0" y1="98" x2="640.0" y2="556" class="grid"/>
+  <text x="640.0" y="584" text-anchor="middle" class="tick">0.3</text>
+  <line x1="816.2" y1="98" x2="816.2" y2="556" class="grid"/>
+  <text x="816.2" y="584" text-anchor="middle" class="tick">0.5</text>
+  <text x="992.4" y="584" text-anchor="middle" class="tick">0.7</text>
+  <line x1="270" y1="556" x2="1010" y2="556" class="axis"/>
+  <line x1="174" y1="112" x2="174" y2="552" class="divider"/>
+  <text x="640.0" y="620" text-anchor="middle" class="axis-label">Spearman correlation</text>
+  <text x="48" y="163.0" class="role">EV-A71 TRAINED</text>
+  <text x="48" y="176.0" class="role">LIGAND-ONLY</text>
+  <text x="196" y="130" class="method">ECFP ridge</text>
+  <rect x="375.7" y="111" width="591.8" height="14" rx="7" class="raw"/>
+  <rect x="375.7" y="131" width="379.1" height="14" rx="7" class="adjusted"/>
+  <text x="196" y="168" class="method">RDKit RF</text>
+  <rect x="375.7" y="149" width="552.7" height="14" rx="7" class="raw"/>
+  <rect x="375.7" y="169" width="297.0" height="14" rx="7" class="adjusted"/>
+  <text x="196" y="206" class="method">RDKit ridge</text>
+  <rect x="375.7" y="187" width="533.4" height="14" rx="7" class="raw"/>
+  <rect x="375.7" y="207" width="232.9" height="14" rx="7" class="adjusted"/>
+  <text x="48" y="277.0" class="role">SIMPLE PROPERTY</text>
+  <text x="48" y="290.0" class="role">BASELINES</text>
+  <line x1="48" y1="222" x2="1010" y2="222" class="divider"/>
+  <text x="196" y="244" class="method">molecular weight</text>
+  <rect x="375.7" y="225" width="426.0" height="14" rx="7" class="raw"/>
+  <rect x="360.3" y="245" width="15.4" height="14" rx="7" class="adjusted"/>
+  <text x="196" y="282" class="method">MW+cLogP ridge</text>
+  <rect x="375.7" y="263" width="426.0" height="14" rx="7" class="raw"/>
+  <rect x="357.7" y="283" width="18.0" height="14" rx="7" class="adjusted"/>
+  <text x="196" y="320" class="method">cLogP</text>
+  <rect x="375.7" y="301" width="153.4" height="14" rx="7" class="raw"/>
+  <rect x="375.7" y="321" width="12.5" height="14" rx="7" class="adjusted"/>
+  <text x="48" y="440.0" class="role">PUBLISHED</text>
+  <text x="48" y="453.0" class="role">BENCHMARK SCORES</text>
+  <line x1="48" y1="336" x2="1010" y2="336" class="divider"/>
+  <text x="196" y="358" class="method">gnina crystal</text>
+  <rect x="375.7" y="339" width="399.4" height="14" rx="7" class="raw"/>
+  <rect x="375.7" y="359" width="16.1" height="14" rx="7" class="adjusted"/>
+  <text x="196" y="396" class="method">Boltz-2</text>
+  <rect x="375.7" y="377" width="350.0" height="14" rx="7" class="raw"/>
+  <rect x="375.7" y="397" width="85.3" height="14" rx="7" class="adjusted"/>
+  <text x="196" y="434" class="method">smina crystal</text>
+  <rect x="375.7" y="415" width="224.2" height="14" rx="7" class="raw"/>
+  <rect x="375.7" y="435" width="33.7" height="14" rx="7" class="adjusted"/>
+  <text x="196" y="472" class="method">AEV-PLIG</text>
+  <rect x="375.7" y="453" width="200.1" height="14" rx="7" class="raw"/>
+  <rect x="300.6" y="473" width="75.1" height="14" rx="7" class="adjusted"/>
+  <text x="196" y="510" class="method">AqAffinity</text>
+  <rect x="375.7" y="491" width="103.3" height="14" rx="7" class="raw"/>
+  <rect x="325.4" y="511" width="50.3" height="14" rx="7" class="adjusted"/>
+</svg>
