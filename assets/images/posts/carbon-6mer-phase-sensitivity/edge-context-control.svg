@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="520" viewBox="0 0 980 520" role="img" aria-labelledby="title desc">
+  <title id="title">Edge context control histogram</title>
+  <desc id="desc">Histogram of shifted-reference edge-only score range, with callout noting median edge-over-full range ratio and fraction where edge range is at least full-window range.</desc>
+  <rect width="980" height="520" fill="#ffffff"/>
+  <defs>
+    <style>
+      text { font-family: 'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+      .title { fill: #111111; font-size: 17px; font-weight: 740; }
+      .label { fill: #111111; font-size: 12.5px; font-weight: 680; }
+      .small { fill: #5f6672; font-size: 10.5px; font-weight: 560; }
+      .tiny { fill: #5f6672; font-size: 9.5px; font-weight: 560; }
+      .value { fill: #111111; font-size: 12px; font-weight: 740; }
+      .axis { stroke: #cfd4dd; stroke-width: 1.2; }
+      .grid { stroke: #e8ebf1; stroke-width: 1; stroke-dasharray: 4 8; }
+      .threshold { stroke: #2b3038; stroke-width: 1.3; stroke-dasharray: 5 6; }
+      .card { fill: #f7f9fc; stroke: #dfe4ed; stroke-width: 1; }
+      .token { fill: #3f41ff; }
+      .fns { fill: #56b39d; }
+      .gray { fill: #9aa1ad; }
+      .box { fill: #eef2ff; stroke: #3f41ff; stroke-width: 1.4; }
+      .median { stroke: #3f41ff; stroke-width: 2.2; }
+      .whisker { stroke: #6b7280; stroke-width: 1.35; }
+      .dot { fill: #3f41ff; opacity: 0.18; }
+    </style>
+    
+  </defs>
+<text x="490" y="42" text-anchor="middle" class="title">Window edge/context drift remains as a separate caution</text>
+<line x1="100" y1="410.0" x2="900" y2="410.0" class="grid"/>
+<text x="86" y="414.0" text-anchor="end" class="small">0</text>
+<line x1="100" y1="357.5" x2="900" y2="357.5" class="grid"/>
+<text x="86" y="361.5" text-anchor="end" class="small">25</text>
+<line x1="100" y1="305.0" x2="900" y2="305.0" class="grid"/>
+<text x="86" y="309.0" text-anchor="end" class="small">50</text>
+<line x1="100" y1="252.5" x2="900" y2="252.5" class="grid"/>
+<text x="86" y="256.5" text-anchor="end" class="small">75</text>
+<line x1="100" y1="200.0" x2="900" y2="200.0" class="grid"/>
+<text x="86" y="204.0" text-anchor="end" class="small">100</text>
+<text x="100.0" y="440" text-anchor="middle" class="small">0.00</text>
+<text x="252.4" y="440" text-anchor="middle" class="small">0.02</text>
+<text x="404.8" y="440" text-anchor="middle" class="small">0.04</text>
+<text x="557.1" y="440" text-anchor="middle" class="small">0.06</text>
+<text x="709.5" y="440" text-anchor="middle" class="small">0.08</text>
+<text x="861.9" y="440" text-anchor="middle" class="small">0.10</text>
+<line x1="100" y1="410" x2="900" y2="410" class="axis"/>
+<line x1="100" y1="76" x2="100" y2="410" class="axis"/>
+<rect x="102.0" y="410.0" width="49.3" height="0.0" rx="5" fill="#3f41ff" opacity="0.82"/>
+<rect x="155.3" y="382.7" width="49.3" height="27.3" rx="5" fill="#3f41ff" opacity="0.82"/>
+<rect x="208.7" y="118.1" width="49.3" height="291.9" rx="5" fill="#3f41ff" opacity="0.82"/>
+<rect x="262.0" y="111.8" width="49.3" height="298.2" rx="5" fill="#3f41ff" opacity="0.82"/>
+<rect x="315.3" y="300.8" width="49.3" height="109.2" rx="5" fill="#3f41ff" opacity="0.82"/>
+<rect x="368.7" y="298.7" width="49.3" height="111.3" rx="5" fill="#3f41ff" opacity="0.82"/>
+<rect x="422.0" y="368.0" width="49.3" height="42.0" rx="5" fill="#3f41ff" opacity="0.82"/>
+<rect x="475.3" y="372.2" width="49.3" height="37.8" rx="5" fill="#3f41ff" opacity="0.82"/>
+<rect x="528.7" y="363.8" width="49.3" height="46.2" rx="5" fill="#3f41ff" opacity="0.82"/>
+<rect x="582.0" y="368.0" width="49.3" height="42.0" rx="5" fill="#3f41ff" opacity="0.82"/>
+<rect x="635.3" y="397.4" width="49.3" height="12.6" rx="5" fill="#3f41ff" opacity="0.82"/>
+<rect x="688.7" y="393.2" width="49.3" height="16.8" rx="5" fill="#3f41ff" opacity="0.82"/>
+<rect x="742.0" y="401.6" width="49.3" height="8.4" rx="5" fill="#3f41ff" opacity="0.82"/>
+<rect x="795.3" y="410.0" width="49.3" height="0.0" rx="5" fill="#3f41ff" opacity="0.82"/>
+<rect x="848.7" y="403.7" width="49.3" height="6.3" rx="5" fill="#3f41ff" opacity="0.82"/>
+<text x="500.0" y="480" text-anchor="middle" class="small">edge-only shifted-reference range</text>
+<text x="35" y="243.0" text-anchor="middle" transform="rotate(-90 35 243.0)" class="small">variant count</text>
+<rect x="608" y="96" width="252" height="92" rx="16" class="card"/>
+<text x="630" y="126" class="label">Edge control summary</text>
+<text x="630" y="152" class="small">median edge/full ratio: 4.162</text>
+<text x="630" y="174" class="small">edge ≥ full in 93.6% variants</text>
+</svg>

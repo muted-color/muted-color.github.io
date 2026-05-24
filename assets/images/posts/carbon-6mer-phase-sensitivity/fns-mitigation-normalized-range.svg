@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="700" viewBox="0 0 1060 700" role="img" aria-labelledby="title desc">
+  <title id="title">FNS mitigation comparison</title>
+  <desc id="desc">Two stacked horizontal bar panels comparing token and FNS normalized phase spread for full sequence and local target scorer pairs, with a 0.10 threshold line.</desc>
+  <rect width="1060" height="700" fill="#ffffff"/>
+  <defs>
+    <style>
+      text { font-family: 'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+      .title { fill: #111111; font-size: 22px; font-weight: 760; }
+      .panel-title { fill: #111111; font-size: 18px; font-weight: 740; }
+      .label { fill: #111111; font-size: 15px; font-weight: 680; }
+      .small { fill: #5f6672; font-size: 13px; font-weight: 560; }
+      .value { fill: #111111; font-size: 15px; font-weight: 760; }
+      .axis { stroke: #cfd4dd; stroke-width: 1.35; }
+      .grid { stroke: #e8ebf1; stroke-width: 1; stroke-dasharray: 4 8; }
+      .threshold { stroke: #2b3038; stroke-width: 1.5; stroke-dasharray: 5 6; }
+      .divider { stroke: #e5e9f2; stroke-width: 1.2; }
+      .token { fill: #3f41ff; }
+      .fns { fill: #E9EBFC; }
+    </style>
+  </defs>
+  <text x="530" y="54" text-anchor="middle" class="title">FNS lowers paired spread, but remaining spread stays above threshold</text>
+
+  <rect x="712" y="84" width="16" height="16" rx="5" class="token"/>
+  <text x="738" y="97" class="small">token</text>
+  <rect x="808" y="84" width="16" height="16" rx="5" class="fns"/>
+  <text x="834" y="97" class="small">FNS</text>
+
+  <text x="96" y="142" class="panel-title">Full sequence pair</text>
+  <line x1="300" y1="166" x2="300" y2="286" class="axis"/>
+  <line x1="426" y1="166" x2="426" y2="286" class="threshold"/>
+  <line x1="552" y1="166" x2="552" y2="286" class="grid"/>
+  <line x1="678" y1="166" x2="678" y2="286" class="grid"/>
+  <line x1="804" y1="166" x2="804" y2="286" class="grid"/>
+  <line x1="930" y1="166" x2="930" y2="286" class="grid"/>
+  <text x="220" y="211" text-anchor="end" class="label">token</text>
+  <text x="220" y="265" text-anchor="end" class="label">FNS</text>
+  <rect x="300" y="188" width="515.3" height="28" rx="14" class="token"/>
+  <text x="832.3" y="208" class="value">0.409</text>
+  <rect x="300" y="242" width="444.8" height="28" rx="14" class="fns"/>
+  <text x="761.8" y="262" class="value">0.353</text>
+  <text x="300" y="318" text-anchor="middle" class="small">0.0</text>
+  <text x="426" y="318" text-anchor="middle" class="small">0.1</text>
+  <text x="552" y="318" text-anchor="middle" class="small">0.2</text>
+  <text x="678" y="318" text-anchor="middle" class="small">0.3</text>
+  <text x="804" y="318" text-anchor="middle" class="small">0.4</text>
+  <text x="930" y="318" text-anchor="middle" class="small">0.5</text>
+
+  <line x1="80" y1="356" x2="980" y2="356" class="divider"/>
+
+  <text x="96" y="416" class="panel-title">Local target pair</text>
+  <line x1="300" y1="440" x2="300" y2="560" class="axis"/>
+  <line x1="426" y1="440" x2="426" y2="560" class="threshold"/>
+  <line x1="552" y1="440" x2="552" y2="560" class="grid"/>
+  <line x1="678" y1="440" x2="678" y2="560" class="grid"/>
+  <line x1="804" y1="440" x2="804" y2="560" class="grid"/>
+  <line x1="930" y1="440" x2="930" y2="560" class="grid"/>
+  <text x="220" y="485" text-anchor="end" class="label">token</text>
+  <text x="220" y="539" text-anchor="end" class="label">FNS</text>
+  <rect x="300" y="462" width="439.7" height="28" rx="14" class="token"/>
+  <text x="756.7" y="482" class="value">0.349</text>
+  <rect x="300" y="516" width="417.1" height="28" rx="14" class="fns"/>
+  <text x="734.1" y="536" class="value">0.331</text>
+  <text x="300" y="592" text-anchor="middle" class="small">0.0</text>
+  <text x="426" y="592" text-anchor="middle" class="small">0.1</text>
+  <text x="552" y="592" text-anchor="middle" class="small">0.2</text>
+  <text x="678" y="592" text-anchor="middle" class="small">0.3</text>
+  <text x="804" y="592" text-anchor="middle" class="small">0.4</text>
+  <text x="930" y="592" text-anchor="middle" class="small">0.5</text>
+
+  <text x="615" y="646" text-anchor="middle" class="small">normalized phase range; dashed line marks 0.10</text>
+</svg>
