@@ -31,25 +31,25 @@
     <text x="862" y="432" text-anchor="middle" class="tick">100%</text>
 
     <g transform="translate(0 74)">
-      <text x="88" y="7" class="label">Local geom.</text>
+      <text x="88" y="7" class="label">Local geometry</text>
       <circle cx="302" cy="2" r="4" class="zero-marker"/>
       <text x="936" y="7" text-anchor="end" class="count">0/8</text>
     </g>
 
     <g transform="translate(0 118)">
-      <text x="88" y="7" class="label">Weak topo A</text>
+      <text x="88" y="7" class="label">Weak topology A</text>
       <circle cx="302" cy="2" r="4" class="zero-marker"/>
       <text x="936" y="7" text-anchor="end" class="count">0/8</text>
     </g>
 
     <g transform="translate(0 162)">
-      <text x="88" y="7" class="label">Weak topo B</text>
+      <text x="88" y="7" class="label">Weak topology B</text>
       <circle cx="302" cy="2" r="4" class="zero-marker"/>
       <text x="936" y="7" text-anchor="end" class="count">0/8</text>
     </g>
 
     <g transform="translate(0 206)">
-      <text x="88" y="7" class="label">Natural topo</text>
+      <text x="88" y="7" class="label">Natural topology</text>
       <rect x="302" y="-8" width="280" height="20" rx="10" class="bar-neutral"/>
       <text x="936" y="7" text-anchor="end" class="count">4/8</text>
     </g>
@@ -61,19 +61,19 @@
     </g>
 
     <g transform="translate(0 294)">
-      <text x="88" y="7" class="label">Smooth edit</text>
+      <text x="88" y="7" class="label">Smooth segment edit</text>
       <rect x="302" y="-8" width="420" height="20" rx="10" class="bar-accent"/>
       <text x="936" y="7" text-anchor="end" class="count">6/8</text>
     </g>
 
     <g transform="translate(0 338)">
-      <text x="88" y="7" class="label">Straight edit</text>
+      <text x="88" y="7" class="label">Straight interpolation</text>
       <circle cx="302" cy="2" r="4" class="zero-marker"/>
       <text x="936" y="7" text-anchor="end" class="count">0/8</text>
     </g>
 
     <g transform="translate(0 382)">
-      <text x="88" y="7" class="label">Fragment edit</text>
+      <text x="88" y="7" class="label">Fragment insertion</text>
       <rect x="302" y="-8" width="70" height="20" rx="10" class="bar-zero"/>
       <text x="936" y="7" text-anchor="end" class="count">1/8</text>
     </g>

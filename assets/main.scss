@@ -1458,6 +1458,33 @@ figcaption {
   text-align: right;
 }
 
+.research-body .table-figure--metrics .metrics-table--designability-ladder .group-cell,
+.research-body .table-figure--metrics .metrics-table--designability-ladder .condition-cell {
+  font-family: inherit;
+  white-space: normal;
+  text-align: left;
+}
+
+.research-body .table-figure--metrics .metrics-table--designability-ladder .group-cell {
+  color: var(--ink);
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.45;
+  vertical-align: middle;
+}
+
+.research-body .table-figure--metrics .metrics-table--designability-ladder .condition-cell {
+  color: var(--ink);
+  font-size: 0.86rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.research-body .table-figure--metrics .metrics-table--designability-ladder .condition-cell .table-note-inline {
+  display: block;
+  margin-top: 0.12rem;
+}
+
 .research-body .table-figure--metrics .metrics-table--numeric-first thead th:first-child,
 .research-body .table-figure--metrics .metrics-table--numeric-first tbody td:first-child {
   text-align: right;

@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="620" viewBox="0 0 1040 620" role="img" aria-labelledby="title desc">
+  <title id="title">Phase sensitivity by scorer</title>
+  <desc id="desc">Horizontal bar chart comparing normalized six-phase score spread for FNS and token scorers, with a 0.10 threshold line.</desc>
+  <rect width="1040" height="620" fill="#ffffff"/>
+  <defs>
+    <style>
+      text { font-family: 'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+      .title { fill: #111111; font-size: 18px; font-weight: 740; }
+      .subtitle { fill: #5f6672; font-size: 12px; font-weight: 560; }
+      .label { fill: #111111; font-size: 13px; font-weight: 680; }
+      .small { fill: #5f6672; font-size: 11px; font-weight: 560; }
+      .tiny { fill: #5f6672; font-size: 10px; font-weight: 560; }
+      .value { fill: #111111; font-size: 13px; font-weight: 740; }
+      .axis { stroke: #cfd4dd; stroke-width: 1.2; }
+      .grid { stroke: #e8ebf1; stroke-width: 1; stroke-dasharray: 4 8; }
+      .threshold { stroke: #2b3038; stroke-width: 1.25; stroke-dasharray: 5 6; }
+      .fns { fill: #E9EBFC; }
+      .token { fill: #3f41ff; }
+    </style>
+  </defs>
+  <text x="520.0" y="66" text-anchor="middle" class="title">Phase spread remains material after scorer changes</text>
+  <text x="520.0" y="91" text-anchor="middle" class="subtitle">Median phase range / score IQR</text>
+  <text x="520.0" y="112" text-anchor="middle" class="subtitle">Dashed line marks 0.10</text>
+  <line x1="250.0" y1="135" x2="250.0" y2="480" class="axis"/>
+  <text x="250.0" y="508" text-anchor="middle" class="small">0.0</text>
+  <line x1="386.0" y1="135" x2="386.0" y2="480" class="threshold"/>
+  <text x="386.0" y="508" text-anchor="middle" class="small">0.1</text>
+  <line x1="522.0" y1="135" x2="522.0" y2="480" class="grid"/>
+  <text x="522.0" y="508" text-anchor="middle" class="small">0.2</text>
+  <line x1="658.0" y1="135" x2="658.0" y2="480" class="grid"/>
+  <text x="658.0" y="508" text-anchor="middle" class="small">0.3</text>
+  <line x1="794.0" y1="135" x2="794.0" y2="480" class="grid"/>
+  <text x="794.0" y="508" text-anchor="middle" class="small">0.4</text>
+  <line x1="930.0" y1="135" x2="930.0" y2="480" class="grid"/>
+  <text x="930.0" y="508" text-anchor="middle" class="small">0.5</text>
+  <line x1="250" y1="480" x2="930" y2="480" class="axis"/>
+  <text x="590.0" y="552" text-anchor="middle" class="small">median phase range / score IQR</text>
+  <text x="393.0" y="125" class="tiny">0.10</text>
+  <line x1="74" y1="276" x2="930" y2="276" class="axis" opacity="0.55"/>
+  <text x="106" y="183" class="label">full sequence</text>
+  <rect x="250" y="166" width="480.1" height="24" rx="12" class="fns"/>
+  <text x="742.1" y="183" class="value">0.353</text>
+  <text x="106" y="237" class="label">local target</text>
+  <rect x="250" y="220" width="449.9" height="24" rx="12" class="fns"/>
+  <text x="711.9" y="237" class="value">0.331</text>
+  <text x="106" y="325" class="label">downstream only</text>
+  <rect x="250" y="308" width="633.3" height="24" rx="12" class="token"/>
+  <text x="895.3" y="325" class="value">0.466</text>
+  <text x="106" y="379" class="label">full window</text>
+  <rect x="250" y="362" width="556.4" height="24" rx="12" class="token"/>
+  <text x="818.4" y="379" class="value">0.409</text>
+  <text x="106" y="433" class="label">target token</text>
+  <rect x="250" y="416" width="474.4" height="24" rx="12" class="token"/>
+  <text x="736.4" y="433" class="value">0.349</text>
+  <rect x="740" y="126" width="14" height="14" rx="4" class="fns"/><text x="762" y="137" class="small">FNS</text>
+  <rect x="820" y="126" width="14" height="14" rx="4" class="token"/><text x="842" y="137" class="small">token</text>
+</svg>
