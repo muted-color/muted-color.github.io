@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Sparse click-label retrieval evaluation workflow</title>
+  <desc id="desc">A concise workflow diagram showing sparse click labels, relevance auditing, contrastive tuning, and Matryoshka low-dimensional retrieval evaluation.</desc>
+  <defs>
+    <filter id="cardShadow" x="-10%" y="-18%" width="120%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#111827" flood-opacity="0.08"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#647084"/>
+    </marker>
+    <style>
+      .font { font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+      .title { fill: #111827; font-size: 36px; font-weight: 760; letter-spacing: 0; }
+      .subtitle { fill: #5f6877; font-size: 17px; font-weight: 450; }
+      .stepNo { fill: #6b7280; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; }
+      .stepTitle { fill: #111827; font-size: 20px; font-weight: 740; }
+      .body { fill: #5f6877; font-size: 14px; font-weight: 450; }
+      .metric { fill: #111827; font-size: 18px; font-weight: 760; }
+      .metricLabel { fill: #647084; font-size: 12.5px; font-weight: 460; }
+      .note { fill: #6b7280; font-size: 12.5px; font-weight: 450; }
+    </style>
+  </defs>
+
+  <g class="font">
+    <text class="title" x="88" y="108">Evaluation-aware product retrieval</text>
+    <text class="subtitle" x="88" y="142">Sparse clicks -> relevance audit -> 256d MRL option.</text>
+
+    <g transform="translate(88 246)">
+      <line x1="220" y1="72" x2="294" y2="72" stroke="#647084" stroke-width="2.4" marker-end="url(#arrow)"/>
+      <line x1="480" y1="72" x2="554" y2="72" stroke="#647084" stroke-width="2.4" marker-end="url(#arrow)"/>
+      <line x1="740" y1="72" x2="814" y2="72" stroke="#647084" stroke-width="2.4" marker-end="url(#arrow)"/>
+
+      <g filter="url(#cardShadow)">
+        <g transform="translate(0 0)">
+          <rect width="220" height="144" rx="18" fill="#ffffff" stroke="#dce2eb"/>
+          <circle cx="28" cy="30" r="13" fill="#f1f5f9"/>
+          <text class="stepNo" x="23" y="34">1</text>
+          <text class="stepTitle" x="24" y="64">Sparse clicks</text>
+          <text class="body" x="24" y="96">few positives per query</text>
+          <text class="body" x="24" y="120">broad-query false negatives</text>
+        </g>
+
+        <g transform="translate(260 0)">
+          <rect width="220" height="144" rx="18" fill="#fbfdff" stroke="#a9d4ef" stroke-width="1.4"/>
+          <circle cx="28" cy="30" r="13" fill="#e0f2fe"/>
+          <text class="stepNo" x="23" y="34">2</text>
+          <text class="stepTitle" x="24" y="64">Relevance audit</text>
+          <text class="body" x="24" y="96">click-label MAP@10</text>
+          <text class="body" x="24" y="120">LLM-judged expanded view</text>
+        </g>
+
+        <g transform="translate(520 0)">
+          <rect width="220" height="144" rx="18" fill="#ffffff" stroke="#cfe4d6"/>
+          <circle cx="28" cy="30" r="13" fill="#ecfdf3"/>
+          <text class="stepNo" x="23" y="34">3</text>
+          <text class="stepTitle" x="24" y="64">Contrastive tuning</text>
+          <text class="body" x="24" y="96">base model capacity</text>
+          <text class="body" x="24" y="120">larger in-batch negatives</text>
+        </g>
+
+        <g transform="translate(780 0)">
+          <rect width="220" height="144" rx="18" fill="#ffffff" stroke="#d7dafb"/>
+          <circle cx="28" cy="30" r="13" fill="#eef2ff"/>
+          <text class="stepNo" x="23" y="34">4</text>
+          <text class="stepTitle" x="24" y="64">MRL index option</text>
+          <text class="body" x="24" y="96">768d quality retained</text>
+          <text class="body" x="24" y="120">256d relevance checked</text>
+        </g>
+      </g>
+    </g>
+
+    <g transform="translate(88 464)">
+      <rect x="0" y="0" width="1000" height="92" rx="18" fill="#fbfcfe" stroke="#e4e8ef"/>
+      <line x1="333" y1="18" x2="333" y2="74" stroke="#e4e8ef"/>
+      <line x1="666" y1="18" x2="666" y2="74" stroke="#e4e8ef"/>
+
+      <text class="metric" x="30" y="38">0.6558 -> 0.8146</text>
+      <text class="metricLabel" x="30" y="64">click-label MAP@10, +24.2%</text>
+
+      <text class="metric" x="363" y="38">0.9525 MAP@10</text>
+      <text class="metricLabel" x="363" y="64">KO LLM-judged audit, dim 768</text>
+
+      <text class="metric" x="696" y="38">256d: 0.9506</text>
+      <text class="metricLabel" x="696" y="64">vs 768d: 0.9525 in the same audit</text>
+    </g>
+
+    <text class="note" x="88" y="610">Anonymized workflow, not a named-catalog benchmark.</text>
+  </g>
+</svg>
