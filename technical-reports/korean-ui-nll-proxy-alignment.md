@@ -85,23 +85,23 @@ place: [사무실, 학교, 운동]
 
 ```mermaid
 flowchart TB
-  A["입력 문맥 x<br/>상품 특징과 사용 상황"]
-  B["후보 출력 y"]
+  A["Input context x<br/>product features, use case"]
+  B["Candidate outputs y"]
 
-  subgraph S["분리된 점수 신호"]
+  subgraph S["Separate scoring signals"]
     direction TB
-    C{"규칙 검증기<br/>형식 통과?"}
-    D["NLL 점수화<br/>Polyglot-Ko-1.3B"]
-    E["NLL_nat(y)<br/>출력 단독 자연스러움"]
-    F["NLL_ctx(x,y)<br/>문맥 조건부 적합성"]
+    C{"Rule validator<br/>format pass?"}
+    D["NLL scorer<br/>Polyglot-Ko-1.3B"]
+    E["NLL_nat(y)<br/>standalone fluency"]
+    F["NLL_ctx(x,y)<br/>context fit"]
   end
 
-  G["자동 선호 쌍<br/>NLL gap + 형식 통과"]
-  H["DPO<br/>선호 최적화"]
-  I{"더 강한 형식 제어가 필요한가?"}
-  J["formatmix<br/>기본 카드 설정"]
-  K["GRPO 형식 보상 보정<br/>메타 슬롯 설정"]
-  L["평가<br/>형식 통과율 + 통과 부분집합 중앙값 NLL"]
+  G["Automatic preference pairs<br/>NLL gaps + format pass"]
+  H["DPO<br/>preference optimization"]
+  I{"Need stronger<br/>format control?"}
+  J["formatmix<br/>base-card setting"]
+  K["GRPO format-reward refinement<br/>metadata-slot setting"]
+  L["Evaluate<br/>format pass + valid-subset median NLL"]
 
   A --> B
   B --> C
@@ -113,8 +113,8 @@ flowchart TB
   F --> G
   G --> H
   H --> I
-  I -->|기본 카드| J
-  I -->|메타 슬롯| K
+  I -->|base card| J
+  I -->|metadata slots| K
   J --> L
   K --> L
 ```
