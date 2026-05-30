@@ -30,7 +30,7 @@ layout: default
         {% assign hero_cover = true %}
       {% endif %}
     {% endif %}
-    <figure class="research-hero{% if page.hero_frame %} research-hero--framed{% endif %}{% if page.hero_compact %} research-hero--compact{% endif %}{% if hero_cover %} research-hero--cover{% endif %}"{% unless page.hero_caption %} aria-hidden="true"{% endunless %}>
+    <figure class="research-hero{% if page.hero_frame %} research-hero--framed{% endif %}{% if page.hero_compact %} research-hero--compact{% endif %}{% if page.hero_variant %} research-hero--{{ page.hero_variant | slugify }}{% endif %}{% if hero_cover %} research-hero--cover{% endif %}"{% unless page.hero_caption %} aria-hidden="true"{% endunless %}>
       <div class="research-hero-frame">
         {% if page.hero_image %}
           <img class="research-hero-image" src="{{ page.hero_image | relative_url }}" alt="{{ page.hero_alt | default: '' | escape }}">

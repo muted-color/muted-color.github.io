@@ -1,0 +1,32 @@
+---
+layout: null
+sitemap: false
+---
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>{{ site.title | xml_escape }}</title>
+  <subtitle>{{ site.description | xml_escape }}</subtitle>
+  <link href="{{ "/feed.xml" | absolute_url }}" rel="self"/>
+  <link href="{{ "/" | absolute_url }}"/>
+  <updated>{{ site.time | date_to_xmlschema }}</updated>
+  <id>{{ "/" | absolute_url }}</id>
+  <author>
+    <name>{{ site.author.name | default: site.title | xml_escape }}</name>
+  </author>
+  {%- assign feed_post_count = 0 -%}
+  {%- for post in site.posts -%}
+  {%- unless post.hidden == true or post.noindex == true or post.sitemap == false -%}
+  {%- if feed_post_count < 20 -%}
+  {%- assign feed_post_count = feed_post_count | plus: 1 %}
+  <entry>
+    <title>{{ post.title | xml_escape }}</title>
+    <link href="{{ post.url | absolute_url }}"/>
+    <updated>{{ post.last_modified_at | default: post.date | date_to_xmlschema }}</updated>
+    <published>{{ post.date | date_to_xmlschema }}</published>
+    <id>{{ post.url | absolute_url }}</id>
+    <summary type="html">{{ post.description | default: post.excerpt | strip_html | normalize_whitespace | xml_escape }}</summary>
+  </entry>
+  {%- endif -%}
+  {%- endunless -%}
+  {%- endfor %}
+</feed>
