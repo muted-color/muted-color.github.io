@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 560" role="img" aria-labelledby="title desc">
+  <title id="title">Matryoshka dimension quality comparison</title>
+  <desc id="desc">Line chart comparing LLM-judged MAP@10 across 768, 512, 256, and 128 embedding dimensions for MRL fine-tuned and non-MRL fine-tuned retrieval models.</desc>
+  <defs>
+    <style>
+      text {
+        font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        fill: #111827;
+      }
+      .axis { stroke: #6b7280; stroke-width: 1.4; }
+      .grid { stroke: #e5e7eb; stroke-width: 1; }
+      .axis-label { fill: #374151; font-size: 14px; font-weight: 600; }
+      .value { fill: #4b5563; font-size: 12.5px; font-weight: 500; }
+      .tick { fill: #5f6877; font-size: 13px; font-weight: 450; }
+      .legend { fill: #5f6877; font-size: 13px; font-weight: 450; }
+      .mrl-line { fill: none; stroke: #3f41ff; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+      .base-line { fill: none; stroke: #9aa1ad; stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 8 8; }
+      .mrl-point { fill: #3f41ff; stroke: #2529d8; stroke-width: 2; }
+      .base-point { fill: #ffffff; stroke: #7d8490; stroke-width: 2.4; }
+    </style>
+  </defs>
+
+  <rect width="1100" height="560" fill="#ffffff"/>
+
+  <g>
+    <line x1="118" y1="455" x2="970" y2="455" class="axis"/>
+    <line x1="118" y1="70" x2="118" y2="455" class="axis"/>
+    <line x1="118" y1="455" x2="970" y2="455" class="grid"/>
+    <line x1="118" y1="359" x2="970" y2="359" class="grid"/>
+    <line x1="118" y1="263" x2="970" y2="263" class="grid"/>
+    <line x1="118" y1="166" x2="970" y2="166" class="grid"/>
+    <line x1="118" y1="70" x2="970" y2="70" class="grid"/>
+
+    <text x="96" y="459" text-anchor="end" class="tick">0.88</text>
+    <text x="96" y="363" text-anchor="end" class="tick">0.90</text>
+    <text x="96" y="267" text-anchor="end" class="tick">0.92</text>
+    <text x="96" y="170" text-anchor="end" class="tick">0.94</text>
+    <text x="96" y="74" text-anchor="end" class="tick">0.96</text>
+
+    <text x="544" y="520" text-anchor="middle" class="axis-label">Embedding dimension after slice + renormalize</text>
+    <text x="42" y="263" text-anchor="middle" class="axis-label" transform="rotate(-90 42 263)">LLM-judged MAP@10</text>
+
+    <text x="178" y="489" text-anchor="middle" class="tick">768</text>
+    <text x="422" y="489" text-anchor="middle" class="tick">512</text>
+    <text x="666" y="489" text-anchor="middle" class="tick">256</text>
+    <text x="910" y="489" text-anchor="middle" class="tick">128</text>
+
+    <path d="M178 112 L422 122 L666 195 L910 374" class="base-line"/>
+    <path d="M178 96 L422 106 L666 105 L910 189" class="mrl-line"/>
+
+    <circle cx="178" cy="112" r="7" class="base-point"/>
+    <circle cx="422" cy="122" r="7" class="base-point"/>
+    <circle cx="666" cy="195" r="7" class="base-point"/>
+    <circle cx="910" cy="374" r="7" class="base-point"/>
+
+    <circle cx="178" cy="96" r="7.5" class="mrl-point"/>
+    <circle cx="422" cy="106" r="7.5" class="mrl-point"/>
+    <circle cx="666" cy="105" r="7.5" class="mrl-point"/>
+    <circle cx="910" cy="189" r="7.5" class="mrl-point"/>
+
+    <text x="194" y="90" class="value">0.9525</text>
+    <text x="682" y="99" class="value">0.9506</text>
+    <text x="926" y="183" class="value">0.9332</text>
+    <text x="194" y="130" class="value">0.9493</text>
+    <text x="682" y="214" class="value">0.9321</text>
+    <text x="926" y="393" class="value">0.8950</text>
+
+    <circle cx="734" cy="38" r="6.5" class="mrl-point"/>
+    <text x="750" y="43" class="legend">MRL fine-tuned</text>
+    <circle cx="870" cy="38" r="6.5" class="base-point"/>
+    <text x="886" y="43" class="legend">non-MRL fine-tuned</text>
+  </g>
+</svg>

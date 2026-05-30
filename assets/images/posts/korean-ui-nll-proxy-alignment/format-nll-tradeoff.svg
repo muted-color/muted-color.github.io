@@ -28,7 +28,7 @@
       .panel-label {
         fill: #111111;
         font-size: 16px;
-        font-weight: 800;
+        font-weight: 400;
       }
       .axis-label {
         fill: #111111;

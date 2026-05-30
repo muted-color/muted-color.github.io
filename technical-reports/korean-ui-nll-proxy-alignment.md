@@ -20,6 +20,7 @@ mermaid: true
 hidden: true
 publication_status: "technical-report"
 report_scope: "technical report"
+lab_path: "projects/ui-grade-copy-generation"
 ---
 
 구조화된 추천 카드 문구는 일반적인 자유 생성보다 좁은 실패 조건을 가진다. 출력은 자연스럽고 입력 조건에 맞아야 하지만, 동시에 `reason`, `title`, `subtitle` 같은 필드 규칙과 슬롯 제약을 만족해야 실제 UI에 배치할 수 있다. 본 분석은 이 문제를 단일 품질 최적화보다 **형식 통과 가능성과 언어 품질 학습 신호를 분리해 다루는 정렬 문제**로 정의한다.
