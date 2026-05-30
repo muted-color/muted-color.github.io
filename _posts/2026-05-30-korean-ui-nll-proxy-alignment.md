@@ -6,7 +6,7 @@ categories: ["LLM EVAL"]
 tags: [korean-ui-copy, structured-generation, nll, dpo, grpo, preference-learning, llm-evaluation]
 excerpt: "구조화된 한국어 추천 카드 문구 생성에서 형식 검증, NLL 기반 자연스러움·문맥 적합성 프록시, DPO/GRPO 정렬이 만드는 품질-형식 절충을 정리한 비공개 기술 레포트."
 description: "한국어 구조화 UI 문구 생성에서 nllnat와 nllctx를 judge 비의존 정렬 프록시로 사용하고, DPO와 formatmix, GRPO 보정이 형식 통과율과 형식 통과 출력의 중앙값 NLL에 미치는 절충을 두 추천 카드 설정에서 정리한다."
-permalink: /technical-reports/2026/05/30/korean-ui-nll-proxy-alignment/
+permalink: /technical-reports/korean-ui-nll-proxy-alignment/
 image: /assets/images/common/editorial-hero-social.png
 image_alt: "구조화된 한국어 UI 문구 생성 정렬 레포트를 나타내는 소셜 썸네일"
 hero_image: /assets/images/posts/korean-ui-nll-proxy-alignment/hero.svg
