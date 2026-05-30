@@ -1,0 +1,23 @@
+---
+layout: null
+sitemap: false
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  {%- for page in site.html_pages -%}
+    {%- unless page.hidden == true or page.noindex == true or page.sitemap == false or page.url == "/404.html" -%}
+  <url>
+    <loc>{{ page.url | absolute_url | xml_escape }}</loc>
+    <lastmod>{{ page.last_modified_at | default: site.time | date_to_xmlschema }}</lastmod>
+  </url>
+    {%- endunless -%}
+  {%- endfor -%}
+  {%- for post in site.posts -%}
+  {%- unless post.hidden == true or post.noindex == true or post.sitemap == false %}
+  <url>
+    <loc>{{ post.url | absolute_url | xml_escape }}</loc>
+    <lastmod>{{ post.last_modified_at | default: post.date | date_to_xmlschema }}</lastmod>
+  </url>
+  {%- endunless -%}
+  {%- endfor %}
+</urlset>

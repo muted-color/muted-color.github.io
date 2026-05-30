@@ -21,8 +21,8 @@ Site: <https://muted-color.github.io>
 - Jekyll
 - Minima theme
 - kramdown
-- jekyll-feed
 - jekyll-seo-tag
+- custom Atom feed / sitemap
 - Ruby / Bundler
 
 ## Local Development
@@ -71,6 +71,14 @@ hero_image: /assets/images/posts/post-slug/hero.svg
 hero_alt: "이미지 대체 텍스트"
 ---
 ```
+
+목록, feed, sitemap, 검색 결과에 드러내지 않고 URL로만 접근할 글은 다음 값을 둡니다.
+
+```yaml
+hidden: true
+```
+
+`hidden: true` 글은 홈 목록, `feed.xml`, `sitemap.xml`에서 제외되고 HTML head에 `noindex, nofollow, noarchive` robots meta가 들어갑니다. 목록에는 보이되 검색에서만 제외할 때는 `noindex: true`를 사용합니다.
 
 소셜 썸네일 규칙:
 

@@ -593,6 +593,13 @@ h6 {
   box-shadow: 0 28px 68px rgba(15, 23, 42, 0.08);
 }
 
+.research-hero--rounded-wide.research-hero--framed .research-hero-frame {
+  aspect-ratio: 16 / 9;
+  border-color: rgba(17, 17, 17, 0.08);
+  border-radius: 30px;
+  box-shadow: 0 28px 68px rgba(15, 23, 42, 0.08);
+}
+
 .research-hero-image,
 .research-hero-placeholder {
   width: 100%;
@@ -2851,6 +2858,10 @@ hr {
   .research-hero--compact .research-hero-frame,
   .research-hero--compact.research-hero--framed .research-hero-frame {
     aspect-ratio: 1040 / 620;
+  }
+
+  .research-hero--rounded-wide.research-hero--framed .research-hero-frame {
+    aspect-ratio: 16 / 9;
   }
 
   .research-grid {

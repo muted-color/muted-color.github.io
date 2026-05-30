@@ -3,6 +3,9 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   {%- seo -%}
+  {%- if page.hidden == true or page.noindex == true -%}
+    <meta name="robots" content="noindex, nofollow, noarchive">
+  {%- endif -%}
   {%- if site.author.name and site.author.alternate_names -%}
     {%- assign site_person_url = site.url | append: site.baseurl | append: "/" -%}
     {%- assign site_person_id = site_person_url | append: "#person" -%}
@@ -18,7 +21,7 @@
       }
     </script>
   {%- endif -%}
-  {%- if page.layout == 'post' -%}
+  {%- if page.layout == 'post' and page.hidden != true and page.noindex != true -%}
     {%- assign site_person_url = site.url | append: site.baseurl | append: "/" -%}
     {%- assign site_person_id = site_person_url | append: "#person" -%}
     {%- assign page_url = page.url | absolute_url -%}
@@ -67,7 +70,7 @@
     {%- assign asset_version = site.time | date: "%s" -%}
   {%- endunless -%}
   <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}?v={{ asset_version | uri_escape }}">
-  {%- feed_meta -%}
+  <link type="application/atom+xml" rel="alternate" href="{{ "/feed.xml" | absolute_url }}" title="{{ site.title | escape }}">
   {%- if page.plotly -%}
     <script defer src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
   {%- endif -%}

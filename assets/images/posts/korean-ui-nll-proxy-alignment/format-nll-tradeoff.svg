@@ -1,0 +1,204 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 900" role="img" aria-labelledby="title desc">
+  <title id="title">Format pass rate versus median NLL trade-offs</title>
+  <desc id="desc">Two vertically stacked scatter plots comparing format pass rate against median NLL_nat and median NLL_ctx for the three-field base-card and metadata-slot card settings. Paths show SFT to DPO to formatmix or GRPO refinement.</desc>
+  <defs>
+    <marker id="arrow-base" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M1,1 L8,5 L1,9 Z" fill="#2529d8"/>
+    </marker>
+    <marker id="arrow-meta" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M1,1 L8,5 L1,9 Z" fill="#6f9fc8"/>
+    </marker>
+    <style>
+      text {
+        font-family: "Plus Jakarta Sans", "Avenir Next", "Segoe UI", sans-serif;
+        fill: #111111;
+      }
+      .axis {
+        stroke: rgba(17, 17, 17, 0.55);
+        stroke-width: 1.5;
+      }
+      .grid {
+        stroke: rgba(17, 17, 17, 0.10);
+        stroke-width: 1;
+      }
+      .tick {
+        fill: #5f6672;
+        font-size: 13px;
+      }
+      .panel-label {
+        fill: #111111;
+        font-size: 16px;
+        font-weight: 800;
+      }
+      .axis-label {
+        fill: #111111;
+        font-size: 15px;
+        font-weight: 700;
+      }
+      .series-base {
+        fill: none;
+        stroke: #2529d8;
+        stroke-width: 2.7;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        marker-end: url(#arrow-base);
+      }
+      .series-meta {
+        fill: none;
+        stroke: #6f9fc8;
+        stroke-width: 2.7;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        marker-end: url(#arrow-meta);
+      }
+      .point-base {
+        fill: #3f41ff;
+        stroke: #2529d8;
+        stroke-width: 2;
+      }
+      .point-meta {
+        fill: #D5E7F7;
+        stroke: #6f9fc8;
+        stroke-width: 2;
+      }
+      .label {
+        fill: #111111;
+        font-size: 13px;
+        font-weight: 750;
+      }
+      .value {
+        fill: #5f6672;
+        font-size: 11.5px;
+        font-weight: 500;
+      }
+      .legend {
+        fill: #5f6672;
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .guide {
+        fill: #5f6672;
+        font-size: 12px;
+        font-weight: 600;
+      }
+    </style>
+  </defs>
+
+  <!-- Shared legend -->
+  <circle cx="724" cy="34" r="6.5" class="point-base"/>
+  <text x="738" y="39" class="legend">Three-field card</text>
+  <circle cx="870" cy="34" r="6.5" class="point-meta"/>
+  <text x="884" y="39" class="legend">Metadata-slot card</text>
+
+  <!-- Panel A: x 105-1005, y 70-365. x scale 0.35-0.90; y scale 2.80-3.75 inverted. -->
+  <text x="105" y="38" class="panel-label">A. Format pass rate vs median NLL_nat</text>
+
+  <line x1="105" y1="365" x2="1005" y2="365" class="axis"/>
+  <line x1="105" y1="70" x2="105" y2="365" class="axis"/>
+
+  <line x1="186.8" y1="70" x2="186.8" y2="365" class="grid"/>
+  <line x1="350.5" y1="70" x2="350.5" y2="365" class="grid"/>
+  <line x1="514.1" y1="70" x2="514.1" y2="365" class="grid"/>
+  <line x1="677.7" y1="70" x2="677.7" y2="365" class="grid"/>
+  <line x1="841.4" y1="70" x2="841.4" y2="365" class="grid"/>
+  <line x1="1005" y1="70" x2="1005" y2="365" class="grid"/>
+
+  <line x1="105" y1="365" x2="1005" y2="365" class="grid"/>
+  <line x1="105" y1="302.9" x2="1005" y2="302.9" class="grid"/>
+  <line x1="105" y1="240.8" x2="1005" y2="240.8" class="grid"/>
+  <line x1="105" y1="178.7" x2="1005" y2="178.7" class="grid"/>
+  <line x1="105" y1="116.6" x2="1005" y2="116.6" class="grid"/>
+
+  <text x="88" y="369" text-anchor="end" class="tick">2.8</text>
+  <text x="88" y="306.9" text-anchor="end" class="tick">3.0</text>
+  <text x="88" y="244.8" text-anchor="end" class="tick">3.2</text>
+  <text x="88" y="182.7" text-anchor="end" class="tick">3.4</text>
+  <text x="88" y="120.6" text-anchor="end" class="tick">3.6</text>
+  <text x="32" y="217.5" text-anchor="middle" class="axis-label" transform="rotate(-90 32 217.5)">Median NLL_nat</text>
+
+  <path d="M951.4 94.2 L559.9 273.1" class="series-base"/>
+  <path d="M559.9 273.1 L775.9 273.1" class="series-base"/>
+  <path d="M782.5 195.9 L147.5 342.9" class="series-meta"/>
+  <path d="M147.5 342.9 L551.7 299.5" class="series-meta"/>
+
+  <circle cx="951.4" cy="94.2" r="7.3" class="point-base"/>
+  <circle cx="559.9" cy="273.1" r="7.3" class="point-base"/>
+  <circle cx="775.9" cy="273.1" r="7.3" class="point-base"/>
+  <circle cx="782.5" cy="195.9" r="7.3" class="point-meta"/>
+  <circle cx="147.5" cy="342.9" r="7.3" class="point-meta"/>
+  <circle cx="551.7" cy="299.5" r="7.3" class="point-meta"/>
+
+  <text x="962" y="86" class="label">SFT</text>
+  <text x="962" y="103" class="value">0.867 / 3.672</text>
+  <text x="575" y="262" class="label">DPO</text>
+  <text x="575" y="279" class="value">0.628 / 3.096</text>
+  <text x="791" y="262" class="label">formatmix 0.25</text>
+  <text x="791" y="279" class="value">0.760 / 3.096</text>
+  <text x="798" y="188" class="label">SFT</text>
+  <text x="798" y="205" class="value">0.764 / 3.344</text>
+  <text x="132" y="329" text-anchor="end" class="label">DPO</text>
+  <text x="132" y="346" text-anchor="end" class="value">0.376 / 2.871</text>
+  <text x="566" y="313" class="label">GRPO</text>
+  <text x="566" y="330" class="value">0.623 / 3.011</text>
+
+  <!-- Panel B: x 105-1005, y 475-770. x scale 0.35-0.90; y scale 2.55-3.25 inverted. -->
+  <text x="105" y="443" class="panel-label">B. Format pass rate vs median NLL_ctx</text>
+
+  <line x1="105" y1="770" x2="1005" y2="770" class="axis"/>
+  <line x1="105" y1="475" x2="105" y2="770" class="axis"/>
+
+  <line x1="186.8" y1="475" x2="186.8" y2="770" class="grid"/>
+  <line x1="350.5" y1="475" x2="350.5" y2="770" class="grid"/>
+  <line x1="514.1" y1="475" x2="514.1" y2="770" class="grid"/>
+  <line x1="677.7" y1="475" x2="677.7" y2="770" class="grid"/>
+  <line x1="841.4" y1="475" x2="841.4" y2="770" class="grid"/>
+  <line x1="1005" y1="475" x2="1005" y2="770" class="grid"/>
+
+  <line x1="105" y1="748.9" x2="1005" y2="748.9" class="grid"/>
+  <line x1="105" y1="664.6" x2="1005" y2="664.6" class="grid"/>
+  <line x1="105" y1="580.4" x2="1005" y2="580.4" class="grid"/>
+  <line x1="105" y1="496.1" x2="1005" y2="496.1" class="grid"/>
+
+  <text x="186.8" y="796" text-anchor="middle" class="tick">0.40</text>
+  <text x="350.5" y="796" text-anchor="middle" class="tick">0.50</text>
+  <text x="514.1" y="796" text-anchor="middle" class="tick">0.60</text>
+  <text x="677.7" y="796" text-anchor="middle" class="tick">0.70</text>
+  <text x="841.4" y="796" text-anchor="middle" class="tick">0.80</text>
+  <text x="1005" y="796" text-anchor="middle" class="tick">0.90</text>
+
+  <text x="88" y="752.9" text-anchor="end" class="tick">2.6</text>
+  <text x="88" y="668.6" text-anchor="end" class="tick">2.8</text>
+  <text x="88" y="584.4" text-anchor="end" class="tick">3.0</text>
+  <text x="88" y="500.1" text-anchor="end" class="tick">3.2</text>
+  <text x="555" y="848" text-anchor="middle" class="axis-label">Format pass rate</text>
+  <text x="32" y="622.5" text-anchor="middle" class="axis-label" transform="rotate(-90 32 622.5)">Median NLL_ctx</text>
+
+  <path d="M951.4 526.8 L559.9 700.4" class="series-base"/>
+  <path d="M559.9 700.4 L775.9 690.7" class="series-base"/>
+  <path d="M782.5 620.8 L147.5 740.1" class="series-meta"/>
+  <path d="M147.5 740.1 L551.7 751.5" class="series-meta"/>
+
+  <circle cx="951.4" cy="526.8" r="7.3" class="point-base"/>
+  <circle cx="559.9" cy="700.4" r="7.3" class="point-base"/>
+  <circle cx="775.9" cy="690.7" r="7.3" class="point-base"/>
+  <circle cx="782.5" cy="620.8" r="7.3" class="point-meta"/>
+  <circle cx="147.5" cy="740.1" r="7.3" class="point-meta"/>
+  <circle cx="551.7" cy="751.5" r="7.3" class="point-meta"/>
+
+  <text x="962" y="518" class="label">SFT</text>
+  <text x="962" y="535" class="value">0.867 / 3.127</text>
+  <text x="575" y="689" class="label">DPO</text>
+  <text x="575" y="706" class="value">0.628 / 2.715</text>
+  <text x="791" y="681" class="label">formatmix 0.25</text>
+  <text x="791" y="698" class="value">0.760 / 2.738</text>
+  <text x="798" y="612" class="label">SFT</text>
+  <text x="798" y="629" class="value">0.764 / 2.904</text>
+  <text x="132" y="727" text-anchor="end" class="label">DPO</text>
+  <text x="132" y="744" text-anchor="end" class="value">0.376 / 2.621</text>
+  <text x="566" y="765" class="label">GRPO</text>
+  <text x="566" y="782" class="value">0.623 / 2.594</text>
+
+  <path d="M820 745 L910 745 L910 690" fill="none" stroke="#5f6672" stroke-width="1.4"/>
+  <path d="M904 696 L910 690 L916 696" fill="none" stroke="#5f6672" stroke-width="1.4"/>
+  <text x="820" y="733" class="guide">Better trade-off</text>
+</svg>
