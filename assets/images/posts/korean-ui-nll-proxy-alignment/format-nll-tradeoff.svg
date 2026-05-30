@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 620" role="img" aria-labelledby="title desc">
+  <title id="title">Format pass rate versus median nllnat trade-off</title>
+  <desc id="desc">A minimal scatter plot of format pass rate against median nllnat for the three-field base-card and metadata-augmented card settings. Paths show SFT to DPO to formatmix or GRPO refinement.</desc>
+  <defs>
+    <marker id="arrow-base" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M1,1 L8,5 L1,9 Z" fill="#2529d8"/>
+    </marker>
+    <marker id="arrow-meta" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M1,1 L8,5 L1,9 Z" fill="#6f9fc8"/>
+    </marker>
+    <style>
+      text {
+        font-family: "Plus Jakarta Sans", "Avenir Next", "Segoe UI", sans-serif;
+        fill: #111111;
+      }
+      .axis {
+        stroke: rgba(17, 17, 17, 0.55);
+        stroke-width: 1.5;
+      }
+      .grid {
+        stroke: rgba(17, 17, 17, 0.10);
+        stroke-width: 1;
+      }
+      .tick {
+        fill: #5f6672;
+        font-size: 13px;
+      }
+      .axis-label {
+        fill: #111111;
+        font-size: 16px;
+        font-weight: 700;
+      }
+      .series-base {
+        fill: none;
+        stroke: #2529d8;
+        stroke-width: 2.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        marker-end: url(#arrow-base);
+      }
+      .series-meta {
+        fill: none;
+        stroke: #6f9fc8;
+        stroke-width: 2.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        marker-end: url(#arrow-meta);
+      }
+      .point-base {
+        fill: #3f41ff;
+        stroke: #2529d8;
+        stroke-width: 2;
+      }
+      .point-meta {
+        fill: #D5E7F7;
+        stroke: #6f9fc8;
+        stroke-width: 2;
+      }
+      .label {
+        fill: #111111;
+        font-size: 14px;
+        font-weight: 700;
+      }
+      .value {
+        fill: #5f6672;
+        font-size: 12px;
+        font-weight: 500;
+      }
+      .legend {
+        fill: #5f6672;
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .guide {
+        fill: #5f6672;
+        font-size: 12px;
+        font-weight: 600;
+      }
+    </style>
+  </defs>
+
+  <!-- Plot area: x 105-1005, y 55-475. x scale 0.35-0.90, y scale 2.80-3.75 inverted. -->
+  <line x1="105" y1="475" x2="1005" y2="475" class="axis"/>
+  <line x1="105" y1="55" x2="105" y2="475" class="axis"/>
+
+  <line x1="186.8" y1="55" x2="186.8" y2="475" class="grid"/>
+  <line x1="350.5" y1="55" x2="350.5" y2="475" class="grid"/>
+  <line x1="514.1" y1="55" x2="514.1" y2="475" class="grid"/>
+  <line x1="677.7" y1="55" x2="677.7" y2="475" class="grid"/>
+  <line x1="841.4" y1="55" x2="841.4" y2="475" class="grid"/>
+  <line x1="1005" y1="55" x2="1005" y2="475" class="grid"/>
+
+  <line x1="105" y1="475" x2="1005" y2="475" class="grid"/>
+  <line x1="105" y1="386.6" x2="1005" y2="386.6" class="grid"/>
+  <line x1="105" y1="298.2" x2="1005" y2="298.2" class="grid"/>
+  <line x1="105" y1="209.7" x2="1005" y2="209.7" class="grid"/>
+  <line x1="105" y1="121.3" x2="1005" y2="121.3" class="grid"/>
+
+  <text x="186.8" y="501" text-anchor="middle" class="tick">0.40</text>
+  <text x="350.5" y="501" text-anchor="middle" class="tick">0.50</text>
+  <text x="514.1" y="501" text-anchor="middle" class="tick">0.60</text>
+  <text x="677.7" y="501" text-anchor="middle" class="tick">0.70</text>
+  <text x="841.4" y="501" text-anchor="middle" class="tick">0.80</text>
+  <text x="1005" y="501" text-anchor="middle" class="tick">0.90</text>
+
+  <text x="88" y="479" text-anchor="end" class="tick">2.8</text>
+  <text x="88" y="390.6" text-anchor="end" class="tick">3.0</text>
+  <text x="88" y="302.2" text-anchor="end" class="tick">3.2</text>
+  <text x="88" y="213.7" text-anchor="end" class="tick">3.4</text>
+  <text x="88" y="125.3" text-anchor="end" class="tick">3.6</text>
+
+  <text x="555" y="555" text-anchor="middle" class="axis-label">Format pass rate</text>
+  <text x="32" y="265" text-anchor="middle" class="axis-label" transform="rotate(-90 32 265)">Median nllnat</text>
+
+  <circle cx="724" cy="28" r="6.5" class="point-base"/>
+  <text x="738" y="33" class="legend">Three-field card</text>
+  <circle cx="870" cy="28" r="6.5" class="point-meta"/>
+  <text x="884" y="33" class="legend">Metadata-slot card</text>
+
+  <path d="M952.3 89.5 L560.1 344.1" class="series-base"/>
+  <path d="M560.1 344.1 L775.9 344.1" class="series-base"/>
+  <path d="M782.5 234.5 L147.5 443.6" class="series-meta"/>
+  <path d="M147.5 443.6 L551.7 381.8" class="series-meta"/>
+
+  <circle cx="952.3" cy="89.5" r="7.5" class="point-base"/>
+  <circle cx="560.1" cy="344.1" r="7.5" class="point-base"/>
+  <circle cx="775.9" cy="344.1" r="7.5" class="point-base"/>
+
+  <circle cx="782.5" cy="234.5" r="7.5" class="point-meta"/>
+  <circle cx="147.5" cy="443.6" r="7.5" class="point-meta"/>
+  <circle cx="551.7" cy="381.8" r="7.5" class="point-meta"/>
+
+  <text x="962" y="81" class="label">SFT</text>
+  <text x="962" y="99" class="value">0.867 / 3.672</text>
+  <text x="575" y="333" class="label">DPO</text>
+  <text x="575" y="351" class="value">0.628 / 3.096</text>
+  <text x="792" y="333" class="label">formatmix 0.25</text>
+  <text x="792" y="351" class="value">0.760 / 3.096</text>
+
+  <text x="798" y="226" class="label">SFT</text>
+  <text x="798" y="244" class="value">0.764 / 3.344</text>
+  <text x="132" y="428" text-anchor="end" class="label">DPO</text>
+  <text x="132" y="446" text-anchor="end" class="value">0.376 / 2.871</text>
+  <text x="566" y="393" class="label">GRPO</text>
+  <text x="566" y="411" class="value">0.623 / 3.011</text>
+
+  <path d="M820 450 L910 450 L910 392" fill="none" stroke="#5f6672" stroke-width="1.4"/>
+  <path d="M904 398 L910 392 L916 398" fill="none" stroke="#5f6672" stroke-width="1.4"/>
+  <text x="820" y="438" class="guide">Better trade-off</text>
+</svg>
