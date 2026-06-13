@@ -1,0 +1,50 @@
+---
+layout: default
+---
+<section class="technical-report-index home-shell">
+  <div class="home-intro">
+    {% if page.eyebrow %}
+      <p class="eyebrow">{{ page.eyebrow }}</p>
+    {% endif %}
+    <h1 class="page-heading">{{ page.title }}</h1>
+    <div class="home-copy">
+      {{ content }}
+    </div>
+  </div>
+
+  {% assign technical_reports = site.pages | where: "publication_status", "technical-report" | sort: "date" | reverse %}
+  <section class="post-index" id="technical-reports">
+    {% if technical_reports.size > 0 %}
+      <ol class="post-stream">
+        {% for report in technical_reports %}
+          {% assign display_category = report.categories | first %}
+          <li class="post-stream-item">
+            <a class="post-stream-link" href="{{ report.url | relative_url }}">
+              <span class="post-stream-icon" aria-hidden="true">
+                {% include category-icon.html category=display_category %}
+              </span>
+              <span class="post-stream-text">
+                <span class="post-stream-kicker">
+                  {% if display_category %}
+                    <span class="post-stream-category">{{ display_category | replace: "-", " " }}</span>
+                  {% endif %}
+                  {% if report.date %}
+                    <time class="post-stream-meta" datetime="{{ report.date | date_to_xmlschema }}">{{ report.date | date: "%b %d, %Y" }}</time>
+                  {% endif %}
+                </span>
+                <span class="post-stream-title">{{ report.title }}</span>
+                {% if report.excerpt %}
+                  <span class="post-stream-excerpt">{{ report.excerpt | strip_html }}</span>
+                {% elsif report.description %}
+                  <span class="post-stream-excerpt">{{ report.description }}</span>
+                {% endif %}
+              </span>
+            </a>
+          </li>
+        {% endfor %}
+      </ol>
+    {% else %}
+      <p class="technical-report-index__empty">아직 공개된 technical report가 없습니다.</p>
+    {% endif %}
+  </section>
+</section>

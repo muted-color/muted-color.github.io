@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc">
+  <title id="title">검증기 지향 아티팩트 평가 흐름</title>
+  <desc id="desc">GRPO 형식 보정을 공개 검증기, 구조 신호, 고정 judge, 완화 루프로 나누어 평가하는 흐름.</desc>
+  <defs>
+    <style>
+      text { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans CJK KR", "Malgun Gothic", "Segoe UI", sans-serif; letter-spacing: 0; }
+      .title { fill: #111111; font-size: 25px; font-weight: 500; }
+      .label { fill: #111111; font-size: 13px; font-weight: 500; }
+      .small { fill: #5f6672; font-size: 12px; font-weight: 400; }
+      .tick { fill: #5f6672; font-size: 11px; font-weight: 400; }
+      .value { fill: #111111; font-size: 11.5px; font-weight: 500; }
+      .axis { stroke: #9aa1ad; stroke-width: 1.2; }
+      .grid { stroke: #d9dde5; stroke-width: 1; opacity: 0.72; }
+    </style>
+    <filter id="shadow" x="-8%" y="-14%" width="116%" height="132%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#111827" flood-opacity="0.055"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8.4" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5f6672"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="520" fill="#ffffff"/>
+
+<text x="82" y="86" class="title">DPO 이후 GRPO 형식 보정 평가</text>
+<g filter="url(#shadow)">
+<g transform="translate(86 172)">
+<rect width="198" height="128" rx="8" fill="#fbfcfe" stroke="#d9dde5" stroke-width="1.35"/>
+<text x="22" y="34" class="small">01</text>
+<text x="22" y="62" class="label" font-size="17">DPO 기준점</text>
+<text x="22" y="91" class="small">공개 검증 통과율</text>
+<text x="176" y="91" text-anchor="end" class="value">0.389</text>
+<text x="22" y="117" class="small">slot stuffing</text>
+<text x="176" y="117" text-anchor="end" class="value">0.218</text>
+</g>
+<g transform="translate(344 158)">
+<rect width="216" height="156" rx="8" fill="#f2f4ff" stroke="#3f41ff" stroke-width="1.35"/>
+<text x="22" y="34" class="small">02</text>
+<text x="22" y="62" class="label" font-size="17">GRPO 보상</text>
+<text x="22" y="91" class="small">binary / dense</text>
+<text x="194" y="91" text-anchor="end" class="value">형식 보상</text>
+<text x="22" y="117" class="small">공개 검증 통과율</text>
+<text x="194" y="117" text-anchor="end" class="value">0.587 / 0.669</text>
+</g>
+<g transform="translate(620 158)">
+<rect width="238" height="156" rx="8" fill="#fbfcfe" stroke="#d9dde5" stroke-width="1.35"/>
+<text x="22" y="34" class="small">03</text>
+<text x="22" y="62" class="label" font-size="17">구조 신호 점검</text>
+<text x="22" y="91" class="small">slot stuffing</text>
+<text x="216" y="91" text-anchor="end" class="value">0.640 / 0.668</text>
+<text x="22" y="117" class="small">검증기-judge gap</text>
+<text x="216" y="117" text-anchor="end" class="value">CI 변화 작음</text>
+</g>
+<g transform="translate(918 172)">
+<rect width="196" height="128" rx="8" fill="#f2f4ff" stroke="#2529d8" stroke-width="1.35"/>
+<text x="22" y="34" class="small">04</text>
+<text x="22" y="62" class="label" font-size="17">완화</text>
+<text x="22" y="91" class="small">stuffing</text>
+<text x="174" y="91" text-anchor="end" class="value">0.015</text>
+<text x="22" y="117" class="small">기본 슬롯</text>
+<text x="174" y="117" text-anchor="end" class="value">0.345 -&gt; 0.068</text>
+</g>
+</g>
+<line x1="284" y1="236" x2="344" y2="236" stroke="#5f6672" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="560" y1="236" x2="620" y2="236" stroke="#5f6672" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="858" y1="236" x2="918" y2="236" stroke="#5f6672" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1016 330 C 910 424, 716 426, 648 326" fill="none" stroke="#2529d8" stroke-width="2" stroke-dasharray="6 6" marker-end="url(#arrow)" opacity="0.78"/>
+<text x="760" y="432" text-anchor="middle" class="small" fill="#5f6672">아티팩트 자리 이동 점검</text>
+</svg>
