@@ -92,7 +92,7 @@
     <path d="M800 412 C835 412 835 340 865 340"/>
   </g>
   <g font-family="Inter, Arial, sans-serif" font-size="13" fill="#5f6672">
-    <text x="375" y="498">Hard validation is separated from soft language-quality supervision.</text>
-    <text x="375" y="526">Lower NLL is used as an operational proxy, not a universal quality label.</text>
+    <text x="375" y="498">Format pass is treated as a hard UI constraint.</text>
+    <text x="375" y="526">Lower NLL is a training proxy, not a universal quality score.</text>
   </g>
 </svg>
