@@ -76,11 +76,6 @@
         font-size: 13px;
         font-weight: 600;
       }
-      .guide {
-        fill: #5f6672;
-        font-size: 12px;
-        font-weight: 600;
-      }
     </style>
   </defs>
 
@@ -197,8 +192,4 @@
   <text x="132" y="744" text-anchor="end" class="value">0.376 / 2.621</text>
   <text x="566" y="765" class="label">GRPO</text>
   <text x="566" y="782" class="value">0.623 / 2.594</text>
-
-  <path d="M820 745 L910 745 L910 690" fill="none" stroke="#5f6672" stroke-width="1.4"/>
-  <path d="M904 696 L910 690 L916 696" fill="none" stroke="#5f6672" stroke-width="1.4"/>
-  <text x="820" y="733" class="guide">Better trade-off</text>
 </svg>
