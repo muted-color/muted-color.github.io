@@ -44,8 +44,6 @@ lab_path: "projects/ui-grade-copy-generation"
 - 형식 통과 부분집합 `N = 1,997`의 보조 인간 평가 비교에서 NLL 프록시는 AUROC(0 vs 2) `0.6939`, Kendall tau-b `0.1449`를 보였다. 두 지표 모두 비교한 judge보다 높았지만 Kendall tau-b 절대값은 약한 순위 신호였으므로, LLM judge 전체를 대체하기보다 학습 데이터 구성과 설정 비교를 위한 보조 정렬 신호로 해석한다.
 - 현재 실증 범위는 Gemma3-4B 계열, 한국어 추천 카드, 단일 평가자 4셀 보조 평가와 2명 평가자 pairwise 보조 비교, 학습 시점 제어다. `retry@5`와 `rerank@5`는 보조 점검으로만 두었고, constrained decoding과 validator loop는 별도 비교 축으로 둔다.
 
-> **후속 리포트.** DPO 이후 GRPO 형식 보정이 검증기 쪽으로 기운 구조 아티팩트를 만드는지는 [별도 technical report](/technical-reports/korean-ui-grpo-validator-artifact-evaluation/)에서 공개 검증기, 구조 휴리스틱, LLM judge 표본 편향을 분리해 분석했다.
-
 ## 관련 연구
 
 이 글은 새로운 선호 최적화 목적함수를 제안하기보다, 구조화된 UI 콘텐츠 생성에서 어떤 자동 신호를 후속 정렬 데이터로 연결할 수 있는지를 다룬다. DPO는 SFT 이후의 오프라인 선호 최적화 기준선으로 사용하고, GRPO는 형식 보상을 직접 쓰는 DPO 이후 보정 단계로 둔다 <a class="citation-ref" href="#ref-dpo" aria-label="Reference 3">[3]</a> <a class="citation-ref" href="#ref-grpo" aria-label="Reference 4">[4]</a>.
