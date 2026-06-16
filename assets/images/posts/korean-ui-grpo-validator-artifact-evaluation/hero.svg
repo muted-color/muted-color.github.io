@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc">
-  <title id="title">검증기 지향 아티팩트 평가 흐름</title>
-  <desc id="desc">GRPO 형식 보정을 공개 검증기, 구조 신호, 고정 judge, 완화 루프로 나누어 평가하는 흐름.</desc>
+  <title id="title">GRPO 형식 보정의 구조 아티팩트 분석 흐름</title>
+  <desc id="desc">GRPO 형식 보정을 공개 검증기, 구조 신호, 고정 judge, 완화 과정으로 나누어 분석하는 흐름.</desc>
   <defs>
     <style>
       text { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans CJK KR", "Malgun Gothic", "Segoe UI", sans-serif; letter-spacing: 0; }

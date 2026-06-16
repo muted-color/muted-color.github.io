@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="600" viewBox="0 0 1180 600" role="img" aria-labelledby="title desc">
+  <title id="title">Constrained decoding과 학습 기반 보정 비교</title>
+  <desc id="desc">DPO 기준 정책 위의 constrained decoding 변형과 RL antistuff의 public_pass, hidden_auto_pass, slot_stuffing, length_boundary를 비교한 행렬형 막대 도표.</desc>
+  <defs>
+    <style>
+      text { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans CJK KR", "Malgun Gothic", "Segoe UI", sans-serif; letter-spacing: 0; }
+      .title { fill: #111111; font-size: 25px; font-weight: 500; }
+      .label { fill: #111111; font-size: 13px; font-weight: 500; }
+      .small { fill: #5f6672; font-size: 12px; font-weight: 400; }
+      .tick { fill: #5f6672; font-size: 11px; font-weight: 400; }
+      .value { fill: #111111; font-size: 11.5px; font-weight: 500; }
+      .value-on-bar { fill: #ffffff; font-size: 11.5px; font-weight: 500; }
+      .grid { stroke: #d9dde5; stroke-width: 1; opacity: 0.72; }
+    </style>
+  </defs>
+  <rect width="1180" height="600" fill="#ffffff"/>
+
+  <text x="44" y="56" class="title">Constrained decoding과 학습 기반 보정 비교</text>
+  <text x="44" y="84" class="small">DPO 기준 정책에 문법 제약을 걸어도 전체 형식 회복은 제한적이며, 다른 구조 비용이 남는다.</text>
+
+  <text x="305" y="120" text-anchor="middle" class="label">DPO</text>
+  <text x="465" y="120" text-anchor="middle" class="label">CD schema</text>
+  <text x="625" y="120" text-anchor="middle" class="label">CD format</text>
+  <text x="785" y="120" text-anchor="middle" class="label">CD array cap</text>
+  <text x="945" y="120" text-anchor="middle" class="label">RL antistuff</text>
+
+  <line x1="44" y1="190" x2="1098" y2="190" class="grid"/>
+  <text x="44" y="150" class="label">public_pass</text>
+  <text x="44" y="170" class="tick">높을수록 좋음</text>
+  <rect x="245" y="142" width="120" height="30" rx="5" fill="#f4f6fb"/>
+  <rect x="245" y="142" width="66.7" height="30" rx="5" fill="#2f6fdf" opacity="0.9"/>
+  <text x="303.7" y="162" text-anchor="end" class="value-on-bar">0.389</text>
+  <rect x="405" y="142" width="120" height="30" rx="5" fill="#f4f6fb"/>
+  <rect x="405" y="142" width="69.1" height="30" rx="5" fill="#2f6fdf" opacity="0.9"/>
+  <text x="466.1" y="162" text-anchor="end" class="value-on-bar">0.403</text>
+  <rect x="565" y="142" width="120" height="30" rx="5" fill="#f4f6fb"/>
+  <rect x="565" y="142" width="74.6" height="30" rx="5" fill="#2f6fdf" opacity="0.9"/>
+  <text x="631.6" y="162" text-anchor="end" class="value-on-bar">0.435</text>
+  <rect x="725" y="142" width="120" height="30" rx="5" fill="#f4f6fb"/>
+  <rect x="725" y="142" width="75.4" height="30" rx="5" fill="#2f6fdf" opacity="0.9"/>
+  <text x="792.4" y="162" text-anchor="end" class="value-on-bar">0.440</text>
+  <rect x="885" y="142" width="120" height="30" rx="5" fill="#f4f6fb"/>
+  <rect x="885" y="142" width="119.0" height="30" rx="5" fill="#2f6fdf" opacity="0.9"/>
+  <text x="996.0" y="162" text-anchor="end" class="value-on-bar">0.694</text>
+
+  <line x1="44" y1="272" x2="1098" y2="272" class="grid"/>
+  <text x="44" y="232" class="label">hidden_auto_pass</text>
+  <text x="44" y="252" class="tick">높을수록 좋음</text>
+  <rect x="245" y="224" width="120" height="30" rx="5" fill="#f4f6fb"/>
+  <rect x="245" y="224" width="47.7" height="30" rx="5" fill="#2f7d65" opacity="0.9"/>
+  <text x="305" y="244" text-anchor="middle" class="value">0.278</text>
+  <rect x="405" y="224" width="120" height="30" rx="5" fill="#f4f6fb"/>
+  <rect x="405" y="224" width="47.7" height="30" rx="5" fill="#2f7d65" opacity="0.9"/>
+  <text x="465" y="244" text-anchor="middle" class="value">0.278</text>
+  <rect x="565" y="224" width="120" height="30" rx="5" fill="#f4f6fb"/>
+  <rect x="565" y="224" width="51.9" height="30" rx="5" fill="#2f7d65" opacity="0.9"/>
+  <text x="625" y="244" text-anchor="middle" class="value">0.303</text>
+  <rect x="725" y="224" width="120" height="30" rx="5" fill="#f4f6fb"/>
+  <rect x="725" y="224" width="45.4" height="30" rx="5" fill="#2f7d65" opacity="0.9"/>
+  <text x="785" y="244" text-anchor="middle" class="value">0.265</text>
+  <rect x="885" y="224" width="120" height="30" rx="5" fill="#f4f6fb"/>
+  <rect x="885" y="224" width="99.4" height="30" rx="5" fill="#2f7d65" opacity="0.9"/>
+  <text x="976.4" y="244" text-anchor="end" class="value-on-bar">0.580</text>
+
+  <line x1="44" y1="354" x2="1098" y2="354" class="grid"/>
+  <text x="44" y="314" class="label">slot_stuffing</text>
+  <text x="44" y="334" class="tick">낮을수록 좋음</text>
+  <rect x="245" y="306" width="120" height="30" rx="5" fill="#f4f6fb"/>
+  <rect x="245" y="306" width="37.4" height="30" rx="5" fill="#6b7280" opacity="0.9"/>
+  <text x="305" y="326" text-anchor="middle" class="value">0.218</text>
+  <rect x="405" y="306" width="120" height="30" rx="5" fill="#f4f6fb"/>
+  <rect x="405" y="306" width="36.9" height="30" rx="5" fill="#6b7280" opacity="0.9"/>
+  <text x="465" y="326" text-anchor="middle" class="value">0.215</text>
+  <rect x="565" y="306" width="120" height="30" rx="5" fill="#f4f6fb"/>
+  <rect x="565" y="306" width="34.6" height="30" rx="5" fill="#6b7280" opacity="0.9"/>
+  <text x="625" y="326" text-anchor="middle" class="value">0.202</text>
+  <rect x="725" y="306" width="120" height="30" rx="5" fill="#f4f6fb"/>
+  <text x="785" y="326" text-anchor="middle" class="value">0.000</text>
+  <rect x="885" y="306" width="120" height="30" rx="5" fill="#f4f6fb"/>
+  <rect x="885" y="306" width="2.6" height="30" rx="4" fill="#6b7280" opacity="0.9"/>
+  <text x="945" y="326" text-anchor="middle" class="value">0.015</text>
+
+  <line x1="44" y1="436" x2="1098" y2="436" class="grid"/>
+  <text x="44" y="396" class="label">length_boundary</text>
+  <text x="44" y="416" class="tick">낮을수록 좋음</text>
+  <rect x="245" y="388" width="120" height="30" rx="5" fill="#f4f6fb"/>
+  <rect x="245" y="388" width="34.7" height="30" rx="5" fill="#c36a2d" opacity="0.92"/>
+  <text x="305" y="408" text-anchor="middle" class="value">0.202</text>
+  <rect x="405" y="388" width="120" height="30" rx="5" fill="#f4f6fb"/>
+  <rect x="405" y="388" width="34.7" height="30" rx="5" fill="#c36a2d" opacity="0.92"/>
+  <text x="465" y="408" text-anchor="middle" class="value">0.203</text>
+  <rect x="565" y="388" width="120" height="30" rx="5" fill="#f4f6fb"/>
+  <rect x="565" y="388" width="66.8" height="30" rx="5" fill="#c36a2d" opacity="0.92"/>
+  <text x="623.8" y="408" text-anchor="end" class="value-on-bar">0.390</text>
+  <rect x="725" y="388" width="120" height="30" rx="5" fill="#f4f6fb"/>
+  <rect x="725" y="388" width="67.5" height="30" rx="5" fill="#c36a2d" opacity="0.92"/>
+  <text x="784.5" y="408" text-anchor="end" class="value-on-bar">0.394</text>
+  <rect x="885" y="388" width="120" height="30" rx="5" fill="#f4f6fb"/>
+  <rect x="885" y="388" width="20.9" height="30" rx="5" fill="#c36a2d" opacity="0.92"/>
+  <text x="945" y="408" text-anchor="middle" class="value">0.122</text>
+
+  <rect x="245" y="482" width="760" height="2" fill="#d9dde5"/>
+  <text x="44" y="506" class="small">해석</text>
+  <text x="245" y="506" class="small">array cap은 slot_stuffing을 제거하지만 length boundary와 hidden_auto_pass 비용이 남는다.</text>
+  <text x="245" y="532" class="small">학습 기반 antistuff는 stuffing을 낮추면서 public_pass와 hidden_auto_pass를 함께 회복한다.</text>
+</svg>

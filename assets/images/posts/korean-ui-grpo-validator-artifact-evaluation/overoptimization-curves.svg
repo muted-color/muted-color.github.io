@@ -130,7 +130,6 @@
 <circle cx="736.4" cy="433.3" r="3.4" fill="#ffffff" stroke="#2529d8" stroke-width="1.6"/>
 <circle cx="843.9" cy="434.3" r="3.4" fill="#ffffff" stroke="#2529d8" stroke-width="1.6"/>
 <circle cx="962.0" cy="434.2" r="3.4" fill="#ffffff" stroke="#2529d8" stroke-width="1.6"/>
-<rect x="982" y="102" width="144" height="170" rx="8" fill="#fbfcfe" stroke="#d9dde5"/>
 <line x1="1000" y1="128" x2="1030" y2="128" stroke="#3f41ff" stroke-width="2.5"/>
 <text x="1040" y="132" class="tick">binary 공개</text>
 <line x1="1000" y1="152" x2="1030" y2="152" stroke="#5f6672" stroke-width="2.5"/>
