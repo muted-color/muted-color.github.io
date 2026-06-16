@@ -1442,18 +1442,19 @@ figcaption {
   text-align: center;
 }
 
-.research-body .table-figure--metrics thead tr:nth-child(2) th,
-.research-body .table-figure--metrics tbody td:not(:first-child) {
+.research-body .table-figure--metrics thead tr:nth-child(2) th {
   text-align: center;
 }
 
-.research-body .table-figure--metrics tbody td:not(:first-child) {
+.research-body .table-figure--metrics tbody td.align-right,
+.research-body .table-figure--metrics .metrics-table--numeric-first tbody td:first-child,
+.research-body .table-figure--metrics .metrics-table--numeric-first tbody td:not(:first-child) {
   font-family: "IBM Plex Mono", "SFMono-Regular", "JetBrains Mono", monospace;
   font-size: 0.84rem;
   white-space: nowrap;
 }
 
-.research-body .table-figure--metrics tbody td:first-child {
+.research-body .table-figure--metrics tbody td[rowspan] {
   font-size: 0.78rem;
   white-space: nowrap;
 }

@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="680" viewBox="0 0 1180 680" role="img" aria-labelledby="title desc">
+  <title id="title">검증기 신호 변화</title>
+  <desc id="desc">binary와 dense 보상의 공개 검증 통과율, hidden_auto_pass, slot stuffing 변화를 비교한 두 패널 선 그래프.</desc>
+  <defs>
+    <style>
+      text { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans CJK KR", "Malgun Gothic", "Segoe UI", sans-serif; letter-spacing: 0; }
+      .title { fill: #111111; font-size: 25px; font-weight: 500; }
+      .label { fill: #111111; font-size: 13px; font-weight: 500; }
+      .small { fill: #5f6672; font-size: 12px; font-weight: 400; }
+      .tick { fill: #5f6672; font-size: 11px; font-weight: 400; }
+      .value { fill: #111111; font-size: 11.5px; font-weight: 500; }
+      .axis { stroke: #9aa1ad; stroke-width: 1.2; }
+      .grid { stroke: #d9dde5; stroke-width: 1; opacity: 0.72; }
+    </style>
+    <filter id="shadow" x="-8%" y="-14%" width="116%" height="132%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#111827" flood-opacity="0.055"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8.4" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5f6672"/>
+    </marker>
+  </defs>
+  <rect width="1180" height="680" fill="#ffffff"/>
+
+<text x="44" y="56" class="title">검증기 신호 변화</text>
+<text x="92" y="104" class="label">A. 공개 검증 통과율과 hidden_auto_pass</text>
+<line x1="92" y1="316.0" x2="962" y2="316.0" class="grid"/>
+<text x="78" y="320.0" text-anchor="end" class="tick">0.00</text>
+<line x1="92" y1="263.2" x2="962" y2="263.2" class="grid"/>
+<text x="78" y="267.2" text-anchor="end" class="tick">0.20</text>
+<line x1="92" y1="210.4" x2="962" y2="210.4" class="grid"/>
+<text x="78" y="214.4" text-anchor="end" class="tick">0.40</text>
+<line x1="92" y1="157.7" x2="962" y2="157.7" class="grid"/>
+<text x="78" y="161.7" text-anchor="end" class="tick">0.60</text>
+<line x1="92.0" y1="126" x2="92.0" y2="316" class="grid" opacity="0.48"/>
+<text x="92.0" y="340" text-anchor="middle" class="tick">0</text>
+<line x1="306.8" y1="126" x2="306.8" y2="316" class="grid" opacity="0.48"/>
+<text x="306.8" y="340" text-anchor="middle" class="tick">200</text>
+<line x1="521.6" y1="126" x2="521.6" y2="316" class="grid" opacity="0.48"/>
+<text x="521.6" y="340" text-anchor="middle" class="tick">400</text>
+<line x1="736.4" y1="126" x2="736.4" y2="316" class="grid" opacity="0.48"/>
+<text x="736.4" y="340" text-anchor="middle" class="tick">600</text>
+<line x1="962.0" y1="126" x2="962.0" y2="316" class="grid" opacity="0.48"/>
+<text x="962.0" y="340" text-anchor="middle" class="tick">810</text>
+<line x1="92" y1="316" x2="962" y2="316" class="axis"/>
+<line x1="92" y1="126" x2="92" y2="316" class="axis"/>
+<polyline points="92.0,213.3 145.7,211.1 199.4,191.1 306.8,169.5 414.2,168.5 521.6,166.3 629.0,167.7 736.4,159.2 843.9,159.3 962.0,161.0" fill="none" stroke="#3f41ff" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="92.0" cy="213.3" r="3.4" fill="#ffffff" stroke="#3f41ff" stroke-width="1.6"/>
+<circle cx="145.7" cy="211.1" r="3.4" fill="#ffffff" stroke="#3f41ff" stroke-width="1.6"/>
+<circle cx="199.4" cy="191.1" r="3.4" fill="#ffffff" stroke="#3f41ff" stroke-width="1.6"/>
+<circle cx="306.8" cy="169.5" r="3.4" fill="#ffffff" stroke="#3f41ff" stroke-width="1.6"/>
+<circle cx="414.2" cy="168.5" r="3.4" fill="#ffffff" stroke="#3f41ff" stroke-width="1.6"/>
+<circle cx="521.6" cy="166.3" r="3.4" fill="#ffffff" stroke="#3f41ff" stroke-width="1.6"/>
+<circle cx="629.0" cy="167.7" r="3.4" fill="#ffffff" stroke="#3f41ff" stroke-width="1.6"/>
+<circle cx="736.4" cy="159.2" r="3.4" fill="#ffffff" stroke="#3f41ff" stroke-width="1.6"/>
+<circle cx="843.9" cy="159.3" r="3.4" fill="#ffffff" stroke="#3f41ff" stroke-width="1.6"/>
+<circle cx="962.0" cy="161.0" r="3.4" fill="#ffffff" stroke="#3f41ff" stroke-width="1.6"/>
+<polyline points="92.0,242.8 145.7,232.9 199.4,225.0 306.8,192.0 414.2,207.8 521.6,200.5 629.0,195.9 736.4,195.9 843.9,180.8 962.0,194.6" fill="none" stroke="#5f6672" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="92.0" cy="242.8" r="3.4" fill="#ffffff" stroke="#5f6672" stroke-width="1.6"/>
+<circle cx="145.7" cy="232.9" r="3.4" fill="#ffffff" stroke="#5f6672" stroke-width="1.6"/>
+<circle cx="199.4" cy="225.0" r="3.4" fill="#ffffff" stroke="#5f6672" stroke-width="1.6"/>
+<circle cx="306.8" cy="192.0" r="3.4" fill="#ffffff" stroke="#5f6672" stroke-width="1.6"/>
+<circle cx="414.2" cy="207.8" r="3.4" fill="#ffffff" stroke="#5f6672" stroke-width="1.6"/>
+<circle cx="521.6" cy="200.5" r="3.4" fill="#ffffff" stroke="#5f6672" stroke-width="1.6"/>
+<circle cx="629.0" cy="195.9" r="3.4" fill="#ffffff" stroke="#5f6672" stroke-width="1.6"/>
+<circle cx="736.4" cy="195.9" r="3.4" fill="#ffffff" stroke="#5f6672" stroke-width="1.6"/>
+<circle cx="843.9" cy="180.8" r="3.4" fill="#ffffff" stroke="#5f6672" stroke-width="1.6"/>
+<circle cx="962.0" cy="194.6" r="3.4" fill="#ffffff" stroke="#5f6672" stroke-width="1.6"/>
+<polyline points="92.0,213.3 145.7,198.4 199.4,184.6 306.8,169.6 414.2,158.2 521.6,156.8 629.0,151.4 736.4,142.3 843.9,142.2 962.0,139.5" fill="none" stroke="#3f41ff" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="7 5"/>
+<circle cx="92.0" cy="213.3" r="3.4" fill="#ffffff" stroke="#3f41ff" stroke-width="1.6"/>
+<circle cx="145.7" cy="198.4" r="3.4" fill="#ffffff" stroke="#3f41ff" stroke-width="1.6"/>
+<circle cx="199.4" cy="184.6" r="3.4" fill="#ffffff" stroke="#3f41ff" stroke-width="1.6"/>
+<circle cx="306.8" cy="169.6" r="3.4" fill="#ffffff" stroke="#3f41ff" stroke-width="1.6"/>
+<circle cx="414.2" cy="158.2" r="3.4" fill="#ffffff" stroke="#3f41ff" stroke-width="1.6"/>
+<circle cx="521.6" cy="156.8" r="3.4" fill="#ffffff" stroke="#3f41ff" stroke-width="1.6"/>
+<circle cx="629.0" cy="151.4" r="3.4" fill="#ffffff" stroke="#3f41ff" stroke-width="1.6"/>
+<circle cx="736.4" cy="142.3" r="3.4" fill="#ffffff" stroke="#3f41ff" stroke-width="1.6"/>
+<circle cx="843.9" cy="142.2" r="3.4" fill="#ffffff" stroke="#3f41ff" stroke-width="1.6"/>
+<circle cx="962.0" cy="139.5" r="3.4" fill="#ffffff" stroke="#3f41ff" stroke-width="1.6"/>
+<polyline points="92.0,242.8 145.7,230.9 199.4,221.7 306.8,181.4 414.2,181.4 521.6,202.5 629.0,183.4 736.4,182.7 843.9,174.2 962.0,179.4" fill="none" stroke="#5f6672" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="7 5"/>
+<circle cx="92.0" cy="242.8" r="3.4" fill="#ffffff" stroke="#5f6672" stroke-width="1.6"/>
+<circle cx="145.7" cy="230.9" r="3.4" fill="#ffffff" stroke="#5f6672" stroke-width="1.6"/>
+<circle cx="199.4" cy="221.7" r="3.4" fill="#ffffff" stroke="#5f6672" stroke-width="1.6"/>
+<circle cx="306.8" cy="181.4" r="3.4" fill="#ffffff" stroke="#5f6672" stroke-width="1.6"/>
+<circle cx="414.2" cy="181.4" r="3.4" fill="#ffffff" stroke="#5f6672" stroke-width="1.6"/>
+<circle cx="521.6" cy="202.5" r="3.4" fill="#ffffff" stroke="#5f6672" stroke-width="1.6"/>
+<circle cx="629.0" cy="183.4" r="3.4" fill="#ffffff" stroke="#5f6672" stroke-width="1.6"/>
+<circle cx="736.4" cy="182.7" r="3.4" fill="#ffffff" stroke="#5f6672" stroke-width="1.6"/>
+<circle cx="843.9" cy="174.2" r="3.4" fill="#ffffff" stroke="#5f6672" stroke-width="1.6"/>
+<circle cx="962.0" cy="179.4" r="3.4" fill="#ffffff" stroke="#5f6672" stroke-width="1.6"/>
+<text x="92" y="400" class="label">B. Slot stuffing</text>
+<line x1="92" y1="592.0" x2="962" y2="592.0" class="grid"/>
+<text x="78" y="596.0" text-anchor="end" class="tick">0.00</text>
+<line x1="92" y1="544.8" x2="962" y2="544.8" class="grid"/>
+<text x="78" y="548.8" text-anchor="end" class="tick">0.20</text>
+<line x1="92" y1="497.6" x2="962" y2="497.6" class="grid"/>
+<text x="78" y="501.6" text-anchor="end" class="tick">0.40</text>
+<line x1="92" y1="450.3" x2="962" y2="450.3" class="grid"/>
+<text x="78" y="454.3" text-anchor="end" class="tick">0.60</text>
+<line x1="92.0" y1="422" x2="92.0" y2="592" class="grid" opacity="0.48"/>
+<text x="92.0" y="616" text-anchor="middle" class="tick">0</text>
+<line x1="306.8" y1="422" x2="306.8" y2="592" class="grid" opacity="0.48"/>
+<text x="306.8" y="616" text-anchor="middle" class="tick">200</text>
+<line x1="521.6" y1="422" x2="521.6" y2="592" class="grid" opacity="0.48"/>
+<text x="521.6" y="616" text-anchor="middle" class="tick">400</text>
+<line x1="736.4" y1="422" x2="736.4" y2="592" class="grid" opacity="0.48"/>
+<text x="736.4" y="616" text-anchor="middle" class="tick">600</text>
+<line x1="962.0" y1="422" x2="962.0" y2="592" class="grid" opacity="0.48"/>
+<text x="962.0" y="616" text-anchor="middle" class="tick">810</text>
+<line x1="92" y1="592" x2="962" y2="592" class="axis"/>
+<line x1="92" y1="422" x2="92" y2="592" class="axis"/>
+<polyline points="92.0,540.5 145.7,521.0 199.4,508.3 306.8,453.4 414.2,453.9 521.6,434.7 629.0,430.6 736.4,438.2 843.9,440.0 962.0,440.9" fill="none" stroke="#2529d8" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="92.0" cy="540.5" r="3.4" fill="#ffffff" stroke="#2529d8" stroke-width="1.6"/>
+<circle cx="145.7" cy="521.0" r="3.4" fill="#ffffff" stroke="#2529d8" stroke-width="1.6"/>
+<circle cx="199.4" cy="508.3" r="3.4" fill="#ffffff" stroke="#2529d8" stroke-width="1.6"/>
+<circle cx="306.8" cy="453.4" r="3.4" fill="#ffffff" stroke="#2529d8" stroke-width="1.6"/>
+<circle cx="414.2" cy="453.9" r="3.4" fill="#ffffff" stroke="#2529d8" stroke-width="1.6"/>
+<circle cx="521.6" cy="434.7" r="3.4" fill="#ffffff" stroke="#2529d8" stroke-width="1.6"/>
+<circle cx="629.0" cy="430.6" r="3.4" fill="#ffffff" stroke="#2529d8" stroke-width="1.6"/>
+<circle cx="736.4" cy="438.2" r="3.4" fill="#ffffff" stroke="#2529d8" stroke-width="1.6"/>
+<circle cx="843.9" cy="440.0" r="3.4" fill="#ffffff" stroke="#2529d8" stroke-width="1.6"/>
+<circle cx="962.0" cy="440.9" r="3.4" fill="#ffffff" stroke="#2529d8" stroke-width="1.6"/>
+<polyline points="92.0,540.5 145.7,535.0 199.4,520.8 306.8,483.7 414.2,453.2 521.6,443.9 629.0,435.1 736.4,433.3 843.9,434.3 962.0,434.2" fill="none" stroke="#2529d8" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="7 5"/>
+<circle cx="92.0" cy="540.5" r="3.4" fill="#ffffff" stroke="#2529d8" stroke-width="1.6"/>
+<circle cx="145.7" cy="535.0" r="3.4" fill="#ffffff" stroke="#2529d8" stroke-width="1.6"/>
+<circle cx="199.4" cy="520.8" r="3.4" fill="#ffffff" stroke="#2529d8" stroke-width="1.6"/>
+<circle cx="306.8" cy="483.7" r="3.4" fill="#ffffff" stroke="#2529d8" stroke-width="1.6"/>
+<circle cx="414.2" cy="453.2" r="3.4" fill="#ffffff" stroke="#2529d8" stroke-width="1.6"/>
+<circle cx="521.6" cy="443.9" r="3.4" fill="#ffffff" stroke="#2529d8" stroke-width="1.6"/>
+<circle cx="629.0" cy="435.1" r="3.4" fill="#ffffff" stroke="#2529d8" stroke-width="1.6"/>
+<circle cx="736.4" cy="433.3" r="3.4" fill="#ffffff" stroke="#2529d8" stroke-width="1.6"/>
+<circle cx="843.9" cy="434.3" r="3.4" fill="#ffffff" stroke="#2529d8" stroke-width="1.6"/>
+<circle cx="962.0" cy="434.2" r="3.4" fill="#ffffff" stroke="#2529d8" stroke-width="1.6"/>
+<line x1="1000" y1="128" x2="1030" y2="128" stroke="#3f41ff" stroke-width="2.5"/>
+<text x="1040" y="132" class="tick">binary 공개</text>
+<line x1="1000" y1="152" x2="1030" y2="152" stroke="#5f6672" stroke-width="2.5"/>
+<text x="1040" y="156" class="tick">binary hidden_auto</text>
+<line x1="1000" y1="176" x2="1030" y2="176" stroke="#3f41ff" stroke-width="2.5" stroke-dasharray="7 5"/>
+<text x="1040" y="180" class="tick">dense 공개</text>
+<line x1="1000" y1="200" x2="1030" y2="200" stroke="#5f6672" stroke-width="2.5" stroke-dasharray="7 5"/>
+<text x="1040" y="204" class="tick">dense hidden_auto</text>
+<line x1="1000" y1="224" x2="1030" y2="224" stroke="#2529d8" stroke-width="2.5"/>
+<text x="1040" y="228" class="tick">stuffing</text>
+<line x1="1000" y1="248" x2="1030" y2="248" stroke="#9aa1ad" stroke-width="2.5" stroke-dasharray="7 5"/>
+<text x="1040" y="252" class="tick">dense는 점선</text>
+<text x="527" y="646" text-anchor="middle" class="small">GRPO step</text>
+</svg>

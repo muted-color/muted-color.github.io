@@ -1,7 +1,7 @@
 ---
 title: "희소 클릭 라벨에서 다국어 상품 검색 임베딩 평가와 Matryoshka 압축"
 layout: post
-date: 2026-05-30 16:30:00 +0900
+date: 2026-05-25 16:30:00 +0900
 last_modified_at: 2026-05-30 22:02:44 +0900
 categories: ["RETRIEVAL EVAL"]
 tags: [retrieval, embeddings, product-search, multilingual-retrieval, contrastive-learning, click-labels, llm-judge, matryoshka-representation-learning, embedding-compression, ablation-study]
