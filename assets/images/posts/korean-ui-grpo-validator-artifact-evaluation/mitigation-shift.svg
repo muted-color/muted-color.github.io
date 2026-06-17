@@ -1,64 +1,57 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="560" viewBox="0 0 1120 560" role="img" aria-labelledby="title desc">
-  <title id="title">완화와 아티팩트 자리 이동</title>
-  <desc id="desc">dense, antistuff, antistuff2의 slot stuffing, 기본 슬롯, 공개 검증 통과율을 비교한 묶음 막대 그래프.</desc>
-  <defs>
-    <style>
-      text { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans CJK KR", "Malgun Gothic", "Segoe UI", sans-serif; letter-spacing: 0; }
-      .title { fill: #111111; font-size: 25px; font-weight: 500; }
-      .label { fill: #111111; font-size: 13px; font-weight: 500; }
-      .small { fill: #5f6672; font-size: 12px; font-weight: 400; }
-      .tick { fill: #5f6672; font-size: 11px; font-weight: 400; }
-      .value { fill: #111111; font-size: 11.5px; font-weight: 500; }
-      .value-on-bar { fill: #ffffff; font-size: 11.5px; font-weight: 500; }
-      .axis { stroke: #9aa1ad; stroke-width: 1.2; }
-      .grid { stroke: #d9dde5; stroke-width: 1; opacity: 0.72; }
-    </style>
-    <filter id="shadow" x="-8%" y="-14%" width="116%" height="132%">
-      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#111827" flood-opacity="0.055"/>
-    </filter>
-    <marker id="arrow" viewBox="0 0 10 10" refX="8.4" refY="5" markerWidth="8" markerHeight="8" orient="auto">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5f6672"/>
-    </marker>
-  </defs>
-  <rect width="1120" height="560" fill="#ffffff"/>
-
-<text x="44" y="56" class="title">완화와 아티팩트 자리 이동</text>
-<line x1="110" y1="416.0" x2="810" y2="416.0" class="grid"/>
-<text x="96" y="420.0" text-anchor="end" class="tick">0.0</text>
-<line x1="110" y1="332.7" x2="810" y2="332.7" class="grid"/>
-<text x="96" y="336.7" text-anchor="end" class="tick">0.2</text>
-<line x1="110" y1="249.3" x2="810" y2="249.3" class="grid"/>
-<text x="96" y="253.3" text-anchor="end" class="tick">0.4</text>
-<line x1="110" y1="166.0" x2="810" y2="166.0" class="grid"/>
-<text x="96" y="170.0" text-anchor="end" class="tick">0.6</text>
-<line x1="110" y1="416" x2="810" y2="416" class="axis"/>
-<text x="278" y="448" text-anchor="middle" class="label">dense</text>
-<rect x="216" y="137.7" width="56" height="278.3" rx="5" fill="#2529d8" opacity="0.88"/>
-<text x="244.0" y="129.7" text-anchor="middle" class="value">0.668</text>
-<rect x="285" y="392.7" width="56" height="23.3" rx="5" fill="#5f6672" opacity="0.88"/>
-<text x="313.0" y="384.7" text-anchor="middle" class="value">0.056</text>
-<rect x="354" y="137.2" width="56" height="278.8" rx="5" fill="#3f41ff" opacity="0.88"/>
-<text x="382.0" y="129.2" text-anchor="middle" class="value">0.669</text>
-<text x="500" y="448" text-anchor="middle" class="label">antistuff</text>
-<rect x="438" y="409.8" width="56" height="6.2" rx="5" fill="#2529d8" opacity="0.88"/>
-<text x="466.0" y="401.8" text-anchor="middle" class="value">0.015</text>
-<rect x="507" y="272.2" width="56" height="143.8" rx="5" fill="#5f6672" opacity="0.88"/>
-<text x="535.0" y="264.2" text-anchor="middle" class="value">0.345</text>
-<rect x="576" y="126.8" width="56" height="289.2" rx="5" fill="#3f41ff" opacity="0.88"/>
-<text x="604.0" y="128.0" text-anchor="middle" class="value">0.694</text>
-<text x="722" y="448" text-anchor="middle" class="label">antistuff2</text>
-<rect x="660" y="357.2" width="56" height="58.8" rx="5" fill="#2529d8" opacity="0.88"/>
-<text x="688.0" y="349.2" text-anchor="middle" class="value">0.141</text>
-<rect x="729" y="387.7" width="56" height="28.3" rx="5" fill="#5f6672" opacity="0.88"/>
-<text x="757.0" y="379.7" text-anchor="middle" class="value">0.068</text>
-<rect x="798" y="146.4" width="56" height="269.6" rx="5" fill="#3f41ff" opacity="0.88"/>
-<text x="826.0" y="138.4" text-anchor="middle" class="value">0.647</text>
-<rect x="858" y="119" width="20" height="20" rx="4" fill="#2529d8" opacity="0.88"/>
-<text x="890" y="134" class="small">slot stuffing</text>
-<rect x="858" y="153" width="20" height="20" rx="4" fill="#5f6672" opacity="0.88"/>
-<text x="890" y="168" class="small">기본 슬롯</text>
-<rect x="858" y="187" width="20" height="20" rx="4" fill="#3f41ff" opacity="0.88"/>
-<text x="890" y="202" class="small">공개 검증 통과율</text>
-<path d="M 394 462 C 462 518, 580 518, 646 462" fill="none" stroke="#2529d8" stroke-width="2" stroke-dasharray="6 6" opacity="0.78"/>
-<text x="520" y="532" text-anchor="middle" class="small">결합 페널티로 자리 이동을 함께 낮춘다</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 430" role="img" aria-labelledby="title desc">
+<title id="title">Mitigation and relocation</title>
+<desc id="desc">Grouped bar comparison for dense, antistuff, and antistuff2.</desc>
+<defs>
+  <style>
+    text { font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; letter-spacing: 0; }
+    .title { fill: #111111; font-size: 22px; font-weight: 700; }
+    .label { fill: #111111; font-size: 16px; font-weight: 700; }
+    .small { fill: #5f6672; font-size: 13px; font-weight: 400; }
+    .tick { fill: #5f6672; font-size: 12px; font-weight: 400; }
+    .value { fill: #111111; font-size: 13px; font-weight: 700; }
+    .valueOn { fill: #ffffff; font-size: 13px; font-weight: 700; }
+  </style>
+  <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%">
+    <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#111111" flood-opacity="0.07"/>
+  </filter>
+  
+</defs>
+<rect width="900" height="430" fill="#ffffff"/>
+<text x="54" y="70" class="title">Mitigation and relocation</text>
+<text x="269.0" y="112" text-anchor="middle" class="label">dense</text>
+<text x="439.0" y="112" text-anchor="middle" class="label">antistuff</text>
+<text x="609.0" y="112" text-anchor="middle" class="label">antistuff2</text>
+<text x="54" y="150" class="label">slot_stuffing</text>
+<text x="54" y="172" class="tick">lower is better</text>
+<rect x="210" y="130" width="118" height="26" rx="6" fill="#f8f9fc" stroke="#111111" stroke-opacity="0.11"/>
+<rect x="210" y="130" width="105.1" height="26" rx="6" fill="#2529d8" opacity="0.88"/>
+<text x="307.1" y="148" text-anchor="end" class="valueOn">0.668</text>
+<rect x="380" y="130" width="118" height="26" rx="6" fill="#f8f9fc" stroke="#111111" stroke-opacity="0.11"/>
+<rect x="380" y="130" width="2.4" height="26" rx="6" fill="#2529d8" opacity="0.88"/>
+<text x="439.0" y="148" text-anchor="middle" class="value">0.016</text>
+<rect x="550" y="130" width="118" height="26" rx="6" fill="#f8f9fc" stroke="#111111" stroke-opacity="0.11"/>
+<rect x="550" y="130" width="22.2" height="26" rx="6" fill="#2529d8" opacity="0.88"/>
+<text x="609.0" y="148" text-anchor="middle" class="value">0.141</text>
+<text x="54" y="226" class="label">default_slot_rate</text>
+<text x="54" y="248" class="tick">lower is better</text>
+<rect x="210" y="206" width="118" height="26" rx="6" fill="#f8f9fc" stroke="#111111" stroke-opacity="0.11"/>
+<rect x="210" y="206" width="8.8" height="26" rx="6" fill="#5f6672" opacity="0.88"/>
+<text x="269.0" y="224" text-anchor="middle" class="value">0.056</text>
+<rect x="380" y="206" width="118" height="26" rx="6" fill="#f8f9fc" stroke="#111111" stroke-opacity="0.11"/>
+<rect x="380" y="206" width="54.3" height="26" rx="6" fill="#5f6672" opacity="0.88"/>
+<text x="439.0" y="224" text-anchor="middle" class="value">0.345</text>
+<rect x="550" y="206" width="118" height="26" rx="6" fill="#f8f9fc" stroke="#111111" stroke-opacity="0.11"/>
+<rect x="550" y="206" width="10.7" height="26" rx="6" fill="#5f6672" opacity="0.88"/>
+<text x="609.0" y="224" text-anchor="middle" class="value">0.068</text>
+<text x="54" y="302" class="label">public_pass</text>
+<text x="54" y="324" class="tick">higher is better</text>
+<rect x="210" y="282" width="118" height="26" rx="6" fill="#f8f9fc" stroke="#111111" stroke-opacity="0.11"/>
+<rect x="210" y="282" width="105.3" height="26" rx="6" fill="#3f41ff" opacity="0.88"/>
+<text x="307.3" y="300" text-anchor="end" class="valueOn">0.669</text>
+<rect x="380" y="282" width="118" height="26" rx="6" fill="#f8f9fc" stroke="#111111" stroke-opacity="0.11"/>
+<rect x="380" y="282" width="109.2" height="26" rx="6" fill="#3f41ff" opacity="0.88"/>
+<text x="481.2" y="300" text-anchor="end" class="valueOn">0.694</text>
+<rect x="550" y="282" width="118" height="26" rx="6" fill="#f8f9fc" stroke="#111111" stroke-opacity="0.11"/>
+<rect x="550" y="282" width="101.8" height="26" rx="6" fill="#3f41ff" opacity="0.88"/>
+<text x="643.8" y="300" text-anchor="end" class="valueOn">0.647</text>
 </svg>

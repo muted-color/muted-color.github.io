@@ -198,13 +198,8 @@ h6 {
   text-decoration: none;
 }
 
-.site-title-primary {
-  font-weight: 400;
-  white-space: nowrap;
-}
-
 .site-title-secondary {
-  color: rgba(17, 17, 17, 0.64);
+  color: var(--ink);
   font-weight: 400;
   letter-spacing: 0.12em;
   white-space: nowrap;
