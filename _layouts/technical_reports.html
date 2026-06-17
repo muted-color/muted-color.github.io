@@ -12,7 +12,7 @@ layout: default
     </div>
   </div>
 
-  {% assign technical_reports = site.pages | where: "publication_status", "technical-report" | sort: "date" | reverse %}
+  {% assign technical_reports = site.pages | where: "publication_status", "technical-report" | where_exp: "report", "report.technical_report_index != false" | sort: "date" | reverse %}
   <section class="post-index" id="technical-reports">
     {% if technical_reports.size > 0 %}
       <ol class="post-stream">

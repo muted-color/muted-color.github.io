@@ -1,106 +1,113 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="600" viewBox="0 0 1180 600" role="img" aria-labelledby="title desc">
-  <title id="title">Constrained decoding과 학습 기반 보정 비교</title>
-  <desc id="desc">DPO 기준 정책 위의 constrained decoding 변형과 RL antistuff의 public_pass, hidden_auto_pass, slot_stuffing, length_boundary를 비교한 행렬형 막대 도표.</desc>
-  <defs>
-    <style>
-      text { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans CJK KR", "Malgun Gothic", "Segoe UI", sans-serif; letter-spacing: 0; }
-      .title { fill: #111111; font-size: 25px; font-weight: 500; }
-      .label { fill: #111111; font-size: 13px; font-weight: 500; }
-      .small { fill: #5f6672; font-size: 12px; font-weight: 400; }
-      .tick { fill: #5f6672; font-size: 11px; font-weight: 400; }
-      .value { fill: #111111; font-size: 11.5px; font-weight: 500; }
-      .value-on-bar { fill: #ffffff; font-size: 11.5px; font-weight: 500; }
-      .grid { stroke: #d9dde5; stroke-width: 1; opacity: 0.72; }
-    </style>
-  </defs>
-  <rect width="1180" height="600" fill="#ffffff"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 520" role="img" aria-labelledby="title desc">
+<title id="title">Constrained decoding comparison</title>
+<desc id="desc">Grouped bar comparison of constrained decoding variants and RL anti-stuffing across pass and artifact metrics.</desc>
+<defs>
+  <style>
+    text { font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; letter-spacing: 0; }
+    .title { fill: #111111; font-size: 22px; font-weight: 700; }
+    .panel-title { fill: #111111; font-size: 19px; font-weight: 700; }
+    .axis { stroke: #b8bec8; stroke-width: 1.2; }
+    .grid { stroke: #dfe3eb; stroke-width: 1; }
+    .tick { fill: #566070; font-size: 12px; }
+    .label { fill: #566070; font-size: 13px; font-weight: 600; }
+    .method { fill: #111111; font-size: 12px; font-weight: 700; }
+    .value { fill: #111111; font-size: 10px; font-weight: 700; }
+    .legend { fill: #566070; font-size: 13px; }
+  </style>
+</defs>
+<rect width="1180" height="520" fill="#ffffff"/>
 
-  <text x="44" y="56" class="title">Constrained decoding과 학습 기반 보정 비교</text>
-  <text x="44" y="84" class="small">DPO 기준 정책에 문법 제약을 걸어도 전체 형식 회복은 제한적이며, 다른 구조 비용이 남는다.</text>
+<text x="54" y="54" class="title">Constrained decoding comparison</text>
 
-  <text x="305" y="120" text-anchor="middle" class="label">DPO</text>
-  <text x="465" y="120" text-anchor="middle" class="label">CD schema</text>
-  <text x="625" y="120" text-anchor="middle" class="label">CD format</text>
-  <text x="785" y="120" text-anchor="middle" class="label">CD array cap</text>
-  <text x="945" y="120" text-anchor="middle" class="label">RL antistuff</text>
+<!-- Panel A: pass metrics -->
+<text x="96" y="96" class="panel-title">A. Pass metrics</text>
+<text x="96" y="118" class="label">Higher is better</text>
 
-  <line x1="44" y1="190" x2="1098" y2="190" class="grid"/>
-  <text x="44" y="150" class="label">public_pass</text>
-  <text x="44" y="170" class="tick">높을수록 좋음</text>
-  <rect x="245" y="142" width="120" height="30" rx="5" fill="#f4f6fb"/>
-  <rect x="245" y="142" width="66.7" height="30" rx="5" fill="#2f6fdf" opacity="0.9"/>
-  <text x="303.7" y="162" text-anchor="end" class="value-on-bar">0.389</text>
-  <rect x="405" y="142" width="120" height="30" rx="5" fill="#f4f6fb"/>
-  <rect x="405" y="142" width="69.1" height="30" rx="5" fill="#2f6fdf" opacity="0.9"/>
-  <text x="466.1" y="162" text-anchor="end" class="value-on-bar">0.403</text>
-  <rect x="565" y="142" width="120" height="30" rx="5" fill="#f4f6fb"/>
-  <rect x="565" y="142" width="74.6" height="30" rx="5" fill="#2f6fdf" opacity="0.9"/>
-  <text x="631.6" y="162" text-anchor="end" class="value-on-bar">0.435</text>
-  <rect x="725" y="142" width="120" height="30" rx="5" fill="#f4f6fb"/>
-  <rect x="725" y="142" width="75.4" height="30" rx="5" fill="#2f6fdf" opacity="0.9"/>
-  <text x="792.4" y="162" text-anchor="end" class="value-on-bar">0.440</text>
-  <rect x="885" y="142" width="120" height="30" rx="5" fill="#f4f6fb"/>
-  <rect x="885" y="142" width="119.0" height="30" rx="5" fill="#2f6fdf" opacity="0.9"/>
-  <text x="996.0" y="162" text-anchor="end" class="value-on-bar">0.694</text>
+<line x1="112" y1="366" x2="548" y2="366" class="axis"/>
+<line x1="112" y1="126" x2="112" y2="366" class="axis"/>
+<line x1="112" y1="366" x2="548" y2="366" class="grid"/>
+<line x1="112" y1="286" x2="548" y2="286" class="grid"/>
+<line x1="112" y1="206" x2="548" y2="206" class="grid"/>
+<line x1="112" y1="126" x2="548" y2="126" class="grid"/>
+<text x="96" y="370" text-anchor="end" class="tick">0.00</text>
+<text x="96" y="290" text-anchor="end" class="tick">0.25</text>
+<text x="96" y="210" text-anchor="end" class="tick">0.50</text>
+<text x="96" y="130" text-anchor="end" class="tick">0.75</text>
 
-  <line x1="44" y1="272" x2="1098" y2="272" class="grid"/>
-  <text x="44" y="232" class="label">hidden_auto_pass</text>
-  <text x="44" y="252" class="tick">높을수록 좋음</text>
-  <rect x="245" y="224" width="120" height="30" rx="5" fill="#f4f6fb"/>
-  <rect x="245" y="224" width="47.7" height="30" rx="5" fill="#2f7d65" opacity="0.9"/>
-  <text x="305" y="244" text-anchor="middle" class="value">0.278</text>
-  <rect x="405" y="224" width="120" height="30" rx="5" fill="#f4f6fb"/>
-  <rect x="405" y="224" width="47.7" height="30" rx="5" fill="#2f7d65" opacity="0.9"/>
-  <text x="465" y="244" text-anchor="middle" class="value">0.278</text>
-  <rect x="565" y="224" width="120" height="30" rx="5" fill="#f4f6fb"/>
-  <rect x="565" y="224" width="51.9" height="30" rx="5" fill="#2f7d65" opacity="0.9"/>
-  <text x="625" y="244" text-anchor="middle" class="value">0.303</text>
-  <rect x="725" y="224" width="120" height="30" rx="5" fill="#f4f6fb"/>
-  <rect x="725" y="224" width="45.4" height="30" rx="5" fill="#2f7d65" opacity="0.9"/>
-  <text x="785" y="244" text-anchor="middle" class="value">0.265</text>
-  <rect x="885" y="224" width="120" height="30" rx="5" fill="#f4f6fb"/>
-  <rect x="885" y="224" width="99.4" height="30" rx="5" fill="#2f7d65" opacity="0.9"/>
-  <text x="976.4" y="244" text-anchor="end" class="value-on-bar">0.580</text>
+<!-- DPO -->
+<rect x="139" y="241.5" width="18" height="124.5" rx="2" fill="#4f52c6"/>
+<rect x="160" y="277.0" width="18" height="89.0" rx="2" fill="#8a90ee"/>
+<text x="158" y="394" text-anchor="middle" class="method">DPO</text>
 
-  <line x1="44" y1="354" x2="1098" y2="354" class="grid"/>
-  <text x="44" y="314" class="label">slot_stuffing</text>
-  <text x="44" y="334" class="tick">낮을수록 좋음</text>
-  <rect x="245" y="306" width="120" height="30" rx="5" fill="#f4f6fb"/>
-  <rect x="245" y="306" width="37.4" height="30" rx="5" fill="#6b7280" opacity="0.9"/>
-  <text x="305" y="326" text-anchor="middle" class="value">0.218</text>
-  <rect x="405" y="306" width="120" height="30" rx="5" fill="#f4f6fb"/>
-  <rect x="405" y="306" width="36.9" height="30" rx="5" fill="#6b7280" opacity="0.9"/>
-  <text x="465" y="326" text-anchor="middle" class="value">0.215</text>
-  <rect x="565" y="306" width="120" height="30" rx="5" fill="#f4f6fb"/>
-  <rect x="565" y="306" width="34.6" height="30" rx="5" fill="#6b7280" opacity="0.9"/>
-  <text x="625" y="326" text-anchor="middle" class="value">0.202</text>
-  <rect x="725" y="306" width="120" height="30" rx="5" fill="#f4f6fb"/>
-  <text x="785" y="326" text-anchor="middle" class="value">0.000</text>
-  <rect x="885" y="306" width="120" height="30" rx="5" fill="#f4f6fb"/>
-  <rect x="885" y="306" width="2.6" height="30" rx="4" fill="#6b7280" opacity="0.9"/>
-  <text x="945" y="326" text-anchor="middle" class="value">0.015</text>
+<!-- CD schema -->
+<rect x="226" y="237.0" width="18" height="129.0" rx="2" fill="#4f52c6"/>
+<rect x="247" y="277.0" width="18" height="89.0" rx="2" fill="#8a90ee"/>
+<text x="246" y="394" text-anchor="middle" class="method">CD schema</text>
 
-  <line x1="44" y1="436" x2="1098" y2="436" class="grid"/>
-  <text x="44" y="396" class="label">length_boundary</text>
-  <text x="44" y="416" class="tick">낮을수록 좋음</text>
-  <rect x="245" y="388" width="120" height="30" rx="5" fill="#f4f6fb"/>
-  <rect x="245" y="388" width="34.7" height="30" rx="5" fill="#c36a2d" opacity="0.92"/>
-  <text x="305" y="408" text-anchor="middle" class="value">0.202</text>
-  <rect x="405" y="388" width="120" height="30" rx="5" fill="#f4f6fb"/>
-  <rect x="405" y="388" width="34.7" height="30" rx="5" fill="#c36a2d" opacity="0.92"/>
-  <text x="465" y="408" text-anchor="middle" class="value">0.203</text>
-  <rect x="565" y="388" width="120" height="30" rx="5" fill="#f4f6fb"/>
-  <rect x="565" y="388" width="66.8" height="30" rx="5" fill="#c36a2d" opacity="0.92"/>
-  <text x="623.8" y="408" text-anchor="end" class="value-on-bar">0.390</text>
-  <rect x="725" y="388" width="120" height="30" rx="5" fill="#f4f6fb"/>
-  <rect x="725" y="388" width="67.5" height="30" rx="5" fill="#c36a2d" opacity="0.92"/>
-  <text x="784.5" y="408" text-anchor="end" class="value-on-bar">0.394</text>
-  <rect x="885" y="388" width="120" height="30" rx="5" fill="#f4f6fb"/>
-  <rect x="885" y="388" width="20.9" height="30" rx="5" fill="#c36a2d" opacity="0.92"/>
-  <text x="945" y="408" text-anchor="middle" class="value">0.122</text>
+<!-- CD format -->
+<rect x="313" y="226.8" width="18" height="139.2" rx="2" fill="#4f52c6"/>
+<rect x="334" y="269.0" width="18" height="97.0" rx="2" fill="#8a90ee"/>
+<text x="334" y="394" text-anchor="middle" class="method">CD format</text>
 
-  <rect x="245" y="482" width="760" height="2" fill="#d9dde5"/>
-  <text x="44" y="506" class="small">해석</text>
-  <text x="245" y="506" class="small">array cap은 slot_stuffing을 제거하지만 length boundary와 hidden_auto_pass 비용이 남는다.</text>
-  <text x="245" y="532" class="small">학습 기반 antistuff는 stuffing을 낮추면서 public_pass와 hidden_auto_pass를 함께 회복한다.</text>
+<!-- CD cap -->
+<rect x="400" y="225.2" width="18" height="140.8" rx="2" fill="#4f52c6"/>
+<rect x="421" y="281.2" width="18" height="84.8" rx="2" fill="#8a90ee"/>
+<text x="421" y="394" text-anchor="middle" class="method">CD cap</text>
+
+<!-- RL anti -->
+<rect x="487" y="143.9" width="18" height="222.1" rx="2" fill="#4f52c6"/>
+<rect x="508" y="180.4" width="18" height="185.6" rx="2" fill="#8a90ee"/>
+<text x="508" y="394" text-anchor="middle" class="method">RL anti</text>
+
+<!-- Panel B: artifact metrics -->
+<text x="650" y="96" class="panel-title">B. Artifact metrics</text>
+<text x="650" y="118" class="label">Lower is better</text>
+
+<line x1="666" y1="366" x2="1102" y2="366" class="axis"/>
+<line x1="666" y1="126" x2="666" y2="366" class="axis"/>
+<line x1="666" y1="366" x2="1102" y2="366" class="grid"/>
+<line x1="666" y1="286" x2="1102" y2="286" class="grid"/>
+<line x1="666" y1="206" x2="1102" y2="206" class="grid"/>
+<line x1="666" y1="126" x2="1102" y2="126" class="grid"/>
+<text x="650" y="370" text-anchor="end" class="tick">0.00</text>
+<text x="650" y="290" text-anchor="end" class="tick">0.25</text>
+<text x="650" y="210" text-anchor="end" class="tick">0.50</text>
+<text x="650" y="130" text-anchor="end" class="tick">0.75</text>
+
+<!-- DPO -->
+<rect x="693" y="296.2" width="18" height="69.8" rx="2" fill="#111111"/>
+<rect x="714" y="301.4" width="18" height="64.6" rx="2" fill="#8b95a5"/>
+<text x="712" y="394" text-anchor="middle" class="method">DPO</text>
+
+<!-- CD schema -->
+<rect x="780" y="297.2" width="18" height="68.8" rx="2" fill="#111111"/>
+<rect x="801" y="301.0" width="18" height="65.0" rx="2" fill="#8b95a5"/>
+<text x="800" y="394" text-anchor="middle" class="method">CD schema</text>
+
+<!-- CD format -->
+<rect x="867" y="301.4" width="18" height="64.6" rx="2" fill="#111111"/>
+<rect x="888" y="241.2" width="18" height="124.8" rx="2" fill="#8b95a5"/>
+<text x="888" y="394" text-anchor="middle" class="method">CD format</text>
+
+<!-- CD cap -->
+<rect x="954" y="366" width="18" height="0" rx="2" fill="#111111"/>
+<rect x="975" y="239.9" width="18" height="126.1" rx="2" fill="#8b95a5"/>
+<circle cx="963" cy="366" r="4" fill="#111111"/>
+<text x="975" y="394" text-anchor="middle" class="method">CD cap</text>
+
+<!-- RL anti -->
+<rect x="1041" y="360.9" width="18" height="5.1" rx="2" fill="#111111"/>
+<rect x="1062" y="327.0" width="18" height="39.0" rx="2" fill="#8b95a5"/>
+<text x="1062" y="394" text-anchor="middle" class="method">RL anti</text>
+
+<!-- Legend -->
+<circle cx="236" cy="456" r="6" fill="#4f52c6"/>
+<text x="250" y="461" class="legend">public_pass</text>
+<circle cx="366" cy="456" r="6" fill="#8a90ee"/>
+<text x="380" y="461" class="legend">hidden_auto_pass</text>
+<circle cx="540" cy="456" r="6" fill="#111111"/>
+<text x="554" y="461" class="legend">slot_stuffing</text>
+<circle cx="684" cy="456" r="6" fill="#8b95a5"/>
+<text x="698" y="461" class="legend">length_boundary</text>
+
 </svg>

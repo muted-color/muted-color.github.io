@@ -19,6 +19,7 @@ math: true
 hidden: true
 publication_status: "technical-report"
 report_scope: "technical report"
+technical_report_index: false
 lab_path: "experiment-lab/projects/serach-lm"
 ---
 

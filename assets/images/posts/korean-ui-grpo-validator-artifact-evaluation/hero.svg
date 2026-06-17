@@ -1,68 +1,95 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc">
-  <title id="title">GRPO 형식 보정의 구조 아티팩트 분석 흐름</title>
-  <desc id="desc">GRPO 형식 보정을 공개 검증기, 구조 신호, 고정 judge, 완화 과정으로 나누어 분석하는 흐름.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">GRPO format repair and structural artifact evaluation</title>
+  <desc id="desc">A clean dashboard-style figure comparing format recovery, slot stuffing, mitigation relocation, and signal separation for GRPO format repair after DPO.</desc>
   <defs>
-    <style>
-      text { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans CJK KR", "Malgun Gothic", "Segoe UI", sans-serif; letter-spacing: 0; }
-      .title { fill: #111111; font-size: 25px; font-weight: 500; }
-      .label { fill: #111111; font-size: 13px; font-weight: 500; }
-      .small { fill: #5f6672; font-size: 12px; font-weight: 400; }
-      .tick { fill: #5f6672; font-size: 11px; font-weight: 400; }
-      .value { fill: #111111; font-size: 11.5px; font-weight: 500; }
-      .axis { stroke: #9aa1ad; stroke-width: 1.2; }
-      .grid { stroke: #d9dde5; stroke-width: 1; opacity: 0.72; }
-    </style>
-    <filter id="shadow" x="-8%" y="-14%" width="116%" height="132%">
-      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#111827" flood-opacity="0.055"/>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#f8f9fc"/>
+    </linearGradient>
+    <radialGradient id="dots-tl-fade" cx="18%" cy="22%" r="42%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.92"/>
+      <stop offset="0.48" stop-color="#ffffff" stop-opacity="0.38"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="dots-br-fade" cx="80%" cy="78%" r="44%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.84"/>
+      <stop offset="0.45" stop-color="#ffffff" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="dots-tl-mask">
+      <rect width="1200" height="675" fill="url(#dots-tl-fade)"/>
+    </mask>
+    <mask id="dots-br-mask">
+      <rect width="1200" height="675" fill="url(#dots-br-fade)"/>
+    </mask>
+    <pattern id="signal-dots" width="34" height="34" patternUnits="userSpaceOnUse">
+      <circle cx="6" cy="6" r="1.15" fill="#3f41ff"/>
+    </pattern>
+    <pattern id="signal-dots-tight" width="17" height="17" patternUnits="userSpaceOnUse">
+      <circle cx="4" cy="4" r="1.25" fill="#3f41ff"/>
+    </pattern>
+    <pattern id="signal-dots-warm" width="21" height="21" patternUnits="userSpaceOnUse">
+      <circle cx="5" cy="5" r="1.15" fill="#2529d8"/>
+    </pattern>
+    <pattern id="signal-dots-secondary" width="54" height="54" patternUnits="userSpaceOnUse">
+      <circle cx="10" cy="10" r="1.6" fill="#3f41ff"/>
+      <circle cx="36" cy="30" r="1.05" fill="#5f6672"/>
+    </pattern>
+    <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#111111" flood-opacity="0.10"/>
     </filter>
-    <marker id="arrow" viewBox="0 0 10 10" refX="8.4" refY="5" markerWidth="8" markerHeight="8" orient="auto">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5f6672"/>
-    </marker>
   </defs>
-  <rect width="1200" height="520" fill="#ffffff"/>
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <rect width="1200" height="675" fill="url(#signal-dots)" opacity="0.16"/>
+  <rect width="1200" height="675" fill="url(#signal-dots-tight)" opacity="0.48" mask="url(#dots-tl-mask)"/>
+  <rect width="1200" height="675" fill="url(#signal-dots-tight)" opacity="0.30" transform="translate(9 9)" mask="url(#dots-tl-mask)"/>
+  <rect width="1200" height="675" fill="url(#signal-dots-tight)" opacity="0.38" transform="translate(7 4)" mask="url(#dots-br-mask)"/>
+  <rect width="1200" height="675" fill="url(#signal-dots-warm)" opacity="0.26" transform="translate(3 11)" mask="url(#dots-br-mask)"/>
+  <rect width="1200" height="675" fill="url(#signal-dots-secondary)" opacity="0.22" transform="translate(13 7)" mask="url(#dots-tl-mask)"/>
+  <rect width="1200" height="675" fill="url(#signal-dots-secondary)" opacity="0.18" transform="translate(31 19)" mask="url(#dots-br-mask)"/>
 
-<text x="82" y="86" class="title">DPO 이후 GRPO 형식 보정 평가</text>
-<g filter="url(#shadow)">
-<g transform="translate(86 172)">
-<rect width="198" height="128" rx="8" fill="#fbfcfe" stroke="#d9dde5" stroke-width="1.35"/>
-<text x="22" y="34" class="small">01</text>
-<text x="22" y="62" class="label" font-size="17">DPO 기준점</text>
-<text x="22" y="91" class="small">공개 검증 통과율</text>
-<text x="176" y="91" text-anchor="end" class="value">0.389</text>
-<text x="22" y="117" class="small">slot stuffing</text>
-<text x="176" y="117" text-anchor="end" class="value">0.218</text>
-</g>
-<g transform="translate(344 158)">
-<rect width="216" height="156" rx="8" fill="#f2f4ff" stroke="#3f41ff" stroke-width="1.35"/>
-<text x="22" y="34" class="small">02</text>
-<text x="22" y="62" class="label" font-size="17">GRPO 보상</text>
-<text x="22" y="91" class="small">binary / dense</text>
-<text x="194" y="91" text-anchor="end" class="value">형식 보상</text>
-<text x="22" y="117" class="small">공개 검증 통과율</text>
-<text x="194" y="117" text-anchor="end" class="value">0.587 / 0.669</text>
-</g>
-<g transform="translate(620 158)">
-<rect width="238" height="156" rx="8" fill="#fbfcfe" stroke="#d9dde5" stroke-width="1.35"/>
-<text x="22" y="34" class="small">03</text>
-<text x="22" y="62" class="label" font-size="17">구조 신호 점검</text>
-<text x="22" y="91" class="small">slot stuffing</text>
-<text x="216" y="91" text-anchor="end" class="value">0.640 / 0.668</text>
-<text x="22" y="117" class="small">검증기-judge gap</text>
-<text x="216" y="117" text-anchor="end" class="value">CI 변화 작음</text>
-</g>
-<g transform="translate(918 172)">
-<rect width="196" height="128" rx="8" fill="#f2f4ff" stroke="#2529d8" stroke-width="1.35"/>
-<text x="22" y="34" class="small">04</text>
-<text x="22" y="62" class="label" font-size="17">완화</text>
-<text x="22" y="91" class="small">stuffing</text>
-<text x="174" y="91" text-anchor="end" class="value">0.015</text>
-<text x="22" y="117" class="small">기본 슬롯</text>
-<text x="174" y="117" text-anchor="end" class="value">0.345 -&gt; 0.068</text>
-</g>
-</g>
-<line x1="284" y1="236" x2="344" y2="236" stroke="#5f6672" stroke-width="2" marker-end="url(#arrow)"/>
-<line x1="560" y1="236" x2="620" y2="236" stroke="#5f6672" stroke-width="2" marker-end="url(#arrow)"/>
-<line x1="858" y1="236" x2="918" y2="236" stroke="#5f6672" stroke-width="2" marker-end="url(#arrow)"/>
-<path d="M 1016 330 C 910 424, 716 426, 648 326" fill="none" stroke="#2529d8" stroke-width="2" stroke-dasharray="6 6" marker-end="url(#arrow)" opacity="0.78"/>
-<text x="760" y="432" text-anchor="middle" class="small" fill="#5f6672">아티팩트 자리 이동 점검</text>
+  <g transform="translate(95 168)">
+    <text x="0" y="0" fill="#111111" font-family="Inter, Arial, sans-serif" font-size="32" font-weight="700">GRPO Format Repair and Structural Artifact Evaluation</text>
+  </g>
+
+  <g filter="url(#shadow)" font-family="Inter, Arial, sans-serif">
+    <g transform="translate(95 270)">
+      <rect width="310" height="210" rx="18" fill="#ffffff" stroke="#3f41ff" stroke-opacity="0.24"/>
+      <text x="28" y="46" fill="#111111" font-size="18" font-weight="700">Partial format recovery</text>
+      <text x="28" y="76" fill="#5f6672" font-size="14">public validator pass</text>
+      <text x="28" y="132" fill="#111111" font-size="38" font-weight="700">0.389 -> 0.694</text>
+      <text x="28" y="170" fill="#5f6672" font-size="14">DPO to antistuff; below SFT</text>
+    </g>
+
+    <g transform="translate(445 270)">
+      <rect width="310" height="210" rx="18" fill="#ffffff" stroke="#3f41ff" stroke-opacity="0.24"/>
+      <text x="28" y="46" fill="#111111" font-size="18" font-weight="700">Structural artifact</text>
+      <text x="28" y="76" fill="#5f6672" font-size="14">slot stuffing rises</text>
+      <text x="28" y="132" fill="#111111" font-size="38" font-weight="700">0.218 -> 0.668</text>
+      <text x="28" y="170" fill="#5f6672" font-size="14">DPO to GRPO-dense</text>
+    </g>
+
+    <g transform="translate(795 270)">
+      <rect width="310" height="210" rx="18" fill="#ffffff" stroke="#2529d8" stroke-opacity="0.28"/>
+      <text x="28" y="46" fill="#111111" font-size="18" font-weight="700">Mitigation check</text>
+      <text x="28" y="76" fill="#5f6672" font-size="14">anti-stuffing penalty</text>
+      <text x="28" y="132" fill="#111111" font-size="38" font-weight="700">0.668 -> 0.016</text>
+      <text x="28" y="170" fill="#5f6672" font-size="14">stuffing falls; default slots checked</text>
+    </g>
+
+    <g transform="translate(95 520)">
+      <line x1="0" y1="0" x2="1010" y2="0" stroke="#111111" stroke-opacity="0.12" stroke-width="1.5"/>
+      <text x="0" y="36" fill="#111111" font-size="18" font-weight="700">Core takeaway</text>
+      <text x="0" y="58" fill="#5f6672" font-size="14">format recovers while quality proxy holds</text>
+      <text x="0" y="76" fill="#5f6672" font-size="14">structural artifacts move separately</text>
+      <g transform="translate(650 33)">
+        <circle cx="0" cy="0" r="4" fill="#3f41ff"/>
+        <text x="16" y="5" fill="#111111" font-size="13" font-weight="700">NLL holds</text>
+        <circle cx="126" cy="0" r="4" fill="#3f41ff"/>
+        <text x="142" y="5" fill="#111111" font-size="13" font-weight="700">stuffing rises</text>
+        <circle cx="276" cy="0" r="4" fill="#2529d8"/>
+        <text x="292" y="5" fill="#111111" font-size="13" font-weight="700">artifacts shift</text>
+      </g>
+    </g>
+  </g>
 </svg>

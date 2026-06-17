@@ -308,6 +308,8 @@ Table 2와 Figure 3은 held-out test에서의 형식-NLL 절충을 요약한다.
 
 검증 세트에서 선택한 GRPO 형식 보상 보정은 형식 전용 DPO보다 NLL 손실이 작은 절충을 만들었다. DPO 대비 형식 통과율을 `0.376 -> 0.623`으로 올렸고, 중앙값 NLL<sub>nat</sub> 증가는 `0.140`에 머물렀다. NLL<sub>ctx</sub>는 오히려 `2.621 -> 2.594`로 낮아졌다.
 
+이 GRPO 형식 보정이 실제 형식 회복인지, 공개 검증기 기준의 구조 부산물을 함께 만든 것인지는 후속 글인 [한국어 UI 문구 생성에서 GRPO 형식 보정의 구조 아티팩트 분석](/technical-reports/korean-ui-grpo-validator-artifact-evaluation/)에서 별도로 분석했다.
+
 <figure class="table-figure table-figure--comparison table-figure--compact-metrics">
   <div class="table-shell">
     <table class="comparison-table metrics-table metrics-table--numeric-columns">
@@ -692,6 +694,7 @@ BibTeX:
   author = {Ahn, Ilho},
   year = {2026},
   institution = {Independent},
-  type = {Technical report}
+  type = {Technical report},
+  url = {https://muted-color.github.io/technical-reports/korean-ui-nll-proxy-alignment/}
 }
 ```
