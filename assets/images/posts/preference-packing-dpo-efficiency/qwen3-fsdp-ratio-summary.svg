@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 420" role="img" aria-labelledby="title desc">
+  <title id="title">Qwen3-8B sparse packed versus dense packed FSDP ratio summary</title>
+  <desc id="desc">A horizontal bar chart showing sparse packed over dense packed ratios for four Qwen3-8B FSDP checks. Every step-time and rank-summed memory ratio is below the dense packed baseline of 1.00.</desc>
+  <rect width="1040" height="420" fill="#ffffff"/>
+
+  <defs>
+    <style>
+      .axis { fill: #5f6672; font: 12px "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+      .label { fill: #111111; font: 700 15px "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+      .note { fill: #5f6672; font: 13px "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+      .value { fill: #111111; font: 700 13px "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+      .blue-value { fill: #3f41ff; font: 700 13px "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <g font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+    <g transform="translate(278 74)">
+      <line x1="0" y1="0" x2="0" y2="292" stroke="#eef1f6"/>
+      <line x1="145" y1="0" x2="145" y2="292" stroke="#eef1f6"/>
+      <line x1="290" y1="0" x2="290" y2="292" stroke="#eef1f6"/>
+      <line x1="435" y1="0" x2="435" y2="292" stroke="#eef1f6"/>
+      <line x1="580" y1="-10" x2="580" y2="306" stroke="#9aa3b2" stroke-width="2"/>
+      <text class="axis" x="-4" y="326" text-anchor="middle">0</text>
+      <text class="axis" x="145" y="326" text-anchor="middle">0.25</text>
+      <text class="axis" x="290" y="326" text-anchor="middle">0.50</text>
+      <text class="axis" x="435" y="326" text-anchor="middle">0.75</text>
+      <text class="axis" x="580" y="326" text-anchor="middle">dense 1.00</text>
+    </g>
+
+    <g transform="translate(70 80)">
+      <g transform="translate(0 0)">
+        <text class="label" x="0" y="18">UltraFeedback transfer</text>
+        <text class="note" x="0" y="39">2 datasets, 20 steps</text>
+        <rect x="208" y="4" width="580" height="12" rx="6" fill="#edf0f5"/>
+        <rect x="208" y="4" width="467" height="12" rx="6" fill="#3f41ff"/>
+        <text class="blue-value" x="688" y="15">0.805</text>
+        <rect x="208" y="27" width="580" height="12" rx="6" fill="#edf0f5"/>
+        <rect x="208" y="27" width="384" height="12" rx="6" fill="#cfd5df"/>
+        <text class="value" x="605" y="38">0.662</text>
+      </g>
+
+      <g transform="translate(0 75)">
+        <text class="label" x="0" y="18">Larger eval robustness</text>
+        <text class="note" x="0" y="39">512 / 256 / 256 eval</text>
+        <rect x="208" y="4" width="580" height="12" rx="6" fill="#edf0f5"/>
+        <rect x="208" y="4" width="476" height="12" rx="6" fill="#3f41ff"/>
+        <text class="blue-value" x="697" y="15">0.820</text>
+        <rect x="208" y="27" width="580" height="12" rx="6" fill="#edf0f5"/>
+        <rect x="208" y="27" width="399" height="12" rx="6" fill="#cfd5df"/>
+        <text class="value" x="620" y="38">0.688</text>
+      </g>
+
+      <g transform="translate(0 150)">
+        <text class="label" x="0" y="18">Response-long repeats</text>
+        <text class="note" x="0" y="39">64 / 192, seeds 17 and 23</text>
+        <rect x="208" y="4" width="580" height="12" rx="6" fill="#edf0f5"/>
+        <rect x="208" y="4" width="444" height="12" rx="6" fill="#3f41ff"/>
+        <text class="blue-value" x="665" y="15">0.765</text>
+        <rect x="208" y="27" width="580" height="12" rx="6" fill="#edf0f5"/>
+        <rect x="208" y="27" width="346" height="12" rx="6" fill="#cfd5df"/>
+        <text class="value" x="567" y="38">0.597</text>
+      </g>
+
+      <g transform="translate(0 225)">
+        <text class="label" x="0" y="18">Longer stability</text>
+        <text class="note" x="0" y="39">H4 UltraFeedback, 200 steps</text>
+        <rect x="208" y="4" width="580" height="12" rx="6" fill="#edf0f5"/>
+        <rect x="208" y="4" width="468" height="12" rx="6" fill="#3f41ff"/>
+        <text class="blue-value" x="689" y="15">0.807</text>
+        <rect x="208" y="27" width="580" height="12" rx="6" fill="#edf0f5"/>
+        <rect x="208" y="27" width="376" height="12" rx="6" fill="#cfd5df"/>
+        <text class="value" x="597" y="38">0.649</text>
+      </g>
+    </g>
+  </g>
+</svg>
