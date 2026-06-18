@@ -5,6 +5,8 @@ last_modified_at: 2026-05-09 09:47:57 +0900
 categories: ["BIO ML"]
 tags: [bioml, looped-transformer, esm2, remote-homology, protein-language-model, model-architecture, negative-result]
 lab_path: "experiment-lab/projects/protein-lt-boundary-conditions"
+published: false
+publication_status: "unpublished"
 excerpt: "Looped Transformer를 여러 BioML 평가 문제에 적용했지만 안정적 개선으로 분리되지 않은 경계 결과를 정리한다."
 description: "RNA MRL, mutation scoring, remote homology, DeepLoc, PINDER contact 등 BioML 평가 문제에서 Looped Transformer를 시험하고, 어떤 조건에서 안정적 개선으로 분리되지 않았는지 정리한 연구 노트."
 permalink: /research/2026/05/05/looped-transformer-bioml-no-stable-gain/

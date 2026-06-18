@@ -44,13 +44,20 @@ body {
 }
 
 a {
-  color: var(--ink);
+  color: var(--accent-strong);
   text-decoration-color: rgba(63, 65, 255, 0.32);
   text-decoration-thickness: 0.08em;
   text-underline-offset: 0.16em;
 }
 
-a:hover,
+a:visited {
+  color: var(--accent-strong);
+}
+
+a:hover {
+  color: var(--accent-strong);
+}
+
 .post-link:hover,
 .page-link:hover,
 .site-title:hover {

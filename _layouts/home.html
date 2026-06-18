@@ -18,9 +18,11 @@ layout: default
 
   <section class="post-index" id="posts">
     {% assign visible_posts = site.posts | where_exp: "post", "post.hidden != true" %}
-    {% if visible_posts.size > 0 %}
+    {% assign featured_posts = visible_posts | where_exp: "post", "post.featured == true" | sort: "home_rank" %}
+    {% assign regular_posts = visible_posts | where_exp: "post", "post.featured != true" %}
+    {% if featured_posts.size > 0 %}
       <div class="post-featured-grid">
-        {% for post in visible_posts limit: 2 %}
+        {% for post in featured_posts %}
           {% assign display_category = post.categories | first %}
           <article class="post-featured-card">
             <a class="post-featured-link" href="{{ post.url | relative_url }}">
@@ -49,9 +51,9 @@ layout: default
       </div>
     {% endif %}
 
-    {% if visible_posts.size > 2 %}
+    {% if regular_posts.size > 0 %}
       <ol class="post-stream">
-        {% for post in visible_posts offset: 2 %}
+        {% for post in regular_posts %}
         {% assign display_category = post.categories | first %}
         <li class="post-stream-item">
           <a class="post-stream-link" href="{{ post.url | relative_url }}">

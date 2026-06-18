@@ -4,6 +4,8 @@ date: 2026-04-12 09:00:00 +0900
 last_modified_at: 2026-04-19 15:45:00 +0900
 categories: ["LLM EVAL"]
 tags: [gemma, korean, sft, eval]
+featured: true
+home_rank: 2
 excerpt: "Gemma3와 Gemma4를 한국어 instruction 환경에서 비교했다. base 품질, QLoRA SFT 후 성능, 학습 효율, 입력 노이즈 안정성을 정리한다."
 description: "Gemma3와 Gemma4 4B급 한국어 instruction 모델을 base 품질, QLoRA SFT 반응, 입력 노이즈 안정성 관점에서 비교한 실험 노트."
 permalink: /research/2026/04/12/gemma3-e4b-korean-sft/
