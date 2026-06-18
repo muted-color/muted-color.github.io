@@ -90,7 +90,6 @@
 
     <g transform="translate(724 44)">
       <text class="h" x="0" y="0">Sparse-backed packed</text>
-      <text class="sub" x="0" y="24">Prior mask idea; measured here.</text>
 
       <g transform="translate(0 76)">
         <rect x="0" y="23" width="96" height="34" rx="8" fill="#dfe3ea"/>

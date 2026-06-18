@@ -1,7 +1,7 @@
 ---
 title: "Where Sparse-Backed Preference Packing Reduced DPO Training Cost"
 date: 2026-06-18 14:18:00 +0900
-last_modified_at: 2026-06-18 23:06:27 +0900
+last_modified_at: 2026-06-18 23:24:52 +0900
 categories: ["LLM SYSTEMS"]
 tags: [llm, dpo, preference-learning, preference-packing, sparse-attention, flexattention, fsdp, lora, qwen3]
 lab_path: "projects/preference-packing-dpo-efficiency"
@@ -26,8 +26,6 @@ This note should be read as an implementation and measurement artifact, not a ne
 
 The main check used `Qwen/Qwen3-8B` + LoRA, 2-node FSDP, and bf16 <a class="citation-ref" href="#ref-qwen3-8b" aria-label="Reference 4">[4]</a> <a class="citation-ref" href="#ref-lora" aria-label="Reference 5">[5]</a>. In the 200-step stability run, sparse packed training preserved held-out DPO metric parity while reducing median step-time ratio to `0.8066` and rank-summed CUDA allocated memory ratio to `0.6490`. This is an **efficiency plus tested metric parity** result, not downstream win-rate or long-convergence evidence.
 
-> **Preference packing / prefix sharing** are prior work. Both change the input layout for preference pairs with the same prompt so the prompt tokens are not computed twice.
->
 > **Branch-aware masking** prevents the chosen and rejected branches from attending to each other. Prior prefix-sharing work also uses block-sparse masking to avoid cross-response contamination. If the branches can see each other, the packed layout no longer matches the original `prompt + response` log-prob computation.
 >
 > **Rank-summed CUDA allocated memory** sums per-rank `torch.cuda.max_memory_allocated()` peaks after aligning them by optimizer step. This note does not use rank0 alone or a simple `2 * rank0` estimate.
@@ -46,7 +44,7 @@ This repository contributes an implementation and evaluation layer around that p
 
 - Dense packing adopted the prior layout but did not remove masked branch-block compute.
 - Correct DPO parity required branch-aware masking, aligned `position_ids`, and explicit response-token target-position log-prob gathering.
-- Sparse-backed packing does not introduce a new objective or layout; in these checks, passing the branch-aware mask to a sparse backend reduced the cost left behind by dense masked packing.
+- Sparse-backed execution reduced the cost left behind by dense masked packing in the tested response-long regime.
 - In the Qwen3-8B + LoRA 2-node FSDP 200-step check, sparse packed training had step-time ratio `0.8066`, rank-summed memory ratio `0.6490`, DPO loss delta `-0.0000118`, and reward accuracy delta `+0.00195`.
 - The claim is limited to efficiency plus tested held-out DPO metric parity.
 
@@ -62,7 +60,7 @@ DPO loss depends on chosen/rejected response-token log-probs. A packed sequence 
 
 <figure class="media-figure media-figure--wide-visual">
   <img src="/assets/images/posts/preference-packing-dpo-efficiency/layout-comparison.svg" alt="Diagram comparing vanilla pairwise, dense packed prior layout, and sparse-backed packed execution">
-  <figcaption><strong>Figure 2.</strong> Layout-level comparison of the three paths. Vanilla pairwise duplicates prompt-side work, dense packed denotes a prior packed layout with dense masked attention, and sparse-backed packed execution denotes the branch-mask-to-sparse-backend path measured here.</figcaption>
+  <figcaption><strong>Figure 2.</strong> Layout-level comparison of the three paths. Vanilla pairwise duplicates prompt-side work, dense packed uses the packed layout with dense masked attention, and sparse-backed packed execution passes the branch structure to sparse block skipping.</figcaption>
 </figure>
 
 A packed sequence is only useful if it also preserves the original target positions.
@@ -114,7 +112,7 @@ Memory is reported as rank-aligned, rank-summed `torch.cuda.max_memory_allocated
 
 The first result is correctness, not speed. The packed layout reproduced the DPO log-prob contract only after three implementation details were made explicit: branch-aware causal masking, original-layout `position_ids`, and response-token target-position gathering.
 
-This reproduces the core layout requirement from prior preference packing / prefix sharing in a TRL/LoRA trainer path. It does not claim the layout or sparse mask as a new method; it establishes that the trainer can evaluate the prior layout without silently changing the DPO objective.
+This reproduces the core layout requirement from prior preference packing / prefix sharing in a TRL/LoRA trainer path, and establishes that the trainer can evaluate the packed layout without silently changing the DPO objective.
 
 ### Sparse-Backed Efficiency
 
@@ -149,7 +147,7 @@ The sparse-backend check separates layout gains from block-skipping gains. Dense
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 1.</strong> A 5-step mechanism check separating vanilla pairwise, dense packed, and sparse packed layouts. Values are medians across prompt-long, balanced, and response-long checks. Dense packing helped versus vanilla pairwise, while the sparse-backed path measured here produced larger step-time and memory gains.</figcaption>
+  <figcaption><strong>Table 1.</strong> A 5-step mechanism check separating vanilla pairwise, dense packed, and sparse packed layouts. Values are medians across prompt-long, balanced, and response-long checks. Dense packing helped versus vanilla pairwise, while sparse-backed execution produced larger step-time and memory gains.</figcaption>
 </figure>
 
 The response-long repeat was the important stress case because dense-only packing had been weak there. With `64/192` train/eval slices, seeds `17` and `23`, and `20` steps per run, sparse packed training had median sparse/dense step ratio `0.7647` and rank-summed memory ratio `0.5968`. Mean reward accuracy delta was `+0.00260`, with range `[0.0, +0.00521]`.
