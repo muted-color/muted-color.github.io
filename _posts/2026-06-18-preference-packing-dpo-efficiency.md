@@ -5,6 +5,8 @@ last_modified_at: 2026-06-18 21:43:12 +0900
 categories: ["LLM SYSTEMS"]
 tags: [llm, dpo, preference-learning, preference-packing, sparse-attention, flexattention, fsdp, lora, qwen3]
 lab_path: "projects/preference-packing-dpo-efficiency"
+featured: true
+home_rank: 1
 excerpt: "A DPO efficiency note evaluating a sparse-backed implementation path for prior preference packing."
 description: "A Qwen3-8B LoRA 2-node FSDP note evaluating a sparse-backed implementation path for prior preference packing, with DPO log-prob parity, dense-versus-sparse comparison, and bounded FSDP validation."
 permalink: /research/2026/06/18/preference-packing-dpo-efficiency/
