@@ -1,14 +1,14 @@
 ---
 title: "Where Sparse-Backed Preference Packing Reduced DPO Training Cost"
 date: 2026-06-18 14:18:00 +0900
-last_modified_at: 2026-06-18 23:24:52 +0900
+last_modified_at: 2026-06-18 23:30:00 +0900
 categories: ["LLM SYSTEMS"]
 tags: [llm, dpo, preference-learning, preference-packing, sparse-attention, flexattention, fsdp, lora, qwen3]
 lab_path: "projects/preference-packing-dpo-efficiency"
 featured: true
 home_rank: 1
-excerpt: "A DPO efficiency note evaluating a sparse-backed implementation path for prior preference packing and prefix sharing ideas."
-description: "A Qwen3-8B LoRA 2-node FSDP note evaluating prior preference packing and prefix sharing ideas as an implementation and measurement artifact, with DPO log-prob parity, dense-versus-sparse comparison, and bounded FSDP validation."
+excerpt: "A DPO efficiency note evaluating sparse-backed execution for prior preference packing and prefix sharing ideas."
+description: "A Qwen3-8B LoRA 2-node FSDP note evaluating prior preference packing and prefix sharing ideas as an implementation and measurement study, with DPO log-prob parity, dense-versus-sparse comparison, and bounded FSDP validation."
 permalink: /research/2026/06/18/preference-packing-dpo-efficiency/
 image: /assets/images/posts/preference-packing-dpo-efficiency/social-thumbnail.png
 image_alt: "A three-panel chart comparing sparse packed DPO cost bars against dense packed baselines and showing held-out metric deltas near zero"
@@ -22,9 +22,9 @@ math: true
 
 DPO has a simple-looking inefficiency: each preference pair usually evaluates the same prompt twice, once as `prompt + chosen` and once as `prompt + rejected` <a class="citation-ref" href="#ref-dpo" aria-label="Reference 3">[3]</a>. Shared-prefix preference training has direct prior work: Wang and Hegde studied DPO prefix sharing with a custom block-sparse attention mask, and Cho later framed a related shared-prompt layout as Preference Packing <a class="citation-ref" href="#ref-prefix-sharing" aria-label="Reference 1">[1]</a> <a class="citation-ref" href="#ref-preference-packing" aria-label="Reference 2">[2]</a>.
 
-This note should be read as an implementation and measurement artifact, not a new preference-packing or prefix-sharing method. It evaluates a local implementation path around those prior ideas: reproducing DPO response log-prob parity, separating dense masked packing from sparse-backed packing, and measuring whether the branch-aware mask reaches a sparse backend that can skip masked branch blocks. The useful result is not “pack the prompt once and stop there.” Dense attention still computes masked branch blocks, while response-long cases became efficient in this implementation only when the branch-aware layout reached a backend that could skip those blocks.
+This note should be read as an implementation and measurement study, not a new preference-packing or prefix-sharing method. It evaluates a local path around those prior ideas: reproducing DPO response log-prob parity, separating dense masked packing from sparse-backed execution, and measuring whether the branch-aware mask reaches a backend that can skip masked branch blocks. The useful result is not “pack the prompt once and stop there.” Dense attention still computes masked branch blocks, while response-long cases became efficient in this implementation only when the branch-aware layout reached a backend that could skip those blocks.
 
-The main check used `Qwen/Qwen3-8B` + LoRA, 2-node FSDP, and bf16 <a class="citation-ref" href="#ref-qwen3-8b" aria-label="Reference 4">[4]</a> <a class="citation-ref" href="#ref-lora" aria-label="Reference 5">[5]</a>. In the 200-step stability run, sparse packed training preserved held-out DPO metric parity while reducing median step-time ratio to `0.8066` and rank-summed CUDA allocated memory ratio to `0.6490`. This is an **efficiency plus tested metric parity** result, not downstream win-rate or long-convergence evidence.
+The main check used `Qwen/Qwen3-8B` + LoRA, 2-node FSDP, and bf16 <a class="citation-ref" href="#ref-qwen3-8b" aria-label="Reference 4">[4]</a> <a class="citation-ref" href="#ref-lora" aria-label="Reference 5">[5]</a>. In the 200-step stability run, the sparse-backed run preserved held-out DPO metric parity while reducing median step-time ratio to `0.8066` and rank-summed CUDA allocated memory ratio to `0.6490`. This is an **efficiency plus tested metric parity** result, not downstream win-rate or long-convergence evidence.
 
 > **Branch-aware masking** prevents the chosen and rejected branches from attending to each other. Prior prefix-sharing work also uses block-sparse masking to avoid cross-response contamination. If the branches can see each other, the packed layout no longer matches the original `prompt + response` log-prob computation.
 >
@@ -45,14 +45,14 @@ This repository contributes an implementation and evaluation layer around that p
 - Dense packing adopted the prior layout but did not remove masked branch-block compute.
 - Correct DPO parity required branch-aware masking, aligned `position_ids`, and explicit response-token target-position log-prob gathering.
 - Sparse-backed execution reduced the cost left behind by dense masked packing in the tested response-long regime.
-- In the Qwen3-8B + LoRA 2-node FSDP 200-step check, sparse packed training had step-time ratio `0.8066`, rank-summed memory ratio `0.6490`, DPO loss delta `-0.0000118`, and reward accuracy delta `+0.00195`.
+- In the Qwen3-8B + LoRA 2-node FSDP 200-step check, the sparse-backed run had step-time ratio `0.8066`, rank-summed memory ratio `0.6490`, DPO loss delta `-0.0000118`, and reward accuracy delta `+0.00195`.
 - The claim is limited to efficiency plus tested held-out DPO metric parity.
 
 ## Evaluation Design
 
 The evaluation has two checks. The first asks whether the prior packed / prefix-shared layout reproduces ordinary pairwise DPO response log-probs. The second asks whether this repository's implementation path turns the same branch structure into lower step time and memory under sparse-backed execution.
 
-This separation matters because dense packing and sparse-backed packing answer different questions. Dense masks can make a packed sequence correct, but they do not by themselves skip masked branch-block computation. Prior prefix-sharing work used block-sparse masking for this reason; this note measures a FlexAttention-backed implementation path under the local trainer/FSDP setup <a class="citation-ref" href="#ref-prefix-sharing" aria-label="Reference 2">[2]</a> <a class="citation-ref" href="#ref-flexattention" aria-label="Reference 6">[6]</a>.
+This separation matters because dense packing and sparse-backed execution answer different questions. Dense masks can make a packed sequence correct, but they do not by themselves skip masked branch-block computation. Prior prefix-sharing work used block-sparse masking for this reason; this note measures a FlexAttention-backed path under the local trainer/FSDP setup <a class="citation-ref" href="#ref-prefix-sharing" aria-label="Reference 1">[1]</a> <a class="citation-ref" href="#ref-flexattention" aria-label="Reference 6">[6]</a>.
 
 ### Prior Layout Validation
 
@@ -60,7 +60,7 @@ DPO loss depends on chosen/rejected response-token log-probs. A packed sequence 
 
 <figure class="media-figure media-figure--wide-visual">
   <img src="/assets/images/posts/preference-packing-dpo-efficiency/layout-comparison.svg" alt="Diagram comparing vanilla pairwise, dense packed prior layout, and sparse-backed packed execution">
-  <figcaption><strong>Figure 2.</strong> Layout-level comparison of the three paths. Vanilla pairwise duplicates prompt-side work, dense packed uses the packed layout with dense masked attention, and sparse-backed packed execution passes the branch structure to sparse block skipping.</figcaption>
+  <figcaption><strong>Figure 2.</strong> Layout-level comparison of the three paths. Vanilla pairwise duplicates prompt-side work, dense packed uses the packed layout with dense masked attention, and the sparse-backed path passes the branch structure to sparse block skipping.</figcaption>
 </figure>
 
 A packed sequence is only useful if it also preserves the original target positions.
@@ -98,7 +98,7 @@ $$
 
 For `p = 1024` and `r = 1024`, the packed/vanilla proxy ratio is `1.125`. Prompt-long / short-response settings favored packing, but balanced and response-long settings were weaker because packed sequence length increased faster than dense attention compute disappeared.
 
-In this implementation and measurement setting, sparse-backed packing changed the response-long cost profile. It passes the branch-aware layout as a FlexAttention block mask, so branch-crossing blocks can be skipped instead of only hidden by an additive mask. Prompt de-duplication and branch-block skipping then work together.
+In this implementation and measurement setting, sparse-backed execution changed the response-long cost profile. It passes the branch-aware layout as a FlexAttention block mask, so branch-crossing blocks can be skipped instead of only hidden by an additive mask. Prompt de-duplication and branch-block skipping then work together.
 
 ### Measurement Scope
 
@@ -150,22 +150,22 @@ The sparse-backend check separates layout gains from block-skipping gains. Dense
   <figcaption><strong>Table 1.</strong> A 5-step mechanism check separating vanilla pairwise, dense packed, and sparse packed layouts. Values are medians across prompt-long, balanced, and response-long checks. Dense packing helped versus vanilla pairwise, while sparse-backed execution produced larger step-time and memory gains.</figcaption>
 </figure>
 
-The response-long repeat was the important stress case because dense-only packing had been weak there. With `64/192` train/eval slices, seeds `17` and `23`, and `20` steps per run, sparse packed training had median sparse/dense step ratio `0.7647` and rank-summed memory ratio `0.5968`. Mean reward accuracy delta was `+0.00260`, with range `[0.0, +0.00521]`.
+The response-long repeat was the important stress case because dense-only packing had been weak there. With `64/192` train/eval slices, seeds `17` and `23`, and `20` steps per run, sparse-backed execution had median sparse/dense step ratio `0.7647` and rank-summed memory ratio `0.5968`. Mean reward accuracy delta was `+0.00260`, with range `[0.0, +0.00521]`.
 
 ### Bounded Qwen3-8B FSDP Evidence
 
-Across Qwen3-8B + LoRA 2-node FSDP checks, sparse packed training stayed below dense packed training on time and rank-summed memory.
+Across Qwen3-8B + LoRA 2-node FSDP checks, sparse-backed execution stayed below dense packed training on time and rank-summed memory.
 
 <figure class="media-figure media-figure--wide-visual">
   <img src="/assets/images/posts/preference-packing-dpo-efficiency/qwen3-fsdp-ratio-summary.svg" alt="Bar chart of sparse packed over dense packed step-time and rank-summed memory ratios across four Qwen3-8B FSDP checks">
-  <figcaption><strong>Figure 3.</strong> Qwen3-8B + LoRA 2-node FSDP sparse packed results. Ratios are <code>sparse packed / dense packed</code>, so shorter bars are more efficient; blue bars show step time and gray bars show rank-summed memory.</figcaption>
+  <figcaption><strong>Figure 3.</strong> Qwen3-8B + LoRA 2-node FSDP sparse-backed results. Ratios are <code>sparse packed / dense packed</code>, so shorter bars are more efficient; blue bars show step time and gray bars show rank-summed memory.</figcaption>
 </figure>
 
 The UltraFeedback transfer check used two real preference datasets, not synthetic behavior checks. Argilla UltraFeedback had reward accuracy delta `+0.054688`, step ratio `0.8097`, and rank-summed memory ratio `0.6521`; H4 UltraFeedback had reward accuracy delta `-0.015625`, step ratio `0.8005`, and rank-summed memory ratio `0.6719` <a class="citation-ref" href="#ref-argilla-ultrafeedback" aria-label="Reference 7">[7]</a> <a class="citation-ref" href="#ref-h4-ultrafeedback" aria-label="Reference 8">[8]</a>. The aggregate was mean reward accuracy delta `+0.019531`, median step ratio `0.8051`, and median memory ratio `0.6620`. Average response lengths were roughly `338-416` tokens for train and `364-405` for eval.
 
 The 200-step run strengthens finite-run stability evidence. It used the same Qwen3-8B + LoRA 2-node FSDP path on an H4 UltraFeedback binarized `512/512` train/eval slice.
 
-Both sparse packed and dense packed training passed the same held-out metric and efficiency checks. Dense final loss was `0.69298`; sparse final loss was `0.69336`. Held-out DPO loss delta, sparse minus dense, was `-0.0000118`; reward accuracy delta was `+0.00195`; reward margin delta was `+0.0000236`. Median step ratio was `0.8066`, rank-summed memory ratio was `0.6490`, and max-rank memory ratio was `0.6046`.
+Both the sparse-backed and dense-packed runs passed the same held-out metric and efficiency checks. Dense final loss was `0.69298`; sparse final loss was `0.69336`. Held-out DPO loss delta, sparse minus dense, was `-0.0000118`; reward accuracy delta was `+0.00195`; reward margin delta was `+0.0000236`. Median step ratio was `0.8066`, rank-summed memory ratio was `0.6490`, and max-rank memory ratio was `0.6046`.
 
 This is still not a convergence claim; it only shows 200-step completion with the held-out DPO checks used here.
 
