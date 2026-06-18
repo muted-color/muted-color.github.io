@@ -1,7 +1,7 @@
 ---
 title: "Where Sparse-Backed Preference Packing Reduced DPO Training Cost"
 date: 2026-06-18 14:18:00 +0900
-last_modified_at: 2026-06-18 20:17:34 +0900
+last_modified_at: 2026-06-18 21:43:12 +0900
 categories: ["LLM SYSTEMS"]
 tags: [llm, dpo, preference-learning, preference-packing, sparse-attention, flexattention, fsdp, lora, qwen3]
 lab_path: "projects/preference-packing-dpo-efficiency"
@@ -142,12 +142,12 @@ The sparse-backend check separates layout gains from block-skipping gains. Dense
         <tr>
           <td>dense packed vs vanilla pairwise</td>
           <td class="align-right"><code>0.8495</code></td>
-          <td class="align-right">not reported</td>
+          <td class="align-right"><code>0.9022</code></td>
         </tr>
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 1.</strong> A 5-step mechanism check separating vanilla pairwise, dense packed, and sparse packed layouts. Dense packing helped versus vanilla pairwise, while connecting the packed mask to the sparse backend produced larger step-time and memory gains.</figcaption>
+  <figcaption><strong>Table 1.</strong> A 5-step mechanism check separating vanilla pairwise, dense packed, and sparse packed layouts. Values are medians across prompt-long, balanced, and response-long checks. Dense packing helped versus vanilla pairwise, while connecting the packed mask to the sparse backend produced larger step-time and memory gains.</figcaption>
 </figure>
 
 The response-long repeat was the important stress case because dense-only packing had been weak there. With `64/192` train/eval slices, seeds `17` and `23`, and `20` steps per run, sparse packed training had median sparse/dense step ratio `0.7647` and rank-summed memory ratio `0.5968`. Mean reward accuracy delta was `+0.00260`, with range `[0.0, +0.00521]`.
