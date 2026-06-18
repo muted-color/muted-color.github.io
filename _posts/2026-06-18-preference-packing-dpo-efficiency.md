@@ -20,7 +20,7 @@ hero_compact: true
 math: true
 ---
 
-DPO has a simple-looking inefficiency: each preference pair usually evaluates the same prompt twice, once as `prompt + chosen` and once as `prompt + rejected` <a class="citation-ref" href="#ref-dpo" aria-label="Reference 3">[3]</a>. Preference packing and DPO prefix sharing are prior work: Cho described the shared-prompt packed layout, while Wang and Hegde described prefix sharing with a custom block-sparse attention mask for DPO <a class="citation-ref" href="#ref-preference-packing" aria-label="Reference 1">[1]</a> <a class="citation-ref" href="#ref-prefix-sharing" aria-label="Reference 2">[2]</a>.
+DPO has a simple-looking inefficiency: each preference pair usually evaluates the same prompt twice, once as `prompt + chosen` and once as `prompt + rejected` <a class="citation-ref" href="#ref-dpo" aria-label="Reference 3">[3]</a>. Shared-prefix preference training has direct prior work: Wang and Hegde studied DPO prefix sharing with a custom block-sparse attention mask, and Cho later framed a related shared-prompt layout as Preference Packing <a class="citation-ref" href="#ref-prefix-sharing" aria-label="Reference 1">[1]</a> <a class="citation-ref" href="#ref-preference-packing" aria-label="Reference 2">[2]</a>.
 
 This note should be read as an implementation and measurement artifact, not a new preference-packing or prefix-sharing method. It evaluates a local implementation path around those prior ideas: reproducing DPO response log-prob parity, separating dense masked packing from sparse-backed packing, and measuring whether the branch-aware mask reaches a sparse backend that can skip masked branch blocks. The useful result is not “pack the prompt once and stop there.” Dense attention still computes masked branch blocks, while response-long cases became efficient in this implementation only when the branch-aware layout reached a backend that could skip those blocks.
 
@@ -32,7 +32,7 @@ The main check used `Qwen/Qwen3-8B` + LoRA, 2-node FSDP, and bf16 <a class="cita
 >
 > **Rank-summed CUDA allocated memory** sums per-rank `torch.cuda.max_memory_allocated()` peaks after aligning them by optimizer step. This note does not use rank0 alone or a simple `2 * rank0` estimate.
 
-{% include model-mention-cards.html label="Main resources" aria_label="Main paper, model, and dataset resources for the preference packing experiment" models="Preference Packing|arXiv:2602.24082|https://arxiv.org/abs/2602.24082;Prefix Sharing for DPO|arXiv:2410.20305|https://arxiv.org/abs/2410.20305;Qwen3-8B|Qwen/Qwen3-8B|https://huggingface.co/Qwen/Qwen3-8B;H4 UltraFeedback|HuggingFaceH4/ultrafeedback_binarized|https://huggingface.co/datasets/HuggingFaceH4/ultrafeedback_binarized" %}
+{% include model-mention-cards.html label="Main resources" aria_label="Main paper, model, and dataset resources for the preference packing experiment" models="Prefix Sharing for DPO|arXiv:2410.20305|https://arxiv.org/abs/2410.20305;Preference Packing|arXiv:2602.24082|https://arxiv.org/abs/2602.24082;Qwen3-8B|Qwen/Qwen3-8B|https://huggingface.co/Qwen/Qwen3-8B;H4 UltraFeedback|HuggingFaceH4/ultrafeedback_binarized|https://huggingface.co/datasets/HuggingFaceH4/ultrafeedback_binarized" %}
 
 ## Contributions
 
@@ -184,8 +184,8 @@ Hardware and data coverage remain limited to the reported GB10 2-node bf16 FSDP 
 <div class="reference-list" markdown="1">
 
 <ol>
-  <li id="ref-preference-packing">Cho, Jaekyung. <strong>Preference Packing: Efficient Preference Optimization for Large Language Models</strong>. arXiv:2602.24082, 2026. <a href="https://arxiv.org/abs/2602.24082">arXiv</a></li>
   <li id="ref-prefix-sharing">Wang, Franklin and Hegde, Sumanth. <strong>Accelerating Direct Preference Optimization with Prefix Sharing</strong>. arXiv:2410.20305, 2024. <a href="https://arxiv.org/abs/2410.20305">arXiv</a></li>
+  <li id="ref-preference-packing">Cho, Jaekyung. <strong>Preference Packing: Efficient Preference Optimization for Large Language Models</strong>. arXiv:2602.24082, 2026. <a href="https://arxiv.org/abs/2602.24082">arXiv</a></li>
   <li id="ref-dpo">Rafailov, Rafael et al. <strong>Direct Preference Optimization: Your Language Model is Secretly a Reward Model</strong>. arXiv:2305.18290, 2023. <a href="https://arxiv.org/abs/2305.18290">arXiv</a></li>
   <li id="ref-qwen3-8b">Qwen Team. <strong>Qwen3-8B</strong>. Hugging Face model repository. <a href="https://huggingface.co/Qwen/Qwen3-8B">Model card</a></li>
   <li id="ref-lora">Hu, Edward J. et al. <strong>LoRA: Low-Rank Adaptation of Large Language Models</strong>. arXiv:2106.09685, 2021. <a href="https://arxiv.org/abs/2106.09685">arXiv</a></li>
