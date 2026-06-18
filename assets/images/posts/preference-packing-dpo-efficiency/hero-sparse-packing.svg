@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 610" role="img" aria-labelledby="title desc">
+  <title id="title">Sparse packed DPO cost and parity comparison</title>
+  <desc id="desc">A balanced three-panel chart comparing sparse packed DPO with dense packed training. Each panel has a large readout above a compact chart: cost panels show shorter sparse bars, and the held-out metric panel shows deltas near the zero line.</desc>
+  <rect width="1040" height="610" fill="#ffffff"/>
+
+  <defs>
+    <style>
+      .section { fill: #5f6672; font-size: 13px; font-weight: 760; }
+      .large-blue { fill: #3f41ff; font-size: 46px; font-weight: 780; }
+      .large-black { fill: #111111; font-size: 46px; font-weight: 780; }
+      .readout-label { fill: #111111; font-size: 17px; font-weight: 740; }
+      .chart-label { fill: #111111; font-size: 13px; font-weight: 720; }
+      .small { fill: #5f6672; font-size: 12px; }
+      .tiny { fill: #5f6672; font-size: 11px; }
+      .value { fill: #3f41ff; font-size: 12px; font-weight: 740; }
+    </style>
+  </defs>
+
+  <g font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+    <text x="58" y="70" font-size="28" font-weight="760" fill="#111111">Sparse packed DPO</text>
+    <text x="58" y="104" font-size="18" font-weight="650" fill="#3f41ff">Lower training cost, held-out parity</text>
+    <text x="58" y="134" font-size="13" fill="#5f6672">Dense packed baseline. Qwen3-8B LoRA, 2-node FSDP.</text>
+
+    <g transform="translate(58 174)">
+      <rect x="0" y="0" width="924" height="1" fill="#dfe3ea"/>
+      <line x1="300" y1="44" x2="300" y2="332" stroke="#e6e8ee" stroke-width="1"/>
+      <line x1="628" y1="44" x2="628" y2="332" stroke="#e6e8ee" stroke-width="1"/>
+
+      <g transform="translate(0 54)">
+        <text class="section" x="0" y="0">200-step stability</text>
+
+        <g transform="translate(0 54)">
+          <text class="large-blue" x="0" y="0">-19%</text>
+          <text class="readout-label" x="132" y="-12">time</text>
+          <text class="large-blue" x="0" y="58">-35%</text>
+          <text class="readout-label" x="132" y="46">memory</text>
+        </g>
+
+        <g transform="translate(0 154)">
+          <text class="chart-label" x="0" y="0">Step time</text>
+          <rect x="0" y="16" width="206" height="8" rx="4" fill="#d7dce5"/>
+          <rect x="0" y="32" width="166" height="8" rx="4" fill="#3f41ff"/>
+          <text class="tiny" x="214" y="24">dense 1.00</text>
+          <text class="value" x="176" y="41">0.807</text>
+        </g>
+
+        <g transform="translate(0 224)">
+          <text class="chart-label" x="0" y="0">Memory</text>
+          <rect x="0" y="16" width="206" height="8" rx="4" fill="#d7dce5"/>
+          <rect x="0" y="32" width="134" height="8" rx="4" fill="#3f41ff"/>
+          <text class="tiny" x="214" y="24">dense 1.00</text>
+          <text class="value" x="144" y="41">0.649</text>
+        </g>
+
+      </g>
+
+      <g transform="translate(344 54)">
+        <text class="section" x="0" y="0">Response-long regime</text>
+
+        <g transform="translate(0 54)">
+          <text class="large-blue" x="0" y="0">-24%</text>
+          <text class="readout-label" x="132" y="-12">time</text>
+          <text class="large-blue" x="0" y="58">-40%</text>
+          <text class="readout-label" x="132" y="46">memory</text>
+        </g>
+
+        <g transform="translate(0 154)">
+          <text class="chart-label" x="0" y="0">Step time</text>
+          <rect x="0" y="16" width="206" height="8" rx="4" fill="#d7dce5"/>
+          <rect x="0" y="32" width="158" height="8" rx="4" fill="#3f41ff"/>
+          <text class="tiny" x="214" y="24">dense 1.00</text>
+          <text class="value" x="168" y="41">0.765</text>
+        </g>
+
+        <g transform="translate(0 224)">
+          <text class="chart-label" x="0" y="0">Memory</text>
+          <rect x="0" y="16" width="206" height="8" rx="4" fill="#d7dce5"/>
+          <rect x="0" y="32" width="123" height="8" rx="4" fill="#3f41ff"/>
+          <text class="tiny" x="214" y="24">dense 1.00</text>
+          <text class="value" x="133" y="41">0.597</text>
+        </g>
+
+      </g>
+
+      <g transform="translate(672 54)">
+        <text class="section" x="0" y="0">Held-out metric check</text>
+
+        <g transform="translate(0 56)">
+          <text class="large-black" x="0" y="0">near zero</text>
+          <text class="small" x="0" y="28">sparse - dense delta</text>
+        </g>
+
+        <g transform="translate(0 154)">
+          <text class="chart-label" x="0" y="0">DPO loss</text>
+          <line x1="0" y1="26" x2="206" y2="26" stroke="#d7dce5" stroke-width="8" stroke-linecap="round"/>
+          <line x1="103" y1="12" x2="103" y2="40" stroke="#9aa3b2" stroke-width="1.2"/>
+          <circle cx="102" cy="26" r="7" fill="#3f41ff" stroke="#ffffff" stroke-width="2"/>
+          <text class="value" x="122" y="30">-0.000012</text>
+          <text class="tiny" x="99" y="58">0</text>
+        </g>
+
+        <g transform="translate(0 224)">
+          <text class="chart-label" x="0" y="0">Reward acc</text>
+          <line x1="0" y1="26" x2="206" y2="26" stroke="#d7dce5" stroke-width="8" stroke-linecap="round"/>
+          <line x1="103" y1="12" x2="103" y2="40" stroke="#9aa3b2" stroke-width="1.2"/>
+          <circle cx="118" cy="26" r="7" fill="#3f41ff" stroke="#ffffff" stroke-width="2"/>
+          <text class="value" x="138" y="30">+0.00195</text>
+          <text class="tiny" x="99" y="58">0</text>
+        </g>
+      </g>
+
+    </g>
+  </g>
+</svg>
