@@ -1,10 +1,10 @@
 ---
 title: "Reporting Fixed-Budget Tool-Use DPO as Recipe-Checkpoint Profiles"
 date: 2026-06-27 11:04:00 +0900
-last_modified_at: 2026-06-30 20:44:46 +0900
+last_modified_at: 2026-06-30 20:48:01 +0900
 categories: ["LLM EVAL"]
 tags: [llm, tool-use, dpo, function-calling, bfcl, when2call, ifeval, qwen3]
-lab_path: "projects/tool-use-dpo-negative-sources"
+lab_path: "experiment-lab/projects/tool-use-dpo-negative-sources"
 excerpt: "A fixed-budget tool-use DPO comparison is better reported as a recipe-checkpoint profile than as a single recipe winner."
 description: "A mini research note on fixed-budget Qwen3-8B tool-use DPO, where structural and behavior negatives move different evaluation axes and checkpoint selection changes the IFEval guardrail trade-off."
 permalink: /research/2026/06/27/tool-use-dpo-fixed-budget-reporting-profile/
@@ -18,9 +18,9 @@ hero_compact: true
 
 Tool-use DPO results are often compressed into a single improvement over an SFT baseline. That summary was too thin in this experiment. Function-call structure, call-decision behavior, and instruction-following guardrails moved in different directions.
 
-This note compares DPO negative recipes under the same pair budget and optimizer-step budget, using a `Qwen3-8B` tool-use SFT checkpoint as the shared reference <a class="citation-ref" href="#ref-qwen3" aria-label="Reference 5">[5]</a>. The main result is not a recipe ranking. **Tool-use DPO should be reported as a recipe-checkpoint profile.** A profile records the negative recipe, fixed budget, reported checkpoint, intended metric, guardrail regression, seed scope, pair-sampling scope, benchmark coverage, data-quality gate, and overlap checks together.
+This note compares DPO negative recipes under the same pair budget and optimizer-step budget, using a `Qwen3-8B` tool-use SFT checkpoint as the shared reference <a class="citation-ref" href="#ref-qwen3" aria-label="Reference 18">[18]</a>. The main result is not a recipe ranking. **Tool-use DPO should be reported as a recipe-checkpoint profile.** A profile records the negative recipe, fixed budget, reported checkpoint, intended metric, guardrail regression, seed scope, pair-sampling scope, benchmark coverage, data-quality gate, and overlap checks together.
 
-> **Tool-use DPO** is a preference-optimization setup where chosen/rejected pairs are built from tool-call outputs or tool-use decisions, and DPO is used to update the policy <a class="citation-ref" href="#ref-dpo" aria-label="Reference 1">[1]</a>. This note does not propose a new objective. It asks which evaluation axes move under fixed-budget negative recipes and checkpoints.
+> **Tool-use DPO** is a preference-optimization setup where chosen/rejected pairs are built from tool-call outputs or tool-use decisions, and DPO is used to update the policy <a class="citation-ref" href="#ref-dpo" aria-label="Reference 13">[13]</a>. This note does not propose a new objective. It asks which evaluation axes move under fixed-budget negative recipes and checkpoints.
 
 {% include model-mention-cards.html label="Key evaluation resources" aria_label="Key evaluation resources for the tool-use DPO reporting profile note" models="Qwen3-8B|Qwen/Qwen3-8B|https://huggingface.co/Qwen/Qwen3-8B;When2Call|nvidia/When2Call|https://huggingface.co/datasets/nvidia/When2Call" %}
 
@@ -89,7 +89,7 @@ Table 1 fixes the unit of interpretation for this note. A fixed budget means the
   <figcaption><strong>Table 1.</strong> Core fields of the reporting profile used in this note. The paper and repository manifest also include seed scope, pair-sampling scope, data-quality gates, benchmark coverage, and overlap checks in the same profile.</figcaption>
 </figure>
 
-The evaluation is read across three axes. **BFCL core** is mainly a structural function-calling axis, focused on function selection and argument correctness <a class="citation-ref" href="#ref-bfcl" aria-label="Reference 2">[2]</a>. **When2Call** evaluates call-decision behavior such as tool call, follow-up question, and unable-to-answer decisions <a class="citation-ref" href="#ref-when2call" aria-label="Reference 3">[3]</a>. **IFEval prompt-strict** is not the primary intended metric; it is a guardrail metric for measuring how much DPO perturbs instruction following <a class="citation-ref" href="#ref-ifeval" aria-label="Reference 4">[4]</a>.
+The evaluation is read across three axes. **BFCL core** is mainly a structural function-calling axis, focused on function selection and argument correctness <a class="citation-ref" href="#ref-bfcl" aria-label="Reference 11">[11]</a>. **When2Call** evaluates call-decision behavior such as tool call, follow-up question, and unable-to-answer decisions <a class="citation-ref" href="#ref-when2call" aria-label="Reference 15">[15]</a>. **IFEval prompt-strict** is not the primary intended metric; it is a guardrail metric for measuring how much DPO perturbs instruction following <a class="citation-ref" href="#ref-ifeval" aria-label="Reference 20">[20]</a>.
 
 ## Results
 
@@ -327,7 +327,7 @@ Without this profile, a `+x points` improvement is easy to over-interpret. In to
 
 The DPO training pools are source-native rather than prompt-matched. The behavior condition is confounded with the When2Call-style data and evaluation family. The source-axis result is therefore a fixed-budget recipe comparison, not a causal ranking of source quality.
 
-The fixed-budget condition is also limited. Pair count, optimizer steps, DPO recipe, and reference checkpoint were fixed, but token count and source distribution were not identical. All DPO conditions come from one Qwen3-8B SFT reference, one QLoRA DPO recipe, and one pair/step budget <a class="citation-ref" href="#ref-lora" aria-label="Reference 6">[6]</a> <a class="citation-ref" href="#ref-qlora" aria-label="Reference 7">[7]</a>.
+The fixed-budget condition is also limited. Pair count, optimizer steps, DPO recipe, and reference checkpoint were fixed, but token count and source distribution were not identical. All DPO conditions come from one Qwen3-8B SFT reference, one QLoRA DPO recipe, and one pair/step budget <a class="citation-ref" href="#ref-lora" aria-label="Reference 3">[3]</a> <a class="citation-ref" href="#ref-qlora" aria-label="Reference 2">[2]</a>.
 
 The IFEval slice should be read as a guardrail diagnostic. Bootstrap intervals address evaluation-sample uncertainty, but they do not cover all uncertainty from training stochasticity, data sampling, or benchmark construction.
 
@@ -336,14 +336,26 @@ The IFEval slice should be read as a guardrail diagnostic. Bootstrap intervals a
 <div class="reference-list" markdown="1">
 
 <ol>
-  <li id="ref-dpo">Rafailov, Rafael et al. <strong>Direct Preference Optimization: Your Language Model is Secretly a Reward Model</strong>. NeurIPS, 2023. <a href="https://arxiv.org/abs/2305.18290">arXiv</a></li>
-  <li id="ref-bfcl">Patil, Shishir G. et al. <strong>The Berkeley Function Calling Leaderboard (BFCL): From Tool Use to Agentic Evaluation of Large Language Models</strong>. ICML, 2025. <a href="https://gorilla.cs.berkeley.edu/leaderboard.html">Project page</a></li>
-  <li id="ref-when2call">Ross, Hayley, Mahabaleshwarkar, Ameya Sunil, and Suhara, Yoshi. <strong>When2Call: When (not) to Call Tools</strong>. NAACL, 2025. <a href="https://doi.org/10.18653/v1/2025.naacl-long.174">DOI</a>; <a href="https://huggingface.co/datasets/nvidia/When2Call">Dataset card</a></li>
-  <li id="ref-ifeval">Zhou, Jeffrey et al. <strong>Instruction-Following Evaluation for Large Language Models</strong>. arXiv:2311.07911, 2023. <a href="https://arxiv.org/abs/2311.07911">arXiv</a></li>
-  <li id="ref-qwen3">Yang, An et al. <strong>Qwen3 Technical Report</strong>. arXiv:2505.09388, 2025. <a href="https://arxiv.org/abs/2505.09388">arXiv</a>; Qwen Team. <strong>Qwen3-8B</strong>. Hugging Face model repository. <a href="https://huggingface.co/Qwen/Qwen3-8B">Model card</a></li>
-  <li id="ref-lora">Hu, Edward J. et al. <strong>LoRA: Low-Rank Adaptation of Large Language Models</strong>. ICLR, 2022. <a href="https://arxiv.org/abs/2106.09685">arXiv</a></li>
+  <li id="ref-robust-dpo">Chowdhury, Sayak Ray, Kini, Anush, and Natarajan, Nagarajan. <strong>Provably Robust DPO: Aligning Language Models with Noisy Feedback</strong>. ICML, 2024. <a href="https://arxiv.org/abs/2403.00409">arXiv</a></li>
   <li id="ref-qlora">Dettmers, Tim et al. <strong>QLoRA: Efficient Finetuning of Quantized LLMs</strong>. NeurIPS, 2023. <a href="https://arxiv.org/abs/2305.14314">arXiv</a></li>
+  <li id="ref-lora">Hu, Edward J. et al. <strong>LoRA: Low-Rank Adaptation of Large Language Models</strong>. ICLR, 2022. <a href="https://arxiv.org/abs/2106.09685">arXiv</a></li>
+  <li id="ref-diatool-dpo">Jung, Sunghee et al. <strong>DiaTool-DPO: Multi-Turn Direct Preference Optimization for Tool-Augmented Large Language Models</strong>. SIGDIAL, 2025. <a href="https://aclanthology.org/2025.sigdial-1.32/">ACL Anthology</a></li>
   <li id="ref-functionchat-bench">Lee, Shinbok et al. <strong>FunctionChat-Bench: Comprehensive Evaluation of Language Models' Generative Capabilities in Korean Tool-use Dialogs</strong>. arXiv:2411.14054, 2024. <a href="https://arxiv.org/abs/2411.14054">arXiv</a></li>
+  <li id="ref-api-bank">Li, Minghao et al. <strong>API-Bank: A Comprehensive Benchmark for Tool-Augmented LLMs</strong>. EMNLP, 2023. DOI: <a href="https://doi.org/10.18653/v1/2023.emnlp-main.187">10.18653/v1/2023.emnlp-main.187</a></li>
+  <li id="ref-helm">Liang, Percy et al. <strong>Holistic Evaluation of Language Models</strong>. <em>Transactions on Machine Learning Research</em>, 2023.</li>
+  <li id="ref-toolace">Liu, Weiwen et al. <strong>ToolACE: Winning the Points of LLM Function Calling</strong>. arXiv:2409.00920, 2024. <a href="https://arxiv.org/abs/2409.00920">arXiv</a></li>
+  <li id="ref-apigen">Liu, Zuxin et al. <strong>APIGen: Automated Pipeline for Generating Verifiable and Diverse Function-Calling Datasets</strong>. NeurIPS, 2024.</li>
+  <li id="ref-what-matters-dpo">Pan, Yu et al. <strong>What Matters in Data for DPO?</strong> arXiv:2508.18312, 2025. <a href="https://arxiv.org/abs/2508.18312">arXiv</a></li>
+  <li id="ref-bfcl">Patil, Shishir G. et al. <strong>The Berkeley Function Calling Leaderboard (BFCL): From Tool Use to Agentic Evaluation of Large Language Models</strong>. ICML, 2025. <a href="https://proceedings.mlr.press/v267/patil25a.html">PMLR</a>; <a href="https://gorilla.cs.berkeley.edu/leaderboard.html">Project page</a></li>
+  <li id="ref-toollm">Qin, Yujia et al. <strong>ToolLLM: Facilitating Large Language Models to Master 16000+ Real-world APIs</strong>. ICLR, 2024. <a href="https://openreview.net/forum?id=dHng2O0Jjr">OpenReview</a></li>
+  <li id="ref-dpo">Rafailov, Rafael et al. <strong>Direct Preference Optimization: Your Language Model is Secretly a Reward Model</strong>. NeurIPS, 2023. <a href="https://arxiv.org/abs/2305.18290">arXiv</a></li>
+  <li id="ref-overoptimization">Rafailov, Rafael et al. <strong>Scaling Laws for Reward Model Overoptimization in Direct Alignment Algorithms</strong>. arXiv:2406.02900, 2024. <a href="https://arxiv.org/abs/2406.02900">arXiv</a></li>
+  <li id="ref-when2call">Ross, Hayley, Mahabaleshwarkar, Ameya Sunil, and Suhara, Yoshi. <strong>When2Call: When (not) to Call Tools</strong>. NAACL, 2025. DOI: <a href="https://doi.org/10.18653/v1/2025.naacl-long.174">10.18653/v1/2025.naacl-long.174</a>; <a href="https://huggingface.co/datasets/nvidia/When2Call">Dataset card</a></li>
+  <li id="ref-toolformer">Schick, Timo et al. <strong>Toolformer: Language Models Can Teach Themselves to Use Tools</strong>. NeurIPS, 2023.</li>
+  <li id="ref-yan-function-calling">Yan, Fanjia. <strong>A Function Calling Perspective on Scalable Large Language Model Agent Evaluation</strong>. Master's thesis, UC Berkeley EECS, 2025. <a href="https://www2.eecs.berkeley.edu/Pubs/TechRpts/2025/EECS-2025-184.html">Technical report</a></li>
+  <li id="ref-qwen3">Yang, An et al. <strong>Qwen3 Technical Report</strong>. arXiv:2505.09388, 2025. <a href="https://arxiv.org/abs/2505.09388">arXiv</a>; Qwen Team. <strong>Qwen3-8B</strong>. Hugging Face model repository. <a href="https://huggingface.co/Qwen/Qwen3-8B">Model card</a></li>
+  <li id="ref-xlam">Zhang, Jianguo et al. <strong>xLAM: A Family of Large Action Models to Empower AI Agent Systems</strong>. NAACL, 2025. <a href="https://arxiv.org/abs/2409.03215">arXiv</a></li>
+  <li id="ref-ifeval">Zhou, Jeffrey et al. <strong>Instruction-Following Evaluation for Large Language Models</strong>. arXiv:2311.07911, 2023. <a href="https://arxiv.org/abs/2311.07911">arXiv</a></li>
 </ol>
 
 </div>
