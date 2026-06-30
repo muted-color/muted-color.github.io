@@ -2,7 +2,7 @@
 title: "구조화된 한국어 UI 콘텐츠 생성을 위한 LLM 정렬과 NLL 프록시"
 layout: post
 date: 2026-04-06 11:20:00 +0900
-last_modified_at: 2026-06-14 00:00:00 +0900
+last_modified_at: 2026-06-30 20:34:55 +0900
 categories: ["LLM ALIGNMENT"]
 tags: [korean-ui-content, korean-llm, structured-generation, structured-output, format-validation, nll, dpo, grpo, preference-learning, llm-alignment, llm-evaluation]
 excerpt: "구조화된 한국어 추천 카드 콘텐츠 생성에서 형식 검증, NLL 기반 자연스러움·문맥 적합성 프록시, DPO/GRPO 정렬이 만드는 품질-형식 절충을 비교한다."
@@ -79,6 +79,11 @@ place: [사무실, 학교, 운동]
 
 두 과제의 차이는 구조 제약 강도다. 3 문구 기본 카드는 짧은 문구의 자연스러움과 필드별 길이·어미 규칙이 중심이다. 메타 슬롯 확장 카드는 여기에 슬롯 값의 범주 허용성, 빈 값, 구조적 일관성 문제가 추가된다.
 
+<figure class="media-figure media-figure--ui-schema">
+  <img src="/assets/images/posts/korean-ui-nll-proxy-alignment/ui-content-slot-schema.png" alt="추천 카드 UI에서 reason, title, subtitle 문구와 season, time, place 메타 슬롯이 분리되어 배치되는 구조를 보여주는 도식">
+  <figcaption><strong>Figure 2.</strong> 평가 과제의 출력 단위다. 3 문구 기본 카드는 UI에 직접 노출되는 <code>reason</code>, <code>title</code>, <code>subtitle</code>를 생성하고, 메타 슬롯 확장 카드는 같은 문구에 <code>season</code>, <code>time</code>, <code>place</code> 같은 구조화 슬롯을 추가한다.</figcaption>
+</figure>
+
 ## 실험 설계
 
 <figure class="media-figure" markdown="1">
@@ -119,7 +124,7 @@ flowchart TB
   K --> L
 ```
 
-  <figcaption><strong>Figure 2.</strong> 형식 검증, NLL 점수화, 선호 쌍 구성, 후속 보정을 연결한 절차 요약이다. 구조 제약 강도에 따라 <code>formatmix</code> 또는 GRPO 보정을 붙인다.</figcaption>
+  <figcaption><strong>Figure 3.</strong> 형식 검증, NLL 점수화, 선호 쌍 구성, 후속 보정을 연결한 절차 요약이다. 구조 제약 강도에 따라 <code>formatmix</code> 또는 GRPO 보정을 붙인다.</figcaption>
 </figure>
 
 ### 방법
@@ -194,7 +199,7 @@ $$
 
 ### 주요 결과
 
-Table 2와 Figure 3은 held-out test에서의 형식-NLL 절충을 요약한다. 두 과제 모두 DPO는 형식 통과 부분집합의 중앙값 NLL을 낮췄지만, 동시에 형식 통과율은 크게 떨어졌다. 이 절충을 완화하는 방식은 두 과제에서 달랐다.
+Table 2와 Figure 4는 held-out test에서의 형식-NLL 절충을 요약한다. 두 과제 모두 DPO는 형식 통과 부분집합의 중앙값 NLL을 낮췄지만, 동시에 형식 통과율은 크게 떨어졌다. 이 절충을 완화하는 방식은 두 과제에서 달랐다.
 
 <figure class="table-figure table-figure--comparison table-figure--metrics">
   <div class="table-shell">
@@ -255,7 +260,7 @@ Table 2와 Figure 3은 held-out test에서의 형식-NLL 절충을 요약한다.
 
 <figure class="media-figure media-figure--wide-visual">
   <img src="/assets/images/posts/korean-ui-nll-proxy-alignment/format-nll-tradeoff.svg" alt="3 문구 기본 카드와 메타 슬롯 확장 카드에서 SFT, DPO, formatmix, GRPO의 형식 통과율과 중앙값 NLL_nat 및 NLL_ctx 절충을 A/B 패널로 비교한 산점도">
-  <figcaption><strong>Figure 3.</strong> Held-out test 대표 결과의 형식-NLL 절충이다. A는 출력 단독 지표인 NLL<sub>nat</sub>, B는 입력 조건부 지표인 NLL<sub>ctx</sub>를 사용한다. 오른쪽으로 갈수록 형식 통과율이 높고, 아래로 갈수록 NLL이 낮다. 각 점의 숫자는 <code>형식 통과율 / 해당 패널의 중앙값 NLL</code>을 뜻한다.</figcaption>
+  <figcaption><strong>Figure 4.</strong> Held-out test 대표 결과의 형식-NLL 절충이다. A는 출력 단독 지표인 NLL<sub>nat</sub>, B는 입력 조건부 지표인 NLL<sub>ctx</sub>를 사용한다. 오른쪽으로 갈수록 형식 통과율이 높고, 아래로 갈수록 NLL이 낮다. 각 점의 숫자는 <code>형식 통과율 / 해당 패널의 중앙값 NLL</code>을 뜻한다.</figcaption>
 </figure>
 
 3 문구 기본 카드에서는 `formatmix 0.25`가 NLL 손실을 작게 유지한 절충점이었다. DPO 기준선 대비 형식 통과율을 `0.628 -> 0.760`으로 회복하면서, 중앙값 NLL<sub>nat</sub>는 그대로 `3.096`을 유지했다. NLL<sub>ctx</sub>는 `2.715 -> 2.738`로 소폭 되돌아갔다.

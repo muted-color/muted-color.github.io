@@ -1146,6 +1146,17 @@ figcaption {
   padding-right: 0;
 }
 
+.research-body .media-figure--ui-schema {
+  max-width: min(32rem, 100%);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.research-body .media-figure--ui-schema > figcaption {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 .research-body .media-figure--wide-visual {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
