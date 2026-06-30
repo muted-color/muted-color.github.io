@@ -24,11 +24,14 @@ show_excerpts: true
 
 exclude:
   - AGENTS.md
+  - README.md
+  - SEO.md
+  - Gemfile
+  - Gemfile.lock
+  - scripts
   - .bundle
   - vendor
   - vendor/bundle
-  - scripts/.bundle
-  - scripts/vendor
 
 minima:
   social_links: []
