@@ -1,0 +1,45 @@
+{
+  "layout": "grouped_bar",
+  "rendering": "custom-summary-strip-zero-centered",
+  "renderer_limitation": "The installed grouped_bar renderer requires a zero minimum and cannot preserve the negative Completion change, so this custom SVG follows the skill tokens and validator contract.",
+  "title": "Similar Macro gain, different axis profiles",
+  "description": "A compact measured comparison places the nearly equal Macro relative gains in a summary strip and gives most of the canvas to the four axis-level percentage-point changes. Macro relative gain is 10.93% locally and 10.78% in the paper. Local versus paper changes are Call 4.93 versus 1.40, Completion 7.04 versus -2.80, Slot 7.01 versus 27.80, and Relevance 5.69 versus 8.70 percentage points. The conditions use different checkpoints, preference data, and judge backends and are not one common effect estimate.",
+  "scale": "measured",
+  "palette": "editorial",
+  "canvas": {
+    "width": 1200,
+    "height": 675,
+    "outer_margin": 72
+  },
+  "panel_separation": "whitespace-and-panel-headings",
+  "panels": [
+    {
+      "id": "macro_relative_gain",
+      "label": "a. Macro relative gain",
+      "presentation": "compact_grouped_bar",
+      "unit": "%",
+      "domain": [0, 12],
+      "display_width_ratio": 0.7,
+      "series": [
+        {"id": "local", "label": "Local reconstruction", "value": 10.93},
+        {"id": "paper", "label": "Paper report", "value": 10.78, "pattern": "hatch"}
+      ]
+    },
+    {
+      "id": "axis_change",
+      "label": "b. Axis changes",
+      "unit": "percentage points",
+      "domain": [-5, 30],
+      "ticks": [-5, 0, 10, 20, 30],
+      "categories": ["Call", "Completion", "Slot", "Relevance"],
+      "series": [
+        {"id": "local", "label": "Local reconstruction"},
+        {"id": "paper", "label": "Paper report", "pattern": "hatch"}
+      ],
+      "values": {
+        "local": [4.93, 7.04, 7.01, 5.69],
+        "paper": [1.40, -2.80, 27.80, 8.70]
+      }
+    }
+  ]
+}

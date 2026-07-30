@@ -91,6 +91,9 @@ Object checklist:
 Formula, diagram, and media checklist:
 - Formulas should use LaTeX, not inline code.
 - Metric formula blocks may use the existing metric-formula classes, but mathematical expressions should still be clear and not hidden as plain prose.
+- Public inline explanatory diagrams and compact static quantitative charts should use `$editorial-systems-figure` by default. Dense, annotation-heavy, exact-layout, branch/merge, timeline, or measured Mermaid candidates should be routed to visual_designer instead of being polished in place.
+- For editorial SVG figures, check the `media-figure` wrapper, useful `img` alt text, numbered external figcaption, matching body reference, measurement contract, and any conceptual-not-to-scale caveat. The SVG itself should contain one small visible title rather than an eyebrow/headline/subtitle/takeaway stack.
+- Do not replace measured charts with conceptual cards or prose. If a new skill-generated SVG lacks its sibling `.figure.json` regeneration spec or recorded 1200px/600px visual QA, report it and route it to visual_designer rather than certifying the figure.
 - Mermaid diagrams should be wrapped in <figure class="media-figure" markdown="1"> and have a caption.
 - Plotly charts should be inside a captioned figure and have plotly: true in front matter.
 - Reference or structure images that are not primary results should be labeled clearly as context, not over-numbered as core evidence unless the post already follows that convention.

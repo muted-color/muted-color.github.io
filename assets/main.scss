@@ -602,6 +602,10 @@ h6 {
   box-shadow: 0 28px 68px rgba(15, 23, 42, 0.08);
 }
 
+.research-hero--featured-plot {
+  max-width: 940px;
+}
+
 .research-hero--featured-plot.research-hero--framed .research-hero-frame {
   aspect-ratio: 1200 / 627;
   border-color: rgba(17, 17, 17, 0.08);

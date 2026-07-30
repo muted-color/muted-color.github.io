@@ -1,0 +1,33 @@
+{
+  "layout": "grouped_bar",
+  "title": "Normalized phase range by scorer",
+  "description": "Median six-phase score range divided by the score IQR for two FNS scorers and three token scorers on the 500-variant BRCA2 MAVE-derived MVE subset.",
+  "scale": "measured",
+  "palette": "editorial",
+  "canvas_height": 675,
+  "y_label": "Median phase range / score IQR",
+  "y_min": 0,
+  "y_max": 0.5,
+  "y_ticks": [0, 0.1, 0.2, 0.3, 0.4, 0.5],
+  "value_decimals": 3,
+  "grid": true,
+  "categories": [
+    {"id": "fns-full", "label": "FNS full sequence"},
+    {"id": "fns-local", "label": "FNS local target"},
+    {"id": "token-downstream", "label": "Token downstream"},
+    {"id": "token-full", "label": "Token full window"},
+    {"id": "token-target", "label": "Token target"}
+  ],
+  "series": [
+    {"id": "normalized-range", "label": "Median normalized range"}
+  ],
+  "values": [
+    {"category": "fns-full", "series": "normalized-range", "value": 0.3530196688240733},
+    {"category": "fns-local", "series": "normalized-range", "value": 0.33081394553602533},
+    {"category": "token-downstream", "series": "normalized-range", "value": 0.4656729879847405},
+    {"category": "token-full", "series": "normalized-range", "value": 0.40910699721465615},
+    {"category": "token-target", "series": "normalized-range", "value": 0.34883724332758503}
+  ],
+  "source_note": "Values are the 500-variant rows from the experiment's scorer-instability summary. A dashed horizontal reference marks the predeclared 0.10 auxiliary threshold.",
+  "qa_note": "Value labels are raised from the renderer's 17px default to 20px after rendering so they remain legible in the 600px stress preview."
+}

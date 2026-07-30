@@ -1,0 +1,26 @@
+{
+  "layout": "custom_histogram",
+  "title": "Shifted-reference control distribution",
+  "description": "Histogram of the six shifted-reference score ranges for the 500-variant BRCA2 MAVE-derived MVE subset, without alternate-allele insertion.",
+  "scale": "measured",
+  "palette": "editorial",
+  "x_label": "Shifted-reference control range",
+  "y_label": "Variant count",
+  "bin_edges": [0.000, 0.007, 0.014, 0.021, 0.028, 0.035, 0.042, 0.049, 0.056, 0.063, 0.070, 0.077, 0.084, 0.091, 0.098, 0.105],
+  "bin_counts": [0, 13, 139, 142, 52, 53, 20, 18, 22, 20, 6, 8, 4, 0, 3],
+  "summary": {
+    "n_variants": 500,
+    "median_shifted_reference_range": 0.025427818298339844,
+    "median_shifted_reference_over_full_window_range": 4.161734695822201,
+    "fraction_shifted_reference_at_least_full_window": 0.936
+  },
+  "summary_display": "external_caption",
+  "layout_geometry": {
+    "outer_x": [90, 1110],
+    "plot_x": [200, 1000],
+    "plot_y": [126, 460],
+    "grid_policy": "major y gridlines",
+    "actual_display_width": 720
+  },
+  "source_note": "Bins and summary reproduce the experiment's per-variant shifted-reference control artifacts. Summary values remain in the external caption because the check is not a complete causal isolate."
+}

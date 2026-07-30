@@ -17,6 +17,10 @@
     "right_content_x": [500, 1110],
     "panel_heading_y": 148,
     "plot_y": [187, 532],
+    "gridlines": {
+      "macro_relative_gain": "joined-x-axis-and-zero-y-axis",
+      "selected_axis_changes": "x-axis-and-zero-line-only"
+    },
     "design_note": "Panel width follows information density rather than geometric symmetry. Muted a./b. headings and a smaller left plot keep the denser selected-axis panel visually primary without changing the data scales. Optical margins move the title and left panel inward and the mechanism downward so visible content has comparable left/right and top/bottom breathing room inside the framed hero."
   },
   "series": [

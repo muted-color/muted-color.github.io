@@ -1,28 +1,26 @@
 ---
-title: "Reconstructing DiaTool-DPO from Public Information: Preference Trajectories and Slot Behavior"
+title: "Preference Trajectories and Slot Behavior in a DiaTool-DPO Reconstruction"
 date: 2026-07-29
 last_modified_at: 2026-07-30
 categories: ["LLM TOOL USE"]
 tags: [llm, tool-use, dpo, preference-learning, function-calling, multi-turn-dialogue, llama3]
 lang: en
 lab_path: "experiment-lab/projects/diatool-dpo-reproduction"
-excerpt: "A public-information reconstruction of DiaTool-DPO that separates aggregate improvement from the composition of Slot behavior and preference-trajectory signals."
-description: "A public-information reconstruction of DiaTool-DPO reproduced an aggregate DPO lift, but the smaller Slot gain and a single-run trajectory sensitivity test show that structural agreement does not establish behavioral equivalence."
+excerpt: "An analysis of preference trajectories and Slot behavior under a public-information reconstruction of DiaTool-DPO."
+description: "Under non-identical evaluation conditions, preference-trajectory diagnostics and a single-run sensitivity comparison examine a smaller local Slot gain despite a numerically similar aggregate gain."
 permalink: /research/2026/07/29/diatool-dpo-public-reconstruction-preference-trajectories/
 image: /assets/images/posts/diatool-dpo-public-reconstruction-preference-trajectories/social-thumbnail.png
 image_alt: "A compact measured plot comparing similar Macro gains with selected Completion and Slot changes in the local reconstruction and paper report"
 hero_image: /assets/images/posts/diatool-dpo-public-reconstruction-preference-trajectories/aggregate-behavior-featured.svg
 hero_alt: "A compact plot showing similar Macro relative gains and different Completion and Slot changes for the local reconstruction and paper report"
-hero_caption: "<strong>Featured summary.</strong> Macro gains were numerically similar, while selected Completion and Slot changes differed. The profiles use different checkpoints, data, and judge backends and are not one common effect estimate."
+hero_caption: "<strong>Featured summary.</strong> Numerically similar Macro gains did not distinguish the different Completion and Slot changes. This axis-level difference motivates the preference-trajectory diagnostics below; the profiles use different checkpoints, data, and judge backends and are not one common effect estimate."
 hero_frame: true
 hero_variant: featured-plot
 published: true
 publication_status: "published"
 ---
 
-DiaTool-DPO publishes a training specification for tool-use preference trajectories, but not every artifact needed to recreate its reported behavior. This note asks how far that public specification can recover the behavioral profile reported on FunctionChat-Bench <a class="citation-ref" href="#ref-diatool-dpo" aria-label="Reference 1">[1]</a>.
-
-> **Slot behavior** refers here to whether the assistant requests missing required fields before calling a tool.
+The local DiaTool-DPO model improved over its SFT baseline on all four FunctionChat-Bench axes, but its axis-level profile differed from the paper. This note examines that difference through the structure and distribution of tool-use preference trajectories, with Slot behavior—whether the assistant requests missing required fields before calling a tool—as the main diagnostic. The public-information reconstruction defines the experimental condition and its limits; the paper and local profiles use different checkpoints, preference data, and judge backends and are not one common effect estimate <a class="citation-ref" href="#ref-diatool-dpo" aria-label="Reference 1">[1]</a>.
 
 ## Summary
 
@@ -163,13 +161,13 @@ Call is normalized tool-call exact match. Completion, Slot, and Relevance use a 
 
 For Relevance, byte-identical responses were assigned the same local judgment. A manual audit found two inconsistent judgments among 42 identical-response cases. This adjustment did not change the main conclusion.
 
-## Aggregate Result
+## Aggregate Gain and Behavioral Composition
 
 The reconstructed DPO model scored above its SFT baseline on all four evaluation axes. Figure 2 shows why the Macro result is insufficient: the local and paper relative Macro gains were numerically close, but the behavioral components moved differently. The two profiles come from different checkpoints, preference data, and judge backends, so their values are not one common effect estimate. Table 3 retains the exact values.
 
 <figure class="media-figure media-figure--wide-visual">
-  <img src="/assets/images/posts/diatool-dpo-public-reconstruction-preference-trajectories/aggregate-behavior-change.svg" alt="Zero-centered comparison of local and paper changes across Call, Completion, Slot, and Relevance, with Macro relative gains shown on a separate common scale">
-  <figcaption><strong>Figure 2.</strong> Similar Macro relative gains were composed of different axis-level changes. The local profile distributed gains across Call, Completion, Slot, and Relevance, while the paper reported a much larger Slot change and a Completion decrease. The panels describe separate experimental conditions rather than a common effect estimate.</figcaption>
+  <img src="/assets/images/posts/diatool-dpo-public-reconstruction-preference-trajectories/aggregate-behavior-change-focused.svg" alt="Measured comparison with Macro relative gains of 10.93% locally and 10.78% in the paper, followed by zero-centered local versus paper axis changes: Call +4.93 versus +1.40, Completion +7.04 versus -2.80, Slot +7.01 versus +27.80, and Relevance +5.69 versus +8.70 percentage points">
+  <figcaption><strong>Figure 2.</strong> The top strip compares relative Macro gain on a common <code>0–12%</code> scale; the zero-centered plot below shows SFT-to-DPO changes for each evaluation axis in percentage points. Similar aggregate ratios were composed differently, including a larger reported Slot change and a reported Completion decrease. The local and paper profiles come from separate checkpoints, preference data, and judge backends and are not one common effect estimate.</figcaption>
 </figure>
 
 <figure class="table-figure table-figure--comparison table-figure--metrics">
@@ -226,9 +224,9 @@ The reconstructed DPO model scored above its SFT baseline on all four evaluation
   <figcaption><strong>Table 3.</strong> SFT-to-DPO changes in the local reconstruction and changes reported by DiaTool-DPO <a class="citation-ref" href="#ref-diatool-dpo" aria-label="Reference 1">[1]</a>. Higher is better on all four axes. The columns do not estimate one common effect because the checkpoints, preference data, and judge backends differ.</figcaption>
 </figure>
 
-The local Macro relative gain was `+10.93%`; the paper's was `+10.78%`. In the paper, Slot was the largest positive change while Completion decreased. Locally, Completion and Call contributed more and Slot increased less. Similar aggregate ratios therefore concealed a different behavioral composition.
+The local Macro relative gain was `+10.93%`; the paper's was `+10.78%`. In the paper, Slot was the largest positive change while Completion decreased. Locally, Completion and Call contributed more and Slot increased less. Similar aggregate ratios therefore did not distinguish the different behavioral composition.
 
-At the item level, the local Slot comparison contained 43 improvements and 12 regressions. This confirms a positive aggregate Slot movement, but not the magnitude or behavioral composition reported in the paper.
+At the item level, the local Slot comparison contained 43 improvements and 12 regressions. This confirms a positive aggregate Slot movement, but not the magnitude or behavioral composition reported in the paper. The difference between the local profile and the paper's Slot-dominant profile motivates the trajectory-level diagnostics below.
 
 ## Preference-Trajectory Diagnostics
 
@@ -292,7 +290,7 @@ On a 5% source-group validation split, chosen reward exceeded rejected reward fo
 
 The pair-level and source-equal concentration values were similar. The observed skew is therefore difficult to explain solely by a small number of sources producing many pairs. In the prefix-synchronized reconstruction, `remaining-one` does not mean that the source trajectories lacked multi-missing states. It means the chosen and rejected behaviors usually diverged immediately before the final missing field.
 
-Lowering rejected reward is a normal DPO optimization path <a class="citation-ref" href="#ref-dpo" aria-label="Reference 3">[3]</a>. High rejected-surface concentration and narrow divergence-state coverage can coexist with valid preference learning; these measurements alone do not demonstrate shortcut learning <a class="citation-ref" href="#ref-shortcut-learning" aria-label="Reference 7">[7]</a>. Because the original preference data were unavailable for the same measurements, these diagnostics remain specific to the local reconstruction and do not establish a difference from the original data distribution.
+Lowering rejected reward is a normal DPO optimization path <a class="citation-ref" href="#ref-dpo" aria-label="Reference 3">[3]</a>. High rejected-surface concentration and narrow divergence-state coverage can coexist with valid preference learning; these measurements alone do not demonstrate shortcut learning <a class="citation-ref" href="#ref-shortcut-learning" aria-label="Reference 7">[7]</a>. Because the original preference data were unavailable for the same measurements, these diagnostics remain specific to the local reconstruction and do not establish a difference from the original data distribution. They instead motivate a bounded sensitivity test of whether a different trajectory construction is associated with different Slot behavior.
 
 ## Post-Hoc Trajectory Sensitivity
 
@@ -353,19 +351,13 @@ The intervention did not isolate prefix equality. Under the tokenizer and chat-t
 
 Judge-based paired transitions for the sensitivity run were improvement/regression `0/1` on Completion, `45/11` on Slot, and `3/2` on Relevance. After excluding three Slot cases where identical outputs received inconsistent judgments, the output-level Slot transitions were 44 improvements and 9 regressions.
 
-The Slot benchmark output changed in the positive direction in this run. The evidence does not identify prefix synchronization as the sole cause: both arms were reconstructed, and tokenization, sequence lengths, and later trajectory content changed together. There was no random-rewrite or placebo control. Call and Completion decreased slightly, and exact success on 28 auxiliary free-running rollouts remained `15/28` for both DPO variants.
+The Slot benchmark output changed in the positive direction in this run. The evidence does not identify prefix synchronization as the sole cause: both arms were reconstructed, and tokenization, sequence lengths, and later trajectory content changed together. There was no random-rewrite or placebo control. Call and Completion decreased slightly, and exact success on 28 auxiliary free-running rollouts remained `15/28` for both DPO variants. The aggregate mismatch, local diagnostics, and post-hoc sensitivity result therefore support three separate audit axes rather than a single causal explanation.
 
-## Interpretation
+## Three Audit Axes for Preference Trajectories
 
-The result separates three levels of evidence.
+The evidence separates structural agreement, objective fit, and behavioral transfer. Pair counts, state paths, and objective components establish the first; preference accuracy and implicit reward margins describe the second; FunctionChat-Bench axes and paired output transitions test the third. Structural agreement and objective fit did not determine behavioral transfer: the primary reconstruction improved in aggregate without matching the paper's Slot-dominant profile, and the post-hoc run changed Slot without uniformly improving the other axes.
 
-1. **Structural agreement:** Pair counts, state paths, objective components, and reported optimizer settings can be reconstructed and audited.
-2. **Objective fit:** Preference accuracy and implicit reward margins show that the optimizer separates chosen and rejected trajectories under the local data distribution.
-3. **Behavioral transfer:** FunctionChat-Bench axes and paired output transitions test whether that separation produces the intended questioning and calling behavior.
-
-The first two levels did not determine the third. The primary reconstruction produced positive aggregate movement, yet its strongest behavioral gains did not match the paper's Slot-dominant profile. The post-hoc run then changed Slot substantially without uniformly improving the other axes.
-
-Three data checks remain useful for preference trajectories with different branch lengths, expressions, and state paths:
+Three audit axes remain useful for preference trajectories with different branch lengths, expressions, and state paths:
 
 - **Surface concentration:** measure whether a small set of exact branch expressions repeatedly co-occurs with the preference label. This is a distribution diagnostic, not a shortcut test by itself.
 - **Divergence-state coverage:** report the source count and missing-Slot distribution at the point where chosen and rejected behaviors separate. Pair count alone does not reveal the covered contrastive states.
@@ -375,9 +367,9 @@ These checks do not prescribe a particular reconstruction method. They make the 
 
 ## Conclusion
 
-The public-information reconstruction reproduced an aggregate DPO lift but only partially reproduced the paper's behavioral effect. The local Slot gain was positive and smaller, while the numerically similar Macro relative gain was composed of different axis-level changes.
+The central observation is that aggregate improvement and Slot behavior followed different profiles under the local and paper conditions. The local Slot gain was `+7.01` points, compared with the paper's `+27.80`-point change, while the relative Macro gains were numerically similar. These values come from different checkpoints, preference data, and judge backends and are not one common effect estimate.
 
-The most stable conclusion is narrow. For tool-use trajectory DPO, matching pair counts and state paths does not establish behavioral equivalence. Surface concentration, divergence-state coverage, and objective-to-behavior transfer provide complementary checks when the underlying preference trajectories are reconstructed rather than directly available.
+The trajectory diagnostics describe repeated local branch surfaces and narrow divergence-state coverage, and the prefix-synchronized condition was associated with a further `+7.69`-point Slot change in one run. That comparison changed tokenization, lengths, and later trajectory content together, reduced Call and Completion, and left auxiliary rollout success at `15/28`; it does not identify a sole cause or establish a generally superior reconstruction rule. The most stable conclusion is narrow: surface concentration, divergence-state coverage, and objective-to-behavior transfer complement pair-count and state-path checks when preference trajectories are reconstructed rather than directly available.
 
 ## Limitations
 
@@ -408,7 +400,7 @@ The most stable conclusion is narrow. For tool-use trajectory DPO, matching pair
 Text citation:
 
 ```text
-Ilho Ahn, "Reconstructing DiaTool-DPO from Public Information: Preference Trajectories and Slot Behavior", Mini Research, July 29, 2026.
+Ilho Ahn, "Preference Trajectories and Slot Behavior in a DiaTool-DPO Reconstruction", Mini Research, July 29, 2026.
 ```
 
 BibTeX:
@@ -416,7 +408,7 @@ BibTeX:
 ```bibtex
 @article{ahn2026diatooldpopublicreconstruction,
   author = {Ilho Ahn},
-  title = {Reconstructing {DiaTool-DPO} from Public Information: Preference Trajectories and Slot Behavior},
+  title = {Preference Trajectories and Slot Behavior in a {DiaTool-DPO} Reconstruction},
   journal = {Mini Research},
   year = {2026},
   month = jul,
