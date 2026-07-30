@@ -1,0 +1,81 @@
+{
+  "layout": "relational",
+  "title": "Preference-trajectory diagnostics",
+  "description": "In the local Hard Type2 partial-call subset, a shared user query reaches a divergence state where one required Slot remains in 2,521 of 2,530 pairs (99.64%), then branches to a chosen missing-field question and a rejected early tool call; their exact first-assistant surface concentrations are 8.18% and 28.50% versus 49.13% and 71.30% at top-1 and top-5.",
+  "scale": "conceptual",
+  "palette": "editorial",
+  "nodes": [
+    {
+      "id": "query",
+      "label": "Same user query",
+      "detail": "Shared prefix",
+      "column": 0,
+      "row": 0
+    },
+    {
+      "id": "divergence",
+      "label": "Preference divergence",
+      "detail": "1 Slot: 2,521 / 2,530 (99.64%)",
+      "column": 1,
+      "row": 0,
+      "accent": true
+    },
+    {
+      "id": "chosen",
+      "label": "Chosen trajectory",
+      "detail": "Asks for the missing field",
+      "column": 2,
+      "row": 0
+    },
+    {
+      "id": "rejected",
+      "label": "Rejected trajectory",
+      "detail": "Calls the tool early",
+      "column": 2,
+      "row": 1
+    },
+    {
+      "id": "chosen_surface",
+      "label": "Chosen exact surface",
+      "detail": "Top-1 8.18% · top-5 28.50%",
+      "column": 3,
+      "row": 0
+    },
+    {
+      "id": "rejected_surface",
+      "label": "Rejected exact surface",
+      "detail": "Top-1 49.13% · top-5 71.30%",
+      "column": 3,
+      "row": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "query",
+      "to": "divergence",
+      "type": "forward"
+    },
+    {
+      "from": "divergence",
+      "to": "chosen",
+      "type": "forward",
+      "label": "chosen"
+    },
+    {
+      "from": "divergence",
+      "to": "rejected",
+      "type": "forward",
+      "label": "rejected"
+    },
+    {
+      "from": "chosen",
+      "to": "chosen_surface",
+      "type": "forward"
+    },
+    {
+      "from": "rejected",
+      "to": "rejected_surface",
+      "type": "forward"
+    }
+  ]
+}

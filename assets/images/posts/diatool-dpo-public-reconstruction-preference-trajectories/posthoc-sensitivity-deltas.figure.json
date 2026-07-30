@@ -1,0 +1,29 @@
+{
+  "layout": "grouped_bar",
+  "rendering": "custom-zero-centered",
+  "renderer_limitation": "The installed grouped_bar renderer requires y_min = 0 and rejects the negative Call and Completion deltas; the custom SVG preserves their signs.",
+  "title": "Post-hoc sensitivity deltas",
+  "description": "Measured prefix-synchronized DPO minus primary DPO deltas are -2.39 percentage points for Call, -1.41 for Completion, +7.69 for Slot, +0.81 for Relevance, and +1.18 for Macro. Auxiliary rollout exact success is unchanged at 15 of 28 for both runs. This single run changed prefixes, later trajectory content, tokenization, and branch lengths together.",
+  "scale": "measured",
+  "palette": "editorial",
+  "delta_label": "Prefix-synchronized DPO minus primary DPO",
+  "unit": "percentage points",
+  "domain": [-3, 9],
+  "ticks": [-3, -2, -1, 0, 1, 3, 5, 7, 9],
+  "categories": [
+    {"id": "call", "label": "Call", "value": -2.39},
+    {"id": "completion", "label": "Completion", "value": -1.41},
+    {"id": "slot", "label": "Slot", "value": 7.69},
+    {"id": "relevance", "label": "Relevance", "value": 0.81},
+    {"id": "macro", "label": "Macro", "value": 1.18}
+  ],
+  "auxiliary_rollout": {
+    "label": "Auxiliary rollout exact success",
+    "unit": "successful rollouts",
+    "total": 28,
+    "series": [
+      {"id": "primary", "label": "Primary DPO", "value": 15},
+      {"id": "prefix_synchronized", "label": "Prefix-synchronized DPO", "value": 15}
+    ]
+  }
+}
