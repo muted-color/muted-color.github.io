@@ -31,7 +31,7 @@ The local DiaTool-DPO model improved over its SFT baseline on all four FunctionC
 
 ## DiaTool-DPO Method
 
-DiaTool-DPO treats tool use as a choice of dialogue flow rather than a preference between isolated responses. The paper defines three query types over five conceptual states: Type1 calls immediately when all required arguments are available, Type2 gathers missing fields before calling, and Type3 refuses when no available tool supports the request. The states describe the task structure proposed by the paper, not model states observed directly <a class="citation-ref" href="#ref-diatool-dpo" aria-label="Reference 1">[1]</a>.
+Jung et al.'s DiaTool-DPO treats tool use as a choice of dialogue flow rather than a preference between isolated responses <a class="citation-ref" href="#ref-diatool-dpo" aria-label="Reference 1">[1]</a>. The paper defines three query types over five conceptual states: Type1 calls immediately when all required arguments are available, Type2 gathers missing fields before calling, and Type3 refuses when no available tool supports the request. The states describe the task structure proposed by the paper, not model states observed directly.
 
 Each training example pairs a chosen full trajectory with a rejected one. They share the initial request and tool context, but later turns and lengths may differ. Rejected paths include redundant questions, premature calls, incorrect refusals, and unsupported tool calls. User and tool messages provide context while assistant turns are scored. The Easy and Hard subsets contain `16,794` pairs in total <a class="citation-ref" href="#ref-diatool-dpo" aria-label="Reference 1">[1]</a>. Figure 1 summarizes the resulting training flow.
 
@@ -42,7 +42,9 @@ Each training example pairs a chosen full trajectory with a rejected one. They s
 
 The objective aggregates policy-versus-reference scores across assistant turns. It gives earlier actions more influence, normalizes each trajectory by its total turn weight, and requires a margin between chosen and rejected scores. These adjustments accommodate the structural length differences between Slot-filling and rejection paths <a class="citation-ref" href="#ref-diatool-dpo" aria-label="Reference 1">[1]</a>.
 
-## Reconstruction Scope
+## Experimental Setup
+
+### Reconstruction Scope
 
 The reconstruction implemented the published trajectory structure and objective components using the reference implementation as a public resource <a class="citation-ref" href="#ref-diatool-code" aria-label="Reference 2">[2]</a>. It retained ordinary DPO's policy-versus-reference comparison <a class="citation-ref" href="#ref-dpo" aria-label="Reference 3">[3]</a>, but several artifacts needed for an exact reproduction were not public.
 
@@ -100,7 +102,7 @@ Table 1 separates specifications taken from the paper from choices made during t
   <figcaption><strong>Table 1.</strong> Scope of structural alignment against the published specification <a class="citation-ref" href="#ref-diatool-dpo" aria-label="Reference 1">[1]</a>. “Aligned” applies to reported preference-pair counts, state-transition paths, and settings, not checkpoint or data identity.</figcaption>
 </figure>
 
-## Evaluation Design
+### Evaluation Design
 
 The primary comparison used the same local SFT lineage for the SFT baseline and reconstructed DPO model. The SFT adapter reconstructed for this project is publicly available, which makes the local starting point inspectable even though it is not the paper's checkpoint.
 
@@ -161,7 +163,9 @@ Call is normalized tool-call exact match. Completion, Slot, and Relevance use a 
 
 For Relevance, byte-identical responses were assigned the same local judgment. A manual audit found two inconsistent judgments among 42 identical-response cases. This adjustment did not change the main conclusion.
 
-## Aggregate Gain and Behavioral Composition
+## Results
+
+### Aggregate Gain and Behavioral Composition
 
 The reconstructed DPO model scored above its SFT baseline on all four evaluation axes. Figure 2 shows why the Macro result is insufficient: the local and paper relative Macro gains were numerically close, but the behavioral components moved differently. The two profiles come from different checkpoints, preference data, and judge backends, so their values are not one common effect estimate. Table 3 retains the exact values.
 
@@ -228,7 +232,7 @@ The local Macro relative gain was `+10.93%`; the paper's was `+10.78%`. In the p
 
 At the item level, the local Slot comparison contained 43 improvements and 12 regressions. This confirms a positive aggregate Slot movement, but not the magnitude or behavioral composition reported in the paper. The difference between the local profile and the paper's Slot-dominant profile motivates the trajectory-level diagnostics below.
 
-## Preference-Trajectory Diagnostics
+### Preference-Trajectory Diagnostics
 
 The initial data audit covered schema, state paths, loaders, duplicates, masks, and pair-level semantic validity. Two additional measurements were added after the behavioral difference appeared: branch-level surface concentration and divergence-state coverage.
 
@@ -292,7 +296,7 @@ The pair-level and source-equal concentration values were similar. The observed 
 
 Lowering rejected reward is a normal DPO optimization path <a class="citation-ref" href="#ref-dpo" aria-label="Reference 3">[3]</a>. High rejected-surface concentration and narrow divergence-state coverage can coexist with valid preference learning; these measurements alone do not demonstrate shortcut learning <a class="citation-ref" href="#ref-shortcut-learning" aria-label="Reference 7">[7]</a>. Because the original preference data were unavailable for the same measurements, these diagnostics remain specific to the local reconstruction and do not establish a difference from the original data distribution. They instead motivate a bounded sensitivity test of whether a different trajectory construction is associated with different Slot behavior.
 
-## Post-Hoc Trajectory Sensitivity
+### Post-Hoc Trajectory Sensitivity
 
 A separate post-hoc reconstruction tested whether the Hard Type2 trajectory construction was associated with the observed Slot behavior. For the `2,530` partial-call target pairs, chosen and rejected prefixes were synchronized through the turn immediately before their behaviors diverged.
 
