@@ -42,6 +42,27 @@ format_polisher를 사용해서 이 글을 공개용 미니 리서치 노트 기
 실험 결론이나 수치는 바꾸지 말고, 필요한 경우 파일을 직접 수정한 뒤 변경한 위치를 요약해줘.
 ```
 
+## 본문 시각화
+
+- 공개 글의 새 본문 도식과 정적 차트는 `$editorial-systems-figure` 스킬을 기본 경로로 사용한다.
+- 대상은 pipeline, loop, layer, comparison, bounded state, context stack, grouped bar, efficiency curve, relational graph, interaction timeline처럼 글이나 데이터에서 하나의 시각적 주장을 압축하는 Figure다.
+- 정확한 숫자 조회가 핵심이면 표를 유지한다. Mermaid는 간단한 graph-like 구조를 Markdown 안에서 빠르게 유지해야 할 때만 사용하고, Plotly는 hover·zoom·legend toggle이 실제 해석에 필요할 때만 사용한다.
+- 대표 이미지, social/Open Graph thumbnail, hero art는 본문 Figure와 별도 자산으로 관리한다.
+- Figure 생성 전 스킬의 `SKILL.md`와 해당 reference를 읽고, 기본 `palette: editorial`을 사용한다. 출처가 정의한 색 자체가 의미일 때만 `palette: source`를 허용한다.
+- SVG 안에는 작은 sentence-case 제목 하나만 둔다. subtitle, takeaway, caption, citation은 SVG 밖의 `<figcaption>`과 본문에 둔다.
+- 생성물은 `assets/images/posts/<post-slug>/` 아래에 descriptive kebab-case 이름으로 저장한다. 재생성의 원천이 JSON spec이면 `<figure-name>.figure.json`도 함께 보존하고 공개 불가 경로나 내부 식별자가 없는지 확인한다.
+- `render_figure.py`와 `validate_figure.py`를 사용하고, 1200px와 600px preview를 rasterize해 text overflow, collision, palette, 축소 가독성을 눈으로 확인한다. preview는 QA 산출물이며 글에 필요하지 않으면 repo에 넣지 않는다.
+- 본문에는 `<figure class="media-figure">` 또는 필요한 경우 `media-figure--wide-visual`로 넣고, 유용한 `alt`와 번호가 맞는 `<figcaption>`을 둔다.
+
+Sub Agent에게 새 본문 Figure를 맡길 때는 다음처럼 요청한다.
+
+```text
+visual_designer를 사용해서 이 글의 본문 Figure를 `$editorial-systems-figure`로 설계하고 생성해줘.
+본문과 표에 있는 근거만 사용하고, layout/scale 선택과 JSON spec을 남긴 뒤 SVG를 validate해줘.
+1200px와 600px preview에서 overflow, collision, palette, 가독성을 확인하고 caption/alt text/본문 번호까지 맞춰줘.
+hero나 social thumbnail은 이 작업에 포함하지 마.
+```
+
 ## Front Matter
 
 - 공개 글은 `image:`를 반드시 둔다.
@@ -63,8 +84,6 @@ hero_image: /assets/images/posts/post-slug/hero.svg
 
 ## Featured Image
 
-- 새 대표 이미지, 소셜 썸네일, Open Graph 이미지, hero 이미지를 만들 때는 `$blog-featured-image` 스킬을 우선 사용한다.
-- 스킬 본체는 `~/.codex/skills/blog-featured-image`에 둔다. 이 repo에는 생성된 결과물과 front matter 경로만 기록한다.
 - 이 블로그의 기본 대표 이미지 스타일은 HSPC hierarchy 글과 TrpB local fitness 글처럼 흰 배경, 반투명 glass/gel 과학 오브젝트, 옅은 파란색 강조 신호, 텍스트 없는 `1200x627` PNG/JPG를 우선한다.
 - 기본 저장 경로는 `assets/images/posts/<post-slug>/social-thumbnail.png`이고, front matter의 `image:`와 `image_alt:`를 함께 갱신한다.
 

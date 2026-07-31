@@ -1,0 +1,48 @@
+{
+  "layout": "grouped_bar",
+  "rendering": "custom-zero-centered",
+  "renderer_limitation": "The installed grouped_bar renderer requires y_min = 0 and rejects negative values; the custom SVG preserves the paper Completion change of -2.80 percentage points.",
+  "title": "Similar Macro gain, different axis profiles",
+  "description": "A measured comparison separates Macro relative gain from axis-level percentage-point changes. Macro relative gain is 10.93% locally and 10.78% in the paper. Local versus paper changes are Call 4.93 versus 1.40, Completion 7.04 versus -2.80, Slot 7.01 versus 27.80, and Relevance 5.69 versus 8.70 percentage points. The conditions use different checkpoints, preference data, and judge backends and are not one common effect estimate.",
+  "scale": "measured",
+  "palette": "editorial",
+  "panels": [
+    {
+      "id": "macro_relative_gain",
+      "label": "Macro relative gain",
+      "unit": "%",
+      "domain": [0, 12],
+      "series": [
+        {"id": "local", "label": "Local reconstruction", "value": 10.93},
+        {"id": "paper", "label": "Paper report", "value": 10.78, "pattern": "hatch"}
+      ]
+    },
+    {
+      "id": "axis_change",
+      "label": "Axis change",
+      "unit": "percentage points",
+      "domain": [-5, 30],
+      "ticks": [-5, 0, 10, 20, 30],
+      "categories": [
+        {"id": "call", "label": "Call"},
+        {"id": "completion", "label": "Completion"},
+        {"id": "slot", "label": "Slot"},
+        {"id": "relevance", "label": "Relevance"}
+      ],
+      "series": [
+        {"id": "local", "label": "Local reconstruction"},
+        {"id": "paper", "label": "Paper report", "pattern": "hatch"}
+      ],
+      "values": [
+        {"category": "call", "series": "local", "value": 4.93},
+        {"category": "call", "series": "paper", "value": 1.40},
+        {"category": "completion", "series": "local", "value": 7.04},
+        {"category": "completion", "series": "paper", "value": -2.80},
+        {"category": "slot", "series": "local", "value": 7.01},
+        {"category": "slot", "series": "paper", "value": 27.80},
+        {"category": "relevance", "series": "local", "value": 5.69},
+        {"category": "relevance", "series": "paper", "value": 8.70}
+      ]
+    }
+  ]
+}

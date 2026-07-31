@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="650" viewBox="0 0 1100 650" role="img" aria-labelledby="title desc">
+  <title id="title">Local and paper aggregate behavior-change profiles</title>
+  <desc id="desc">The local Macro relative gain is 10.93 percent and the paper gain is 10.78 percent. Separate bar pairs show local versus paper percentage-point changes for Call, Completion, Slot, and Relevance: 4.93 versus 1.40, 7.04 versus negative 2.80, 7.01 versus 27.80, and 5.69 versus 8.70. The two profiles are not one common effect estimate.</desc>
+  <defs>
+    <pattern id="paper-hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="7" height="7" fill="#e2e5ea"/>
+      <line x1="0" y1="0" x2="0" y2="7" stroke="#9aa2ae" stroke-width="2"/>
+    </pattern>
+    <style>
+      text { font-family: "Plus Jakarta Sans", "Avenir Next", "Segoe UI", Arial, sans-serif; fill: #171923; }
+      .section { font-size: 17px; font-weight: 700; fill: #343a46; }
+      .axis { font-size: 14px; fill: #707886; }
+      .label { font-size: 18px; font-weight: 700; }
+      .series { font-size: 15px; fill: #5e6674; }
+      .value { font-size: 16px; font-weight: 700; }
+      .macro { font-size: 23px; font-weight: 700; }
+      .caveat { font-size: 15px; fill: #626a78; }
+    </style>
+  </defs>
+  <rect width="1100" height="650" fill="#ffffff"/>
+
+  <text x="70" y="45" class="section">Relative Macro gain</text>
+  <g aria-label="Macro relative gain comparison">
+    <rect x="70" y="64" width="960" height="88" rx="16" fill="#f8f9fb" stroke="#dde1e7"/>
+    <rect x="212" y="87" width="666.7" height="14" rx="7" fill="#3f41ff"/>
+    <circle cx="212" cy="94" r="5" fill="#3f41ff"/>
+    <text x="96" y="100" class="series">Local</text>
+    <text x="895" y="101" class="macro">10.93%</text>
+    <rect x="212" y="119" width="657.5" height="14" rx="2" fill="url(#paper-hatch)" stroke="#9aa2ae"/>
+    <rect x="207" y="116" width="10" height="20" fill="#7e8794"/>
+    <text x="96" y="132" class="series">Paper</text>
+    <text x="886" y="133" class="macro">10.78%</text>
+  </g>
+
+  <text x="70" y="190" class="section">Axis change · percentage points</text>
+  <g aria-label="Axis ticks">
+    <line x1="336.7" y1="215" x2="336.7" y2="558" stroke="#aab1bc" stroke-width="1.6"/>
+    <line x1="270" y1="215" x2="270" y2="558" stroke="#eef0f4"/>
+    <line x1="470" y1="215" x2="470" y2="558" stroke="#eef0f4"/>
+    <line x1="603.3" y1="215" x2="603.3" y2="558" stroke="#eef0f4"/>
+    <line x1="736.7" y1="215" x2="736.7" y2="558" stroke="#eef0f4"/>
+    <line x1="870" y1="215" x2="870" y2="558" stroke="#eef0f4"/>
+    <text x="270" y="578" text-anchor="middle" class="axis">−5</text>
+    <text x="336.7" y="578" text-anchor="middle" class="axis">0</text>
+    <text x="470" y="578" text-anchor="middle" class="axis">10</text>
+    <text x="603.3" y="578" text-anchor="middle" class="axis">20</text>
+    <text x="736.7" y="578" text-anchor="middle" class="axis">30</text>
+    <text x="870" y="578" text-anchor="middle" class="axis">40 pp</text>
+  </g>
+
+  <g aria-label="Call change">
+    <text x="70" y="255" class="label">Call</text>
+    <text x="175" y="239" class="series">Local</text>
+    <rect x="336.7" y="225" width="65.7" height="20" rx="10" fill="#3f41ff"/>
+    <circle cx="336.7" cy="235" r="5" fill="#3f41ff"/>
+    <text x="412" y="240" class="value">+4.93</text>
+    <text x="175" y="270" class="series">Paper</text>
+    <rect x="336.7" y="256" width="18.7" height="20" fill="url(#paper-hatch)" stroke="#9aa2ae"/>
+    <text x="366" y="271" class="value">+1.40</text>
+  </g>
+
+  <g aria-label="Completion change">
+    <text x="70" y="348" class="label">Completion</text>
+    <text x="175" y="331" class="series">Local</text>
+    <rect x="336.7" y="317" width="93.9" height="20" rx="10" fill="#3f41ff"/>
+    <circle cx="336.7" cy="327" r="5" fill="#3f41ff"/>
+    <text x="441" y="332" class="value">+7.04</text>
+    <text x="175" y="363" class="series">Paper</text>
+    <rect x="299.3" y="349" width="37.4" height="20" fill="url(#paper-hatch)" stroke="#9aa2ae"/>
+    <text x="290" y="364" text-anchor="end" class="value">−2.80</text>
+  </g>
+
+  <g aria-label="Slot change">
+    <text x="70" y="441" class="label">Slot</text>
+    <text x="175" y="424" class="series">Local</text>
+    <rect x="336.7" y="410" width="93.5" height="20" rx="10" fill="#3f41ff"/>
+    <circle cx="336.7" cy="420" r="5" fill="#3f41ff"/>
+    <text x="441" y="425" class="value">+7.01</text>
+    <text x="175" y="456" class="series">Paper</text>
+    <rect x="336.7" y="442" width="370.7" height="20" fill="url(#paper-hatch)" stroke="#9aa2ae"/>
+    <text x="718" y="457" class="value">+27.80</text>
+  </g>
+
+  <g aria-label="Relevance change">
+    <text x="70" y="534" class="label">Relevance</text>
+    <text x="175" y="517" class="series">Local</text>
+    <rect x="336.7" y="503" width="75.9" height="20" rx="10" fill="#3f41ff"/>
+    <circle cx="336.7" cy="513" r="5" fill="#3f41ff"/>
+    <text x="423" y="518" class="value">+5.69</text>
+    <text x="175" y="549" class="series">Paper</text>
+    <rect x="336.7" y="535" width="116" height="20" fill="url(#paper-hatch)" stroke="#9aa2ae"/>
+    <text x="463" y="550" class="value">+8.70</text>
+  </g>
+
+  <line x1="70" y1="610" x2="1030" y2="610" stroke="#e0e4ea"/>
+  <text x="550" y="634" text-anchor="middle" class="caveat">Different checkpoints, preference data, and judge backends · not one common effect estimate</text>
+</svg>

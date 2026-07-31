@@ -1,71 +1,38 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="700" viewBox="0 0 1060 700" role="img" aria-labelledby="title desc">
-  <title id="title">FNS mitigation comparison</title>
-  <desc id="desc">Two stacked horizontal bar panels comparing token and FNS normalized phase spread for full sequence and local target scorer pairs, with a 0.10 threshold line.</desc>
-  <rect width="1060" height="700" fill="#ffffff"/>
-  <defs>
-    <style>
-      text { font-family: 'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-      .title { fill: #111111; font-size: 22px; font-weight: 760; }
-      .panel-title { fill: #111111; font-size: 18px; font-weight: 740; }
-      .label { fill: #111111; font-size: 15px; font-weight: 680; }
-      .small { fill: #5f6672; font-size: 13px; font-weight: 560; }
-      .value { fill: #111111; font-size: 15px; font-weight: 760; }
-      .axis { stroke: #cfd4dd; stroke-width: 1.35; }
-      .grid { stroke: #e8ebf1; stroke-width: 1; stroke-dasharray: 4 8; }
-      .threshold { stroke: #2b3038; stroke-width: 1.5; stroke-dasharray: 5 6; }
-      .divider { stroke: #e5e9f2; stroke-width: 1.2; }
-      .token { fill: #3f41ff; }
-      .fns { fill: #E9EBFC; }
-    </style>
-  </defs>
-  <text x="530" y="54" text-anchor="middle" class="title">FNS lowers paired spread, but remaining spread stays above threshold</text>
-
-  <rect x="712" y="84" width="16" height="16" rx="5" class="token"/>
-  <text x="738" y="97" class="small">token</text>
-  <rect x="808" y="84" width="16" height="16" rx="5" class="fns"/>
-  <text x="834" y="97" class="small">FNS</text>
-
-  <text x="96" y="142" class="panel-title">Full sequence pair</text>
-  <line x1="300" y1="166" x2="300" y2="286" class="axis"/>
-  <line x1="426" y1="166" x2="426" y2="286" class="threshold"/>
-  <line x1="552" y1="166" x2="552" y2="286" class="grid"/>
-  <line x1="678" y1="166" x2="678" y2="286" class="grid"/>
-  <line x1="804" y1="166" x2="804" y2="286" class="grid"/>
-  <line x1="930" y1="166" x2="930" y2="286" class="grid"/>
-  <text x="220" y="211" text-anchor="end" class="label">token</text>
-  <text x="220" y="265" text-anchor="end" class="label">FNS</text>
-  <rect x="300" y="188" width="515.3" height="28" rx="14" class="token"/>
-  <text x="832.3" y="208" class="value">0.409</text>
-  <rect x="300" y="242" width="444.8" height="28" rx="14" class="fns"/>
-  <text x="761.8" y="262" class="value">0.353</text>
-  <text x="300" y="318" text-anchor="middle" class="small">0.0</text>
-  <text x="426" y="318" text-anchor="middle" class="small">0.1</text>
-  <text x="552" y="318" text-anchor="middle" class="small">0.2</text>
-  <text x="678" y="318" text-anchor="middle" class="small">0.3</text>
-  <text x="804" y="318" text-anchor="middle" class="small">0.4</text>
-  <text x="930" y="318" text-anchor="middle" class="small">0.5</text>
-
-  <line x1="80" y1="356" x2="980" y2="356" class="divider"/>
-
-  <text x="96" y="416" class="panel-title">Local target pair</text>
-  <line x1="300" y1="440" x2="300" y2="560" class="axis"/>
-  <line x1="426" y1="440" x2="426" y2="560" class="threshold"/>
-  <line x1="552" y1="440" x2="552" y2="560" class="grid"/>
-  <line x1="678" y1="440" x2="678" y2="560" class="grid"/>
-  <line x1="804" y1="440" x2="804" y2="560" class="grid"/>
-  <line x1="930" y1="440" x2="930" y2="560" class="grid"/>
-  <text x="220" y="485" text-anchor="end" class="label">token</text>
-  <text x="220" y="539" text-anchor="end" class="label">FNS</text>
-  <rect x="300" y="462" width="439.7" height="28" rx="14" class="token"/>
-  <text x="756.7" y="482" class="value">0.349</text>
-  <rect x="300" y="516" width="417.1" height="28" rx="14" class="fns"/>
-  <text x="734.1" y="536" class="value">0.331</text>
-  <text x="300" y="592" text-anchor="middle" class="small">0.0</text>
-  <text x="426" y="592" text-anchor="middle" class="small">0.1</text>
-  <text x="552" y="592" text-anchor="middle" class="small">0.2</text>
-  <text x="678" y="592" text-anchor="middle" class="small">0.3</text>
-  <text x="804" y="592" text-anchor="middle" class="small">0.4</text>
-  <text x="930" y="592" text-anchor="middle" class="small">0.5</text>
-
-  <text x="615" y="646" text-anchor="middle" class="small">normalized phase range; dashed line marks 0.10</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="figure-title figure-desc" data-renderer="editorial-systems-figure-v2" data-theme="paper" data-palette="editorial">
+<title id="figure-title">Paired token and FNS phase range</title>
+<desc id="figure-desc">Token and FNS median six-phase ranges divided by their own score IQRs for full-sequence and local-target paired comparisons on the 500-variant BRCA2 MAVE-derived MVE subset.</desc>
+<rect width="1200" height="675" fill="#FFFFFF"/>
+<defs><style>.system-label{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;letter-spacing:.035em}</style><pattern id="diagonal-hatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="10" height="10" fill="#EEF3FD"/><line x1="0" y1="0" x2="0" y2="10" stroke="#11120F" stroke-width="2" opacity=".35"/></pattern><pattern id="dot-pattern" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" fill="#FFFFFF"/><circle cx="3" cy="3" r="1.4" fill="#11120F" opacity=".35"/></pattern><pattern id="bar-hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" fill="#FFFFFF"/><line x1="0" y1="0" x2="0" y2="8" stroke="#5E7FD8" stroke-width="5" opacity=".72"/></pattern><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="context-stroke"/></marker></defs>
+<g font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif">
+<text class="figure-title" data-fit-width="1056.0" data-rendered-width="406.4" data-line-count="1" data-leading="1.22" x="72.0" y="60.0" font-size="24" font-weight="600" fill="#11120F" text-anchor="start"><tspan x="72.0" dy="0.0">Paired token and FNS phase range</tspan></text>
+<rect x="120.0" y="88" width="24" height="15" rx="2" fill="#D9DCD7" stroke="#686B66" stroke-width="1.4"/>
+<text class="legend-label" data-fit-width="50.8" data-rendered-width="50.8" data-line-count="1" data-leading="1.22" x="154.0" y="103.0" font-size="18" font-weight="400" fill="#686B66" text-anchor="start"><tspan x="154.0" dy="0.0">Token</tspan></text>
+<rect x="246.8" y="88" width="24" height="15" rx="2" fill="url(#bar-hatch)" stroke="#5E7FD8" stroke-width="1.4"/>
+<text class="legend-label" data-fit-width="35.6" data-rendered-width="35.6" data-line-count="1" data-leading="1.22" x="280.8" y="103.0" font-size="18" font-weight="400" fill="#686B66" text-anchor="start"><tspan x="280.8" dy="0.0">FNS</tspan></text>
+<text class="system-label axis-tick" data-fit-width="97.2" data-rendered-width="11.2" data-line-count="1" data-leading="1.22" x="105.0" y="551.0" font-size="18" font-weight="400" fill="#686B66" text-anchor="end"><tspan x="105.0" dy="0.0">0</tspan></text>
+<line class="grid-line" data-axis-id="main" x1="120" y1="467.0" x2="1130" y2="467.0" stroke="#11120F" stroke-width="1" opacity=".10"/>
+<line class="threshold-line" x1="120" y1="467.0" x2="1130" y2="467.0" stroke="#11120F" stroke-width="1.5" stroke-dasharray="5 7"/>
+<text class="system-label axis-tick" data-fit-width="97.2" data-rendered-width="33.5" data-line-count="1" data-leading="1.22" x="105.0" y="473.0" font-size="18" font-weight="400" fill="#686B66" text-anchor="end"><tspan x="105.0" dy="0.0">0.1</tspan></text>
+<line class="grid-line" data-axis-id="main" x1="120" y1="389.0" x2="1130" y2="389.0" stroke="#11120F" stroke-width="1" opacity=".10"/>
+<text class="system-label axis-tick" data-fit-width="97.2" data-rendered-width="33.5" data-line-count="1" data-leading="1.22" x="105.0" y="395.0" font-size="18" font-weight="400" fill="#686B66" text-anchor="end"><tspan x="105.0" dy="0.0">0.2</tspan></text>
+<line class="grid-line" data-axis-id="main" x1="120" y1="311.0" x2="1130" y2="311.0" stroke="#11120F" stroke-width="1" opacity=".10"/>
+<text class="system-label axis-tick" data-fit-width="97.2" data-rendered-width="33.5" data-line-count="1" data-leading="1.22" x="105.0" y="317.0" font-size="18" font-weight="400" fill="#686B66" text-anchor="end"><tspan x="105.0" dy="0.0">0.3</tspan></text>
+<line class="grid-line" data-axis-id="main" x1="120" y1="233.0" x2="1130" y2="233.0" stroke="#11120F" stroke-width="1" opacity=".10"/>
+<text class="system-label axis-tick" data-fit-width="97.2" data-rendered-width="33.5" data-line-count="1" data-leading="1.22" x="105.0" y="239.0" font-size="18" font-weight="400" fill="#686B66" text-anchor="end"><tspan x="105.0" dy="0.0">0.4</tspan></text>
+<line class="grid-line" data-axis-id="main" x1="120" y1="155.0" x2="1130" y2="155.0" stroke="#11120F" stroke-width="1" opacity=".10"/>
+<text class="system-label axis-tick" data-fit-width="97.2" data-rendered-width="33.5" data-line-count="1" data-leading="1.22" x="105.0" y="161.0" font-size="18" font-weight="400" fill="#686B66" text-anchor="end"><tspan x="105.0" dy="0.0">0.5</tspan></text>
+<line class="axis-y" data-axis-id="main" x1="120" y1="155" x2="120" y2="545" stroke="#11120F" stroke-width="1.5"/>
+<line class="axis-x zero-line" data-axis-id="main" x1="120" y1="545" x2="1130" y2="545" stroke="#11120F" stroke-width="1.5"/>
+<text x="31" y="350.0" font-size="19" fill="#686B66" text-anchor="middle" transform="rotate(-90 31 350.0)">Median phase range / score IQR</text>
+<rect class="data-mark" x="301.5" y="225.9" width="67.0" height="319.1" rx="2" fill="#D9DCD7" stroke="#686B66" stroke-width="1.4"/>
+<text class="system-label value-label" data-fit-width="244.5" data-rendered-width="54.0" data-line-count="1" data-leading="1.22" x="335.0" y="215.9" font-size="20" font-weight="600" fill="#11120F" text-anchor="middle"><tspan x="335.0" dy="0.0">0.409</tspan></text>
+<rect class="data-mark" x="376.5" y="269.6" width="67.0" height="275.4" rx="2" fill="url(#bar-hatch)" stroke="#5E7FD8" stroke-width="1.4"/>
+<text class="system-label value-label" data-fit-width="244.5" data-rendered-width="54.0" data-line-count="1" data-leading="1.22" x="410.0" y="259.6" font-size="20" font-weight="600" fill="#11120F" text-anchor="middle"><tspan x="410.0" dy="0.0">0.353</tspan></text>
+<text class="category-label" data-fit-width="491.0" data-rendered-width="116.3" data-line-count="1" data-leading="1.10" x="372.5" y="577.0" font-size="18" font-weight="500" fill="#686B66" text-anchor="middle"><tspan x="372.5" dy="0.0">Full sequence</tspan></text>
+<rect class="data-mark" x="806.5" y="272.9" width="67.0" height="272.1" rx="2" fill="#D9DCD7" stroke="#686B66" stroke-width="1.4"/>
+<text class="system-label value-label" data-fit-width="244.5" data-rendered-width="54.0" data-line-count="1" data-leading="1.22" x="840.0" y="262.9" font-size="20" font-weight="600" fill="#11120F" text-anchor="middle"><tspan x="840.0" dy="0.0">0.349</tspan></text>
+<rect class="data-mark" x="881.5" y="287.0" width="67.0" height="258.0" rx="2" fill="url(#bar-hatch)" stroke="#5E7FD8" stroke-width="1.4"/>
+<text class="system-label value-label" data-fit-width="244.5" data-rendered-width="54.0" data-line-count="1" data-leading="1.22" x="915.0" y="277.0" font-size="20" font-weight="600" fill="#11120F" text-anchor="middle"><tspan x="915.0" dy="0.0">0.331</tspan></text>
+<text class="category-label" data-fit-width="491.0" data-rendered-width="110.9" data-line-count="1" data-leading="1.10" x="877.5" y="577.0" font-size="18" font-weight="500" fill="#686B66" text-anchor="middle"><tspan x="877.5" dy="0.0">Local target</tspan></text>
+</g>
 </svg>

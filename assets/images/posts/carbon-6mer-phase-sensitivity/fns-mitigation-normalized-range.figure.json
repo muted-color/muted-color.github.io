@@ -1,0 +1,30 @@
+{
+  "layout": "grouped_bar",
+  "title": "Paired token and FNS phase range",
+  "description": "Token and FNS median six-phase ranges divided by their own score IQRs for full-sequence and local-target paired comparisons on the 500-variant BRCA2 MAVE-derived MVE subset.",
+  "scale": "measured",
+  "palette": "editorial",
+  "canvas_height": 675,
+  "y_label": "Median phase range / score IQR",
+  "y_min": 0,
+  "y_max": 0.5,
+  "y_ticks": [0, 0.1, 0.2, 0.3, 0.4, 0.5],
+  "value_decimals": 3,
+  "grid": true,
+  "categories": [
+    {"id": "full-sequence", "label": "Full sequence"},
+    {"id": "local-target", "label": "Local target"}
+  ],
+  "series": [
+    {"id": "token", "label": "Token"},
+    {"id": "fns", "label": "FNS", "pattern": "hatch"}
+  ],
+  "values": [
+    {"category": "full-sequence", "series": "token", "value": 0.40910699721465615},
+    {"category": "full-sequence", "series": "fns", "value": 0.3530196688240733},
+    {"category": "local-target", "series": "token", "value": 0.34883724332758503},
+    {"category": "local-target", "series": "fns", "value": 0.33081394553602533}
+  ],
+  "source_note": "Values are the 500-variant rows from the experiment's paired FNS-token comparison. A dashed horizontal reference marks the predeclared 0.10 auxiliary threshold; paired differences and confidence intervals remain external.",
+  "qa_note": "Value labels are raised from the renderer's 17px default to 20px after rendering so they remain legible in the 600px stress preview."
+}

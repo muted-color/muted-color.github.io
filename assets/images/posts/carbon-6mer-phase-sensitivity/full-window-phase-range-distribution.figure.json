@@ -1,0 +1,31 @@
+{
+  "layout": "custom_ranked_distribution",
+  "title": "Full-window phase range distribution",
+  "description": "Ranked distribution of each BRCA2 variant's six-phase full-window score range divided by the common full-window score IQR.",
+  "scale": "measured",
+  "palette": "editorial",
+  "measurement": {
+    "n_variants": 500,
+    "score_iqr": 0.015493154525756836,
+    "y_transform": "log10",
+    "median": 0.40910699721465615,
+    "p90": 1.162,
+    "p95": 2.20,
+    "maximum": 11.52,
+    "count_at_or_above_0.10": 498
+  },
+  "source_data": {
+    "file_role": "BRCA2 token-score artifact",
+    "filter": "in_mve=true and scorer=full_window",
+    "group_by": "variant_id",
+    "value": "(max(score_ref_minus_alt) - min(score_ref_minus_alt)) / score_iqr",
+    "order": "ascending"
+  },
+  "layout_geometry": {
+    "outer_x": [90, 1110],
+    "plot_x": [186, 1050],
+    "plot_y": [127, 482],
+    "grid_policy": "log major ticks plus auxiliary threshold",
+    "actual_display_width": 720
+  }
+}

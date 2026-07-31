@@ -1,61 +1,59 @@
 ---
-title: "Carbon-3B: 6-mer token phase sensitivity 측정"
+title: "Carbon-3B: Measuring 6-mer Token Phase Sensitivity"
 date: 2026-05-23 16:50:00 +0900
-last_modified_at: 2026-05-24 21:49:23 +0900
+last_modified_at: 2026-07-30 21:59:25 +0900
+lang: en
 categories: ["BIO ML"]
 tags: [carbon-3b, dna-foundation-model, brca2, variant-effect-prediction, tokenization, phase-sensitivity, fns]
 lab_path: "experiment-lab/projects/carbon-6mer-phase-sensitivity"
-excerpt: "Carbon-3B로 BRCA2 MVE SNV를 점수화할 때 6-mer token phase가 score IQR 대비 얼마나 흔드는지, FNS가 그 흔들림을 얼마나 줄이는지 점검한 노트."
-description: "Carbon-3B BRCA2 MVE 500개 SNV에서 6-mer token phase가 token-level score를 score IQR 대비 크게 흔들었고, FNS는 대응 비교에서 phase range를 줄였지만 남는 phase sensitivity가 있었다."
+excerpt: "A test of how much 6-mer token phase changes Carbon-3B scores relative to score IQR across 500 BRCA2 MAVE SNVs, and how the corresponding FNS pipeline differs."
+description: "Across 500 BRCA2 MAVE SNVs scored with Carbon-3B, the 6-mer token phase range exceeded a prespecified 0.10 threshold, while the FNS pipeline showed lower ranges than the corresponding token conditions."
 permalink: /research/2026/05/23/carbon-6mer-phase-sensitivity/
 image: /assets/images/posts/carbon-6mer-phase-sensitivity/social-thumbnail.png
-image_alt: "Carbon-3B score 조건별 6-mer phase sensitivity를 비교하고 0.10 보조 기준선을 표시한 막대 차트"
+image_alt: "Bar chart comparing 6-mer phase sensitivity across Carbon-3B scoring conditions with a prespecified 0.10 reference threshold"
 hero_image: /assets/images/posts/carbon-6mer-phase-sensitivity/phase-instability-by-scorer.svg
-hero_alt: "전체 sequence FNS, variant 위치 주변 FNS, downstream token, 전체 window token, variant 포함 token 조건의 정규화 phase range를 비교한 막대 차트"
-hero_caption: "<strong>Figure 1.</strong> BRCA2 MVE 500개 SNV에서 score 조건별 median phase range를 각 조건의 score IQR로 나눈 값이다. 점선은 score IQR의 10%에 해당하는 0.10 보조 기준선이다. Paired 기준에서 FNS 조건은 대응하는 token 조건보다 낮았지만, 두 FNS 조건도 기준선을 넘었다."
+hero_alt: "Bar chart comparing normalized phase ranges for full-sequence FNS, local-target FNS, downstream token, full-window token, and target-token scores"
+hero_caption: "<strong>Figure 1.</strong> Normalized phase ranges across scoring conditions for 500 SNVs sampled from the BRCA2 MAVE. The dashed line marks the prespecified 0.10 reference threshold. All three token conditions exceeded it; both FNS conditions were lower than their corresponding token conditions but remained above the threshold."
 hero_frame: true
 hero_compact: true
+hero_variant: featured-plot
 ---
 
-Carbon-3B는 DNA를 non-overlapping 6-mer token으로 읽는 autoregressive genomic foundation model이다 <a class="citation-ref" href="#ref-carbon-3b" aria-label="Reference 1">[1]</a>. 이 구조에서는 같은 SNV(single-nucleotide variant)라도 window start를 몇 bp 옮기느냐에 따라 variant base가 6-mer token 안의 서로 다른 위치에 들어간다. 이 글은 그 phase 선택이 Carbon variant score를 얼마나 흔드는지 평가한다.
+Carbon presents non-overlapping 6-mer tokenization as an efficiency trade-off: encoding six nucleotides per token expands the nucleotide context covered by a fixed token budget, and the authors report that this scheme worked better than BPE for DNA. FNS is presented as the bridge from this coarse representation to single-nucleotide supervision and scoring <a class="citation-ref" href="#ref-carbon-paper" aria-label="Reference 1">[1]</a> <a class="citation-ref" href="#ref-carbon-3b" aria-label="Reference 2">[2]</a>.
 
-평가 질문은 Carbon VEP(variant effect prediction) 전체 성능이 아니라 score 계산 절차의 안정성이다. 같은 biological SNV를 거의 같은 BRCA2 genomic context 안에 두고, 6가지 6-mer phase가 reference score에서 alternative score를 뺀 값에 남기는 변동폭을 측정한다. 이어서 Carbon의 FNS base-level scoring이 그 변동을 줄이는지 확인한다.
+Because Carbon also reports training-free VEP (variant effect prediction) results on BRCA2, phase stability is a practical complementary question: does the same SNV receive a stable reference-minus-alternative score across the six possible token offsets? This note tests that scoring-protocol question in 500 BRCA2 MAVE SNVs and compares the corresponding token and FNS pipelines; it does not re-evaluate overall Carbon VEP performance.
 
-핵심 관찰은 token score의 정규화 phase range가 0.10 보조 기준선을 크게 넘었고, FNS가 이 range를 줄였지만 제거하지는 못했다는 점이다.
+The normalized token-score phase range exceeded the 0.10 reference threshold across most variants. The paired FNS pipeline comparisons showed lower ranges, but the sensitivity remained.
 
-> **Carbon-3B**는 Hugging Face Biology Research가 공개한 3B parameter DNA/RNA autoregressive model이다. DNA 입력에서는 `<dna>` tag 뒤 sequence가 6-mer token 단위로 묶인다.
+> **6-mer phase** is the offset occupied by the variant base within a 6 bp token. Here, the same SNV is scored at all six phases.
 >
-> **6-mer phase**는 variant base가 6bp token 안에서 차지하는 offset이다. 이 글에서는 같은 SNV를 6가지 phase에 놓아 score range를 계산했다.
+> **MAVE** stands for multiplexed assay of variant effect. The BRCA2 resource from Huang et al. measures the functional effects of many variants in parallel.
 >
-> **MVE**는 multiplexed variant effect를 뜻한다. 이 글의 BRCA2 MVE는 여러 BRCA2 variant의 functional effect label을 제공하는 평가 리소스다.
->
-> **FNS**는 Factorised Nucleotide Supervision이다. Carbon model card는 Carbon training이 Cross-Entropy 단계 뒤 FNS objective 단계로 이어졌다고 설명한다 <a class="citation-ref" href="#ref-carbon-3b" aria-label="Reference 1">[1]</a>. 이 글에서는 Carbon이 제공하는 FNS base-level scoring을 token-level scoring과 비교한다.
+> **FNS** stands for Factorised Nucleotide Supervision, Carbon's mechanism for connecting coarse 6-mer modeling to position-wise nucleotide supervision and scoring.
 
-{% include model-mention-cards.html label="사용한 주요 리소스" aria_label="Carbon과 BRCA2 평가 리소스" models="Carbon-3B|HuggingFaceBio/Carbon-3B|https://huggingface.co/HuggingFaceBio/Carbon-3B;Carbon evaluation README|huggingface/carbon evaluation|https://github.com/huggingface/carbon/blob/main/evaluation/README.md;BRCA2 MVE|Huang et al. Nature 2025|https://doi.org/10.1038/s41586-024-08388-8" %}
+{% include model-mention-cards.html label="Primary resources" aria_label="Carbon and BRCA2 evaluation resources" models="Carbon-3B|HuggingFaceBio/Carbon-3B|https://huggingface.co/HuggingFaceBio/Carbon-3B;Carbon evaluation README|huggingface/carbon evaluation|https://github.com/huggingface/carbon/blob/main/evaluation/README.md;BRCA2 MAVE|Huang et al. Nature 2025|https://doi.org/10.1038/s41586-024-08388-8" %}
 
-## 요약
+## Summary
 
-- BRCA2 MVE 500개 SNV를 대상으로 Carbon-3B token-level scoring의 6-mer phase sensitivity를 평가했다. Label 구성은 LOF(loss-of-function) 85개, FUNC(functional)/INT(intermediate) 415개다.
-- Token score의 score IQR(interquartile range) 정규화 phase range는 Full-window 0.409, Target-token 0.349, Downstream-only 0.466이었다. 세 값 모두 score IQR의 10%에 해당하는 0.10 보조 기준선을 넘었다.
-- FNS scoring은 paired 정규화 phase range를 줄였다. Full-sequence FNS는 0.353, Local-target FNS는 0.331이었다.
-- FNS mitigation의 median token-minus-FNS 정규화 차이는 full-sequence 비교에서 0.0544, local-target 비교에서 0.0198이었다. 95% CI(confidence interval)는 각각 0.0362-0.0709, 0.0118-0.0294였다.
-- FNS는 phase range를 줄이는 완화 효과를 보였다. 동시에 두 FNS 조건도 score IQR 정규화 phase range가 0.10을 넘어, phase에 무관한 점수 기준으로 보기는 어렵다.
-- 8,190 bp clean-window protocol은 partial-token tail을 만들지 않았다. Full-window 결과에는 window edge/context 변화도 들어갈 수 있으므로, local token boundary 효과는 target-token 결과와 함께 읽었다.
+- The evaluation covers six token offsets for 500 BRCA2 MAVE SNVs: 85 LOF (loss-of-function) and 415 FUNC (functional)/INT (intermediate). Phase range is normalized by scorer-specific score IQR, with 0.10 as the prespecified reference threshold.
+- Median normalized ranges were 0.409 for Full-window, 0.349 for Target-token, and 0.466 for Downstream-only; 93.6–100% of variants met or exceeded 0.10.
+- Target-token is the most direct measure of sensitivity in scoring the variant-containing token. Full-window and Downstream-only also include global segmentation and edge/context changes; the shifted-reference control prevents a purely local attribution.
+- FNS ranges were lower at 0.353 for Full-sequence and 0.331 for Local-target. Median paired differences were 0.0544 and 0.0198, but both FNS conditions remained above 0.10.
 
-## 평가 설정
+## Evaluation setup
 
-데이터는 Huang et al. BRCA2 functional evaluation resource를 hg19 chr13 reference와 맞춰 다시 구성한 SNV subset이다 <a class="citation-ref" href="#ref-huang-brca2" aria-label="Reference 3">[3]</a> <a class="citation-ref" href="#ref-brca2-source-table" aria-label="Reference 4">[4]</a> <a class="citation-ref" href="#ref-ucsc-hg19-chr13" aria-label="Reference 5">[5]</a>. 원자료 전체에서 ref allele match와 SNV 조건을 통과한 6,836개 중, label 구성이 유지되는 500개 MVE subset을 사용했다.
+The data are an SNV subset reconstructed from the Huang et al. BRCA2 MAVE resource against the hg19 chr13 reference <a class="citation-ref" href="#ref-huang-brca2" aria-label="Reference 4">[4]</a> <a class="citation-ref" href="#ref-brca2-source-table" aria-label="Reference 5">[5]</a> <a class="citation-ref" href="#ref-ucsc-hg19-chr13" aria-label="Reference 6">[6]</a>. Of 6,836 source variants that passed the reference-allele match and SNV filters, 500 were sampled with stratification and `seed=20260523`. Strata covered label, functional-score quantile, genomic-position decile, reference/alternative base, and genomic position modulo 6. The 100-variant protocol pilot is included in this subset.
 
-주 window는 8,190 bp다. 이 길이는 6으로 나누어 떨어지므로 Carbon tokenizer에서 tail padding을 만들지 않는다. Carbon BRCA2 평가와 맞춘 8,192 bp window도 따로 확인했고 <a class="citation-ref" href="#ref-carbon-eval" aria-label="Reference 2">[2]</a> <a class="citation-ref" href="#ref-carbon-brca2-prep" aria-label="Reference 6">[6]</a>, 주 phase score 결론에는 섞지 않았다.
+The primary window is 8,190 bp. Its length is divisible by six, so it creates no tail padding in the Carbon tokenizer. An 8,192 bp window matching the Carbon BRCA2 evaluation was checked separately <a class="citation-ref" href="#ref-carbon-eval" aria-label="Reference 3">[3]</a> <a class="citation-ref" href="#ref-carbon-brca2-prep" aria-label="Reference 7">[7]</a> and was not mixed into the primary phase-score result.
 
-<aside class="model-flow" aria-label="평가 흐름" markdown="1">
-  <p class="metric-detail__eyebrow">평가 흐름</p>
+<aside class="model-flow" aria-label="Evaluation flow" markdown="1">
+  <p class="metric-detail__eyebrow">Evaluation flow</p>
 <pre class="model-flow__diagram"><code>BRCA2 SNV
-  -> 6가지 8,190 bp phase window
+  -> six 8,190 bp phase windows
   -> reference / alternative sequence pair
   -> token score: Full-window, Target-token, Downstream-only
   -> FNS score: Full-sequence, Local-target
-  -> variant별 phase range와 정규화 phase range</code></pre>
+  -> per-variant phase range and normalized phase range</code></pre>
 </aside>
 
 <figure class="table-figure table-figure--comparison table-figure--compact-metrics">
@@ -63,69 +61,67 @@ Carbon-3B는 DNA를 non-overlapping 6-mer token으로 읽는 autoregressive geno
     <table class="comparison-table metrics-table">
       <thead>
         <tr>
-          <th>항목</th>
-          <th>고정한 값</th>
+          <th>Item</th>
+          <th>Fixed value</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>모델</td>
-          <td><code>HuggingFaceBio/Carbon-3B</code></td>
+          <td>Model</td>
+          <td><code>HuggingFaceBio/Carbon-3B</code><br><span class="table-note-inline">token <code>fe755cb5</code>; FNS revision <code>bf6f6bec</code></span></td>
         </tr>
         <tr>
-          <td>주 데이터</td>
-          <td>BRCA2 MVE 500개 SNV<br><span class="table-note-inline">LOF 85, FUNC/INT 415</span></td>
+          <td>Primary data</td>
+          <td>500-SNV subset of the BRCA2 MAVE<br><span class="table-note-inline">LOF 85, FUNC/INT 415; seed 20260523</span></td>
         </tr>
         <tr>
-          <td>주 window</td>
-          <td><code>8,190 bp</code><br><span class="table-note-inline">6-mer clean window, partial token tail 없음</span></td>
+          <td>Primary window</td>
+          <td><code>8,190 bp</code><br><span class="table-note-inline">6-mer clean window; no partial-token tail</span></td>
         </tr>
         <tr>
-          <td>주 score</td>
-          <td>reference score에서 alternative score를 뺀 값</td>
+          <td>Primary score</td>
+          <td>Reference score minus alternative score</td>
         </tr>
         <tr>
-          <td>보조 기준선</td>
-          <td>median phase range / score IQR &ge; <code>0.10</code><br><span class="table-note-inline">score IQR의 10%를 scale-normalized effect-size 기준으로 사용</span></td>
+          <td>Reference threshold</td>
+          <td>Median phase range / score IQR &ge; <code>0.10</code><br><span class="table-note-inline">10% of score IQR as a scale-normalized effect-size threshold</span></td>
         </tr>
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 1.</strong> 평가 범위다. 이 글은 BRCA2 MVE subset에서 score 계산 절차의 phase sensitivity를 점검한다. Carbon VEP 전체 성능 평가는 별도 평가 문제로 둔다.</figcaption>
+  <figcaption><strong>Table 1.</strong> Evaluation scope for testing scoring-protocol phase sensitivity in the 500-SNV BRCA2 MAVE subset.</figcaption>
 </figure>
 
-Score scale은 계산 방식마다 다르다. Token score 조건은 score를 모으는 범위로 구분했다.
+Within Table 1's scope, score scales differ across scoring methods. Token conditions are distinguished by the region over which scores are aggregated.
 
-- **Full-window**는 8,190 bp window 전체의 valid DNA token에서 평균 log probability score를 계산한다.
-- **Target-token**은 variant를 포함하는 단일 6-mer token만 score에 사용한다.
-- **Downstream-only**는 variant 이후에 오는 token들만 score에 사용한다. Autoregressive model에서 variant context가 뒤쪽 token 예측에 남기는 변화를 보기 위한 조건이다.
+- **Full-window** averages log-probability scores over all valid DNA tokens in the 8,190 bp window.
+- **Target-token** uses only the single 6-mer token containing the variant.
+- **Downstream-only** uses only tokens after the variant, measuring how the changed variant context affects subsequent token predictions in the autoregressive model.
 
-FNS full-sequence와 FNS local-target score도 raw scale이 token score와 같지 않다. 따라서 서로 다른 계산 방식의 raw range를 직접 비교하지 않고, 각 score의 IQR로 나눈 정규화 phase range를 사용했다.
+FNS Full-sequence and FNS Local-target scores are also on different raw scales from token scores. Raw ranges are therefore not compared across scoring methods. For each variant, the numerator of the normalized phase range is the difference between the maximum and minimum scores across six phases. The denominator is one IQR calculated over all `score_ref_minus_alt` values for the same scorer across 500 variants × 6 phases. Reported values are the medians of the 500 variant-level normalized ranges.
 
-0.10 보조 기준선은 실험 설계 단계에서 score IQR의 10%로 미리 둔 effect-size 기준이다. Score 조건별 scale이 다르기 때문에 raw range 대신 이 기준으로 phase range의 상대적 크기를 비교했다.
+The 0.10 reference threshold was prespecified during experiment design as 10% of score IQR. It provides a common relative scale for phase ranges whose raw score scales differ.
 
-## 결과
+## Results
 
-주 결과는 token score의 phase sensitivity와 FNS의 완화 효과다. Padding과 window edge 조건은 phase score의 해석 범위를 정하고, label 지표는 score가 BRCA2 MVE label 방향성과 연결되는지 확인하는 보조 결과다.
+The primary result is phase sensitivity in token scores.
 
-### Token phase 민감도
+### Token phase sensitivity
 
-가장 직접적인 관찰은 token-level score가 phase 선택에 크게 흔들렸다는 점이다. BRCA2 MVE 500개 SNV에서 full-window token score의 정규화 phase range는 0.409였다. 같은 기준에서 target-token score는 0.349, downstream-only score는 0.466이었다. 모두 0.10 보조 기준선보다 충분히 크다.
+Across the 500-SNV BRCA2 subset, normalized token-score phase ranges were 0.409 for Full-window, 0.349 for Target-token, and 0.466 for Downstream-only. These values were 3.5–4.7 times the prespecified 0.10 reference threshold, and 93.6–100% of variants met or exceeded it in each condition. Within this subset, phase sensitivity was distributed across variants rather than confined to a few outliers.
 
-Figure 1은 이 값을 score 조건별로 압축해 보여준다. Token score 세 조건은 모두 기준선 위에 있었다. FNS 조건은 paired 기준에서 대응하는 token score보다 낮은 값을 보였고, 동시에 기준선 위에 남았다.
-
-Target-token raw range는 token 하나의 log-probability 차이에서 나오기 때문에 full-window raw range와 직접 비교하지 않는다. 여기서 중요한 값은 같은 score 조건 안에서 phase range가 score IQR 대비 얼마나 큰지다. 이 기준에서는 target token만 문제가 아니라 full-window와 downstream score도 phase-sensitive하다.
+Target-token provides the most direct measure of sensitivity in scoring the variant-containing token; scorer-specific normalization is required for comparisons with the other token conditions.
 
 <figure class="table-figure table-figure--comparison table-figure--metrics">
   <div class="table-shell">
     <table class="comparison-table metrics-table metrics-table--numeric-columns">
       <thead>
         <tr>
-          <th>Token score 조건</th>
+          <th>Token score condition</th>
           <th class="align-right">Median phase range</th>
           <th class="align-right">P90 phase range</th>
-          <th class="align-right">Range / score IQR</th>
-          <th class="align-right">Variants over 0.10 보조 기준선</th>
+          <th class="align-right">Median range / score IQR</th>
+          <th class="align-right">Variants at or above 0.10</th>
         </tr>
       </thead>
       <tbody>
@@ -153,81 +149,28 @@ Target-token raw range는 token 하나의 log-probability 차이에서 나오기
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 2.</strong> Token score 조건별 phase sensitivity다. Raw phase range는 score scale이 다르므로, 주 비교 값은 score IQR로 나눈 정규화 phase range다.</figcaption>
+  <figcaption><strong>Table 2.</strong> Phase sensitivity by token-score condition. Because raw phase ranges use different score scales, the primary comparison is the median variant-level phase range divided by the scorer-specific overall score IQR.</figcaption>
 </figure>
 
-Figure 2는 이 관찰이 일부 variant의 outlier 현상인지, 대부분의 variant에 걸친 현상인지 확인하기 위한 그림이다. Phase별 방향성을 보여주는 그림이 아니라, variant별 phase sensitivity의 크기를 보여준다. 여기서 y값은 한 variant의 6개 phase score가 만드는 최대-최소 차이를 full-window score IQR로 나눈 값이다. Median은 0.41, p90은 1.16이었고, 500개 중 498개 variant가 0.10 보조 기준선 이상이었다.
+Figure 2 expands the Table 2 distribution by variant to test whether the observation is driven by outliers. It shows the magnitude of per-variant phase sensitivity, not a direction associated with any phase. Each y-value is the range across a variant's six phase scores divided by the Full-window score IQR. The median was 0.41, the p90 was 1.16, and 498 of 500 variants met or exceeded the 0.10 threshold.
 
 <figure class="media-figure media-figure--wide-visual">
-  <img src="/assets/images/posts/carbon-6mer-phase-sensitivity/full-window-phase-range-distribution.svg" alt="Full-window token score에서 variant별 six-phase range를 score IQR로 나눈 값의 ranked distribution">
-  <figcaption><strong>Figure 2.</strong> 각 점은 하나의 variant다. y값은 그 variant가 6가지 phase에서 얼마나 크게 흔들렸는지를 나타내며, log scale로 표시했다. x축은 흔들림이 작은 variant부터 큰 variant까지 정렬한 순서다. 점선은 0.10 보조 기준선이며, 498/500개 variant가 기준선 이상이었다.</figcaption>
+  <img src="/assets/images/posts/carbon-6mer-phase-sensitivity/full-window-phase-range-distribution.svg" alt="Ranked distribution of per-variant six-phase ranges divided by score IQR for the Full-window token score">
+  <figcaption><strong>Figure 2.</strong> Each point represents one variant. The y-axis shows its six-phase score range on a log scale, and the x-axis ranks variants from the smallest to largest range. The dashed line marks 0.10; 498/500 variants were at or above it.</figcaption>
 </figure>
 
-이 관찰을 기준으로 Carbon이 제공하는 FNS base-level scoring의 완화 효과를 따로 측정했다.
+### Padding and shifted-reference control
 
-### FNS 완화 효과
-
-Paired comparison에서는 FNS가 token score보다 낮은 정규화 phase range를 보였다. Full-sequence FNS는 full-window token score의 0.409보다 낮은 0.353이었다. Local-target FNS는 target-token score의 0.349보다 낮은 0.331이었다. 두 FNS 값 모두 0.10 보조 기준선을 넘는다.
-
-Figure 3은 두 paired comparison을 같은 scale에 놓는다. 두 비교 모두에서 FNS bar는 낮아졌고, 낮아진 뒤에도 0.10 보조 기준선 위에 남았다.
-
-<figure class="media-figure media-figure--wide-visual">
-  <img src="/assets/images/posts/carbon-6mer-phase-sensitivity/fns-mitigation-normalized-range.svg" alt="Token score와 FNS score의 정규화 phase range를 full-sequence와 local-target 비교 쌍별로 나타낸 막대 차트">
-  <figcaption><strong>Figure 3.</strong> FNS와 token score의 paired 정규화 phase range 비교다. FNS는 두 비교 쌍에서 token보다 낮았지만, 남는 range가 0.10 보조 기준선보다 컸다. 차이, CI, p값은 아래 표에 분리했다.</figcaption>
-</figure>
-
-<figure class="table-figure table-figure--comparison table-figure--metrics">
-  <div class="table-shell">
-    <table class="comparison-table metrics-table metrics-table--numeric-columns">
-      <thead>
-        <tr>
-          <th>비교</th>
-          <th class="align-right">Token range / IQR</th>
-          <th class="align-right">FNS range / IQR</th>
-          <th class="align-right">Token - FNS</th>
-          <th class="align-right">95% CI</th>
-          <th class="align-right">FNS lower variants</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Full-sequence<br><span class="table-note-inline">FNS vs token</span></td>
-          <td class="align-right"><code>0.409</code></td>
-          <td class="align-right"><code>0.353</code></td>
-          <td class="align-right"><code>0.0544</code></td>
-          <td class="align-right"><code>0.0362-0.0709</code></td>
-          <td class="align-right"><code>64%</code></td>
-        </tr>
-        <tr>
-          <td>Local-target<br><span class="table-note-inline">FNS vs token</span></td>
-          <td class="align-right"><code>0.349</code></td>
-          <td class="align-right"><code>0.331</code></td>
-          <td class="align-right"><code>0.0198</code></td>
-          <td class="align-right"><code>0.0118-0.0294</code></td>
-          <td class="align-right"><code>58%</code></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <figcaption><strong>Table 3.</strong> FNS 완화 효과 점검이다. <code>Token - FNS</code>는 표에 보이는 두 median의 차이가 아니라 variant별 paired 정규화 차이의 median이다. <code>FNS lower variants</code>는 paired variant 중 FNS 정규화 phase range가 token 정규화 phase range보다 낮은 비율이다. CI는 10,000-repeat variant bootstrap으로 계산했다.</figcaption>
-</figure>
-
-이 결과는 FNS가 phase range를 줄인다는 결론을 지지한다. 동시에 실제 점수 계산 절차 관점에서는 남는 range가 여전히 크다. 따라서 FNS의 역할은 phase에 무관한 점수 기준이 아니라, phase range를 줄이는 보정 기준으로 정리된다. 남는 range를 해석하려면 window 길이와 edge context가 만드는 조건도 함께 확인해야 한다.
-
-### Padding과 window edge
-
-이 절은 phase effect의 해석 범위를 정리한다. Padding 점검은 8,190 bp와 8,192 bp window를 같은 score 조건으로 섞을 수 있는지 확인하고, edge 대조는 full-window score에 window 양끝 context 변화가 얼마나 들어올 수 있는지 본다.
-
-먼저 window 길이다. 8,190 bp는 6으로 나누어 떨어지므로 Carbon의 6-mer tokenizer에서 partial-token tail이 없다. 반면 Carbon BRCA2 평가와 맞춘 8,192 bp window는 length 2 tail을 만든다. 따라서 이 글의 주 phase score는 8,190 bp clean-window 조건으로 해석하고, 8,192 bp 조건은 호환성 점검으로 분리했다.
+An 8,190 bp sequence is divisible by six and creates no partial-token tail. The 8,192 bp window matching the Carbon BRCA2 evaluation creates a length-2 tail. Primary phase scores therefore use the 8,190 bp clean-window condition; the 8,192 bp condition is kept as a separate compatibility check.
 
 <figure class="table-figure table-figure--comparison table-figure--compact-metrics">
   <div class="table-shell">
     <table class="comparison-table metrics-table">
       <thead>
         <tr>
-          <th>점검 항목</th>
-          <th>조건</th>
-          <th class="align-right">관찰</th>
+          <th>Check</th>
+          <th>Condition</th>
+          <th class="align-right">Observation</th>
         </tr>
       </thead>
       <tbody>
@@ -237,36 +180,81 @@ Figure 3은 두 paired comparison을 같은 scale에 놓는다. 두 비교 모�
           <td class="align-right"><code>0/3,000</code> partial-token tails</td>
         </tr>
         <tr>
-          <td>Carbon BRCA2 호환 window</td>
+          <td>Carbon BRCA2 compatibility window</td>
           <td><code>8,192 bp</code></td>
-          <td class="align-right"><code>3,000/3,000</code> length 2 tails</td>
+          <td class="align-right"><code>3,000/3,000</code> length-2 tails</td>
         </tr>
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 4.</strong> Padding 점검 요약이다. 8,190 bp는 partial-token tail이 없는 주 분석 조건이고, 8,192 bp는 Carbon BRCA2 호환성 확인용 조건이다.</figcaption>
+  <figcaption><strong>Table 3.</strong> Padding checks. The 8,190 bp window is the primary condition without a partial-token tail; 8,192 bp is used only for compatibility with the Carbon BRCA2 evaluation.</figcaption>
 </figure>
 
-다음은 window edge다. Six-phase windows는 variant 근처 context를 거의 유지하지만, window start를 옮기는 만큼 양끝 bases는 바뀐다. 그래서 full-window score의 phase range에는 variant의 token 위치 효과와 window edge/context 변화가 함께 들어갈 수 있다.
+Even after separating padding conditions, the six shifted windows change both edge bases and global 6-mer segmentation. The Full-window range therefore cannot be attributed to a purely local token-boundary effect.
 
-이를 보기 위해 alternate allele을 넣지 않은 reference window만 phase처럼 옮겨 edge-only range를 계산했다. Variant별 edge-only/full-window phase range ratio의 median은 4.162였다.
-
-Figure 4는 이 edge-only range의 분포다. 이 결과는 full-window phase range를 local token boundary 효과만으로 읽으면 안 된다는 점을 보여준다.
+For the shifted-reference control, reference windows without the alternative allele were moved through the same six-shift protocol. The median diagnostic ratio of this control range to the reference-minus-alternative Full-window phase range was 4.162, and the control range was at least as large as the Full-window phase range for 93.6% of variants. Because numerator and denominator measure different score quantities, this ratio is not an estimate of edge contribution.
 
 <figure class="media-figure media-figure--wide-visual">
-  <img src="/assets/images/posts/carbon-6mer-phase-sensitivity/edge-context-control.svg" alt="Shifted-reference edge-only 대조에서 variant별 edge-only range 분포를 보여주는 histogram">
-  <figcaption><strong>Figure 4.</strong> Shifted-reference edge-only range 분포다. x축은 edge-only range, y축은 variant count다. Variant별 edge-only/full-window phase range ratio의 median은 4.162였고, full-window phase range에는 window edge/context 변화도 함께 들어올 수 있다.</figcaption>
+  <img src="/assets/images/posts/carbon-6mer-phase-sensitivity/edge-context-control.svg" alt="Histogram of per-variant reference-score ranges in the shifted-reference control">
+  <figcaption><strong>Figure 3.</strong> Distribution of shifted-reference control ranges. The x-axis is the six-shift range in reference full-window likelihood and the y-axis is variant count. The control range was at least as large as the reference-minus-alternative Full-window phase range for 93.6% of variants; the median diagnostic ratio between the two ranges was 4.162.</figcaption>
 </figure>
 
-이 결과 때문에 target-token과 full-window는 따로 읽어야 한다. Target-token 결과는 variant가 들어간 6-mer token 자체가 phase-sensitive하다는 신호이고, full-window 결과는 그 local 효과에 window edge/context 변화가 더해진 score다.
+Target-token and Full-window should therefore be interpreted separately. Target-token indicates sensitivity of the token-containing-variant score to the six-shift protocol. Full-window is a protocol-level score that does not separate local tokenization, global segmentation, and window edge/context changes.
 
-### Label 구분 신호
+### Paired differences in the FNS pipeline
 
-여기까지의 결과는 score 계산 절차가 phase에 민감하다는 점을 보여준다. 남는 질문은 phase-sensitive한 score가 BRCA2 MVE label 방향성과도 연결되어 있는지다. 이를 확인하기 위해 LOF를 positive class로 두고, Carbon score가 LOF variant와 FUNC/INT variant를 구분할 수 있는지를 AUROC로 측정했다.
+Within these bounds, FNS base-level scoring was compared with the corresponding token conditions. The normalized range was 0.353 for FNS Full-sequence versus 0.409 for token Full-window, and 0.331 for FNS Local-target versus 0.349 for token Target-token. Both FNS values exceeded the 0.10 threshold.
 
-BRCA2 MVE 500개 SNV에서 full-window token과 full-sequence FNS의 6개 phase 평균 AUROC(area under the receiver operating characteristic curve)는 세 자리 반올림 기준으로 모두 0.913이었다. 이 값은 label을 섞어 만든 shuffled-label control보다 높았다. 따라서 보조 지표상 phase-sensitive score에도 BRCA2 MVE label signal이 남아 있었다.
+Figure 4 places both paired comparisons on the same normalized scale.
 
-Table 5는 이 보조 지표를 score 조건별로 정리한다. 여기서는 AUROC를 성능 순위가 아니라, phase-sensitive score에도 label 방향성이 남아 있는지 확인하는 값으로 사용한다.
+<figure class="media-figure media-figure--wide-visual">
+  <img src="/assets/images/posts/carbon-6mer-phase-sensitivity/fns-mitigation-normalized-range.svg" alt="Bar chart comparing normalized phase ranges between token and FNS scores for full-sequence and local-target pairs">
+  <figcaption><strong>Figure 4.</strong> Paired normalized phase ranges for FNS and token scores. FNS was lower in both pairs, but both FNS values remained above 0.10. Variant-level paired differences and bootstrap confidence intervals are reported in Table 4.</figcaption>
+</figure>
+
+<figure class="table-figure table-figure--comparison table-figure--metrics">
+  <div class="table-shell">
+    <table class="comparison-table metrics-table metrics-table--numeric-columns">
+      <thead>
+        <tr>
+          <th>Comparison</th>
+          <th class="align-right">Token range / IQR</th>
+          <th class="align-right">FNS range / IQR</th>
+          <th class="align-right">Token - FNS</th>
+          <th class="align-right">95% CI</th>
+          <th class="align-right">Variants with lower FNS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Full-sequence<br><span class="table-note-inline">FNS vs token</span></td>
+          <td class="align-right"><code>0.409</code></td>
+          <td class="align-right"><code>0.353</code></td>
+          <td class="align-right"><code>0.0544</code></td>
+          <td class="align-right"><code>[0.0362, 0.0709]</code></td>
+          <td class="align-right"><code>64%</code></td>
+        </tr>
+        <tr>
+          <td>Local-target<br><span class="table-note-inline">FNS vs token</span></td>
+          <td class="align-right"><code>0.349</code></td>
+          <td class="align-right"><code>0.331</code></td>
+          <td class="align-right"><code>0.0198</code></td>
+          <td class="align-right"><code>[0.0118, 0.0294]</code></td>
+          <td class="align-right"><code>58%</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <figcaption><strong>Table 4.</strong> Paired normalized-range differences in the FNS pipeline. <code>Token - FNS</code> is the median per-variant paired difference, not the difference between displayed medians. The final column reports the proportion of variants with lower FNS values. Post-hoc CIs use 10,000 variant bootstrap resamples with fixed scorer-specific IQR denominators (<code>seed=20260523</code>).</figcaption>
+</figure>
+
+The token and FNS revisions use the same safetensor weight blob, but their scorer configuration and modeling/tokenizer code differ. Table 4 therefore reports an observed pipeline-level difference in normalized range, not the causal effect of the FNS objective alone.
+
+### Label-direction signal
+
+The results above establish sensitivity to the six-shift scoring protocol. As a separate sanity check, LOF was treated as the positive class and AUROC was used to test whether Carbon scores aligned with the BRCA2 MAVE label direction.
+
+Scores were first averaged across six phases for each variant. On the 500-SNV subset, this mean-score AUROC was 0.913 for both Full-window token and Full-sequence FNS after rounding to three decimals. Both exceeded the p95 of scorer-specific null distributions created by 500 label permutations, indicating that label-direction signal remained in the phase-sensitive scores.
 
 <figure class="table-figure table-figure--comparison table-figure--metrics">
   <div class="table-shell">
@@ -276,128 +264,96 @@ Table 5는 이 보조 지표를 score 조건별로 정리한다. 여기서는 AU
           <th>Score</th>
           <th class="align-right">Observed AUROC</th>
           <th class="align-right">Shuffled null p95</th>
-          <th>해석</th>
+          <th>Interpretation</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>Full-window token<br><span class="table-note-inline">6개 phase 평균</span></td>
+          <td>Full-window token<br><span class="table-note-inline">Six-phase mean score</span></td>
           <td class="align-right"><code>0.913</code></td>
           <td class="align-right"><code>0.553</code></td>
-          <td>LOF와 FUNC/INT 구분 signal이 보인다.</td>
+          <td>Signal separating LOF from FUNC/INT remained.</td>
         </tr>
         <tr>
-          <td>Full-sequence FNS<br><span class="table-note-inline">6개 phase 평균</span></td>
+          <td>Full-sequence FNS<br><span class="table-note-inline">Six-phase mean score</span></td>
           <td class="align-right"><code>0.913</code></td>
           <td class="align-right"><code>0.559</code></td>
-          <td>Full-window token과 거의 같은 AUROC를 보였다.</td>
+          <td>AUROC was nearly identical to Full-window token.</td>
         </tr>
         <tr>
-          <td>Local-target FNS<br><span class="table-note-inline">6개 phase 평균</span></td>
+          <td>Local-target FNS<br><span class="table-note-inline">Six-phase mean score</span></td>
           <td class="align-right"><code>0.760</code></td>
           <td class="align-right"><code>0.559</code></td>
-          <td>Variant 주변만 보는 score라 full-sequence 조건과 역할이 다르다.</td>
+          <td>This local score has a different role from the full-sequence conditions.</td>
         </tr>
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 5.</strong> Label metric은 Carbon score가 LOF와 FUNC/INT label을 구분하는지 확인하는 보조 축이다. Shuffled-label보다 높은 AUROC가 확인됐고, 이 표는 score-label 연결을 확인하기 위한 보조 표다.</figcaption>
+  <figcaption><strong>Table 5.</strong> Observed AUROC was calculated after averaging the six phase scores for each variant. Shuffled null p95 is the 95th percentile of 500 label-permuted AUROCs generated with seed <code>20260523</code>.</figcaption>
 </figure>
 
-## 해석과 결론
+## Interpretation and conclusion
 
-앞의 결과를 합치면 결론은 두 겹이다. Carbon-3B score는 BRCA2 MVE label signal을 일부 담고 있었고, 동시에 6-mer phase 선택에 따른 score 변동도 score scale 대비 충분히 컸다. 따라서 Carbon SNV 점수 보고에서는 phase sensitivity를 함께 보고해야 한다. 단일 기준 phase score만 저장하면, 그 score가 biological allele evidence인지 임의의 6-mer 경계 선택에서 나온 차이인지 분리하기 어렵다.
+Across the 500-SNV BRCA2 subset, six-shift sensitivity in Carbon-3B token scores was present for most variants rather than a few outliers. Target-token is the most direct measure here of sensitivity in scoring the token containing the variant. Full-window and Downstream-only additionally include changes to global segmentation and window edge/context.
 
-현재 설정에서 적용 기준은 세 가지다.
+Under this protocol, the nucleotide-resolution FNS pipeline showed lower normalized ranges—from 0.409 to 0.353 for the full-sequence pair and from 0.349 to 0.331 for the local-target pair—but did not eliminate the observed six-shift sensitivity; both FNS conditions remained above 0.10. Mean-score AUROC showed that label-direction signal remained, but it does not alter the phase-sensitivity finding or establish overall Carbon VEP performance.
 
-1. Reference score에서 alternative score를 뺀 값을 보고할 때 6개 phase range 또는 불안정성 표식을 함께 둔다.
-2. FNS가 가능한 환경에서는 token score와 FNS score를 paired 정규화 지표로 비교한다. FNS는 phase range를 줄이는 기준이지, phase에 무관한 기준은 아니었다.
-3. 8,190 bp clean-window 점수와 8,192 bp padding 포함 호환성 점검을 같은 표에서 섞지 않는다. 8,192 bp를 쓰려면 padding tail 점검과 별도 score 절을 둔다.
+For Carbon SNV scoring under similar conditions, reporting a six-phase summary and range is therefore more appropriate than reporting a single reference-phase score. The mean used here is one possible summary, not the result of an aggregation-method comparison. Storing only one value makes allele-associated score differences difficult to separate from variation introduced by window and tokenization choices.
 
-가장 안정적으로 남는 결론은 단순하다. BRCA2 MVE 500개 SNV, Carbon-3B, 8,190 bp 평가 조건에서는 6-mer phase가 SNV score에서 score scale 대비 의미 있는 변동을 만들었다. FNS는 이 phase range를 줄였지만 제거하지 않았다. 따라서 이 설정의 공개 결론은 "phase-sensitive score 계산 절차와 FNS 완화 효과"로 정리된다.
+Three reporting rules follow for this setting:
 
-## Appendix: 재현 조건과 결론 범위
+1. Report the six-phase range or an instability flag alongside the reference-minus-alternative score.
+2. Where FNS is available, compare token and FNS scores with paired normalized metrics and report the result as an observed pipeline-level difference.
+3. Keep the 8,190 bp clean-window score separate from the 8,192 bp compatibility check with padding. If 8,192 bp is used, report the padding-tail check and its scores separately.
+
+## Limitations
+
+- Results are limited to 500 SNVs from the BRCA2 MAVE and an 8,190 bp window. The 100-variant protocol pilot is included in the subset, although normalized ranges for all three token scorers also exceeded 0.10 in the remaining 400 variants.
+- Bootstrap confidence intervals were not calculated for the primary phase effects. The values `0.409`, `0.349`, and `0.466` are observations above the prespecified effect-size threshold in this subset; generalization to other genes or window conditions requires further evaluation.
+- The shifted-reference control changes both edge context and global 6-mer segmentation phase. It does not separate a pure edge effect, a local token-boundary effect, or their causal contributions.
+- Table 5 AUROCs exceeded the shuffled-label null, but no simple sequence/position baseline, reverse-complement evaluation, or external VEP benchmark was included. These results do not establish overall Carbon VEP performance or improved biological performance from FNS.
+- The paired FNS confidence intervals are from a post-hoc audit rather than the prespecified primary analysis. Differences in scorer code and normalization scale between token and FNS revisions prevent isolation of the FNS objective's effect.
+
+## Appendix: Reproduction conditions
 
 <figure class="table-figure table-figure--comparison table-figure--metrics">
   <div class="table-shell">
     <table class="comparison-table metrics-table">
       <thead>
         <tr>
-          <th>계산 묶음</th>
-          <th>역할</th>
-          <th class="align-right">항목 수</th>
-          <th class="align-right">소요 시간</th>
-          <th class="align-right">최대 CUDA 메모리</th>
+          <th>Computation</th>
+          <th>Role</th>
+          <th class="align-right">Items</th>
+          <th class="align-right">Runtime</th>
+          <th class="align-right">Peak CUDA memory</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>Token score 계산</td>
-          <td>Token 기반 MVE score 계산</td>
-          <td class="align-right"><code>12,000</code> 점수 계산 항목<br><span class="table-note-inline"><code>3,000</code> window 조건 점검, 오류 0건</span></td>
+          <td>Token scoring</td>
+          <td>Token-based variant scores</td>
+          <td class="align-right"><code>12,000</code> scoring items<br><span class="table-note-inline"><code>3,000</code> window checks; 0 errors</span></td>
           <td class="align-right"><code>1,192.93 s</code></td>
           <td class="align-right"><code>14.40 GB</code></td>
         </tr>
         <tr>
-          <td>FNS score 계산</td>
-          <td>FNS 기반 score 계산</td>
-          <td class="align-right"><code>6,000</code> 점수 계산 항목<br><span class="table-note-inline"><code>6,000</code> paired 비교 항목, 오류 0건</span></td>
+          <td>FNS scoring</td>
+          <td>FNS-based scores</td>
+          <td class="align-right"><code>6,000</code> scoring items<br><span class="table-note-inline"><code>6,000</code> paired-comparison items; 0 errors</span></td>
           <td class="align-right"><code>1,149.77 s</code></td>
           <td class="align-right"><code>8.33 GB</code></td>
         </tr>
         <tr>
-          <td>보조 점검</td>
-          <td>Padding, edge, ensemble 점검</td>
-          <td class="align-right"><code>6,000</code> padding 점검 항목</td>
+          <td>Auxiliary checks</td>
+          <td>Padding checks</td>
+          <td class="align-right"><code>6,000</code> padding-check items</td>
           <td class="align-right"><code>13.21 s</code></td>
-          <td class="align-right">해당 없음</td>
+          <td class="align-right">N/A</td>
         </tr>
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Appendix Table 1.</strong> 계산별 재현 조건 요약이다. 세부 재현 정보와 결과 파일 대조는 별도 재현 기록에 보존했다.</figcaption>
-</figure>
-
-<figure class="table-figure table-figure--comparison table-figure--compact-metrics">
-  <div class="table-shell">
-    <table class="comparison-table metrics-table">
-      <thead>
-        <tr>
-          <th>결론 항목</th>
-          <th>상태</th>
-          <th>주의점</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Token-level phase 불안정성</td>
-          <td>지지됨</td>
-          <td>BRCA2 MVE와 8,190 bp 평가 조건에서 확인됐다.</td>
-        </tr>
-        <tr>
-          <td>FNS 점수 계산 동작</td>
-          <td>지지됨</td>
-          <td>FNS score는 token score와 scale이 다르다.</td>
-        </tr>
-        <tr>
-          <td>FNS 완화 효과</td>
-          <td>지지됨</td>
-          <td>완화 뒤에도 phase range가 0.10 보조 기준선을 넘는다.</td>
-        </tr>
-        <tr>
-          <td>FNS phase 불변성</td>
-          <td>지지되지 않음</td>
-          <td>FNS는 불변성보다 완화 효과로 해석한다.</td>
-        </tr>
-        <tr>
-          <td>Carbon VEP 전체 성능</td>
-          <td>별도 평가</td>
-          <td>외부 평가와 단순 sequence/position 기준선이 필요한 별도 문제다.</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <figcaption><strong>Appendix Table 2.</strong> 결론 범위 요약이다. 이 글은 Carbon-3B score 계산 절차의 phase sensitivity와 FNS 완화 효과를 결론으로 둔다.</figcaption>
+  <figcaption><strong>Appendix Table 1.</strong> Reproduction conditions by computation. Model revisions, input hashes, sampling seed, and score artifacts are preserved in the separate experiment record.</figcaption>
 </figure>
 
 ## References
@@ -405,15 +361,16 @@ Table 5는 이 보조 지표를 score 조건별로 정리한다. 여기서는 AU
 <div class="reference-list" markdown="1">
 
 <ol>
-  <li id="ref-carbon-3b">Hugging Face Biology Research. <strong>Carbon-3B model card and FNS model revision</strong>. Hugging Face, 2026. <a href="https://huggingface.co/HuggingFaceBio/Carbon-3B">HuggingFaceBio/Carbon-3B</a>. Technical report: <a href="https://github.com/huggingface/carbon/blob/main/tech-report.pdf">Carbon technical report</a>. Accessed 2026-05-24.</li>
-  <li id="ref-carbon-eval">Hugging Face Biology Research. <strong>Carbon evaluation README</strong>. GitHub, 2026. <a href="https://github.com/huggingface/carbon/blob/main/evaluation/README.md">huggingface/carbon evaluation</a>. Accessed 2026-05-24.</li>
+  <li id="ref-carbon-paper">Ben Allal, L., Li, Q., Fiusco, M. et al. <strong>Carbon: Decoding the Language of Life</strong>. <em>bioRxiv</em>, 2026.05.22.727119, 2026. DOI: <a href="https://doi.org/10.64898/2026.05.22.727119">10.64898/2026.05.22.727119</a></li>
+  <li id="ref-carbon-3b">Hugging Face Biology Research. <strong>Carbon-3B model card and pinned scorer revisions</strong>. Hugging Face, 2026. <a href="https://huggingface.co/HuggingFaceBio/Carbon-3B">Model card</a>; token revision <a href="https://huggingface.co/HuggingFaceBio/Carbon-3B/tree/fe755cb5c7498acbf630080609ef61ecc4e36c17"><code>fe755cb5</code></a>; FNS revision <a href="https://huggingface.co/HuggingFaceBio/Carbon-3B/tree/bf6f6bec000ea6ced8cb656d02f3120a24795c91"><code>bf6f6bec</code></a>. Accessed 2026-07-30.</li>
+  <li id="ref-carbon-eval">Hugging Face Biology Research. <strong>Carbon evaluation README</strong>. GitHub, 2026. <a href="https://github.com/huggingface/carbon/blob/0c4a63e985f376426d3e656a4be875e27440473f/evaluation/README.md">pinned evaluation README</a>. Accessed 2026-05-23.</li>
   <li id="ref-huang-brca2">Huang, H., Hu, C., Na, J. et al. <strong>Functional evaluation and clinical classification of BRCA2 variants</strong>. <em>Nature</em> 638, 528-537, 2025. DOI: <a href="https://doi.org/10.1038/s41586-024-08388-8">10.1038/s41586-024-08388-8</a></li>
   <li id="ref-brca2-source-table">Huang et al. <strong>Functional evaluation and clinical classification of BRCA2 variants</strong>, Supplementary Table 3. Nature/Springer, 2025. <a href="https://static-content.springer.com/esm/art%3A10.1038%2Fs41586-024-08388-8/MediaObjects/41586_2024_8388_MOESM3_ESM.xlsx">Supplementary Table S3 XLSX</a></li>
-  <li id="ref-ucsc-hg19-chr13">UCSC Genome Browser. <strong>hg19/GRCh37 chr13 chromosome FASTA, goldenPath</strong>. <a href="https://hgdownload.soe.ucsc.edu/goldenPath/hg19/chromosomes/chr13.fa.gz">chr13.fa.gz</a></li>
-  <li id="ref-carbon-brca2-prep">Hugging Face Biology Research. <strong>Carbon BRCA2 data preparation script</strong>. <a href="https://raw.githubusercontent.com/huggingface/carbon/main/evaluation/data_prep/prep_brca2.py">prep_brca2.py</a>. Accessed 2026-05-24.</li>
+  <li id="ref-ucsc-hg19-chr13">UCSC Genome Browser. <strong>hg19/GRCh37 chr13 chromosome FASTA, goldenPath</strong>. <a href="https://hgdownload.soe.ucsc.edu/goldenPath/hg19/chromosomes/chr13.fa.gz">chr13.fa.gz</a>. Accessed 2026-05-23.</li>
+  <li id="ref-carbon-brca2-prep">Hugging Face Biology Research. <strong>Carbon BRCA2 data preparation script</strong>. <a href="https://raw.githubusercontent.com/huggingface/carbon/0c4a63e985f376426d3e656a4be875e27440473f/evaluation/data_prep/prep_brca2.py">pinned <code>prep_brca2.py</code></a>. Source content frozen with the experiment inputs; accessed 2026-05-23.</li>
 </ol>
 
-계산 요약은 Appendix Table 1에 정리했다. 세부 재현 정보는 front matter의 <code>lab_path</code>가 가리키는 실험 기록에 보존했다.
+Appendix Table 1 summarizes the computations. Detailed reproduction metadata are preserved in the experiment record referenced by the front matter <code>lab_path</code>.
 
 </div>
 
@@ -422,7 +379,7 @@ Table 5는 이 보조 지표를 score 조건별로 정리한다. 여기서는 AU
 Text citation:
 
 ```text
-Ilho Ahn, "Carbon-3B: 6-mer token phase sensitivity 측정", Mini Research, May 23, 2026.
+Ilho Ahn, "Carbon-3B: Measuring 6-mer Token Phase Sensitivity", Mini Research, May 23, 2026.
 ```
 
 BibTeX:
@@ -430,7 +387,7 @@ BibTeX:
 ```bibtex
 @misc{ahn2026carbon_6mer_phase_sensitivity,
   author = {Ahn, Ilho},
-  title = {Carbon-3B: {6-mer} token phase sensitivity 측정},
+  title = {Carbon-3B: Measuring {6-mer} Token Phase Sensitivity},
   year = {2026},
   month = {May},
   howpublished = {Mini Research},

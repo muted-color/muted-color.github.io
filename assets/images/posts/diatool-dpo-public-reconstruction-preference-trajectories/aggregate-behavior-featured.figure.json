@@ -1,0 +1,74 @@
+{
+  "layout": "custom_measured_featured",
+  "rendering": "custom-zero-centered",
+  "renderer_limitation": "The installed grouped_bar renderer cannot combine mixed units with a negative value; this custom SVG preserves the paper Completion change of -2.80 percentage points.",
+  "title": "Similar aggregate gain, different selected changes",
+  "description": "A compact measured comparison shows Macro relative gain of 10.93% for the local reconstruction and 10.78% in the paper report, alongside selected axis changes for Completion and Slot. Completion changed by +7.04 versus -2.80 percentage points, and Slot changed by +7.01 versus +27.80 percentage points. Call and Relevance are intentionally omitted from this featured view.",
+  "scale": "measured",
+  "palette": "editorial",
+  "canvas": {
+    "width": 1200,
+    "height": 627
+  },
+  "layout_geometry": {
+    "outer_x": [90, 1110],
+    "panel_fraction": [0.36, 0.64],
+    "left_content_x": [90, 446],
+    "right_content_x": [500, 1110],
+    "panel_heading_y": 148,
+    "plot_y": [187, 532],
+    "gridlines": {
+      "macro_relative_gain": "joined-x-axis-and-zero-y-axis",
+      "selected_axis_changes": "x-axis-and-zero-line-only"
+    },
+    "design_note": "Panel width follows information density rather than geometric symmetry. Muted a./b. headings and a smaller left plot keep the denser selected-axis panel visually primary without changing the data scales. Optical margins move the title and left panel inward and the mechanism downward so visible content has comparable left/right and top/bottom breathing room inside the framed hero."
+  },
+  "series": [
+    {
+      "id": "local",
+      "label": "Local reconstruction",
+      "style": "solid"
+    },
+    {
+      "id": "paper",
+      "label": "Paper report",
+      "style": "hatch"
+    }
+  ],
+  "panels": [
+    {
+      "id": "macro_relative_gain",
+      "label": "Macro relative gain (%)",
+      "domain": [0, 12],
+      "ticks": [0, 6, 12],
+      "values": [
+        {"series": "local", "value": 10.93},
+        {"series": "paper", "value": 10.78}
+      ]
+    },
+    {
+      "id": "selected_axis_changes",
+      "label": "Selected axis changes (percentage points)",
+      "domain": [-5, 30],
+      "ticks": [-5, 0, 10, 20, 30],
+      "categories": [
+        {
+          "id": "completion",
+          "label": "Completion",
+          "values": [
+            {"series": "local", "value": 7.04},
+            {"series": "paper", "value": -2.80}
+          ]
+        },
+        {
+          "id": "slot",
+          "label": "Slot",
+          "values": [
+            {"series": "local", "value": 7.01},
+            {"series": "paper", "value": 27.80}
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -44,6 +44,9 @@ Object and asset checklist:
 - Tables should not have obvious missing captions when they are part of the public evidence flow.
 - Every referenced image, SVG, PNG, JPG, JSON, JS, or data asset path should exist unless intentionally external.
 - Standalone SVG assets should include viewBox, title, and desc when they are used as public visuals.
+- For a new or changed public inline SVG with `data-renderer="editorial-systems-figure-v2"`, run `$editorial-systems-figure`'s `validate_figure.py`, confirm a sibling `<figure-name>.figure.json` regeneration spec exists, and inspect temporary 1200px and 600px previews. A validator failure, clipped evidence, or unreadable labels/values is a Blocker; a missing regeneration spec or missing visual-QA evidence is High.
+- For a documented custom-SVG exception, require editable text, viewBox, title, desc, one `figure-title`, successful validation, and the same 1200px/600px inspection. Do not require skill provenance for legacy SVGs that predate this contract.
+- Static SVG figures do not need Mermaid or Plotly front matter flags. They do need an existing asset, useful `img` alt text, numbered external figcaption, and a matching body reference.
 - image_alt and hero_alt should describe the visual content instead of keyword stuffing.
 
 Citation and reference checklist:
@@ -64,6 +67,7 @@ Suggested commands:
 - Use rg for text checks and file references.
 - Use a lightweight front matter parser or Ruby/Jekyll tooling if available; otherwise inspect YAML manually.
 - Use test -f or equivalent shell checks for local asset existence.
+- For new or changed inline SVGs, use `/home/soleaf/.codex/skills/editorial-systems-figure/scripts/validate_figure.py` and `rasterize_figure.py`; report both preview widths inspected and any skipped visual check.
 - If a local dev server is already running, use curl to confirm expected HTML hooks. Do not start a long-running server unless the parent asks.
 - If build tooling is available and the parent asks for a build readiness check, run the lightest relevant build command and report failures.
 

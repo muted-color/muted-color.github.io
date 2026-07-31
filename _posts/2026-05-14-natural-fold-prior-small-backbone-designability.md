@@ -1,7 +1,11 @@
 ---
 title: "작은 backbone 생성/편집 모델에서 designability를 만드는 구조 단서 수준"
 date: 2026-05-14 21:50:00 +0900
-last_modified_at: 2026-05-23 20:25:27 +0900
+last_modified_at: 2026-07-28 00:00:00 +0900
+hidden: true
+published: false
+publication_status: "unpublished"
+hide_reason: "자연 구조 core 근처의 소표본 수동 편집 결과와 아직 검증되지 않은 후속 모델 방향이 중심이어서, 연구자 전환용 공개 포트폴리오에서는 가리고 탐색 기록으로 보존한다."
 categories: ["PROTEIN ML"]
 tags: [protein, backbone-generation, protein-design, designability, proteinmpnn, esmfold, topology, generative-model]
 lab_path: "experiment-lab/projects/topology-first-backbone-generation"

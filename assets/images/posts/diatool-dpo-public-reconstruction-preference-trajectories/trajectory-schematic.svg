@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="627" viewBox="0 0 1200 627" role="img" aria-labelledby="title desc">
+  <title id="title">Local chosen and rejected preference trajectory diagnostic</title>
+  <desc id="desc">A shared user query branches to a chosen response that asks for a missing field and a rejected response that calls a tool early. The chosen exact first-assistant surface has top-1 and top-5 concentrations of 8.18 and 28.50 percent, while the rejected surface has 49.13 and 71.30 percent. At divergence, 2,521 of 2,530 pairs have one required slot remaining. These are local diagnostics and not shortcut-learning evidence.</desc>
+  <defs>
+    <style>
+      text { font-family: "Plus Jakarta Sans", "Avenir Next", "Segoe UI", Arial, sans-serif; fill: #171923; }
+      .small { font-size: 18px; fill: #626a78; }
+      .label { font-size: 20px; font-weight: 700; }
+      .body { font-size: 19px; fill: #353b47; }
+      .value { font-size: 25px; font-weight: 700; }
+      .metric { font-size: 17px; fill: #626a78; }
+      .caveat { font-size: 17px; fill: #505866; }
+    </style>
+    <marker id="arrow-local" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#3f41ff"/>
+    </marker>
+    <marker id="arrow-reference" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8e96a3"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="627" fill="#ffffff"/>
+
+  <g aria-label="Shared query">
+    <rect x="420" y="42" width="360" height="82" rx="18" fill="#f7f8fb" stroke="#cfd5df" stroke-width="2"/>
+    <text x="600" y="76" text-anchor="middle" class="small">SHARED PREFIX</text>
+    <text x="600" y="103" text-anchor="middle" class="label">Same user query</text>
+  </g>
+
+  <path d="M600 124 V157 C600 176 565 181 470 203" fill="none" stroke="#3f41ff" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow-local)"/>
+  <path d="M600 124 V157 C600 176 635 181 730 203" fill="none" stroke="#8e96a3" stroke-width="3" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#arrow-reference)"/>
+  <circle cx="600" cy="155" r="7" fill="#ffffff" stroke="#636b78" stroke-width="2"/>
+  <rect x="496" y="174" width="208" height="30" rx="15" fill="#ffffff" fill-opacity="0.96"/>
+  <text x="600" y="195" text-anchor="middle" class="small">preference divergence</text>
+
+  <g aria-label="Chosen trajectory">
+    <rect x="90" y="210" width="460" height="164" rx="20" fill="#f4f4ff" stroke="#3f41ff" stroke-width="2.5"/>
+    <circle cx="128" cy="248" r="12" fill="#3f41ff"/>
+    <path d="M122 248 l4 4 8 -9" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="153" y="254" class="label">Chosen · asks for the missing field</text>
+    <text x="128" y="291" class="body">First-assistant exact surface concentration</text>
+    <text x="128" y="329" class="value">8.18%</text>
+    <text x="221" y="329" class="metric">top-1</text>
+    <line x1="284" y1="304" x2="284" y2="336" stroke="#c9cafb" stroke-width="2"/>
+    <text x="310" y="329" class="value">28.50%</text>
+    <text x="420" y="329" class="metric">top-5</text>
+  </g>
+
+  <g aria-label="Rejected trajectory">
+    <rect x="650" y="210" width="460" height="164" rx="20" fill="#fafbfc" stroke="#8e96a3" stroke-width="2.5" stroke-dasharray="9 7"/>
+    <rect x="116" y="-12" width="24" height="24" rx="5" fill="#8e96a3" transform="translate(560 260)"/>
+    <path d="M682 248 h12 M688 242 v12" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+    <text x="713" y="254" class="label">Rejected · calls the tool early</text>
+    <text x="688" y="291" class="body">First-assistant exact surface concentration</text>
+    <text x="688" y="329" class="value">49.13%</text>
+    <text x="792" y="329" class="metric">top-1</text>
+    <line x1="846" y1="304" x2="846" y2="336" stroke="#d9dde4" stroke-width="2"/>
+    <text x="872" y="329" class="value">71.30%</text>
+    <text x="980" y="329" class="metric">top-5</text>
+  </g>
+
+  <g aria-label="Divergence-state coverage">
+    <rect x="270" y="414" width="660" height="112" rx="18" fill="#ffffff" stroke="#cfd5df" stroke-width="2"/>
+    <text x="304" y="449" class="small">REMAINING REQUIRED SLOTS AT DIVERGENCE</text>
+    <text x="304" y="493" class="label">One slot remaining</text>
+    <text x="554" y="493" class="value">2,521 / 2,530</text>
+    <rect x="783" y="458" width="111" height="42" rx="21" fill="#eeeeff"/>
+    <text x="838.5" y="486" text-anchor="middle" class="label" fill="#3f41ff">99.64%</text>
+  </g>
+
+  <g aria-label="Interpretive boundary">
+    <line x1="140" y1="572" x2="1060" y2="572" stroke="#e1e5eb" stroke-width="1.5"/>
+    <circle cx="360" cy="594" r="5" fill="#3f41ff"/>
+    <text x="373" y="599" class="caveat">Local reconstruction diagnostic only</text>
+    <path d="M685 589 l10 10 M695 589 l-10 10" stroke="#717987" stroke-width="2.2" stroke-linecap="round"/>
+    <text x="708" y="599" class="caveat">Not shortcut-learning evidence</text>
+  </g>
+</svg>

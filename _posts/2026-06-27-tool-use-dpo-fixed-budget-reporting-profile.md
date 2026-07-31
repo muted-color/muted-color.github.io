@@ -5,6 +5,8 @@ last_modified_at: 2026-06-30 20:48:01 +0900
 categories: ["LLM EVAL"]
 tags: [llm, tool-use, dpo, function-calling, bfcl, when2call, ifeval, qwen3]
 lab_path: "experiment-lab/projects/tool-use-dpo-negative-sources"
+featured: true
+home_rank: 2
 excerpt: "A fixed-budget tool-use DPO comparison is better reported as a recipe-checkpoint profile than as a single recipe winner."
 description: "A mini research note on fixed-budget Qwen3-8B tool-use DPO, where structural and behavior negatives move different evaluation axes and checkpoint selection changes the IFEval guardrail trade-off."
 permalink: /research/2026/06/27/tool-use-dpo-fixed-budget-reporting-profile/
