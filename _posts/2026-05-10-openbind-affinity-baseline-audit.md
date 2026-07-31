@@ -1,61 +1,61 @@
 ---
-title: "OpenBind prediction score를 구조 신호로 읽을 수 있을까"
+title: "OpenBind prediction score의 구조 신호 해석 점검"
 date: 2026-05-10 18:40:00 +0900
-last_modified_at: 2026-05-18 16:58:52 +0900
+last_modified_at: 2026-07-31 09:36:11 +0900
+published: true
+publication_status: "published"
 categories: ["BIO ML"]
 tags: [openbind, affinity-prediction, structure-based-ai, ligand-baseline, benchmark-check, rdkit, ecfp]
 lab_path: "experiment-lab/projects/openbind-affinity-baseline-stress"
-excerpt: "OpenBind EV-A71 2A release에서 공개 prediction score가 측정 pKD와 보이는 상관이 MW+cLogP 영향을 뺀 뒤에도 유지되는지 점검한 노트."
-description: "OpenBind EV-A71 2A release에서 공개 prediction score와 측정 pKD의 상관이 분자량과 cLogP trend에 얼마나 기대는지 점검한 노트."
+excerpt: "OpenBind EV-A71 2A prediction score와 MW+cLogP 조정 pKD의 상관을 ligand-only control과 함께 점검한 재현 가능한 benchmark audit."
+description: "OpenBind EV-A71 2A의 공개 prediction score를 MW+cLogP 조정 pKD, 같은 campaign의 ligand-only control, 재표집 분석과 비교해 구조 신호 해석의 범위를 점검했다."
 permalink: /research/2026/05/10/openbind-affinity-baseline-audit/
 image: /assets/images/posts/openbind-affinity-baseline-audit/social-thumbnail.png
-image_alt: "OpenBind EV-A71 2A affinity 점검에서 측정 pKD와의 Spearman 및 MW+cLogP 영향을 뺀 뒤의 Spearman을 method별로 비교한 대표 차트"
+image_alt: "OpenBind EV-A71 2A affinity 점검에서 측정 pKD 및 MW+cLogP로 조정한 pKD와의 Spearman을 method별로 비교한 대표 차트"
 hero_image: /assets/images/posts/openbind-affinity-baseline-audit/raw-vs-residual-spearman.svg
-hero_alt: "OpenBind EV-A71 2A compound-level 점검에서 method별 score가 측정 pKD 및 MW+cLogP 영향을 뺀 뒤의 pKD와 얼마나 맞는지 비교한 차트"
-hero_caption: "<strong>Figure 1.</strong> 각 row는 하나의 method score이며, x축은 그 score가 pKD 순위와 얼마나 비슷한지 나타내는 Spearman correlation이다. 빈 막대는 측정 pKD와의 상관이고, 진한 막대는 pKD에서 MW+cLogP trend를 뺀 뒤의 상관이다. 왼쪽 묶음은 같은 EV-A71 2A 데이터로 학습한 ligand-only 비교 기준, 단순 property 기준선, 공개 benchmark score를 구분한다. 빈 막대보다 진한 막대가 크게 짧아지면, 측정 pKD와의 상관 중 상당 부분이 MW+cLogP trend와 겹쳤을 가능성이 있다. 막대의 정확한 수치는 Table 3과 Appendix Table 1에 정리했다."
+hero_alt: "OpenBind EV-A71 2A compound-level 점검에서 method별 score가 측정 pKD 및 MW+cLogP로 조정한 pKD와 얼마나 맞는지 비교한 차트"
+hero_caption: "<strong>Figure 1.</strong> 각 row는 하나의 method score이며, x축은 그 score가 pKD 순위와 얼마나 비슷한지 나타내는 Spearman correlation이다. 진한 막대는 측정 pKD와의 상관이고, 빗금 막대는 MW+cLogP로 조정한 pKD와의 상관이다. 왼쪽 묶음은 같은 EV-A71 2A 데이터로 학습한 ligand-only control군, 단순 property 기준선, 공개 benchmark score를 구분한다. 진한 막대보다 빗금 막대가 짧아지면, raw pKD 상관이 MW+cLogP trend와 겹쳤을 가능성을 검토할 수 있다. 막대의 정확한 수치는 Table 3과 Appendix Table 2에 정리했다."
 hero_frame: true
 hero_compact: true
 ---
 
-OpenBind의 첫 공개 release는 구조, affinity 측정값, benchmark 파일을 함께 제공한다 <a class="citation-ref" href="#ref-openbind-first-release" aria-label="Reference 1">[1]</a>. 이 release에는 compound별 측정 affinity와 여러 method의 prediction score가 함께 들어 있다.
+OpenBind의 첫 공개 release는 compound별 affinity와 여러 구조 기반 method의 prediction score를 함께 제공한다. 공식 분석에서는 molecular weight도 이 release의 강한 affinity-ranking baseline으로 보고됐다 <a class="citation-ref" href="#ref-openbind-first-release" aria-label="Reference 1">[1]</a>.
 
-> **EV-A71 2A protease**는 Enterovirus A71 바이러스의 단백질 절단 효소다. OpenBind 첫 release는 이 target에 결합하는 compound들의 구조와 affinity 측정값, 그리고 benchmark용 prediction score를 함께 제공한다.
->
-> **Prediction score**는 각 method가 compound에 매긴 점수다. 이 score가 pKD와 상관을 보인다는 것은 두 값의 순위가 비슷하다는 뜻이지, score 자체를 affinity 값으로 읽어도 된다는 뜻은 아니다.
->
-> **pKD**는 binding affinity를 로그 스케일로 표현한 값이다. 여기서 KD는 kilodalton(kDa)이 아니라 dissociation constant다. KD는 작을수록 강한 결합이고, pKD는 클수록 강한 결합으로 읽는다. 이 글에서는 affinity가 높은 compound가 더 높은 pKD를 갖는 순위 비교로 해석한다.
->
-> **Spearman correlation**은 두 값의 절대 크기보다 순위가 얼마나 비슷한지 보는 상관 지표다. 이 글에서는 method score가 pKD 순위를 얼마나 따라가는지 볼 때 사용한다.
->
-> **MW와 cLogP**는 각각 molecular weight, 즉 분자량과 계산된 지용성 지표다. 둘 다 compound의 단순한 물성으로 볼 수 있다.
->
-> **MW+cLogP 영향을 뺀 pKD**는 pKD에서 분자량과 cLogP만으로 설명되는 부분을 먼저 제거한 값이다. 이 값이 곧 “구조 정보에서 온 진짜 affinity 신호”라는 뜻은 아니다. 이 글에서는 측정 pKD와의 상관이 단순 ligand property trend에 얼마나 기대는지 보기 위한 비교 대상으로 사용한다.
->
-> **공개 benchmark score**는 OpenBind benchmark repository에 공개된 method별 prediction score 파일을 뜻한다.
->
-> **Ligand-only 비교 기준**은 구조 정보를 쓰지 않고 compound의 ligand 표현만 사용한 ECFP/RDKit 계열 모델이다. ECFP는 compound 구조를 fingerprint로 바꾼 표현이고, ridge는 그 표현으로 pKD 순서를 맞추는 단순 회귀 모델이다. 이 기준은 공개 prediction score를 대체하려는 모델이 아니라, 같은 데이터 안에서 ligand 정보만으로 어느 정도 상관이 나오는지 보기 위한 비교 기준이다.
+이 글은 공개 compound 표를 독립적으로 재구성하고, prediction score가 MW+cLogP로 조정한 pKD와도 상관을 유지하는지 확인한다. 조정 pKD와 가장 높은 상관을 보인 공개 score는 Boltz-2의 `0.097`이었고, 같은 campaign label로 학습한 ligand-only ECFP control은 `0.430`이었다.
 
-이 글은 OpenBind의 prediction score가 pKD와 얼마나 잘 맞는지 compound 단위로 점검한다. 이 구분이 필요한 이유는 약물 후보를 최적화하는 과정 때문이다. Compound가 커지거나 cLogP가 높아지는 방향으로 바뀌면, score는 단백질 결합 부위를 잘 읽지 못해도 pKD와 상관을 보일 수 있다.
-
-따라서 이 글은 prediction score와 pKD의 상관이 분자량과 cLogP 같은 단순 ligand property 영향을 뺀 뒤에도 유지되는지 확인한다. 공개 benchmark score와 ligand-only 비교 기준은 같은 compound 단위에서 나란히 비교한다.
-
-{% include model-mention-cards.html label="사용한 공개 리소스" aria_label="OpenBind release와 benchmark 리소스" models="OpenBind first release|EV-A71 2A structure-affinity dataset|https://openbind.uk/news/blog-openbinds-first-release-a-structure-affinity-dataset-for-structure-based-ai/;Affinity data note|OpenBind affinity and kinetics data|https://openbind.uk/news/blog-affinity-and-kinetics-data-in-the-ev-a71-2a-openbind-release/;EV-A71 2A benchmark|OpenBind GitHub affinity files|https://github.com/OpenBind-Consortium/EV-A71_2A_benchmark/tree/main/affinity;Zenodo release|OpenBind structure-affinity data|https://zenodo.org/records/20026661" %}
+두 값은 동일한 학습 조건에서 얻은 model ranking이 아니다. 이 비교는 구조 기여를 직접 분해하거나 새 chemical series의 일반화 성능을 평가하지 않으며, 공개 score와 pKD의 상관을 구조 기반 affinity 신호로 읽기 전에 필요한 retrospective audit으로 한정된다.
 
 ## 요약
 
-- OpenBind EV-A71 2A release에서 공개된 prediction score가 측정 pKD와 얼마나 잘 맞는지 compound 단위로 점검했다.
-- 핵심 질문은 이 score-pKD 상관이 구조적 결합 신호 때문인지, 아니면 분자량과 cLogP 같은 단순 ligand property trend에 기대는지다.
-- 공개 benchmark score는 측정 pKD와는 어느 정도 맞았지만, MW+cLogP 영향을 뺀 뒤에는 상관이 크게 약해졌다. MW+cLogP 제거 후 공개 score 중 가장 높은 Spearman은 `0.097`이었다.
-- 반면 구조를 쓰지 않고 같은 EV-A71 2A 데이터로 학습한 ECFP ridge 비교 기준은 MW+cLogP 영향을 뺀 뒤에도 더 높은 상관을 보였다. MW+cLogP 제거 후 Spearman은 `0.430`이었다.
-- 단순한 protein-ligand 접촉 수를 더해도 결과는 개선되지 않았다. 따라서 이 글의 결론은 prediction score와 pKD의 상관을 구조 기반 affinity 신호로 바로 해석하기 어렵다는 것이다.
+- OpenBind는 이 release에서 molecular weight가 강한 affinity-ranking baseline이라는 점을 이미 제시했다. 이 audit은 그 관찰을 compound 단위에서 재확인하고 MW+cLogP 조정과 ligand-only control을 추가한다.
+- 분석 대상은 공개 benchmark와 맞춘 `494` compounds와 `7`개 score 파일이다. 이 중 `5`개는 학습·scoring method의 score이고 `2`개는 molecular weight와 cLogP property baseline이다.
+- MW+cLogP 조정 pKD는 전체 compound 표에서 계산한 진단용 값이다. 이 값과 가장 높은 상관을 보인 공개 method score는 Boltz-2의 `0.097`이었다.
+- ECFP ridge의 `0.430`은 같은 campaign의 raw pKD로 학습한 shuffled 5-fold out-of-fold ligand-only control이다. 공개 score와 동일 학습 조건의 model ranking이나 새 chemical series에 대한 일반화 결과가 아니다.
+- Compound 및 chemical-group 재표집에서도 공개 score와 ligand-only control의 평균 순서는 유지됐다. 다만 group-held-out 재학습이 아니므로 엄격한 scaffold 일반화 근거로 읽지 않는다.
+- 별도 follow-up에서는 prepared structure에서 만든 거리·접촉·atom-count descriptor를 ECFP에 추가해도 상관이 높아지지 않았다. 이 결과는 주 비교의 재현이 아니라 제한된 구조 descriptor 설계에 대한 보조 결과다.
+
+{% include model-mention-cards.html label="사용한 공개 리소스" aria_label="OpenBind release와 benchmark 리소스" models="OpenBind first release|EV-A71 2A structure-affinity dataset|https://openbind.uk/news/blog-openbinds-first-release-a-structure-affinity-dataset-for-structure-based-ai/;Affinity data note|OpenBind affinity and kinetics data|https://openbind.uk/news/blog-affinity-and-kinetics-data-in-the-ev-a71-2a-openbind-release/;EV-A71 2A benchmark|Pinned OpenBind GitHub affinity files|https://github.com/OpenBind-Consortium/EV-A71_2A_benchmark/tree/86e5c12da518d749c33cfa9dcb6ae8eae1b804f9/affinity;Zenodo release|OpenBind structure-affinity data|https://zenodo.org/records/20026661" %}
 
 ## 평가 설정
 
-이 글의 비교 단위는 compound다. OpenBind repository에는 affinity 측정값, compound 정보, method별 prediction score, score를 비교 표로 정리하는 규칙이 공개되어 있다 <a class="citation-ref" href="#ref-openbind-github" aria-label="Reference 3">[3]</a>. OpenBind affinity 원자료에는 같은 compound에 대한 측정값이 여러 행으로 들어갈 수 있고, 공개 자료의 분석 포함 표시를 통해 그중 최종 benchmark에 사용된 행을 구분할 수 있다 <a class="citation-ref" href="#ref-openbind-affinity-note" aria-label="Reference 2">[2]</a>.
+EV-A71 2A protease는 Enterovirus A71 바이러스의 단백질 절단 효소다. OpenBind 첫 release의 실험 구조와 affinity는 EV-A71 2A와 서열의 다섯 위치만 다르고 그 차이가 active site 가까이에 없는 CVA16 2A surrogate에서 생성됐다 <a class="citation-ref" href="#ref-openbind-first-release" aria-label="Reference 1">[1]</a>.
+
+> **pKD**는 dissociation constant를 로그 스케일로 표현한 값으로, 값이 클수록 강한 결합을 뜻한다. **Spearman correlation**은 두 값의 절대 크기보다 순위가 얼마나 비슷한지 본다.
+>
+> **MW와 cLogP**는 각각 분자량과 계산된 지용성이다. 이 글에서 MW+cLogP 조정 pKD는 두 물성으로 설명되는 trend를 뺀 진단용 값이며, 구조 정보에서 온 신호의 정답을 뜻하지 않는다. **Ligand-only control**은 단백질 구조 없이 ECFP/RDKit compound 표현만 사용하는 비교 기준이다.
+
+이 글의 비교 단위는 compound다. OpenBind affinity 원자료에는 같은 compound에 대한 측정값이 여러 행으로 들어갈 수 있고, 공개 자료의 분석 포함 표시를 통해 그중 최종 benchmark에 사용된 행을 구분할 수 있다 <a class="citation-ref" href="#ref-openbind-affinity-note" aria-label="Reference 2">[2]</a>. OpenBind repository에는 affinity 측정값, compound 정보, method별 prediction score, score를 비교 표로 정리하는 규칙이 공개되어 있다 <a class="citation-ref" href="#ref-openbind-github" aria-label="Reference 3">[3]</a>.
 
 이 글은 원자료의 측정값을 다시 해석하거나, 여러 측정 행을 pKD 하나로 다시 합치지 않는다. 대신 공개 benchmark에서 이미 정리된 compound 단위 표에 맞춘다. 같은 compound와 method 조합에 대해 공개 prediction score와 compound 단위 pKD를 나란히 두고 비교한다.
 
 비교는 두 단계로 나눈다. 먼저 prediction score가 측정 pKD 순위와 얼마나 비슷한지 본다. 그다음 pKD에서 분자량과 cLogP로 설명되는 부분을 뺀 뒤에도 그 상관이 유지되는지 본다. 이 비교는 구조 기반 방법의 최종 평가가 아니라, pKD와의 상관을 구조 기반 affinity 신호로 해석해도 되는지 먼저 가르는 기본 점검이다.
+
+평가 계약은 다음과 같다.
+
+- **공개 benchmark score**는 OpenBind가 제공한 compound-level score를 재학습하거나 보정하지 않고 사용한다.
+- **MW+cLogP 조정 pKD**는 `494` compounds 전체에서 pKD를 molecular weight와 cLogP에 선형 회귀한 뒤 남은 값이다. Held-out target이 아니라 전체 표에 대한 설명용 조정값이다.
+- **Ligand-only control**은 같은 `494` compounds에서 shuffled 5-fold 교차검증으로 만든 out-of-fold prediction이다. ECFP ridge는 raw pKD를 학습하며, fold는 scaffold나 similarity cluster가 아닌 compound 단위로 나뉘다.
+- **불확실성 범위**는 이미 계산된 score와 out-of-fold prediction을 고정한 채 compound 또는 chemical group을 재표집해 계산한다. 모델 재학습 변동이나 새 chemical series에 대한 성능 범위는 포함하지 않는다.
 
 Table 1은 원자료가 최종 비교 단위로 정리되는 과정을 세 묶음으로 요약한다.
 
@@ -98,20 +98,22 @@ Table 1은 원자료가 최종 비교 단위로 정리되는 과정을 세 묶�
           <td class="align-right"><code>494</code></td>
         </tr>
         <tr>
-          <td>공개 benchmark methods</td>
+          <td>공개 score 파일<br><span class="table-note-inline">5 methods + 2 property baselines</span></td>
           <td class="align-right"><code>7</code></td>
         </tr>
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 1.</strong> 원자료에서 최종 비교 표로 정리되는 과정을 요약했다. 실제 분석은 공개 benchmark score와 pKD를 같은 compound 단위로 맞춘 <code>494</code> compounds와 <code>7</code> methods에서 진행했다.</figcaption>
+  <figcaption><strong>Table 1.</strong> 원자료에서 최종 비교 표로 정리되는 과정을 요약했다. 실제 분석은 pKD를 같은 compound 단위로 맞춘 <code>494</code> compounds에서 진행했다. 공개 score 파일 <code>7</code>개는 학습·scoring method <code>5</code>개와 property baseline <code>2</code>개로 나뉘다.</figcaption>
 </figure>
 
 ## 결과
 
-### 단순 ligand property 기준선
+### 공개 property baseline 관찰의 재확인
 
-측정 pKD에서는 molecular weight, 즉 분자량 하나만으로도 Spearman `0.484`가 나왔다. MW+cLogP 선형 모델은 pKD 변동의 약 30%를 설명했다 (`R2 = 0.299`). Affinity benchmark에서는 이런 단순 ligand property 기준선을 먼저 확인해야 한다. 여기서는 그 효과가 OpenBind EV-A71 2A release 안에서 어느 정도인지 확인한다.
+OpenBind 공개 글은 molecular weight가 이 release의 강한 affinity-ranking baseline이라는 점을 이미 제시했다 <a class="citation-ref" href="#ref-openbind-first-release" aria-label="Reference 1">[1]</a>. 이 audit에서도 molecular weight와 측정 pKD의 Spearman은 `0.484`였고, MW+cLogP 선형 모델은 전체 compound 표의 pKD 변동 중 약 30%를 설명했다 (`R2 = 0.299`).
+
+이 결과는 새로운 ligand-property 효과를 주장하기 위한 것이 아니다. 이후 공개 prediction score의 상관을 MW+cLogP trend와 분리해 읽기 위한 출발 조건이다.
 
 Figure 2는 molecular weight와 pKD의 관계를 나타낸다.
 
@@ -120,7 +122,7 @@ Figure 2는 molecular weight와 pKD의 관계를 나타낸다.
   <figcaption><strong>Figure 2.</strong> Molecular weight와 pKD의 관계다. 분자량만 봤을 때의 Spearman은 <code>0.484</code>였고, 선은 설명용 선형 trend다. 이 관계는 측정 pKD와의 상관을 해석할 때 먼저 확인해야 하는 단순 ligand property 기준선으로 사용했다.</figcaption>
 </figure>
 
-이후 비교는 pKD에서 분자량과 cLogP로 설명되는 부분을 제거한 값에서 진행했다. 이 값은 실제 약물화학 과정에서 제거해야 할 모든 신호를 뜻하지 않는다. Compound가 커지거나 지용성이 바뀌는 흐름 자체도 potency 변화와 함께 움직일 수 있다. 따라서 여기서 만든 값은 “진짜 affinity 신호”의 정답이 아니라, prediction score와 pKD의 상관이 큰 property trend에 얼마나 의존하는지 보기 위한 비교 대상이다.
+이후 비교는 `494` compounds 전체에서 pKD를 분자량과 cLogP에 선형 회귀한 뒤 남은 값에서 진행했다. 이 값은 실제 약물화학 과정에서 제거해야 할 모든 신호를 뜻하지 않는다. Compound가 커지거나 지용성이 바뀌는 흐름 자체도 potency 변화와 함께 움직일 수 있다. 따라서 여기서 만든 값은 “진짜 affinity 신호”의 정답이 아니라, 전체 표에 대한 descriptive adjustment이며 prediction score와 pKD의 상관이 큰 property trend에 얼마나 의존하는지 보기 위한 비교 대상이다.
 
 Table 2는 MW+cLogP를 빼기 전에 확인한 ligand-property 기준선이다.
 
@@ -151,21 +153,21 @@ Table 2는 MW+cLogP를 빼기 전에 확인한 ligand-property 기준선이다.
   <figcaption><strong>Table 2.</strong> 측정 pKD와의 상관을 해석하기 전에 확인한 단순 ligand property 기준선이다. MW+cLogP는 최종 모델 비교 기준이 아니라, 공개 release에서 property trend의 크기를 확인하기 위한 비교 대상이다.</figcaption>
 </figure>
 
-### MW+cLogP 영향을 뺀 뒤의 상관
+### MW+cLogP로 조정한 pKD와의 상관
 
-먼저 pKD에서 분자량과 cLogP로 설명되는 부분을 뺐다. 그런 다음 이렇게 조정한 pKD 순위와 각 method score 순위가 얼마나 비슷한지 다시 봤다.
+먼저 전체 `494` compounds에서 pKD를 분자량과 cLogP에 선형 회귀하고 residual을 계산했다. 그런 다음 이 조정 pKD 순위와 각 method score 순위가 얼마나 비슷한지 봤다.
 
 그 결과 OpenBind에 공개된 benchmark score 중 가장 높은 값은 Boltz-2의 Spearman `0.097`이었다. 반면 구조를 쓰지 않고 compound 정보만 본 ECFP ridge 비교 기준은 `0.430`을 보였다.
 
-즉 공개 score는 측정 pKD와는 어느 정도 같이 움직였지만, 분자량과 cLogP trend를 빼고 나면 조정된 pKD 순위를 잘 따라가지 못했다. 같은 데이터 안에서는 구조를 쓰지 않은 ligand-only 비교 기준이 오히려 이 순위를 더 잘 따라갔다.
+즉 공개 score는 측정 pKD와는 어느 정도 같이 움직였지만, MW+cLogP 조정 pKD 순위는 잘 따라가지 못했다. 같은 데이터 안에서는 구조를 쓰지 않은 ligand-only 비교 기준이 이 조정 pKD와 더 높은 상관을 보였다.
 
-MW+cLogP 영향을 뺀 뒤에도 상관이 유지되어야, 측정 pKD와의 상관을 단순 ligand property trend를 넘어선 신호로 조심스럽게 해석할 수 있다. 이 상관이 곧 “구조 정보를 잘 읽었다”는 직접 증거는 아니지만, 최소한 그런 해석을 검토할 출발점은 된다.
+이 글에서는 각 score가 MW+cLogP 조정 pKD와도 상관을 유지하는지를, 단순 ligand property trend를 넘어선 신호를 검토하는 최소 진단 기준으로 둔다. 이 상관이 곧 “구조 정보를 잘 읽었다”는 직접 증거는 아니다.
 
-OpenBind 공개 benchmark score와 ECFP ridge 비교 기준은 역할이 다르다. 공개 benchmark score는 외부에서 제공된 method 점수이고, ECFP ridge는 구조 정보를 쓰지 않은 채 같은 EV-A71 2A pKD 데이터로 학습한 ligand-only 기준이다.
+OpenBind 공개 benchmark score와 ECFP ridge control은 같은 역할의 모델이 아니다. 공개 benchmark score는 외부에서 제공된 고정 score이고, ECFP ridge는 같은 EV-A71 2A campaign의 raw pKD를 사용해 shuffled 5-fold 교차검증으로 만든 supervised ligand-only out-of-fold prediction이다. Morgan fingerprint는 radius `2`, `2048` bits를 사용했고 Ridge alpha는 `10`, split seed는 `20260508`이었다.
 
-ECFP ridge를 함께 둔 이유는 단순하다. 구조 정보를 보지 않아도 같은 데이터 안에서 ligand 정보만으로 어느 정도 pKD 순위를 따라갈 수 있는지 확인하기 위해서다. 공개 score가 측정 pKD와는 맞아 보이지만 MW+cLogP 영향을 뺀 뒤에는 이 기준선보다 약하다면, 그 상관을 구조 정보에서 온 affinity 신호로 바로 읽기는 어렵다.
+따라서 `0.097`과 `0.430`의 차이는 동일한 학습·평가 계약에서 얻은 model ranking이 아니다. 같은 campaign의 ligand 표현만으로도 MW+cLogP 조정 pKD와 더 높은 상관이 나올 수 있음을 보여주는 진단적 비교다. 이 조건에서 공개 score의 raw pKD 상관만으로 구조 정보의 독립적 기여를 특정하기 어렵다는 것이 남는 결론이다.
 
-Table 3은 이 역할 구분을 유지한 채 MW+cLogP 영향을 뺀 뒤의 Spearman만 압축해 보여준다.
+Table 3은 이 역할 구분을 유지한 채 MW+cLogP로 조정한 pKD와의 Spearman만 압축해 보여준다.
 
 <figure class="table-figure table-figure--comparison table-figure--compact-metrics">
   <div class="table-shell">
@@ -175,7 +177,7 @@ Table 3은 이 역할 구분을 유지한 채 MW+cLogP 영향을 뺀 뒤의 Spea
           <th>score 출처</th>
           <th>가장 높은 method</th>
           <th>구조 정보 사용</th>
-          <th class="align-right">MW+cLogP 제거 후<br><span class="table-note-inline">Spearman</span></th>
+          <th class="align-right">MW+cLogP 조정 pKD<br><span class="table-note-inline">Spearman</span></th>
         </tr>
       </thead>
       <tbody>
@@ -194,18 +196,16 @@ Table 3은 이 역할 구분을 유지한 채 MW+cLogP 영향을 뺀 뒤의 Spea
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 3.</strong> MW+cLogP 영향을 뺀 뒤의 주 비교다. 구조 정보 사용 여부를 함께 표시해 공개 benchmark score와 ligand-only 기준선의 역할을 구분했다. 가장 높은 공개 benchmark Spearman에서 가장 높은 ligand-only 비교 기준 Spearman을 빼면, 반올림 전 값 기준 <code>-0.334</code>였다.</figcaption>
+  <figcaption><strong>Table 3.</strong> 각 score와 MW+cLogP로 조정한 pKD 사이의 주 비교다. 구조 정보 사용 여부를 함께 표시해 공개 benchmark score와 ligand-only control의 역할을 구분했다. 가장 높은 공개 benchmark Spearman에서 ligand-only control Spearman을 빼면, 반올림 전 값 기준 <code>-0.334</code>였다. 이 차이는 동일 학습 조건의 모델 간 성능 차이가 아니라 공개 고정 score와 campaign-supervised ligand control 사이의 진단적 간격이다.</figcaption>
 </figure>
 
-Figure 1은 같은 결과를 측정 pKD와의 Spearman, 그리고 MW+cLogP 영향을 뺀 뒤의 Spearman으로 나눠 나타낸다. Gnina crystal은 공개 benchmark methods 중 측정 pKD와의 Spearman이 가장 높았지만, MW+cLogP 영향을 뺀 뒤에는 약해졌다. 반대로 ECFP/RDKit 계열 ligand-only 비교 기준은 측정 pKD뿐 아니라 MW+cLogP 영향을 뺀 뒤에도 더 높은 상관을 보였다.
+Figure 1은 각 score가 측정 pKD 및 MW+cLogP로 조정한 pKD와 보이는 Spearman을 함께 나타낸다. 공개 score의 상관은 조정 pKD에서 전반적으로 약해진 반면, 같은 campaign의 ligand 표현으로 만든 control은 더 높은 상관을 보였다. 이 비교는 유사 compound 사이의 예측 성능을 직접 평가하지 않지만, raw pKD 상관만으로 공개 score가 구조 정보를 잘 읽었다고 강하게 주장하기 어렵다는 점을 보여준다.
 
-같은 EV-A71 2A 데이터 안에서는 ligand-only 비교 기준도 비슷한 compound들 사이의 potency 차이를 어느 정도 잡을 수 있다. 이 기준과 함께 보면, prediction score와 pKD의 상관만으로 공개 benchmark score가 구조 정보를 잘 읽었다고 강하게 주장하기 어렵다.
+### 재표집 기반 민감도 확인
 
-### 유사 compound 기준의 보조 확인
+앞의 상관이 compound 구성 변화에 얼마나 민감한지 보기 위해, 이미 계산된 score와 out-of-fold prediction을 고정한 채 compound 행을 `1000`회 복원 재표집했다. 이 범위는 모델을 다시 학습했을 때의 변동이 아니라, 현재 `494` compounds의 재표집에 따른 상관 변동이다. MW+cLogP 조정 pKD와의 Spearman 평균은 Boltz-2 `0.096`, ECFP ridge control `0.429`였고, 95% 범위는 각각 `[0.008, 0.179]`, `[0.354, 0.497]`였다.
 
-앞의 비교가 특정 compound 구성에만 의존하는지 확인하기 위해 데이터를 여러 번 다시 뽑아 불확실성을 추정했다. MW+cLogP 영향을 뺀 뒤에도 공개 benchmark score의 상관이 항상 0 근처에만 있지는 않았다. 다만 가장 높은 Boltz-2도 Spearman 평균은 `0.096`, 95% 범위는 `[0.008, 0.179]`였다. ECFP ridge 비교 기준은 평균 `0.429`, 95% 범위 `[0.354, 0.497]`로 더 높았다.
-
-Table 4는 MW+cLogP 영향을 뺀 뒤 Spearman의 불확실성 범위를 method별로 정리한다.
+Table 4는 MW+cLogP로 조정한 pKD와의 Spearman 불확실성 범위를 method별로 정리한다.
 
 <figure class="table-figure table-figure--comparison table-figure--metrics">
   <div class="table-shell">
@@ -214,7 +214,7 @@ Table 4는 MW+cLogP 영향을 뺀 뒤 Spearman의 불확실성 범위를 method�
         <tr>
           <th>method</th>
           <th>구조 정보 사용</th>
-          <th class="align-right">MW+cLogP 제거 후<br><span class="table-note-inline">Spearman 평균</span></th>
+          <th class="align-right">MW+cLogP 조정 pKD<br><span class="table-note-inline">Spearman 평균</span></th>
           <th class="align-right">95% 범위</th>
         </tr>
       </thead>
@@ -227,20 +227,22 @@ Table 4는 MW+cLogP 영향을 뺀 뒤 Spearman의 불확실성 범위를 method�
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 4.</strong> MW+cLogP 영향을 뺀 뒤 Spearman을 반복 계산으로 확인한 범위다. 구조/pose를 사용하는 공개 benchmark score와 구조를 쓰지 않는 ligand-only 기준선을 같은 표에서 구분했다. 공개 benchmark score 중 가장 높은 상관은 약하게 양수였지만, 이 비교에서는 ligand-only 비교 기준과 같은 범위로 올라오지는 않았다.</figcaption>
+  <figcaption><strong>Table 4.</strong> 이미 계산된 score와 out-of-fold prediction을 고정하고 compound 행을 <code>1000</code>회 재표집해 얻은 MW+cLogP 조정 pKD와의 Spearman 범위다. 공개 benchmark score 중 가장 높은 상관은 약하게 양수였지만, 이 비교에서는 ligand-only control과 같은 범위로 올라오지 않았다.</figcaption>
 </figure>
 
-비슷한 compound가 많이 섞여 있으면, 같은 화학 계열 안의 쉬운 차이가 결과를 크게 좌우할 수 있다. 이를 완전히 제거하려면 화학 골격을 엄격히 나눠 평가해야 하지만, 여기서는 보조 확인으로만 다뤘다. 유사한 compound를 같은 묶음에 넣고 다시 계산했을 때도 공개 benchmark score 중 가장 높은 Spearman 평균은 `0.098`, ligand-only 비교 기준 중 가장 높은 Spearman 평균은 `0.421`이었다. 두 값의 차이는 `-0.323`으로 유지됐다.
+Grouped bootstrap은 Murcko scaffold 또는 Butina cluster를 재표집 단위로 사용해, 특정 chemical group의 비중 변화가 상관의 방향을 뒤집는지 확인했다. 각 반복에서 group을 복원 추출하고 그 group에 속한 compound 행의 Spearman을 다시 계산했다. ECFP ridge를 group-held-out fold에서 다시 학습한 것은 아니므로, 유사 compound가 학습 fold와 평가 fold에 함께 들어가는 문제를 제거하지 않는다.
+
+Murcko scaffold 단위 `300`회 재표집에서 공개 benchmark score 중 가장 높은 평균은 Boltz-2의 `0.098`, ligand-only control 중 가장 높은 평균은 ECFP ridge의 `0.421`이었고 차이는 `-0.323`이었다. Figure 3은 별도의 Butina Tanimoto 0.6 재표집 결과를 보여준다. 여기서 Boltz-2는 `0.075`, ECFP ridge는 `0.395`, 차이는 `-0.320`이었다. 두 grouping에서 비교 방향은 유지됐지만, 이는 chemical-series generalization이 아니라 현재 score의 group-weighting sensitivity다.
 
 > **Murcko scaffold**는 compound의 중심 골격을 기준으로 비슷한 compound를 묶는 방식이다.
 >
 > **Butina Tanimoto 0.6**은 fingerprint similarity가 높은 compound를 cluster로 묶는 방식이다. 이 글에서는 비슷한 compound 때문에 결론이 쉽게 뒤집히는지 보는 보조 확인으로 사용한다.
 
-Figure 3은 이 보조 확인의 결과를 보여준다. Table 5는 이 확인이 얼마나 강한지 판단하기 위해 묶음 구성을 따로 보여준다.
+Figure 3은 Butina 재표집 결과를, Table 5는 높은 singleton 비율을 포함한 묶음 구성과 해석 한계를 보여준다.
 
-<figure class="media-figure">
-  <img src="/assets/images/posts/openbind-affinity-baseline-audit/butina-grouped-residual-spearman.svg" alt="Butina Tanimoto 0.6 cluster로 유사 compound를 묶은 뒤 method별 MW+cLogP 제거 후 Spearman 평균과 95% 범위를 비교한 막대 차트">
-  <figcaption><strong>Figure 3.</strong> Butina Tanimoto 0.6 cluster로 유사 compound를 같은 묶음에 넣은 뒤, MW+cLogP 영향을 뺀 Spearman을 다시 계산했다. 이 결과는 화학 골격을 엄격히 분리한 평가가 아니라 보조 확인으로 해석한다. Figure 1과 같은 세 묶음으로 배치했고, 막대는 반복 계산 평균, 얇은 선은 95% 범위다.</figcaption>
+<figure class="media-figure media-figure--wide-visual">
+  <img src="/assets/images/posts/openbind-affinity-baseline-audit/butina-grouped-residual-spearman.svg" alt="고정된 method score와 out-of-fold prediction을 Butina Tanimoto 0.6 cluster 단위로 재표집해 MW+cLogP 조정 pKD와의 Spearman 평균을 점으로, 95% 범위를 선으로 비교한 forest plot">
+  <figcaption><strong>Figure 3.</strong> Butina Tanimoto 0.6 cluster를 재표집 단위로 사용해, 이미 계산된 method score와 out-of-fold prediction이 MW+cLogP 조정 pKD와 보이는 Spearman을 다시 계산했다. 점은 <code>300</code>회 grouped bootstrap 평균, 선은 95% 범위다. 모델을 cluster-held-out 조건에서 다시 학습한 결과가 아니므로 chemical-series generalization이 아니라 cluster 구성에 대한 민감도로 해석한다.</figcaption>
 </figure>
 
 <figure class="table-figure table-figure--comparison table-figure--compact-metrics">
@@ -267,66 +269,114 @@ Figure 3은 이 보조 확인의 결과를 보여준다. Table 5는 이 확인�
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 5.</strong> 유사 compound 기준의 보조 확인이 얼마나 강한지 보여주는 묶음 구성이다. compound 1개짜리 묶음 비율이 높으므로, 이 확인은 화학 골격을 엄격히 분리한 평가가 아니다. 다만 유사 compound를 일부 묶어도 Figure 1과 Table 3의 결론이 쉽게 뒤집히지 않는지 보는 보조 확인으로 사용했다.</figcaption>
+  <figcaption><strong>Table 5.</strong> Grouped bootstrap의 묶음 구성이다. Compound 1개짜리 묶음 비율이 높고 모델을 group-held-out 조건에서 재학습하지 않았으므로 엄격한 scaffold split이 아니다. 현재 상관의 방향이 일부 chemical group의 재표집 가중치에 쉽게 뒤집히는지만 확인한다.</figcaption>
 </figure>
 
-### 단순 protein-ligand 접촉 수 보조 확인
+### Prepared-structure descriptor 보조 확인
 
-> **Protein-ligand 접촉 수**는 공개 구조에서 protein atom과 ligand atom이 가까이 놓인 횟수를 세어 만든 단순 구조 요약값이다. 정교한 구조 모델이 아니라, 결합 자세 주변의 접촉량을 거칠게 요약한 값으로 사용한다.
+> **Prepared-structure descriptor**는 공개 구조에서 protein·ligand atom 수, 최소 거리, 거리 threshold별 접촉 수, 원소쌍과 pocket residue 정보를 계산하고 compound별 평균과 최댓값으로 모은 feature다. 정교한 interaction model이 아니라 prepared pose 주변의 크기·거리·접촉량을 거칠게 요약한다.
 
-MW+cLogP 영향을 뺀 뒤 공개 benchmark score가 약해졌다고 해서, 구조 정보가 전혀 쓸모없다고 말할 수는 없다. 그래서 공개 구조에서 protein-ligand 접촉 수를 세고, 이 단순한 구조 요약을 ligand-only 기준에 더해 봤다.
+공개 score 분석과 별도로, 단순한 prepared-structure descriptor가 ligand representation에 추가 신호를 주는지만 제한적으로 확인했다. Zenodo v1의 prepared structure archive <a class="citation-ref" href="#ref-openbind-zenodo" aria-label="Reference 4">[4]</a>에서 atom 수와 최소 거리, 거리 threshold `3.5`, `4.5`, `6.0`, `8.0` Å의 protein-ligand 접촉, 원소쌍과 pocket residue 정보를 포함한 `312`개 descriptor를 만들었다.
 
-구체적으로는 구조가 있는 925개 항목에서 이 접촉 수를 세고, 이를 494 compounds 단위로 모았다.
+구조 파일 `925`개는 모두 파싱했다. 이 가운데 공개 compound reference에 연결된 `649`개 structure instances를 `494` compounds 단위로 모아 follow-up 모델 입력으로 사용했다.
 
-결과는 개선되지 않았다. 접촉 수만 사용한 모델은 MW+cLogP 제거 후 Spearman `0.156`이었고, ECFP에 접촉 수를 더한 모델은 `0.279`였다. 이는 ECFP만 사용한 모델의 `0.360`보다 낮다.
+이 follow-up의 ECFP 기준은 앞의 `0.430` ECFP ridge와 평가 파이프라인이 다르다. 주 비교의 `0.430`은 ECFP로 raw pKD를 예측한 5-fold out-of-fold score와 전체 표에서 계산한 조정 pKD의 상관이다. 여기서 사용하는 `0.360`은 ECFP를 sparse scaling한 뒤 조정 pKD 자체를 직접 예측하도록 같은 shuffled 5-fold 교차검증에서 다시 학습한 결과다. 따라서 `0.430`에서 `0.360`으로 성능이 감소했다는 비교는 성립하지 않으며, `0.360`은 prepared-structure descriptor 추가 효과를 보기 위한 follow-up 내부 기준선이다.
 
-Table 6은 단순 protein-ligand 접촉 수를 더했을 때의 MW+cLogP 제거 후 Spearman을 요약한다.
+이 동일 follow-up 파이프라인 안에서는 prepared-structure descriptor만 사용한 모델이 Spearman `0.156`, ECFP에 descriptor를 더한 모델이 `0.279`, ECFP만 사용한 기준선이 `0.360`이었다. 따라서 descriptor를 추가했을 때의 차이는 `-0.081`이다.
 
-<figure class="table-figure table-figure--comparison table-figure--metrics">
+Table 6은 prepared-structure descriptor를 더했을 때 MW+cLogP 조정 pKD와의 Spearman을 요약한다.
+
+<figure class="table-figure table-figure--comparison table-figure--compact-metrics">
   <div class="table-shell">
-    <table class="comparison-table metrics-table">
+    <table class="comparison-table metrics-table metrics-table--compact-two-col">
       <thead>
         <tr>
           <th>입력 정보</th>
-          <th class="align-right">MW+cLogP 제거 후<br><span class="table-note-inline">Spearman</span></th>
+          <th class="align-right">MW+cLogP 조정 pKD<br><span class="table-note-inline">Spearman</span></th>
         </tr>
       </thead>
       <tbody>
         <tr><td>ECFP만 사용</td><td class="align-right"><code>0.360</code></td></tr>
-        <tr><td>접촉 수만 사용</td><td class="align-right"><code>0.156</code></td></tr>
-        <tr><td>ECFP + 접촉 수</td><td class="align-right"><code>0.279</code></td></tr>
+        <tr><td>Prepared-structure descriptors</td><td class="align-right"><code>0.156</code></td></tr>
+        <tr><td>ECFP + structure descriptors</td><td class="align-right"><code>0.279</code></td></tr>
         <tr><td>RDKit descriptors + ECFP</td><td class="align-right"><code>0.369</code></td></tr>
-        <tr><td>RDKit descriptors + ECFP<br><span class="table-note-inline">+ 접촉 수</span></td><td class="align-right"><code>0.283</code></td></tr>
+        <tr><td>RDKit descriptors + ECFP<br><span class="table-note-inline">+ structure descriptors</span></td><td class="align-right"><code>0.283</code></td></tr>
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 6.</strong> 공개 구조에서 세어 만든 단순 protein-ligand 접촉 수 보조 확인이다. ECFP에 접촉 수를 더했을 때의 차이는 <code>-0.081</code>였고, 반복 계산의 95% 범위는 <code>[-0.146, -0.012]</code>였다. 이 결과는 단순 접촉 수만으로는 앞의 결론이 뒤집히지 않는다는 뜻으로 해석한다.</figcaption>
+  <figcaption><strong>Table 6.</strong> MW+cLogP 조정 pKD를 직접 예측하도록 동일한 shuffled 5-fold 교차검증에서 학습한 follow-up 내부 비교다. ECFP에 prepared structure에서 만든 <code>312</code>개 거리·접촉·atom-count descriptor를 더했을 때의 차이는 <code>-0.081</code>이었고, 고정된 out-of-fold prediction을 <code>1000</code>회 paired row bootstrap한 95% 범위는 <code>[-0.146, -0.012]</code>였다.</figcaption>
 </figure>
 
 ## 해석
 
-핵심은 prediction score와 pKD의 상관을 affinity 예측 성공으로 바로 읽기 어렵다는 점이다. Score와 pKD의 순위가 비슷해 보여도, 그 상관이 단백질-리간드 구조에서 온 신호인지 단순 ligand property trend에서 온 신호인지는 따로 확인해야 한다.
+핵심은 prediction score와 측정 pKD의 상관만으로 모델이 구조적 결합 원리를 포착했다고 판단하기 어렵다는 점이다. Score와 pKD의 순위가 비슷해 보여도, 그 상관이 단백질-리간드 구조에서 온 신호인지 단순 ligand property나 campaign의 chemical-series 구성에서 온 신호인지는 따로 확인해야 한다.
 
-OpenBind 공개 benchmark score는 측정 pKD와는 어느 정도 같이 움직였다. 하지만 pKD에서 분자량과 cLogP로 설명되는 부분을 빼고 나면 그 상관은 크게 약해졌다. 처음에 보였던 상관의 상당 부분이 compound의 크기나 지용성 같은 ligand property trend와 겹쳤을 가능성이 있다.
+OpenBind 공개 benchmark score는 측정 pKD와는 어느 정도 같이 움직였다. 하지만 공개 method 전반에서 MW+cLogP 조정 pKD와의 상관은 약해졌으며, raw pKD 상관이 compound의 크기나 지용성 같은 ligand-property trend와 겹쳤을 가능성이 있다.
 
-구조 정보를 쓰지 않은 ligand-only 비교 기준은 MW+cLogP 영향을 뺀 뒤에도 더 강한 상관을 보였다. 이 기준은 공개 benchmark score를 대체하려는 모델이 아니라, 같은 데이터 안에서 ligand 정보만으로 어느 정도 pKD 순서를 따라갈 수 있는지 보기 위한 기준선이다. 공개 score가 이 기준선보다 약하다면, 공개 score의 pKD 상관을 구조 기반 affinity 신호로 강하게 해석하기 어렵다.
+구조 정보를 쓰지 않은 ligand-only control은 이 retrospective audit에서 MW+cLogP 조정 pKD와 더 강한 상관을 보였다. 다만 이 control은 같은 campaign의 label로 학습한 random-fold out-of-fold prediction이므로, 공개 benchmark score를 대체하거나 prospective model 우위를 보이는 결과가 아니다. 같은 campaign의 ligand 정보만으로도 더 높은 상관이 나오는 조건에서는 공개 score의 raw pKD 상관만으로 구조 기반 affinity 신호를 강하게 해석하기 어렵다는 것이 이 비교의 범위다.
 
-이 결론은 OpenBind 전체나 구조 기반 affinity prediction 일반에 대한 판정이 아니다. 이 release의 공개 prediction score를 해석할 때, 측정 pKD와의 상관만 보지 말고 분자량과 cLogP 같은 단순 property 기준선과 함께 봐야 한다는 점을 확인한 것이다.
+이 결론은 OpenBind 전체나 구조 기반 affinity prediction 일반에 대한 판정이 아니다. 이 release의 공개 prediction score를 구조 신호로 해석하려면 측정 pKD와의 상관만 보지 말고, 분자량·cLogP 같은 단순 property 기준선과 ligand-only control을 함께 비교해야 한다. 더 나아가 구조 기반 일반화를 주장하려면 새로운 chemical series를 분리한 group-held-out 또는 prospective 평가가 필요하다.
 
 ## 한계
 
-- 이 결과는 이미 공개된 EV-A71 2A compound 표를 다시 확인한 결과에 한정된다. OpenBind 전체나 구조 기반 affinity prediction 일반을 판정하지 않는다.
-- 새 compound를 미리 분리해 놓고 발견 성능을 평가한 설정이 아니며, 새 affinity model의 일반화 성능도 평가하지 않는다.
-- MW/cLogP 영향 자체가 뜻밖의 발견이라는 주장은 아니다. 이 글의 초점은 공개 release 안에서 그 크기를 수치화하고, prediction score와 pKD의 상관을 해석할 때 필요한 기준선을 확인하는 데 있다.
-- ECFP ridge 비교 기준은 공개 benchmark score를 대체하려는 모델이 아니다. 구조 정보를 쓰지 않고 같은 EV-A71 2A pKD 데이터로 학습한 ligand-only 비교 기준이다.
-- MW+cLogP로 설명되는 부분을 빼는 절차는 진단용이다. 약물화학 최적화 과정에서는 property trend와 compound 최적화 흐름 자체도 실제 potency 변화와 얽힐 수 있으므로, 이렇게 조정한 값을 구조 정보의 정답으로 해석하지 않는다.
-- 유사 compound 기준의 보조 확인은 결론을 뒤집지 않았지만, Murcko 기준에서는 `82.2%`, Butina 기준에서는 `71.4%`의 묶음에 compound가 하나만 들어 있었다. 따라서 새로운 화학 골격(scaffold)을 엄격히 분리한 평가 설정은 아니다.
-- pKD 값이 정리되는 과정에 대한 민감도는 아직 확인하지 않았다. 예를 들어 여러 측정 행을 하나로 모으는 규칙, 측정값의 불확실성, benchmark 포함 행 선택이 MW+cLogP 제거 후 결론에 미치는 영향은 별도로 확인해야 한다.
-- 단순 protein-ligand 접촉 수 보조 확인은 접촉 수 하나만 평가했다. 구조 정보가 무의미하다는 결론이 아니며, 더 정교한 구조 정보나 pKD에 맞춘 구조 모델을 배제하지 않는다.
+- 이 결과는 공개된 EV-A71 2A release 하나에 한정된다. 새 compound를 미리 분리한 prospective 평가가 아니며, OpenBind 전체나 구조 기반 affinity prediction 일반의 성능을 판정하지 않는다.
+- MW+cLogP 조정은 전체 `494` compounds에서 계산한 descriptive adjustment다. Property trend도 실제 potency 변화와 얽힐 수 있으므로, 조정 후 pKD를 구조 정보에서 온 신호의 정답으로 해석하지 않는다.
+- ECFP control은 같은 campaign의 raw pKD로 학습한 random 5-fold out-of-fold 모델이다. 공개된 고정 score와 동일 조건의 model ranking이 아니며, 새로운 chemical series에 대한 일반화 성능을 보여주지 않는다.
+- Grouped bootstrap은 기존 score와 prediction을 고정한 채 chemical group을 재표집했다. Group-held-out 재학습이 아니고 singleton group 비율도 높으므로, analog leakage를 제거하거나 scaffold 일반화를 입증하지 않는다.
+- 측정 행을 compound pKD로 정리하는 규칙과 측정 불확실성에 대한 민감도는 평가하지 않았다. Structure follow-up도 prepared pose에서 집계한 `312`개 거리·접촉·atom-count descriptor에 한정되므로, 더 정교한 구조 표현의 유효성을 배제하지 않는다.
 
-## Appendix
+## Appendix: 평가·재현 계약
 
-본문에는 해석에 필요한 주요 수치만 두었다. Appendix Table 1은 전체 method의 측정 pKD Spearman과 MW+cLogP 제거 후 Spearman을 함께 보기 위한 보조 자료다. 이 표도 method 순위를 확정하기보다 두 상관의 차이를 점검하는 용도로 둔다.
+<figure class="table-figure table-figure--comparison">
+  <div class="table-shell">
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>단계</th>
+          <th>고정한 계약</th>
+          <th>해석 경계</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>입력 snapshot</td>
+          <td>OpenBind affinity repository의 <a href="https://github.com/OpenBind-Consortium/EV-A71_2A_benchmark/tree/86e5c12da518d749c33cfa9dcb6ae8eae1b804f9/affinity"><code>86e5c12</code> revision</a>과 Zenodo <code>v1</code></td>
+          <td>실험 provenance의 affinity 입력 <code>11</code>개 SHA-256이 이 revision의 파일과 일치함을 <code>2026-07-30</code>에 다시 확인</td>
+        </tr>
+        <tr>
+          <td>MW+cLogP 조정</td>
+          <td>전체 <code>494</code> compounds에 OLS 1회 적합</td>
+          <td>전체 표에서 계산한 설명용 조정값이며 cross-fitted target이 아님</td>
+        </tr>
+        <tr>
+          <td>Ligand-only control</td>
+          <td>Shuffled 5-fold CV, seed <code>20260508</code>; ECFP radius <code>2</code>, <code>2048</code> bits; Ridge alpha <code>10</code></td>
+          <td>Compound-random OOF prediction이며 scaffold-disjoint 평가가 아님</td>
+        </tr>
+        <tr>
+          <td>Compound bootstrap</td>
+          <td>고정 score/prediction의 행을 <code>1000</code>회 복원 추출</td>
+          <td>Percentile 95% 범위; 모델과 MW+cLogP 조정 모델을 다시 적합하지 않음</td>
+        </tr>
+        <tr>
+          <td>Grouped bootstrap</td>
+          <td>Murcko 또는 Butina Tanimoto 0.6 group을 <code>300</code>회 복원 추출</td>
+          <td>Group-held-out 재학습이 아니라 group-weighting sensitivity</td>
+        </tr>
+        <tr>
+          <td>Prepared-structure descriptor</td>
+          <td>Zenodo v1 구조 <code>925</code>개 파싱, reference-linked instances <code>649</code>개를 <code>494</code> compounds와 <code>312</code> features로 집계</td>
+          <td>조정 pKD를 직접 학습한 별도 5-fold pipeline; 주 비교의 ECFP <code>0.430</code>과 직접 비교하지 않음</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <figcaption><strong>Appendix Table 1.</strong> 본문의 수치를 재현하고 해석할 때 필요한 평가 계약이다. Python <code>3.12.3</code>, NumPy <code>2.2.6</code>, pandas <code>2.3.3</code>, SciPy <code>1.17.1</code>, scikit-learn <code>1.7.1</code>, RDKit <code>2026.03.1</code>에서 실행했다.</figcaption>
+</figure>
+
+핵심 분석은 <a href="https://github.com/muted-color/openbind-affinity-score-audit">OpenBind Affinity Score Audit 재현 저장소</a>에서 다시 실행할 수 있다. 저장소는 고정된 OpenBind revision에서 입력 CSV를 내려받아 SHA-256을 확인하고, compound 표 재구성, MW+cLogP 조정, ligand-only control, Murcko·Butina grouped sensitivity를 한 명령으로 재현한다. Prepared-structure descriptor follow-up은 핵심 audit의 공개 범위에 포함하지 않는다.
+
+본문에는 해석에 필요한 주요 수치만 두었다. Appendix Table 2는 전체 method의 측정 pKD Spearman과 MW+cLogP 조정 pKD Spearman을 함께 보기 위한 보조 자료다. 이 표도 method 순위를 확정하기보다 두 상관의 차이를 점검하는 용도로 둔다.
 
 <figure class="table-figure table-figure--comparison table-figure--metrics">
   <div class="table-shell">
@@ -335,8 +385,8 @@ OpenBind 공개 benchmark score는 측정 pKD와는 어느 정도 같이 움직�
         <tr>
           <th>method</th>
           <th class="align-right">측정 pKD<br><span class="table-note-inline">Spearman</span></th>
-          <th class="align-right">MW+cLogP 제거 후<br><span class="table-note-inline">Spearman</span></th>
-          <th class="align-right">ligand-only 대비 차이</th>
+          <th class="align-right">MW+cLogP 조정 pKD<br><span class="table-note-inline">Spearman</span></th>
+          <th class="align-right">ECFP ridge 대비 차이</th>
         </tr>
       </thead>
       <tbody>
@@ -354,7 +404,7 @@ OpenBind 공개 benchmark score는 측정 pKD와는 어느 정도 같이 움직�
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Appendix Table 1.</strong> Method별 측정 pKD Spearman과 MW+cLogP 제거 후 Spearman이다. Ligand-only 대비 차이는 ECFP ridge 비교 기준의 MW+cLogP 제거 후 Spearman 반올림 전 값을 기준으로 계산했으며, 직접 순위표가 아니라 제거 전후 차이를 보는 보조 표로 사용한다.</figcaption>
+  <figcaption><strong>Appendix Table 2.</strong> Method별 측정 pKD Spearman과 MW+cLogP 조정 pKD Spearman이다. ECFP ridge 대비 차이는 그 control의 조정 pKD Spearman 반올림 전 값을 기준으로 계산했으며, 직접 순위표가 아니라 raw pKD와 조정 pKD의 상관 차이를 보는 보조 표로 사용한다.</figcaption>
 </figure>
 
 ## References
@@ -373,20 +423,21 @@ OpenBind 공개 benchmark score는 측정 pKD와는 어느 정도 같이 움직�
 <div class="reference-list" markdown="1">
 
 <ol start="3">
-  <li id="ref-openbind-github">OpenBind Consortium. <strong>EV-A71_2A_benchmark affinity files</strong>. GitHub, 2026. <a href="https://github.com/OpenBind-Consortium/EV-A71_2A_benchmark/tree/main/affinity">Repository directory</a></li>
-  <li id="ref-openbind-zenodo">OpenBind Consortium. <strong>OpenBind Structure-Affinity Data Release: Enterovirus A71 (EV-A71) / Coxsackievirus A16 (CVA16) 2A protease</strong>. Zenodo, version v1, May 5, 2026. DOI: <a href="https://doi.org/10.5281/zenodo.20026661">10.5281/zenodo.20026661</a></li>
+  <li id="ref-openbind-github">OpenBind Consortium. <strong>EV-A71_2A_benchmark affinity files</strong>. GitHub, revision <code>86e5c12</code>, 2026. <a href="https://github.com/OpenBind-Consortium/EV-A71_2A_benchmark/tree/86e5c12da518d749c33cfa9dcb6ae8eae1b804f9/affinity">Pinned repository directory</a>. Repository code: Apache-2.0; released data: CC0 1.0.</li>
+  <li id="ref-openbind-zenodo">OpenBind Consortium. <strong>OpenBind Structure-Affinity Data Release: Enterovirus A71 (EV-A71) / Coxsackievirus A16 (CVA16) 2A protease</strong>. Zenodo, version v1, May 5, 2026. DOI: <a href="https://doi.org/10.5281/zenodo.20026661">10.5281/zenodo.20026661</a>. Data license: CC0 1.0.</li>
+  <li id="ref-openbind-audit-reproduction">Soleaf. <strong>OpenBind Affinity Score Audit</strong>. GitHub, version <code>0.1.0</code>, 2026. <a href="https://github.com/muted-color/openbind-affinity-score-audit">Reproduction repository</a>. License: Apache-2.0.</li>
 </ol>
 
-본문의 비교 단위와 전체 method 결과는 Table 1과 Appendix Table 1에 요약했다.
-
 </div>
+
+본문의 비교 단위와 전체 method 결과는 Table 1과 Appendix Table 2에 요약했다.
 
 ## Citation
 
 Text citation:
 
 ```text
-Ilho Ahn, "OpenBind prediction score를 구조 신호로 읽을 수 있을까", Mini Research, May 10, 2026.
+Ilho Ahn, "OpenBind prediction score의 구조 신호 해석 점검", Mini Research, May 10, 2026.
 ```
 
 BibTeX:
@@ -394,7 +445,7 @@ BibTeX:
 ```bibtex
 @misc{ahn2026openbind_affinity_baseline_check,
   author = {Ahn, Ilho},
-  title = {OpenBind prediction score를 구조 신호로 읽을 수 있을까},
+  title = {OpenBind prediction score의 구조 신호 해석 점검},
   year = {2026},
   month = {May},
   howpublished = {Mini Research},

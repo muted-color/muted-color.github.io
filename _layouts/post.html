@@ -70,6 +70,10 @@ layout: default
     var sidebarInner = document.querySelector(".research-sidebar-inner");
     if (!root || !toc) return;
 
+    function cssVar(name, fallback) {
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback;
+    }
+
     function renderMermaidBlocks() {
       if (!window.mermaid) return;
 
@@ -121,19 +125,19 @@ layout: default
           useMaxWidth: true
         },
         themeVariables: {
-          background: "#ffffff",
-          mainBkg: "#ffffff",
-          primaryColor: "#ffffff",
-          primaryTextColor: "#1b1d22",
-          primaryBorderColor: "#dfdcd6",
-          secondaryColor: "#ffffff",
-          secondaryTextColor: "#1b1d22",
-          secondaryBorderColor: "#dfdcd6",
-          tertiaryColor: "#f2f4ff",
-          tertiaryTextColor: "#3f41ff",
-          tertiaryBorderColor: "#3f41ff",
-          lineColor: "#e3e0da",
-          edgeLabelBackground: "#ffffff",
+          background: cssVar("--page", "#ffffff"),
+          mainBkg: cssVar("--surface", "#ffffff"),
+          primaryColor: cssVar("--surface", "#ffffff"),
+          primaryTextColor: cssVar("--ink", "#1b1d22"),
+          primaryBorderColor: cssVar("--line-strong", "#dfdcd6"),
+          secondaryColor: cssVar("--surface", "#ffffff"),
+          secondaryTextColor: cssVar("--ink", "#1b1d22"),
+          secondaryBorderColor: cssVar("--line-strong", "#dfdcd6"),
+          tertiaryColor: cssVar("--code-bg", "#f2f4ff"),
+          tertiaryTextColor: cssVar("--accent-strong", "#3f41ff"),
+          tertiaryBorderColor: cssVar("--accent", "#3f41ff"),
+          lineColor: cssVar("--mermaid-cluster-line", "#e3e0da"),
+          edgeLabelBackground: cssVar("--surface", "#ffffff"),
           fontFamily: "\"IBM Plex Mono\", \"SFMono-Regular\", \"JetBrains Mono\", monospace",
           fontSize: "13px"
         }
@@ -164,10 +168,10 @@ layout: default
 
       return definition + [
         "",
-        "classDef card fill:#ffffff,stroke:#dfdcd6,color:#1b1d22,stroke-width:1.4px;",
-        "classDef accent fill:#f2f4ff,stroke:#3f41ff,color:#3f41ff,stroke-width:1.8px;",
-        "classDef muted fill:#faf9f7,stroke:#d8d4cd,color:#6f6a64,stroke-width:1.2px;",
-        "linkStyle default stroke:#e3e0da,stroke-width:1.2px;"
+        "classDef card fill:" + cssVar("--mermaid-card-bg", "#ffffff") + ",stroke:" + cssVar("--mermaid-card-line", "#dfdcd6") + ",color:" + cssVar("--ink", "#1b1d22") + ",stroke-width:1.4px;",
+        "classDef accent fill:" + cssVar("--code-bg", "#f2f4ff") + ",stroke:" + cssVar("--accent", "#3f41ff") + ",color:" + cssVar("--accent-strong", "#3f41ff") + ",stroke-width:1.8px;",
+        "classDef muted fill:" + cssVar("--mermaid-muted-bg", "#faf9f7") + ",stroke:" + cssVar("--mermaid-muted-line", "#d8d4cd") + ",color:" + cssVar("--mermaid-muted-ink", "#6f6a64") + ",stroke-width:1.2px;",
+        "linkStyle default stroke:" + cssVar("--mermaid-cluster-line", "#e3e0da") + ",stroke-width:1.2px;"
       ].join("\n");
     }
 

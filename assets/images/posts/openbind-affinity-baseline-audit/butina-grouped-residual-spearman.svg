@@ -1,105 +1,97 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 650" role="img" aria-labelledby="title desc">
-  <title id="title">Grouped residual Spearman sensitivity</title>
-  <desc id="desc">Horizontal bar chart showing Butina Tanimoto 0.6 grouped residual Spearman means with bootstrap 95 percent intervals.</desc>
-  <rect width="1120" height="650" fill="#ffffff"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="figure-title-meta figure-desc-meta" data-renderer="editorial-systems-figure-v2" data-theme="paper" data-palette="editorial">
+  <title id="figure-title-meta">Butina cluster-bootstrap correlation sensitivity</title>
+  <desc id="figure-desc-meta">Forest plot of mean Spearman correlation and 95 percent bootstrap ranges after molecular-weight and cLogP adjustment, using 300 resamples of Butina Tanimoto 0.6 clusters with fixed scores and predictions.</desc>
+  <rect x="0" y="0" width="1200" height="675" fill="#FFFFFF"/>
   <defs>
-    <pattern id="control-stripe" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-      <rect width="8" height="8" fill="#3f41ff"/>
-      <line x1="0" y1="0" x2="0" y2="8" stroke="#ffffff" stroke-width="2.2" opacity="0.45"/>
+    <pattern id="adjusted-hatch-forest" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect x="0" y="0" width="10" height="10" fill="#EEF3FD"/>
+      <line x1="0" y1="0" x2="0" y2="10" stroke="#5E7FD8" stroke-width="2"/>
     </pattern>
-    <style>
-      text { font-family: 'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-      .title { fill: #111111; font-size: 15px; font-weight: 700; }
-      .method { fill: #111111; font-size: 12.5px; font-weight: 650; }
-      .role { fill: #5f6672; font-size: 9.6px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
-      .tick { fill: #5f6672; font-size: 12px; font-weight: 500; }
-      .axis-label { fill: #5f6672; font-size: 12.5px; font-weight: 600; }
-      .grid { stroke: #e6e8ee; stroke-width: 1; stroke-dasharray: 4 8; }
-      .axis { stroke: #cfd4dd; stroke-width: 1.2; }
-      .zero { stroke: #5f6672; stroke-width: 1.35; }
-      .ci { stroke: #5f6672; stroke-width: 1.15; }
-      .bar-control { fill: url(#control-stripe); }
-      .bar-property { fill: #b9c0cc; }
-      .bar-published { fill: #7f8796; }
-      .divider { stroke: #e6e8ee; stroke-width: 1; }
-    </style>
   </defs>
-  <text x="560" y="42" text-anchor="middle" class="title">Grouped sensitivity preserves the residual gap</text>
-  <text x="356.0" y="584" text-anchor="middle" class="tick">-0.2</text>
-  <line x1="446.8" y1="98" x2="446.8" y2="556" class="grid"/>
-  <text x="446.8" y="584" text-anchor="middle" class="tick">-0.1</text>
-  <line x1="537.7" y1="98" x2="537.7" y2="556" class="zero"/>
-  <text x="537.7" y="584" text-anchor="middle" class="tick">0</text>
-  <line x1="628.5" y1="98" x2="628.5" y2="556" class="grid"/>
-  <text x="628.5" y="584" text-anchor="middle" class="tick">0.1</text>
-  <line x1="810.2" y1="98" x2="810.2" y2="556" class="grid"/>
-  <text x="810.2" y="584" text-anchor="middle" class="tick">0.3</text>
-  <line x1="991.8" y1="98" x2="991.8" y2="556" class="grid"/>
-  <text x="991.8" y="584" text-anchor="middle" class="tick">0.5</text>
-  <line x1="356" y1="556" x2="1010" y2="556" class="axis"/>
-  <line x1="174" y1="112" x2="174" y2="552" class="divider"/>
-  <text x="683.0" y="620" text-anchor="middle" class="axis-label">Grouped residual Spearman mean</text>
-  <text x="48" y="163.0" class="role">EV-A71 TRAINED</text>
-  <text x="48" y="176.0" class="role">LIGAND-ONLY</text>
-  <text x="196" y="130" class="method">ECFP ridge</text>
-  <line x1="780.5" y1="128" x2="994.2" y2="128" class="ci"/>
-  <line x1="780.5" y1="122" x2="780.5" y2="134" class="ci"/>
-  <line x1="994.2" y1="122" x2="994.2" y2="134" class="ci"/>
-  <rect x="537.7" y="122" width="358.6" height="12" rx="4" class="bar-control"/>
-  <text x="196" y="168" class="method">RDKit RF</text>
-  <line x1="623.3" y1="166" x2="912.9" y2="166" class="ci"/>
-  <line x1="623.3" y1="160" x2="623.3" y2="172" class="ci"/>
-  <line x1="912.9" y1="160" x2="912.9" y2="172" class="ci"/>
-  <rect x="537.7" y="160" width="271.5" height="12" rx="4" class="bar-control"/>
-  <text x="196" y="206" class="method">RDKit ridge</text>
-  <line x1="510.6" y1="204" x2="870.4" y2="204" class="ci"/>
-  <line x1="510.6" y1="198" x2="510.6" y2="210" class="ci"/>
-  <line x1="870.4" y1="198" x2="870.4" y2="210" class="ci"/>
-  <rect x="537.7" y="198" width="210.2" height="12" rx="4" class="bar-control"/>
-  <text x="48" y="277.0" class="role">SIMPLE PROPERTY</text>
-  <text x="48" y="290.0" class="role">BASELINES</text>
-  <line x1="48" y1="222" x2="1010" y2="222" class="divider"/>
-  <text x="196" y="244" class="method">molecular weight</text>
-  <line x1="356.0" y1="242" x2="668.1" y2="242" class="ci"/>
-  <line x1="356.0" y1="236" x2="356.0" y2="248" class="ci"/>
-  <line x1="668.1" y1="236" x2="668.1" y2="248" class="ci"/>
-  <rect x="479.1" y="236" width="58.5" height="12" rx="4" class="bar-property"/>
-  <text x="196" y="282" class="method">MW+cLogP ridge</text>
-  <line x1="356.0" y1="280" x2="670.4" y2="280" class="ci"/>
-  <line x1="356.0" y1="274" x2="356.0" y2="286" class="ci"/>
-  <line x1="670.4" y1="274" x2="670.4" y2="286" class="ci"/>
-  <rect x="471.0" y="274" width="66.6" height="12" rx="4" class="bar-property"/>
-  <text x="196" y="320" class="method">cLogP</text>
-  <line x1="402.4" y1="318" x2="684.5" y2="318" class="ci"/>
-  <line x1="402.4" y1="312" x2="402.4" y2="324" class="ci"/>
-  <line x1="684.5" y1="312" x2="684.5" y2="324" class="ci"/>
-  <rect x="537.7" y="312" width="4.3" height="12" rx="4" class="bar-property"/>
-  <text x="48" y="440.0" class="role">PUBLISHED</text>
-  <text x="48" y="453.0" class="role">BENCHMARK SCORES</text>
-  <line x1="48" y1="336" x2="1010" y2="336" class="divider"/>
-  <text x="196" y="358" class="method">gnina crystal</text>
-  <line x1="356.0" y1="356" x2="701.0" y2="356" class="ci"/>
-  <line x1="356.0" y1="350" x2="356.0" y2="362" class="ci"/>
-  <line x1="701.0" y1="350" x2="701.0" y2="362" class="ci"/>
-  <rect x="517.5" y="350" width="20.2" height="12" rx="4" class="bar-published"/>
-  <text x="196" y="396" class="method">Boltz-2</text>
-  <line x1="415.3" y1="394" x2="744.7" y2="394" class="ci"/>
-  <line x1="415.3" y1="388" x2="415.3" y2="400" class="ci"/>
-  <line x1="744.7" y1="388" x2="744.7" y2="400" class="ci"/>
-  <rect x="537.7" y="388" width="68.2" height="12" rx="4" class="bar-published"/>
-  <text x="196" y="434" class="method">smina crystal</text>
-  <line x1="390.4" y1="432" x2="687.9" y2="432" class="ci"/>
-  <line x1="390.4" y1="426" x2="390.4" y2="438" class="ci"/>
-  <line x1="687.9" y1="426" x2="687.9" y2="438" class="ci"/>
-  <rect x="537.7" y="426" width="21.2" height="12" rx="4" class="bar-published"/>
-  <text x="196" y="472" class="method">AEV-PLIG</text>
-  <line x1="356.0" y1="470" x2="619.3" y2="470" class="ci"/>
-  <line x1="356.0" y1="464" x2="356.0" y2="476" class="ci"/>
-  <line x1="619.3" y1="464" x2="619.3" y2="476" class="ci"/>
-  <rect x="457.7" y="464" width="80.0" height="12" rx="4" class="bar-published"/>
-  <text x="196" y="510" class="method">AqAffinity</text>
-  <line x1="359.6" y1="508" x2="574.9" y2="508" class="ci"/>
-  <line x1="359.6" y1="502" x2="359.6" y2="514" class="ci"/>
-  <line x1="574.9" y1="502" x2="574.9" y2="514" class="ci"/>
-  <rect x="481.0" y="502" width="56.7" height="12" rx="4" class="bar-published"/>
+  <text x="84.0" y="66.0" font-size="23" font-weight="700" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F" class="figure-title">Butina cluster-bootstrap correlation sensitivity</text>
+  <line x1="498.8" y1="122" x2="498.8" y2="568" stroke="#D9DCD7" stroke-width="1" class="grid-line"/>
+  <text x="498.8" y="597.0" font-size="18" font-weight="500" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">-0.4</text>
+  <line x1="613.8" y1="122" x2="613.8" y2="568" stroke="#D9DCD7" stroke-width="1" class="grid-line"/>
+  <text x="613.8" y="597.0" font-size="18" font-weight="500" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">-0.2</text>
+  <line x1="728.9" y1="122" x2="728.9" y2="568" stroke="#686B66" stroke-width="2" class="zero-line"/>
+  <text x="728.9" y="597.0" font-size="18" font-weight="500" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">0</text>
+  <line x1="843.9" y1="122" x2="843.9" y2="568" stroke="#D9DCD7" stroke-width="1" class="grid-line"/>
+  <text x="843.9" y="597.0" font-size="18" font-weight="500" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">0.2</text>
+  <line x1="959.0" y1="122" x2="959.0" y2="568" stroke="#D9DCD7" stroke-width="1" class="grid-line"/>
+  <text x="959.0" y="597.0" font-size="18" font-weight="500" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">0.4</text>
+  <line x1="470.0" y1="568" x2="1028.0" y2="568" stroke="#B8BBB5" stroke-width="1.5" class="axis-x" data-axis-id="forest"/>
+  <line x1="470.0" y1="122" x2="470.0" y2="568" stroke="#B8BBB5" stroke-width="1.5" class="axis-y" data-axis-id="forest"/>
+  <text x="749.0" y="643.0" font-size="19" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle">Spearman with MW+cLogP-adjusted pKD</text>
+  <text x="1082.0" y="112.0" font-size="20" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="series-label">Mean</text>
+  <text x="248.0" y="190.0" font-size="20" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="end" class="series-label">Ligand-only controls</text>
+  <text x="248.0" y="304.0" font-size="20" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="end" class="series-label">Property baselines</text>
+  <text x="248.0" y="456.0" font-size="20" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="end" class="series-label">Published scores</text>
+  <line x1="84" y1="240.0" x2="1110" y2="240.0" stroke="#D9DCD7" stroke-width="1"/>
+  <line x1="84" y1="354.0" x2="1110" y2="354.0" stroke="#D9DCD7" stroke-width="1"/>
+  <text x="282.0" y="152.0" font-size="18" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">ECFP ridge</text>
+  <line x1="882.6" y1="146.0" x2="1018.0" y2="146.0" stroke="#B8BBB5" stroke-width="3" class="data-mark"/>
+  <line x1="882.6" y1="140.0" x2="882.6" y2="152.0" stroke="#B8BBB5" stroke-width="2" class="data-mark"/>
+  <line x1="1018.0" y1="140.0" x2="1018.0" y2="152.0" stroke="#B8BBB5" stroke-width="2" class="data-mark"/>
+  <circle cx="956.0" cy="146.0" r="7" fill="#5E7FD8" class="data-mark"/>
+  <text x="1082.0" y="153.0" font-size="20" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F" text-anchor="middle" class="value-label">0.395</text>
+  <text x="282.0" y="190.0" font-size="18" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">RDKit RF</text>
+  <line x1="783.1" y1="184.0" x2="966.5" y2="184.0" stroke="#B8BBB5" stroke-width="3" class="data-mark"/>
+  <line x1="783.1" y1="178.0" x2="783.1" y2="190.0" stroke="#B8BBB5" stroke-width="2" class="data-mark"/>
+  <line x1="966.5" y1="178.0" x2="966.5" y2="190.0" stroke="#B8BBB5" stroke-width="2" class="data-mark"/>
+  <circle cx="900.8" cy="184.0" r="7" fill="#5E7FD8" class="data-mark"/>
+  <text x="1082.0" y="191.0" font-size="20" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F" text-anchor="middle" class="value-label">0.299</text>
+  <text x="282.0" y="228.0" font-size="18" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">RDKit ridge</text>
+  <line x1="711.7" y1="222.0" x2="939.6" y2="222.0" stroke="#B8BBB5" stroke-width="3" class="data-mark"/>
+  <line x1="711.7" y1="216.0" x2="711.7" y2="228.0" stroke="#B8BBB5" stroke-width="2" class="data-mark"/>
+  <line x1="939.6" y1="216.0" x2="939.6" y2="228.0" stroke="#B8BBB5" stroke-width="2" class="data-mark"/>
+  <circle cx="862.0" cy="222.0" r="7" fill="#5E7FD8" class="data-mark"/>
+  <text x="1082.0" y="229.0" font-size="20" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F" text-anchor="middle" class="value-label">0.231</text>
+  <text x="282.0" y="266.0" font-size="18" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">molecular weight</text>
+  <line x1="502.9" y1="260.0" x2="811.5" y2="260.0" stroke="#B8BBB5" stroke-width="3" class="data-mark"/>
+  <line x1="502.9" y1="254.0" x2="502.9" y2="266.0" stroke="#B8BBB5" stroke-width="2" class="data-mark"/>
+  <line x1="811.5" y1="254.0" x2="811.5" y2="266.0" stroke="#B8BBB5" stroke-width="2" class="data-mark"/>
+  <rect x="685.8" y="254.0" width="12" height="12" fill="#FFFFFF" stroke="#686B66" stroke-width="2.5" class="data-mark"/>
+  <text x="1082.0" y="267.0" font-size="20" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F" text-anchor="middle" class="value-label">-0.064</text>
+  <text x="282.0" y="304.0" font-size="18" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">MW+cLogP ridge</text>
+  <line x1="487.9" y1="298.0" x2="813.0" y2="298.0" stroke="#B8BBB5" stroke-width="3" class="data-mark"/>
+  <line x1="487.9" y1="292.0" x2="487.9" y2="304.0" stroke="#B8BBB5" stroke-width="2" class="data-mark"/>
+  <line x1="813.0" y1="292.0" x2="813.0" y2="304.0" stroke="#B8BBB5" stroke-width="2" class="data-mark"/>
+  <rect x="680.7" y="292.0" width="12" height="12" fill="#FFFFFF" stroke="#686B66" stroke-width="2.5" class="data-mark"/>
+  <text x="1082.0" y="305.0" font-size="20" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F" text-anchor="middle" class="value-label">-0.073</text>
+  <text x="282.0" y="342.0" font-size="18" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">cLogP</text>
+  <line x1="643.2" y1="336.0" x2="821.9" y2="336.0" stroke="#B8BBB5" stroke-width="3" class="data-mark"/>
+  <line x1="643.2" y1="330.0" x2="643.2" y2="342.0" stroke="#B8BBB5" stroke-width="2" class="data-mark"/>
+  <line x1="821.9" y1="330.0" x2="821.9" y2="342.0" stroke="#B8BBB5" stroke-width="2" class="data-mark"/>
+  <rect x="725.6" y="330.0" width="12" height="12" fill="#FFFFFF" stroke="#686B66" stroke-width="2.5" class="data-mark"/>
+  <text x="1082.0" y="343.0" font-size="20" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F" text-anchor="middle" class="value-label">0.005</text>
+  <text x="282.0" y="380.0" font-size="18" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">gnina crystal</text>
+  <line x1="546.8" y1="374.0" x2="832.3" y2="374.0" stroke="#B8BBB5" stroke-width="3" class="data-mark"/>
+  <line x1="546.8" y1="368.0" x2="546.8" y2="380.0" stroke="#B8BBB5" stroke-width="2" class="data-mark"/>
+  <line x1="832.3" y1="368.0" x2="832.3" y2="380.0" stroke="#B8BBB5" stroke-width="2" class="data-mark"/>
+  <polygon points="716.1,366.0 724.1,374.0 716.1,382.0 708.1,374.0" fill="#686B66" class="data-mark"/>
+  <text x="1082.0" y="381.0" font-size="20" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F" text-anchor="middle" class="value-label">-0.022</text>
+  <text x="282.0" y="418.0" font-size="18" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">Boltz-2</text>
+  <line x1="651.3" y1="412.0" x2="860.0" y2="412.0" stroke="#B8BBB5" stroke-width="3" class="data-mark"/>
+  <line x1="651.3" y1="406.0" x2="651.3" y2="418.0" stroke="#B8BBB5" stroke-width="2" class="data-mark"/>
+  <line x1="860.0" y1="406.0" x2="860.0" y2="418.0" stroke="#B8BBB5" stroke-width="2" class="data-mark"/>
+  <polygon points="772.0,404.0 780.0,412.0 772.0,420.0 764.0,412.0" fill="#686B66" class="data-mark"/>
+  <text x="1082.0" y="419.0" font-size="20" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F" text-anchor="middle" class="value-label">0.075</text>
+  <text x="282.0" y="456.0" font-size="18" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">smina crystal</text>
+  <line x1="635.6" y1="450.0" x2="824.0" y2="450.0" stroke="#B8BBB5" stroke-width="3" class="data-mark"/>
+  <line x1="635.6" y1="444.0" x2="635.6" y2="456.0" stroke="#B8BBB5" stroke-width="2" class="data-mark"/>
+  <line x1="824.0" y1="444.0" x2="824.0" y2="456.0" stroke="#B8BBB5" stroke-width="2" class="data-mark"/>
+  <polygon points="742.3,442.0 750.3,450.0 742.3,458.0 734.3,450.0" fill="#686B66" class="data-mark"/>
+  <text x="1082.0" y="457.0" font-size="20" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F" text-anchor="middle" class="value-label">0.023</text>
+  <text x="282.0" y="494.0" font-size="18" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">AEV-PLIG</text>
+  <line x1="551.4" y1="488.0" x2="780.6" y2="488.0" stroke="#B8BBB5" stroke-width="3" class="data-mark"/>
+  <line x1="551.4" y1="482.0" x2="551.4" y2="494.0" stroke="#B8BBB5" stroke-width="2" class="data-mark"/>
+  <line x1="780.6" y1="482.0" x2="780.6" y2="494.0" stroke="#B8BBB5" stroke-width="2" class="data-mark"/>
+  <polygon points="678.2,480.0 686.2,488.0 678.2,496.0 670.2,488.0" fill="#686B66" class="data-mark"/>
+  <text x="1082.0" y="495.0" font-size="20" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F" text-anchor="middle" class="value-label">-0.088</text>
+  <text x="282.0" y="532.0" font-size="18" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">AqAffinity</text>
+  <line x1="616.1" y1="526.0" x2="752.4" y2="526.0" stroke="#B8BBB5" stroke-width="3" class="data-mark"/>
+  <line x1="616.1" y1="520.0" x2="616.1" y2="532.0" stroke="#B8BBB5" stroke-width="2" class="data-mark"/>
+  <line x1="752.4" y1="520.0" x2="752.4" y2="532.0" stroke="#B8BBB5" stroke-width="2" class="data-mark"/>
+  <polygon points="693.0,518.0 701.0,526.0 693.0,534.0 685.0,526.0" fill="#686B66" class="data-mark"/>
+  <text x="1082.0" y="533.0" font-size="20" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F" text-anchor="middle" class="value-label">-0.062</text>
 </svg>

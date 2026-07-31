@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from xml.sax.saxutils import escape
 
@@ -167,7 +168,7 @@ def write_raw_vs_residual_svg(metrics: pd.DataFrame) -> None:
         "aqaffinity": "published prediction file",
     }
     role_label = {
-        "cv_ecfp_ridge": ("EV-A71 TRAINED", "LIGAND-ONLY"),
+        "cv_ecfp_ridge": ("RANDOM 5-FOLD", "LIGAND-ONLY"),
         "molecular_weight": ("SIMPLE PROPERTY", "BASELINES"),
         "gnina_crystal": ("PUBLISHED", "BENCHMARK SCORES"),
     }
@@ -206,7 +207,7 @@ def write_raw_vs_residual_svg(metrics: pd.DataFrame) -> None:
         "      .legend { fill: #5f6672; font-size: 11.5px; font-weight: 600; }",
         "    </style>",
         "  </defs>",
-        '  <text x="560" y="42" text-anchor="middle" class="title">pKD correlation is not the residual signal</text>',
+        '  <text x="560" y="42" text-anchor="middle" class="title">Raw and adjusted pKD correlations diverge</text>',
         '  <rect x="438" y="74" width="18" height="14" rx="4" class="raw"/>',
         '  <text x="464" y="86" class="legend">original pKD</text>',
         '  <rect x="572" y="74" width="18" height="14" rx="4" class="adjusted"/>',
@@ -302,7 +303,7 @@ def write_raw_vs_residual_png(metrics: pd.DataFrame) -> None:
         "aqaffinity": "published",
     }
     role_label = {
-        "cv_ecfp_ridge": ("EV-A71 TRAINED", "LIGAND-ONLY"),
+        "cv_ecfp_ridge": ("RANDOM 5-FOLD", "LIGAND-ONLY"),
         "molecular_weight": ("SIMPLE PROPERTY", "BASELINES"),
         "gnina_crystal": ("PUBLISHED", "BENCHMARK SCORES"),
     }
@@ -353,7 +354,7 @@ def write_raw_vs_residual_png(metrics: pd.DataFrame) -> None:
     tick_font = font(sc(12), "regular")
     axis_font = font(sc(12), "semibold")
 
-    draw_center(draw, (sc(560), sc(42)), "pKD correlation is not the residual signal", title_font, INK)
+    draw_center(draw, (sc(560), sc(42)), "Raw and adjusted pKD correlations diverge", title_font, INK)
     rect(438, 74, 456, 88, BLUE, radius=4)
     draw.text((sc(464), sc(73)), "original pKD", font=role_font, fill=MUTED)
     hatch_rect(572, 74, 590, 88)
@@ -564,7 +565,7 @@ def write_grouped_residual_svg(grouped: pd.DataFrame) -> None:
         "aqaffinity": "published",
     }
     role_label = {
-        "cv_ecfp_ridge": ("EV-A71 TRAINED", "LIGAND-ONLY"),
+        "cv_ecfp_ridge": ("RANDOM 5-FOLD", "LIGAND-ONLY"),
         "molecular_weight": ("SIMPLE PROPERTY", "BASELINES"),
         "gnina_crystal": ("PUBLISHED", "BENCHMARK SCORES"),
     }
@@ -573,7 +574,7 @@ def write_grouped_residual_svg(grouped: pd.DataFrame) -> None:
     group_label_x, group_rule_x = 48, 174
     label_left = 196
     plot_left, plot_right = 356, 1010
-    x_min, x_max = -0.2, 0.52
+    x_min, x_max = -0.45, 0.52
     y0, step, bar_h = 126, 38, 12
 
     def gx(value: float) -> float:
@@ -586,8 +587,8 @@ def write_grouped_residual_svg(grouped: pd.DataFrame) -> None:
     group_bottom = {"cv_ecfp_ridge": 226, "molecular_weight": 340, "gnina_crystal": 552}
     lines: list[str] = [
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">',
-        '  <title id="title">Grouped residual Spearman sensitivity</title>',
-        '  <desc id="desc">Horizontal bar chart showing Butina Tanimoto 0.6 grouped residual Spearman means with bootstrap 95 percent intervals.</desc>',
+        '  <title id="title">Cluster-bootstrap sensitivity of adjusted correlations</title>',
+        '  <desc id="desc">Horizontal bar chart showing Butina Tanimoto 0.6 cluster-bootstrap means and 95 percent intervals for Spearman correlation after MW and cLogP adjustment. Predictions remain fixed rather than being refit with cluster-held-out folds.</desc>',
         f'  <rect width="{width}" height="{height}" fill="#ffffff"/>',
         "  <defs>",
         '    <pattern id="control-stripe" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">',
@@ -611,18 +612,18 @@ def write_grouped_residual_svg(grouped: pd.DataFrame) -> None:
         "      .divider { stroke: #e6e8ee; stroke-width: 1; }",
         "    </style>",
         "  </defs>",
-        '  <text x="560" y="42" text-anchor="middle" class="title">Grouped sensitivity preserves the residual gap</text>',
+        '  <text x="560" y="42" text-anchor="middle" class="title">Cluster-bootstrap sensitivity of adjusted correlations</text>',
     ]
-    for tick in [-0.2, -0.1, 0.0, 0.1, 0.3, 0.5]:
+    for tick in [-0.4, -0.2, 0.0, 0.1, 0.3, 0.5]:
         x = gx(tick)
-        if tick != -0.2:
+        if tick != -0.4:
             cls = "zero" if tick == 0 else "grid"
             lines.append(f'  <line x1="{x:.1f}" y1="98" x2="{x:.1f}" y2="556" class="{cls}"/>')
         label = "0" if tick == 0 else f"{tick:.1f}"
         lines.append(f'  <text x="{x:.1f}" y="584" text-anchor="middle" class="tick">{label}</text>')
     lines.append(f'  <line x1="{plot_left}" y1="556" x2="{plot_right}" y2="556" class="axis"/>')
     lines.append(f'  <line x1="{group_rule_x}" y1="112" x2="{group_rule_x}" y2="552" class="divider"/>')
-    lines.append(f'  <text x="{(plot_left + plot_right) / 2:.1f}" y="620" text-anchor="middle" class="axis-label">Grouped residual Spearman mean</text>')
+    lines.append(f'  <text x="{(plot_left + plot_right) / 2:.1f}" y="620" text-anchor="middle" class="axis-label">Cluster-bootstrap mean Spearman after MW+cLogP adjustment</text>')
     zero = gx(0)
     for idx, row in rows.iterrows():
         method = str(row["method"])
@@ -679,7 +680,7 @@ def write_grouped_residual_png(grouped: pd.DataFrame) -> None:
         "aqaffinity": "published",
     }
     role_label = {
-        "cv_ecfp_ridge": ("EV-A71 TRAINED", "LIGAND-ONLY"),
+        "cv_ecfp_ridge": ("RANDOM 5-FOLD", "LIGAND-ONLY"),
         "molecular_weight": ("SIMPLE PROPERTY", "BASELINES"),
         "gnina_crystal": ("PUBLISHED", "BENCHMARK SCORES"),
     }
@@ -691,7 +692,7 @@ def write_grouped_residual_png(grouped: pd.DataFrame) -> None:
     group_label_x, group_rule_x = 48, 174
     label_left = 196
     plot_left, plot_right = 356, 1010
-    x_min, x_max = -0.2, 0.52
+    x_min, x_max = -0.45, 0.52
 
     def sc(v: float) -> int:
         return int(round(v * scale))
@@ -708,10 +709,10 @@ def write_grouped_residual_png(grouped: pd.DataFrame) -> None:
     tick_font = font(sc(12), "regular")
     axis_font = font(sc(12), "semibold")
 
-    draw_center(draw, (sc(560), sc(42)), "Grouped sensitivity preserves the residual gap", title_font, INK)
-    for tick in [-0.2, -0.1, 0.0, 0.1, 0.3, 0.5]:
+    draw_center(draw, (sc(560), sc(42)), "Cluster-bootstrap sensitivity of adjusted correlations", title_font, INK)
+    for tick in [-0.4, -0.2, 0.0, 0.1, 0.3, 0.5]:
         x = gx(tick)
-        if tick != -0.2:
+        if tick != -0.4:
             color = MUTED if tick == 0 else GRID
             width_px = sc(1.35) if tick == 0 else 1
             if tick == 0:
@@ -724,7 +725,7 @@ def write_grouped_residual_png(grouped: pd.DataFrame) -> None:
         draw_center(draw, (x, sc(584)), "0" if tick == 0 else f"{tick:.1f}", tick_font, MUTED)
     draw.line((sc(plot_left), sc(556), sc(plot_right), sc(556)), fill=AXIS, width=sc(1))
     draw.line((sc(group_rule_x), sc(112), sc(group_rule_x), sc(552)), fill=GRID, width=1)
-    draw_center(draw, (sc((plot_left + plot_right) / 2), sc(620)), "Grouped residual Spearman mean", axis_font, MUTED)
+    draw_center(draw, (sc((plot_left + plot_right) / 2), sc(620)), "Cluster-bootstrap mean Spearman after MW+cLogP adjustment", axis_font, MUTED)
 
     group_top = {"cv_ecfp_ridge": 112, "molecular_weight": 226, "gnina_crystal": 340}
     group_bottom = {"cv_ecfp_ridge": 226, "molecular_weight": 340, "gnina_crystal": 552}
@@ -781,7 +782,7 @@ def raw_vs_residual() -> None:
     ax.set_xlabel("Spearman correlation", fontweight="semibold")
     title_block(
         fig,
-        "Raw affinity ranking separates from MW+cLogP residual signal",
+        "Raw and adjusted pKD correlations diverge",
         "",
     )
     style_axis(ax)
@@ -867,13 +868,13 @@ def grouped_residual() -> None:
         alpha=0.72,
     )
     ax.axvline(0, color=AXIS, linewidth=1)
-    ax.set_xlim(-0.20, 0.56)
+    ax.set_xlim(-0.45, 0.56)
     ax.set_yticks(y)
     ax.set_yticklabels([DISPLAY_METHOD.get(m, m) for m in methods], color=INK, fontsize=10.2)
-    ax.set_xlabel("Grouped residual Spearman mean", fontweight="semibold")
+    ax.set_xlabel("Cluster-bootstrap mean Spearman after MW+cLogP adjustment", fontweight="semibold")
     title_block(
         fig,
-        "Grouped sensitivity preserves the residual gap",
+        "Cluster-bootstrap sensitivity of adjusted correlations",
         "",
     )
     style_axis(ax)
@@ -884,11 +885,541 @@ def grouped_residual() -> None:
     write_grouped_residual_png(grouped)
 
 
+# Current publication SVGs follow the editorial-systems-figure custom measured
+# contract. The older matplotlib/Pillow functions above remain available for
+# the separate PNG/social workflow, but are intentionally not called here.
+EDITORIAL = {
+    "background": "#FFFFFF",
+    "ink": "#11120F",
+    "muted": "#686B66",
+    "hairline": "#B8BBB5",
+    "accent": "#5E7FD8",
+    "accent_mid": "#C8D5F5",
+    "accent_wash": "#EEF3FD",
+    "panel": "#F1F2EF",
+    "grid": "#D9DCD7",
+}
+
+METHOD_ORDER = [
+    "cv_ecfp_ridge",
+    "cv_rdkit_descriptor_rf",
+    "cv_rdkit_descriptor_ridge",
+    "molecular_weight",
+    "cv_mw_clogp_ridge",
+    "clogp",
+    "gnina_crystal",
+    "boltz_2",
+    "smina_crystal",
+    "aev_plig",
+    "aqaffinity",
+]
+
+METHOD_ROLE = {
+    "cv_ecfp_ridge": "ligand_control",
+    "cv_rdkit_descriptor_rf": "ligand_control",
+    "cv_rdkit_descriptor_ridge": "ligand_control",
+    "molecular_weight": "property",
+    "cv_mw_clogp_ridge": "property",
+    "clogp": "property",
+    "gnina_crystal": "published",
+    "boltz_2": "published",
+    "smina_crystal": "published",
+    "aev_plig": "published",
+    "aqaffinity": "published",
+}
+
+ROLE_LABEL = {
+    "ligand_control": "Ligand-only controls",
+    "property": "Property baselines",
+    "published": "Published scores",
+}
+
+
+def _svg_open(height: int, title: str, description: str, suffix: str) -> list[str]:
+    return [
+        (
+            f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 {height}" '
+            'role="img" aria-labelledby="figure-title-meta figure-desc-meta" '
+            'data-renderer="editorial-systems-figure-v2" data-theme="paper" '
+            'data-palette="editorial">'
+        ),
+        f'  <title id="figure-title-meta">{escape(title)}</title>',
+        f'  <desc id="figure-desc-meta">{escape(description)}</desc>',
+        f'  <rect x="0" y="0" width="1200" height="{height}" fill="{EDITORIAL["background"]}"/>',
+        "  <defs>",
+        (
+            f'    <pattern id="adjusted-hatch-{suffix}" width="10" height="10" '
+            'patternUnits="userSpaceOnUse" patternTransform="rotate(45)">'
+        ),
+        f'      <rect x="0" y="0" width="10" height="10" fill="{EDITORIAL["accent_wash"]}"/>',
+        f'      <line x1="0" y1="0" x2="0" y2="10" stroke="{EDITORIAL["accent"]}" stroke-width="2"/>',
+        "    </pattern>",
+        "  </defs>",
+    ]
+
+
+def _text(
+    x: float,
+    y: float,
+    value: str,
+    *,
+    size: int = 18,
+    fill: str | None = None,
+    weight: int = 500,
+    anchor: str = "start",
+    css_class: str = "",
+    transform: str = "",
+) -> str:
+    attrs = [
+        f'x="{x:.1f}"',
+        f'y="{y:.1f}"',
+        f'font-size="{size}"',
+        f'font-weight="{weight}"',
+        (
+            "font-family=\"'Plus Jakarta Sans', 'Segoe UI', Roboto, "
+            "Helvetica, Arial, sans-serif\""
+        ),
+        f'fill="{fill or EDITORIAL["ink"]}"',
+    ]
+    if anchor != "start":
+        attrs.append(f'text-anchor="{anchor}"')
+    if css_class:
+        attrs.append(f'class="{css_class}"')
+    if transform:
+        attrs.append(f'transform="{transform}"')
+    return f'  <text {" ".join(attrs)}>{escape(value)}</text>'
+
+
+def _write_spec(name: str, payload: dict) -> None:
+    (OUT / f"{name}.figure.json").write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+
+def write_editorial_raw_vs_adjusted(metrics: pd.DataFrame) -> None:
+    rows = metrics.set_index("method").loc[METHOD_ORDER].reset_index()
+    name = "raw-vs-residual-spearman"
+    spec = {
+        "layout": "custom_grouped_horizontal_bar",
+        "title": "Score correlation before and after property adjustment",
+        "description": (
+            "Measured Spearman correlations for eleven method scores against measured pKD "
+            "and pKD adjusted for molecular weight and cLogP."
+        ),
+        "scale": "measured",
+        "palette": "editorial",
+        "canvas": {"width": 1200, "height": 675},
+        "x_axis": {
+            "label": "Spearman correlation",
+            "domain": [-0.1, 0.72],
+            "ticks": [-0.1, 0.0, 0.1, 0.3, 0.5, 0.7],
+        },
+        "series": [
+            {"id": "raw", "label": "Measured pKD", "pattern": "solid"},
+            {
+                "id": "adjusted",
+                "label": "MW+cLogP-adjusted pKD",
+                "pattern": "hatch",
+            },
+        ],
+        "rows": [
+            {
+                "method": row.method,
+                "label": DISPLAY_METHOD[row.method],
+                "role": METHOD_ROLE[row.method],
+                "raw": float(row.raw_spearman),
+                "adjusted": float(row.residual_spearman),
+            }
+            for row in rows.itertuples(index=False)
+        ],
+        "layout_geometry": {
+            "outer_x": [84, 1116],
+            "group_label_x": 248,
+            "group_label_anchor": "end",
+            "method_label_x": 282,
+            "plot_x": [438, 1110],
+            "plot_y": [142, 572],
+            "grid_policy": "major-grid-and-zero",
+            "actual_display_width": 1040,
+        },
+    }
+    _write_spec(name, spec)
+
+    title = spec["title"]
+    description = spec["description"]
+    lines = _svg_open(675, title, description, "raw")
+    lines.append(_text(84, 66, title, size=23, weight=700, css_class="figure-title"))
+    lines.extend(
+        [
+            f'  <rect x="438" y="91" width="24" height="15" rx="3" fill="{EDITORIAL["accent"]}"/>',
+            _text(474, 105, "Measured pKD", size=18, fill=EDITORIAL["muted"], weight=600),
+            (
+                f'  <rect x="630" y="91" width="24" height="15" rx="3" '
+                'fill="url(#adjusted-hatch-raw)" '
+                f'stroke="{EDITORIAL["accent"]}" stroke-width="1.5"/>'
+            ),
+            _text(666, 105, "MW+cLogP-adjusted pKD", size=18, fill=EDITORIAL["muted"], weight=600),
+        ]
+    )
+    plot_left, plot_right = 438.0, 1110.0
+    x_min, x_max = -0.1, 0.72
+
+    def px(value: float) -> float:
+        return plot_left + (value - x_min) / (x_max - x_min) * (plot_right - plot_left)
+
+    for tick in spec["x_axis"]["ticks"]:
+        x = px(tick)
+        if tick == 0:
+            lines.append(
+                f'  <line x1="{x:.1f}" y1="128" x2="{x:.1f}" y2="572" '
+                f'stroke="{EDITORIAL["muted"]}" stroke-width="2" class="zero-line"/>'
+            )
+        else:
+            lines.append(
+                f'  <line x1="{x:.1f}" y1="128" x2="{x:.1f}" y2="572" '
+                f'stroke="{EDITORIAL["grid"]}" stroke-width="1" class="grid-line"/>'
+            )
+        lines.append(
+            _text(
+                x,
+                601,
+                "0" if tick == 0 else f"{tick:.1f}",
+                size=18,
+                fill=EDITORIAL["muted"],
+                anchor="middle",
+                css_class="axis-tick",
+            )
+        )
+    lines.append(
+        f'  <line x1="{plot_left}" y1="572" x2="{plot_right}" y2="572" '
+        f'stroke="{EDITORIAL["hairline"]}" stroke-width="1.5" class="axis-x" data-axis-id="raw"/>'
+    )
+    lines.append(
+        f'  <line x1="{plot_left}" y1="128" x2="{plot_left}" y2="572" '
+        f'stroke="{EDITORIAL["hairline"]}" stroke-width="1.5" class="axis-y" data-axis-id="raw"/>'
+    )
+    lines.append(_text((plot_left + plot_right) / 2, 645, "Spearman correlation", size=19, fill=EDITORIAL["muted"], weight=600, anchor="middle"))
+
+    y0, step = 148.0, 38.0
+    group_start = {"ligand_control": 0, "property": 3, "published": 6}
+    group_end = {"ligand_control": 2, "property": 5, "published": 10}
+    for role, start in group_start.items():
+        center = y0 + ((start + group_end[role]) / 2) * step
+        lines.append(
+            _text(
+                248,
+                center + 6,
+                ROLE_LABEL[role],
+                size=20,
+                fill=EDITORIAL["muted"],
+                weight=600,
+                anchor="end",
+                css_class="series-label",
+            )
+        )
+    for divider_idx in (3, 6):
+        y = y0 + divider_idx * step - 20
+        lines.append(
+            f'  <line x1="84" y1="{y:.1f}" x2="1110" y2="{y:.1f}" '
+            f'stroke="{EDITORIAL["grid"]}" stroke-width="1"/>'
+        )
+    zero = px(0)
+    for idx, row in enumerate(spec["rows"]):
+        y = y0 + idx * step
+        lines.append(_text(282, y + 7, row["label"], size=18, weight=600))
+        for value, y_offset, fill, stroke in (
+            (row["raw"], -10, EDITORIAL["accent"], "none"),
+            (row["adjusted"], 4, "url(#adjusted-hatch-raw)", EDITORIAL["accent"]),
+        ):
+            end = px(value)
+            x = min(zero, end)
+            width = max(abs(end - zero), 1.5)
+            lines.append(
+                f'  <rect x="{x:.1f}" y="{y + y_offset:.1f}" width="{width:.1f}" height="10" '
+                f'rx="3" fill="{fill}" stroke="{stroke}" stroke-width="1.2" class="data-mark"/>'
+            )
+    lines.append("</svg>\n")
+    (OUT / f"{name}.svg").write_text("\n".join(lines), encoding="utf-8")
+
+
+def write_editorial_pkd_vs_mw(df: pd.DataFrame) -> None:
+    name = "pkd-vs-mw"
+    x = df["mw_rdkit"].to_numpy()
+    y = df["experimental_pKD"].to_numpy()
+    slope, intercept = np.polyfit(x, y, deg=1)
+    spec = {
+        "layout": "custom_scatter",
+        "title": "Molecular weight and measured pKD",
+        "description": (
+            "Scatter plot of 494 OpenBind EV-A71 2A compounds with RDKit molecular "
+            "weight on the x-axis, measured pKD on the y-axis, and an explanatory "
+            "linear trend."
+        ),
+        "scale": "measured",
+        "palette": "editorial",
+        "canvas": {"width": 1200, "height": 600},
+        "x_axis": {
+            "label": "RDKit molecular weight (Da)",
+            "domain": [180, 510],
+            "ticks": [200, 250, 300, 350, 400, 450, 500],
+        },
+        "y_axis": {
+            "label": "Measured pKD",
+            "domain": [3.2, 8.1],
+            "ticks": [4, 5, 6, 7, 8],
+        },
+        "trend": {"kind": "linear", "slope": float(slope), "intercept": float(intercept)},
+        "points": [
+            {"mw": float(mw), "pkd": float(pkd)}
+            for mw, pkd in zip(x, y)
+        ],
+        "layout_geometry": {
+            "outer_x": [84, 1116],
+            "plot_x": [152, 1110],
+            "plot_y": [116, 500],
+            "grid_policy": "major-grid",
+            "actual_display_width": 760,
+        },
+    }
+    _write_spec(name, spec)
+
+    title = spec["title"]
+    lines = _svg_open(600, title, spec["description"], "scatter")
+    lines.append(_text(84, 66, title, size=23, weight=700, css_class="figure-title"))
+    left, right, top, bottom = 152.0, 1110.0, 116.0, 500.0
+    x_min, x_max = spec["x_axis"]["domain"]
+    y_min, y_max = spec["y_axis"]["domain"]
+
+    def px(value: float) -> float:
+        return left + (value - x_min) / (x_max - x_min) * (right - left)
+
+    def py(value: float) -> float:
+        return bottom - (value - y_min) / (y_max - y_min) * (bottom - top)
+
+    for tick in spec["x_axis"]["ticks"]:
+        xt = px(tick)
+        lines.append(
+            f'  <line x1="{xt:.1f}" y1="{top}" x2="{xt:.1f}" y2="{bottom}" '
+            f'stroke="{EDITORIAL["grid"]}" stroke-width="1" class="grid-line"/>'
+        )
+        lines.append(_text(xt, 529, str(tick), size=18, fill=EDITORIAL["muted"], anchor="middle", css_class="axis-tick"))
+    for tick in spec["y_axis"]["ticks"]:
+        yt = py(tick)
+        lines.append(
+            f'  <line x1="{left}" y1="{yt:.1f}" x2="{right}" y2="{yt:.1f}" '
+            f'stroke="{EDITORIAL["grid"]}" stroke-width="1" class="grid-line"/>'
+        )
+        lines.append(_text(124, yt + 6, str(tick), size=18, fill=EDITORIAL["muted"], anchor="end", css_class="axis-tick"))
+    lines.extend(
+        [
+            f'  <line x1="{left}" y1="{bottom}" x2="{right}" y2="{bottom}" stroke="{EDITORIAL["muted"]}" stroke-width="1.5" class="axis-x" data-axis-id="scatter"/>',
+            f'  <line x1="{left}" y1="{top}" x2="{left}" y2="{bottom}" stroke="{EDITORIAL["muted"]}" stroke-width="1.5" class="axis-y" data-axis-id="scatter"/>',
+        ]
+    )
+    for point in spec["points"]:
+        lines.append(
+            f'  <circle cx="{px(point["mw"]):.2f}" cy="{py(point["pkd"]):.2f}" r="4.2" '
+            f'fill="{EDITORIAL["accent"]}" fill-opacity="0.42" class="data-mark"/>'
+        )
+    trend = spec["trend"]
+    trend_x = [x_min, x_max]
+    trend_y = [trend["slope"] * value + trend["intercept"] for value in trend_x]
+    lines.append(
+        f'  <line x1="{px(trend_x[0]):.1f}" y1="{py(trend_y[0]):.1f}" '
+        f'x2="{px(trend_x[1]):.1f}" y2="{py(trend_y[1]):.1f}" '
+        f'stroke="{EDITORIAL["ink"]}" stroke-width="3" class="data-mark"/>'
+    )
+    lines.append(_text((left + right) / 2, 578, "RDKit molecular weight (Da)", size=19, fill=EDITORIAL["muted"], weight=600, anchor="middle"))
+    lines.append(
+        _text(
+            40,
+            (top + bottom) / 2,
+            "Measured pKD",
+            size=19,
+            fill=EDITORIAL["muted"],
+            weight=600,
+            anchor="middle",
+            transform=f"rotate(-90 40 {(top + bottom) / 2:.1f})",
+        )
+    )
+    lines.append("</svg>\n")
+    (OUT / f"{name}.svg").write_text("\n".join(lines), encoding="utf-8")
+
+
+def write_editorial_grouped_sensitivity(grouped: pd.DataFrame) -> None:
+    name = "butina-grouped-residual-spearman"
+    selected = (
+        grouped[grouped["group_col"].eq("butina_tanimoto_0p6_cluster")]
+        .set_index("method")
+        .loc[METHOD_ORDER]
+        .reset_index()
+    )
+    spec = {
+        "layout": "custom_forest_plot",
+        "title": "Butina cluster-bootstrap correlation sensitivity",
+        "description": (
+            "Forest plot of mean Spearman correlation and 95 percent bootstrap ranges "
+            "after molecular-weight and cLogP adjustment, using 300 resamples of Butina "
+            "Tanimoto 0.6 clusters with fixed scores and predictions."
+        ),
+        "scale": "measured",
+        "palette": "editorial",
+        "canvas": {"width": 1200, "height": 675},
+        "x_axis": {
+            "label": "Spearman with MW+cLogP-adjusted pKD",
+            "domain": [-0.45, 0.52],
+            "ticks": [-0.4, -0.2, 0.0, 0.2, 0.4],
+        },
+        "bootstrap": {
+            "resamples": 300,
+            "unit": "Butina Tanimoto 0.6 cluster",
+            "prediction_refit": False,
+            "interval": "percentile 95%",
+        },
+        "rows": [
+            {
+                "method": row.method,
+                "label": DISPLAY_METHOD[row.method],
+                "role": METHOD_ROLE[row.method],
+                "mean": float(row.mean_residual_spearman),
+                "ci_low": float(row.ci_low),
+                "ci_high": float(row.ci_high),
+            }
+            for row in selected.itertuples(index=False)
+        ],
+        "layout_geometry": {
+            "outer_x": [84, 1116],
+            "group_label_x": 248,
+            "group_label_anchor": "end",
+            "method_label_x": 282,
+            "plot_x": [470, 1028],
+            "value_label_x": 1082,
+            "plot_y": [136, 568],
+            "grid_policy": "zero-and-major-ticks",
+            "actual_display_width": 760,
+        },
+    }
+    _write_spec(name, spec)
+
+    title = spec["title"]
+    lines = _svg_open(675, title, spec["description"], "forest")
+    lines.append(_text(84, 66, title, size=23, weight=700, css_class="figure-title"))
+    plot_left, plot_right = 470.0, 1028.0
+    x_min, x_max = spec["x_axis"]["domain"]
+
+    def px(value: float) -> float:
+        return plot_left + (value - x_min) / (x_max - x_min) * (plot_right - plot_left)
+
+    for tick in spec["x_axis"]["ticks"]:
+        xt = px(tick)
+        if tick == 0:
+            lines.append(
+                f'  <line x1="{xt:.1f}" y1="122" x2="{xt:.1f}" y2="568" '
+                f'stroke="{EDITORIAL["muted"]}" stroke-width="2" class="zero-line"/>'
+            )
+        else:
+            lines.append(
+                f'  <line x1="{xt:.1f}" y1="122" x2="{xt:.1f}" y2="568" '
+                f'stroke="{EDITORIAL["grid"]}" stroke-width="1" class="grid-line"/>'
+            )
+        lines.append(
+            _text(
+                xt,
+                597,
+                "0" if tick == 0 else f"{tick:.1f}",
+                size=18,
+                fill=EDITORIAL["muted"],
+                anchor="middle",
+                css_class="axis-tick",
+            )
+        )
+    lines.append(
+        f'  <line x1="{plot_left}" y1="568" x2="{plot_right}" y2="568" '
+        f'stroke="{EDITORIAL["hairline"]}" stroke-width="1.5" class="axis-x" data-axis-id="forest"/>'
+    )
+    lines.append(
+        f'  <line x1="{plot_left}" y1="122" x2="{plot_left}" y2="568" '
+        f'stroke="{EDITORIAL["hairline"]}" stroke-width="1.5" class="axis-y" data-axis-id="forest"/>'
+    )
+    lines.append(_text((plot_left + plot_right) / 2, 643, spec["x_axis"]["label"], size=19, fill=EDITORIAL["muted"], weight=600, anchor="middle"))
+    lines.append(_text(1082, 112, "Mean", size=20, fill=EDITORIAL["muted"], weight=600, anchor="middle", css_class="series-label"))
+
+    y0, step = 146.0, 38.0
+    group_start = {"ligand_control": 0, "property": 3, "published": 6}
+    group_end = {"ligand_control": 2, "property": 5, "published": 10}
+    for role, start in group_start.items():
+        center = y0 + ((start + group_end[role]) / 2) * step
+        lines.append(
+            _text(
+                248,
+                center + 6,
+                ROLE_LABEL[role],
+                size=20,
+                fill=EDITORIAL["muted"],
+                weight=600,
+                anchor="end",
+                css_class="series-label",
+            )
+        )
+    for divider_idx in (3, 6):
+        y = y0 + divider_idx * step - 20
+        lines.append(
+            f'  <line x1="84" y1="{y:.1f}" x2="1110" y2="{y:.1f}" '
+            f'stroke="{EDITORIAL["grid"]}" stroke-width="1"/>'
+        )
+    for idx, row in enumerate(spec["rows"]):
+        y = y0 + idx * step
+        lines.append(_text(282, y + 6, row["label"], size=18, weight=600))
+        low, mean, high = px(row["ci_low"]), px(row["mean"]), px(row["ci_high"])
+        lines.extend(
+            [
+                f'  <line x1="{low:.1f}" y1="{y:.1f}" x2="{high:.1f}" y2="{y:.1f}" stroke="{EDITORIAL["hairline"]}" stroke-width="3" class="data-mark"/>',
+                f'  <line x1="{low:.1f}" y1="{y - 6:.1f}" x2="{low:.1f}" y2="{y + 6:.1f}" stroke="{EDITORIAL["hairline"]}" stroke-width="2" class="data-mark"/>',
+                f'  <line x1="{high:.1f}" y1="{y - 6:.1f}" x2="{high:.1f}" y2="{y + 6:.1f}" stroke="{EDITORIAL["hairline"]}" stroke-width="2" class="data-mark"/>',
+            ]
+        )
+        if row["role"] == "ligand_control":
+            lines.append(
+                f'  <circle cx="{mean:.1f}" cy="{y:.1f}" r="7" fill="{EDITORIAL["accent"]}" class="data-mark"/>'
+            )
+        elif row["role"] == "property":
+            lines.append(
+                f'  <rect x="{mean - 6:.1f}" y="{y - 6:.1f}" width="12" height="12" fill="{EDITORIAL["background"]}" stroke="{EDITORIAL["muted"]}" stroke-width="2.5" class="data-mark"/>'
+            )
+        else:
+            points = f"{mean:.1f},{y - 8:.1f} {mean + 8:.1f},{y:.1f} {mean:.1f},{y + 8:.1f} {mean - 8:.1f},{y:.1f}"
+            lines.append(
+                f'  <polygon points="{points}" fill="{EDITORIAL["muted"]}" class="data-mark"/>'
+            )
+        lines.append(
+            _text(
+                1082,
+                y + 7,
+                f'{row["mean"]:.3f}',
+                size=20,
+                weight=600,
+                anchor="middle",
+                css_class="value-label",
+            )
+        )
+    lines.append("</svg>\n")
+    (OUT / f"{name}.svg").write_text("\n".join(lines), encoding="utf-8")
+
+
+def editorial_publication_figures() -> None:
+    OUT.mkdir(parents=True, exist_ok=True)
+    metrics = pd.read_csv(R002 / "method_metrics.csv")
+    compounds = pd.read_csv(R002 / "openbind_clean_compound_table_with_residuals.csv")
+    grouped = pd.read_csv(R003 / "grouped_intervals.csv")
+    write_editorial_raw_vs_adjusted(metrics)
+    write_editorial_pkd_vs_mw(compounds)
+    write_editorial_grouped_sensitivity(grouped)
+
+
 def main() -> None:
     setup()
-    raw_vs_residual()
-    pkd_vs_mw()
-    grouped_residual()
+    editorial_publication_figures()
 
 
 if __name__ == "__main__":

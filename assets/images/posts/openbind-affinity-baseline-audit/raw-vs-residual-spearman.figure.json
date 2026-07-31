@@ -1,0 +1,136 @@
+{
+  "layout": "custom_grouped_horizontal_bar",
+  "title": "Score correlation before and after property adjustment",
+  "description": "Measured Spearman correlations for eleven method scores against measured pKD and pKD adjusted for molecular weight and cLogP.",
+  "scale": "measured",
+  "palette": "editorial",
+  "canvas": {
+    "width": 1200,
+    "height": 675
+  },
+  "x_axis": {
+    "label": "Spearman correlation",
+    "domain": [
+      -0.1,
+      0.72
+    ],
+    "ticks": [
+      -0.1,
+      0.0,
+      0.1,
+      0.3,
+      0.5,
+      0.7
+    ]
+  },
+  "series": [
+    {
+      "id": "raw",
+      "label": "Measured pKD",
+      "pattern": "solid"
+    },
+    {
+      "id": "adjusted",
+      "label": "MW+cLogP-adjusted pKD",
+      "pattern": "hatch"
+    }
+  ],
+  "rows": [
+    {
+      "method": "cv_ecfp_ridge",
+      "label": "ECFP ridge",
+      "role": "ligand_control",
+      "raw": 0.6718124252228919,
+      "adjusted": 0.430328527292072
+    },
+    {
+      "method": "cv_rdkit_descriptor_rf",
+      "label": "RDKit RF",
+      "role": "ligand_control",
+      "raw": 0.6273600603339204,
+      "adjusted": 0.3371891820034444
+    },
+    {
+      "method": "cv_rdkit_descriptor_ridge",
+      "label": "RDKit ridge",
+      "role": "ligand_control",
+      "raw": 0.6054882327378568,
+      "adjusted": 0.2643343825876205
+    },
+    {
+      "method": "molecular_weight",
+      "label": "molecular weight",
+      "role": "property",
+      "raw": 0.4835664782629785,
+      "adjusted": -0.0174954603858459
+    },
+    {
+      "method": "cv_mw_clogp_ridge",
+      "label": "MW+cLogP ridge",
+      "role": "property",
+      "raw": 0.4836075466687849,
+      "adjusted": -0.0204782412123658
+    },
+    {
+      "method": "clogp",
+      "label": "cLogP",
+      "role": "property",
+      "raw": 0.1740883705259163,
+      "adjusted": 0.0142121734510933
+    },
+    {
+      "method": "gnina_crystal",
+      "label": "gnina crystal",
+      "role": "published",
+      "raw": 0.4533486454006518,
+      "adjusted": 0.0182681202644905
+    },
+    {
+      "method": "boltz_2",
+      "label": "Boltz-2",
+      "role": "published",
+      "raw": 0.3972964251024232,
+      "adjusted": 0.0968197977992772
+    },
+    {
+      "method": "smina_crystal",
+      "label": "smina crystal",
+      "role": "published",
+      "raw": 0.2545251608409111,
+      "adjusted": 0.0382015123768086
+    },
+    {
+      "method": "aev_plig",
+      "label": "AEV-PLIG",
+      "role": "published",
+      "raw": 0.2271577437907044,
+      "adjusted": -0.085246997406707
+    },
+    {
+      "method": "aqaffinity",
+      "label": "AqAffinity",
+      "role": "published",
+      "raw": 0.117205401057345,
+      "adjusted": -0.0571169978023826
+    }
+  ],
+  "layout_geometry": {
+    "outer_x": [
+      84,
+      1116
+    ],
+    "group_label_x": 248,
+    "group_label_anchor": "end",
+    "method_label_x": 282,
+    "plot_x": [
+      438,
+      1110
+    ],
+    "plot_y": [
+      142,
+      572
+    ],
+    "grid_policy": "major-grid-and-zero",
+    "actual_display_width": 1040
+  }
+}
