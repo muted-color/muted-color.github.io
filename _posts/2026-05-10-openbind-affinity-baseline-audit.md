@@ -1,7 +1,7 @@
 ---
 title: "Auditing Structural-Signal Interpretation in OpenBind Prediction Scores"
 date: 2026-05-10 18:40:00 +0900
-last_modified_at: 2026-07-31 19:35:13 +0900
+last_modified_at: 2026-08-01 08:07:32 +0900
 published: true
 publication_status: "published"
 lang: en

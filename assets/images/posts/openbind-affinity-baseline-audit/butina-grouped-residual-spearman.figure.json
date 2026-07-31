@@ -137,5 +137,9 @@
     ],
     "grid_policy": "zero-and-major-ticks",
     "actual_display_width": 760
+  },
+  "typography": {
+    "title_weight": 700,
+    "body_weight": 400
   }
 }

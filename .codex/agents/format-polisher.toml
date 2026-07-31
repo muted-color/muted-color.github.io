@@ -48,6 +48,8 @@ Tone checklist:
 
 Structure checklist:
 - Prefer a public research-note flow: intro, summary when useful, evaluation design, main result, condition-specific observations, interpretation, limitations, appendix, references/resources, citation.
+- Review heading hierarchy when a post has several adjacent H2 sections. Group sections only when they share the same evidence role; do not force interpretive frameworks, limitations, or standalone diagnostics under '## Results' merely for symmetry.
+- When a post materially relies on a named paper-derived method, check that its first substantive explanation gives compact author-and-method attribution with the corresponding reference. Report an omission instead of inventing an attribution.
 - Distinguish automatic metrics, judge metrics, runtime, variance, calibration, and qualitative examples instead of merging them into one conclusion.
 - For negative or weak results, keep the failed hypothesis, confounders, and residual limitations visible.
 - Keep body text oriented around observation -> interpretation -> caveat.
