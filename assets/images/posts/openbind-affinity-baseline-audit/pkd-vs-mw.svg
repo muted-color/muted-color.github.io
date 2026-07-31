@@ -10,29 +10,29 @@
   </defs>
   <text x="84.0" y="66.0" font-size="23" font-weight="700" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F" class="figure-title">Molecular weight and measured pKD</text>
   <line x1="210.1" y1="116.0" x2="210.1" y2="500.0" stroke="#D9DCD7" stroke-width="1" class="grid-line"/>
-  <text x="210.1" y="529.0" font-size="18" font-weight="500" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">200</text>
+  <text x="210.1" y="529.0" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">200</text>
   <line x1="355.2" y1="116.0" x2="355.2" y2="500.0" stroke="#D9DCD7" stroke-width="1" class="grid-line"/>
-  <text x="355.2" y="529.0" font-size="18" font-weight="500" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">250</text>
+  <text x="355.2" y="529.0" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">250</text>
   <line x1="500.4" y1="116.0" x2="500.4" y2="500.0" stroke="#D9DCD7" stroke-width="1" class="grid-line"/>
-  <text x="500.4" y="529.0" font-size="18" font-weight="500" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">300</text>
+  <text x="500.4" y="529.0" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">300</text>
   <line x1="645.5" y1="116.0" x2="645.5" y2="500.0" stroke="#D9DCD7" stroke-width="1" class="grid-line"/>
-  <text x="645.5" y="529.0" font-size="18" font-weight="500" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">350</text>
+  <text x="645.5" y="529.0" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">350</text>
   <line x1="790.7" y1="116.0" x2="790.7" y2="500.0" stroke="#D9DCD7" stroke-width="1" class="grid-line"/>
-  <text x="790.7" y="529.0" font-size="18" font-weight="500" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">400</text>
+  <text x="790.7" y="529.0" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">400</text>
   <line x1="935.8" y1="116.0" x2="935.8" y2="500.0" stroke="#D9DCD7" stroke-width="1" class="grid-line"/>
-  <text x="935.8" y="529.0" font-size="18" font-weight="500" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">450</text>
+  <text x="935.8" y="529.0" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">450</text>
   <line x1="1081.0" y1="116.0" x2="1081.0" y2="500.0" stroke="#D9DCD7" stroke-width="1" class="grid-line"/>
-  <text x="1081.0" y="529.0" font-size="18" font-weight="500" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">500</text>
+  <text x="1081.0" y="529.0" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">500</text>
   <line x1="152.0" y1="437.3" x2="1110.0" y2="437.3" stroke="#D9DCD7" stroke-width="1" class="grid-line"/>
-  <text x="124.0" y="443.3" font-size="18" font-weight="500" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="end" class="axis-tick">4</text>
+  <text x="124.0" y="443.3" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="end" class="axis-tick">4</text>
   <line x1="152.0" y1="358.9" x2="1110.0" y2="358.9" stroke="#D9DCD7" stroke-width="1" class="grid-line"/>
-  <text x="124.0" y="364.9" font-size="18" font-weight="500" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="end" class="axis-tick">5</text>
+  <text x="124.0" y="364.9" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="end" class="axis-tick">5</text>
   <line x1="152.0" y1="280.6" x2="1110.0" y2="280.6" stroke="#D9DCD7" stroke-width="1" class="grid-line"/>
-  <text x="124.0" y="286.6" font-size="18" font-weight="500" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="end" class="axis-tick">6</text>
+  <text x="124.0" y="286.6" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="end" class="axis-tick">6</text>
   <line x1="152.0" y1="202.2" x2="1110.0" y2="202.2" stroke="#D9DCD7" stroke-width="1" class="grid-line"/>
-  <text x="124.0" y="208.2" font-size="18" font-weight="500" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="end" class="axis-tick">7</text>
+  <text x="124.0" y="208.2" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="end" class="axis-tick">7</text>
   <line x1="152.0" y1="123.8" x2="1110.0" y2="123.8" stroke="#D9DCD7" stroke-width="1" class="grid-line"/>
-  <text x="124.0" y="129.8" font-size="18" font-weight="500" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="end" class="axis-tick">8</text>
+  <text x="124.0" y="129.8" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="end" class="axis-tick">8</text>
   <line x1="152.0" y1="500.0" x2="1110.0" y2="500.0" stroke="#686B66" stroke-width="1.5" class="axis-x" data-axis-id="scatter"/>
   <line x1="152.0" y1="116.0" x2="152.0" y2="500.0" stroke="#686B66" stroke-width="1.5" class="axis-y" data-axis-id="scatter"/>
   <circle cx="443.26" cy="381.13" r="4.2" fill="#5E7FD8" fill-opacity="0.42" class="data-mark"/>
@@ -530,6 +530,6 @@
   <circle cx="376.38" cy="346.17" r="4.2" fill="#5E7FD8" fill-opacity="0.42" class="data-mark"/>
   <circle cx="257.21" cy="351.64" r="4.2" fill="#5E7FD8" fill-opacity="0.42" class="data-mark"/>
   <line x1="152.0" y1="441.2" x2="1110.0" y2="248.2" stroke="#11120F" stroke-width="3" class="data-mark"/>
-  <text x="631.0" y="578.0" font-size="19" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle">RDKit molecular weight (Da)</text>
-  <text x="40.0" y="308.0" font-size="19" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" transform="rotate(-90 40 308.0)">Measured pKD</text>
+  <text x="631.0" y="578.0" font-size="19" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle">RDKit molecular weight (Da)</text>
+  <text x="40.0" y="308.0" font-size="19" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" transform="rotate(-90 40 308.0)">Measured pKD</text>
 </svg>

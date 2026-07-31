@@ -965,7 +965,7 @@ def _text(
     *,
     size: int = 18,
     fill: str | None = None,
-    weight: int = 500,
+    weight: int = 400,
     anchor: str = "start",
     css_class: str = "",
     transform: str = "",
@@ -1183,6 +1183,7 @@ def write_editorial_pkd_vs_mw(df: pd.DataFrame) -> None:
             "grid_policy": "major-grid",
             "actual_display_width": 760,
         },
+        "typography": {"title_weight": 700, "body_weight": 400},
     }
     _write_spec(name, spec)
 
@@ -1205,14 +1206,14 @@ def write_editorial_pkd_vs_mw(df: pd.DataFrame) -> None:
             f'  <line x1="{xt:.1f}" y1="{top}" x2="{xt:.1f}" y2="{bottom}" '
             f'stroke="{EDITORIAL["grid"]}" stroke-width="1" class="grid-line"/>'
         )
-        lines.append(_text(xt, 529, str(tick), size=18, fill=EDITORIAL["muted"], anchor="middle", css_class="axis-tick"))
+        lines.append(_text(xt, 529, str(tick), size=18, fill=EDITORIAL["muted"], weight=400, anchor="middle", css_class="axis-tick"))
     for tick in spec["y_axis"]["ticks"]:
         yt = py(tick)
         lines.append(
             f'  <line x1="{left}" y1="{yt:.1f}" x2="{right}" y2="{yt:.1f}" '
             f'stroke="{EDITORIAL["grid"]}" stroke-width="1" class="grid-line"/>'
         )
-        lines.append(_text(124, yt + 6, str(tick), size=18, fill=EDITORIAL["muted"], anchor="end", css_class="axis-tick"))
+        lines.append(_text(124, yt + 6, str(tick), size=18, fill=EDITORIAL["muted"], weight=400, anchor="end", css_class="axis-tick"))
     lines.extend(
         [
             f'  <line x1="{left}" y1="{bottom}" x2="{right}" y2="{bottom}" stroke="{EDITORIAL["muted"]}" stroke-width="1.5" class="axis-x" data-axis-id="scatter"/>',
@@ -1232,7 +1233,7 @@ def write_editorial_pkd_vs_mw(df: pd.DataFrame) -> None:
         f'x2="{px(trend_x[1]):.1f}" y2="{py(trend_y[1]):.1f}" '
         f'stroke="{EDITORIAL["ink"]}" stroke-width="3" class="data-mark"/>'
     )
-    lines.append(_text((left + right) / 2, 578, "RDKit molecular weight (Da)", size=19, fill=EDITORIAL["muted"], weight=600, anchor="middle"))
+    lines.append(_text((left + right) / 2, 578, "RDKit molecular weight (Da)", size=19, fill=EDITORIAL["muted"], weight=400, anchor="middle"))
     lines.append(
         _text(
             40,
@@ -1240,7 +1241,7 @@ def write_editorial_pkd_vs_mw(df: pd.DataFrame) -> None:
             "Measured pKD",
             size=19,
             fill=EDITORIAL["muted"],
-            weight=600,
+            weight=400,
             anchor="middle",
             transform=f"rotate(-90 40 {(top + bottom) / 2:.1f})",
         )
@@ -1301,6 +1302,7 @@ def write_editorial_grouped_sensitivity(grouped: pd.DataFrame) -> None:
             "grid_policy": "zero-and-major-ticks",
             "actual_display_width": 760,
         },
+        "typography": {"title_weight": 700, "body_weight": 400},
     }
     _write_spec(name, spec)
 
@@ -1332,6 +1334,7 @@ def write_editorial_grouped_sensitivity(grouped: pd.DataFrame) -> None:
                 "0" if tick == 0 else f"{tick:.1f}",
                 size=18,
                 fill=EDITORIAL["muted"],
+                weight=400,
                 anchor="middle",
                 css_class="axis-tick",
             )
@@ -1344,8 +1347,8 @@ def write_editorial_grouped_sensitivity(grouped: pd.DataFrame) -> None:
         f'  <line x1="{plot_left}" y1="122" x2="{plot_left}" y2="568" '
         f'stroke="{EDITORIAL["hairline"]}" stroke-width="1.5" class="axis-y" data-axis-id="forest"/>'
     )
-    lines.append(_text((plot_left + plot_right) / 2, 643, spec["x_axis"]["label"], size=19, fill=EDITORIAL["muted"], weight=600, anchor="middle"))
-    lines.append(_text(1082, 112, "Mean", size=20, fill=EDITORIAL["muted"], weight=600, anchor="middle", css_class="series-label"))
+    lines.append(_text((plot_left + plot_right) / 2, 643, spec["x_axis"]["label"], size=19, fill=EDITORIAL["muted"], weight=400, anchor="middle"))
+    lines.append(_text(1082, 112, "Mean", size=20, fill=EDITORIAL["muted"], weight=400, anchor="middle", css_class="series-label"))
 
     y0, step = 146.0, 38.0
     group_start = {"ligand_control": 0, "property": 3, "published": 6}
@@ -1359,7 +1362,7 @@ def write_editorial_grouped_sensitivity(grouped: pd.DataFrame) -> None:
                 ROLE_LABEL[role],
                 size=20,
                 fill=EDITORIAL["muted"],
-                weight=600,
+                weight=400,
                 anchor="end",
                 css_class="series-label",
             )
@@ -1372,7 +1375,7 @@ def write_editorial_grouped_sensitivity(grouped: pd.DataFrame) -> None:
         )
     for idx, row in enumerate(spec["rows"]):
         y = y0 + idx * step
-        lines.append(_text(282, y + 6, row["label"], size=18, weight=600))
+        lines.append(_text(282, y + 6, row["label"], size=18, weight=400))
         low, mean, high = px(row["ci_low"]), px(row["mean"]), px(row["ci_high"])
         lines.extend(
             [
@@ -1400,7 +1403,7 @@ def write_editorial_grouped_sensitivity(grouped: pd.DataFrame) -> None:
                 y + 7,
                 f'{row["mean"]:.3f}',
                 size=20,
-                weight=600,
+                weight=400,
                 anchor="middle",
                 css_class="value-label",
             )

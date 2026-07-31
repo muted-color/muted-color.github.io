@@ -2036,5 +2036,9 @@
     ],
     "grid_policy": "major-grid",
     "actual_display_width": 760
+  },
+  "typography": {
+    "title_weight": 700,
+    "body_weight": 400
   }
 }

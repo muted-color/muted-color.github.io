@@ -19,6 +19,8 @@ Style contract learned from existing posts:
 - Put the quick conclusion early, then immediately attach the evaluation condition and remaining limit.
 - For long experiment posts, include '## 요약' with 4-6 bullets that fix the main observation and caveats before the detailed sections.
 - Use the macro flow: problem / evaluation question -> setup / design -> main result -> condition-specific observations -> interpretation -> limitations -> appendix -> resources / references -> citation.
+- For a named method originating in a paper and substantively analyzed by the post, attribute its first explanatory mention compactly as '<lead author> et al.'s <Method> [n]' or '<organization>'s <Method> [n]'. Do not force this form for standard techniques or incidental sources.
+- Use heading hierarchy to expose evidence roles: group two or more setup sections under '## Experimental Setup' and two or more adjacent result or condition-specific observation sections under '## Results'. Keep a reusable diagnostic framework or interpretation that extends beyond those measurements as a separate top-level section.
 - Use the paragraph rhythm: condition or setup -> observation -> interpretation -> remaining limit.
 - Keep weak signals, failed cases, variance, runtime, judge behavior, metric caveats, and boundary conditions visible.
 - Separate roles clearly: baseline, calibrated reference, primary-score 기준 조합, diagnostic ablation, weak signal, failure case, and remaining boundary.
