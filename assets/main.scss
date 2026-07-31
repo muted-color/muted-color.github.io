@@ -19,6 +19,9 @@
     linear-gradient(90deg, transparent 0 18%, rgba(17, 17, 17, 0.06) 18% 31%, transparent 31% 40%, rgba(63, 65, 255, 0.24) 40% 59%, transparent 59% 69%, rgba(63, 65, 255, 0.12) 69% 84%, transparent 84% 100%),
     repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.28) 0 7px, rgba(241, 243, 248, 0.28) 7px 14px),
     linear-gradient(180deg, #ffffff 0%, #f3f4f8 100%);
+  --figure-paper: #ffffff;
+  --figure-paper-line: transparent;
+  --figure-paper-shadow: none;
   --code-surface: #f4f5ff;
   --inline-code-bg: #f1f3f5;
   --inline-code-ink: #2f3440;
@@ -72,6 +75,9 @@
       linear-gradient(90deg, transparent 0 18%, rgba(255, 255, 255, 0.07) 18% 31%, transparent 31% 40%, rgba(132, 150, 255, 0.28) 40% 59%, transparent 59% 69%, rgba(132, 150, 255, 0.16) 69% 84%, transparent 84% 100%),
       repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0 7px, rgba(34, 39, 49, 0.32) 7px 14px),
       linear-gradient(180deg, #171b23 0%, #101319 100%);
+    --figure-paper: #ffffff;
+    --figure-paper-line: rgba(255, 255, 255, 0.16);
+    --figure-paper-shadow: 0 18px 42px rgba(0, 0, 0, 0.24);
     --code-surface: #1b2030;
     --inline-code-bg: #252a33;
     --inline-code-ink: #e6ebf7;
@@ -1157,6 +1163,14 @@ h6 {
   display: block;
   width: 100%;
   height: auto;
+}
+
+.research-body .media-figure > img {
+  box-sizing: border-box;
+  background: var(--figure-paper);
+  border: 1px solid var(--figure-paper-line);
+  border-radius: 8px;
+  box-shadow: var(--figure-paper-shadow);
 }
 
 figcaption {
