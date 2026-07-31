@@ -10,60 +10,60 @@
   </defs>
   <text x="84.0" y="66.0" font-size="23" font-weight="700" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F" class="figure-title">Score correlation before and after property adjustment</text>
   <rect x="438" y="91" width="24" height="15" rx="3" fill="#5E7FD8"/>
-  <text x="474.0" y="105.0" font-size="18" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66">Measured pKD</text>
+  <text x="474.0" y="105.0" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66">Measured pKD</text>
   <rect x="630" y="91" width="24" height="15" rx="3" fill="url(#adjusted-hatch-raw)" stroke="#5E7FD8" stroke-width="1.5"/>
-  <text x="666.0" y="105.0" font-size="18" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66">MW+cLogP-adjusted pKD</text>
+  <text x="666.0" y="105.0" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66">MW+cLogP-adjusted pKD</text>
   <line x1="438.0" y1="128" x2="438.0" y2="572" stroke="#D9DCD7" stroke-width="1" class="grid-line"/>
-  <text x="438.0" y="601.0" font-size="18" font-weight="500" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">-0.1</text>
+  <text x="438.0" y="601.0" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">-0.1</text>
   <line x1="520.0" y1="128" x2="520.0" y2="572" stroke="#686B66" stroke-width="2" class="zero-line"/>
-  <text x="520.0" y="601.0" font-size="18" font-weight="500" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">0</text>
+  <text x="520.0" y="601.0" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">0</text>
   <line x1="601.9" y1="128" x2="601.9" y2="572" stroke="#D9DCD7" stroke-width="1" class="grid-line"/>
-  <text x="601.9" y="601.0" font-size="18" font-weight="500" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">0.1</text>
+  <text x="601.9" y="601.0" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">0.1</text>
   <line x1="765.8" y1="128" x2="765.8" y2="572" stroke="#D9DCD7" stroke-width="1" class="grid-line"/>
-  <text x="765.8" y="601.0" font-size="18" font-weight="500" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">0.3</text>
+  <text x="765.8" y="601.0" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">0.3</text>
   <line x1="929.7" y1="128" x2="929.7" y2="572" stroke="#D9DCD7" stroke-width="1" class="grid-line"/>
-  <text x="929.7" y="601.0" font-size="18" font-weight="500" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">0.5</text>
+  <text x="929.7" y="601.0" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">0.5</text>
   <line x1="1093.6" y1="128" x2="1093.6" y2="572" stroke="#D9DCD7" stroke-width="1" class="grid-line"/>
-  <text x="1093.6" y="601.0" font-size="18" font-weight="500" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">0.7</text>
+  <text x="1093.6" y="601.0" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle" class="axis-tick">0.7</text>
   <line x1="438.0" y1="572" x2="1110.0" y2="572" stroke="#B8BBB5" stroke-width="1.5" class="axis-x" data-axis-id="raw"/>
   <line x1="438.0" y1="128" x2="438.0" y2="572" stroke="#B8BBB5" stroke-width="1.5" class="axis-y" data-axis-id="raw"/>
-  <text x="774.0" y="645.0" font-size="19" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle">Spearman correlation</text>
-  <text x="248.0" y="192.0" font-size="20" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="end" class="series-label">Ligand-only controls</text>
-  <text x="248.0" y="306.0" font-size="20" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="end" class="series-label">Property baselines</text>
-  <text x="248.0" y="458.0" font-size="20" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="end" class="series-label">Published scores</text>
+  <text x="774.0" y="645.0" font-size="19" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="middle">Spearman correlation</text>
+  <text x="248.0" y="192.0" font-size="20" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="end" class="series-label">Ligand-only controls</text>
+  <text x="248.0" y="306.0" font-size="20" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="end" class="series-label">Property baselines</text>
+  <text x="248.0" y="458.0" font-size="20" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#686B66" text-anchor="end" class="series-label">Published scores</text>
   <line x1="84" y1="242.0" x2="1110" y2="242.0" stroke="#D9DCD7" stroke-width="1"/>
   <line x1="84" y1="356.0" x2="1110" y2="356.0" stroke="#D9DCD7" stroke-width="1"/>
-  <text x="282.0" y="155.0" font-size="18" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">ECFP ridge</text>
+  <text x="282.0" y="155.0" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">ECFP ridge</text>
   <rect x="520.0" y="138.0" width="550.6" height="10" rx="3" fill="#5E7FD8" stroke="none" stroke-width="1.2" class="data-mark"/>
   <rect x="520.0" y="152.0" width="352.7" height="10" rx="3" fill="url(#adjusted-hatch-raw)" stroke="#5E7FD8" stroke-width="1.2" class="data-mark"/>
-  <text x="282.0" y="193.0" font-size="18" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">RDKit RF</text>
+  <text x="282.0" y="193.0" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">RDKit RF</text>
   <rect x="520.0" y="176.0" width="514.1" height="10" rx="3" fill="#5E7FD8" stroke="none" stroke-width="1.2" class="data-mark"/>
   <rect x="520.0" y="190.0" width="276.3" height="10" rx="3" fill="url(#adjusted-hatch-raw)" stroke="#5E7FD8" stroke-width="1.2" class="data-mark"/>
-  <text x="282.0" y="231.0" font-size="18" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">RDKit ridge</text>
+  <text x="282.0" y="231.0" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">RDKit ridge</text>
   <rect x="520.0" y="214.0" width="496.2" height="10" rx="3" fill="#5E7FD8" stroke="none" stroke-width="1.2" class="data-mark"/>
   <rect x="520.0" y="228.0" width="216.6" height="10" rx="3" fill="url(#adjusted-hatch-raw)" stroke="#5E7FD8" stroke-width="1.2" class="data-mark"/>
-  <text x="282.0" y="269.0" font-size="18" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">molecular weight</text>
+  <text x="282.0" y="269.0" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">molecular weight</text>
   <rect x="520.0" y="252.0" width="396.3" height="10" rx="3" fill="#5E7FD8" stroke="none" stroke-width="1.2" class="data-mark"/>
   <rect x="505.6" y="266.0" width="14.3" height="10" rx="3" fill="url(#adjusted-hatch-raw)" stroke="#5E7FD8" stroke-width="1.2" class="data-mark"/>
-  <text x="282.0" y="307.0" font-size="18" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">MW+cLogP ridge</text>
+  <text x="282.0" y="307.0" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">MW+cLogP ridge</text>
   <rect x="520.0" y="290.0" width="396.3" height="10" rx="3" fill="#5E7FD8" stroke="none" stroke-width="1.2" class="data-mark"/>
   <rect x="503.2" y="304.0" width="16.8" height="10" rx="3" fill="url(#adjusted-hatch-raw)" stroke="#5E7FD8" stroke-width="1.2" class="data-mark"/>
-  <text x="282.0" y="345.0" font-size="18" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">cLogP</text>
+  <text x="282.0" y="345.0" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">cLogP</text>
   <rect x="520.0" y="328.0" width="142.7" height="10" rx="3" fill="#5E7FD8" stroke="none" stroke-width="1.2" class="data-mark"/>
   <rect x="520.0" y="342.0" width="11.6" height="10" rx="3" fill="url(#adjusted-hatch-raw)" stroke="#5E7FD8" stroke-width="1.2" class="data-mark"/>
-  <text x="282.0" y="383.0" font-size="18" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">gnina crystal</text>
+  <text x="282.0" y="383.0" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">gnina crystal</text>
   <rect x="520.0" y="366.0" width="371.5" height="10" rx="3" fill="#5E7FD8" stroke="none" stroke-width="1.2" class="data-mark"/>
   <rect x="520.0" y="380.0" width="15.0" height="10" rx="3" fill="url(#adjusted-hatch-raw)" stroke="#5E7FD8" stroke-width="1.2" class="data-mark"/>
-  <text x="282.0" y="421.0" font-size="18" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">Boltz-2</text>
+  <text x="282.0" y="421.0" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">Boltz-2</text>
   <rect x="520.0" y="404.0" width="325.6" height="10" rx="3" fill="#5E7FD8" stroke="none" stroke-width="1.2" class="data-mark"/>
   <rect x="520.0" y="418.0" width="79.3" height="10" rx="3" fill="url(#adjusted-hatch-raw)" stroke="#5E7FD8" stroke-width="1.2" class="data-mark"/>
-  <text x="282.0" y="459.0" font-size="18" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">smina crystal</text>
+  <text x="282.0" y="459.0" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">smina crystal</text>
   <rect x="520.0" y="442.0" width="208.6" height="10" rx="3" fill="#5E7FD8" stroke="none" stroke-width="1.2" class="data-mark"/>
   <rect x="520.0" y="456.0" width="31.3" height="10" rx="3" fill="url(#adjusted-hatch-raw)" stroke="#5E7FD8" stroke-width="1.2" class="data-mark"/>
-  <text x="282.0" y="497.0" font-size="18" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">AEV-PLIG</text>
+  <text x="282.0" y="497.0" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">AEV-PLIG</text>
   <rect x="520.0" y="480.0" width="186.2" height="10" rx="3" fill="#5E7FD8" stroke="none" stroke-width="1.2" class="data-mark"/>
   <rect x="450.1" y="494.0" width="69.9" height="10" rx="3" fill="url(#adjusted-hatch-raw)" stroke="#5E7FD8" stroke-width="1.2" class="data-mark"/>
-  <text x="282.0" y="535.0" font-size="18" font-weight="600" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">AqAffinity</text>
+  <text x="282.0" y="535.0" font-size="18" font-weight="400" font-family="'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" fill="#11120F">AqAffinity</text>
   <rect x="520.0" y="518.0" width="96.1" height="10" rx="3" fill="#5E7FD8" stroke="none" stroke-width="1.2" class="data-mark"/>
   <rect x="473.1" y="532.0" width="46.8" height="10" rx="3" fill="url(#adjusted-hatch-raw)" stroke="#5E7FD8" stroke-width="1.2" class="data-mark"/>
 </svg>

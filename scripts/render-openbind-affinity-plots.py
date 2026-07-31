@@ -1043,6 +1043,7 @@ def write_editorial_raw_vs_adjusted(metrics: pd.DataFrame) -> None:
             "grid_policy": "major-grid-and-zero",
             "actual_display_width": 1040,
         },
+        "typography": {"title_weight": 700, "body_weight": 400},
     }
     _write_spec(name, spec)
 
@@ -1053,13 +1054,13 @@ def write_editorial_raw_vs_adjusted(metrics: pd.DataFrame) -> None:
     lines.extend(
         [
             f'  <rect x="438" y="91" width="24" height="15" rx="3" fill="{EDITORIAL["accent"]}"/>',
-            _text(474, 105, "Measured pKD", size=18, fill=EDITORIAL["muted"], weight=600),
+            _text(474, 105, "Measured pKD", size=18, fill=EDITORIAL["muted"], weight=400),
             (
                 f'  <rect x="630" y="91" width="24" height="15" rx="3" '
                 'fill="url(#adjusted-hatch-raw)" '
                 f'stroke="{EDITORIAL["accent"]}" stroke-width="1.5"/>'
             ),
-            _text(666, 105, "MW+cLogP-adjusted pKD", size=18, fill=EDITORIAL["muted"], weight=600),
+            _text(666, 105, "MW+cLogP-adjusted pKD", size=18, fill=EDITORIAL["muted"], weight=400),
         ]
     )
     plot_left, plot_right = 438.0, 1110.0
@@ -1087,6 +1088,7 @@ def write_editorial_raw_vs_adjusted(metrics: pd.DataFrame) -> None:
                 "0" if tick == 0 else f"{tick:.1f}",
                 size=18,
                 fill=EDITORIAL["muted"],
+                weight=400,
                 anchor="middle",
                 css_class="axis-tick",
             )
@@ -1099,7 +1101,7 @@ def write_editorial_raw_vs_adjusted(metrics: pd.DataFrame) -> None:
         f'  <line x1="{plot_left}" y1="128" x2="{plot_left}" y2="572" '
         f'stroke="{EDITORIAL["hairline"]}" stroke-width="1.5" class="axis-y" data-axis-id="raw"/>'
     )
-    lines.append(_text((plot_left + plot_right) / 2, 645, "Spearman correlation", size=19, fill=EDITORIAL["muted"], weight=600, anchor="middle"))
+    lines.append(_text((plot_left + plot_right) / 2, 645, "Spearman correlation", size=19, fill=EDITORIAL["muted"], weight=400, anchor="middle"))
 
     y0, step = 148.0, 38.0
     group_start = {"ligand_control": 0, "property": 3, "published": 6}
@@ -1113,7 +1115,7 @@ def write_editorial_raw_vs_adjusted(metrics: pd.DataFrame) -> None:
                 ROLE_LABEL[role],
                 size=20,
                 fill=EDITORIAL["muted"],
-                weight=600,
+                weight=400,
                 anchor="end",
                 css_class="series-label",
             )
@@ -1127,7 +1129,7 @@ def write_editorial_raw_vs_adjusted(metrics: pd.DataFrame) -> None:
     zero = px(0)
     for idx, row in enumerate(spec["rows"]):
         y = y0 + idx * step
-        lines.append(_text(282, y + 7, row["label"], size=18, weight=600))
+        lines.append(_text(282, y + 7, row["label"], size=18, weight=400))
         for value, y_offset, fill, stroke in (
             (row["raw"], -10, EDITORIAL["accent"], "none"),
             (row["adjusted"], 4, "url(#adjusted-hatch-raw)", EDITORIAL["accent"]),

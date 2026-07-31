@@ -132,5 +132,9 @@
     ],
     "grid_policy": "major-grid-and-zero",
     "actual_display_width": 1040
+  },
+  "typography": {
+    "title_weight": 700,
+    "body_weight": 400
   }
 }

@@ -1,7 +1,7 @@
 ---
 title: "Auditing Structural-Signal Interpretation in OpenBind Prediction Scores"
 date: 2026-05-10 18:40:00 +0900
-last_modified_at: 2026-07-31 19:21:01 +0900
+last_modified_at: 2026-07-31 19:35:13 +0900
 published: true
 publication_status: "published"
 lang: en
@@ -18,6 +18,7 @@ hero_alt: "Chart comparing how closely each method score tracks measured pKD and
 hero_caption: "<strong>Figure 1.</strong> Each row represents one method score, and the x-axis is the Spearman correlation between that score and the pKD ranking. Solid bars show correlation with measured pKD; hatched bars show correlation with MW+cLogP-adjusted pKD. The labels at left distinguish ligand-only controls trained on the same EV-A71 2A data, simple property baselines, and public benchmark scores. A shorter hatched bar indicates that overlap between the raw pKD correlation and the MW+cLogP trend should be considered. Exact values are reported in Table 3 and Appendix Table 2."
 hero_frame: true
 hero_compact: true
+hero_variant: featured-plot
 ---
 
 OpenBind's first public release provides compound-level affinity measurements together with prediction scores from several structure-based methods. The official analysis also reported molecular weight as a strong affinity-ranking baseline for this release <a class="citation-ref" href="#ref-openbind-first-release" aria-label="Reference 1">[1]</a>.
