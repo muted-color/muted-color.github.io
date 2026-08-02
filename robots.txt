@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://muted-color.github.io/sitemap.xml
+Sitemap: https://muted-color.github.io/sitemap-google.xml
