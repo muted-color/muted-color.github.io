@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://muted-color.github.io/</loc>
+  </url>
+  <url>
+    <loc>https://muted-color.github.io/about/</loc>
+  </url>
+  <url>
+    <loc>https://muted-color.github.io/technical-reports/</loc>
+  </url>
+  <url>
+    <loc>https://muted-color.github.io/research/2026/07/29/diatool-dpo-public-reconstruction-preference-trajectories/</loc>
+  </url>
+  <url>
+    <loc>https://muted-color.github.io/research/2026/06/27/tool-use-dpo-fixed-budget-reporting-profile/</loc>
+  </url>
+  <url>
+    <loc>https://muted-color.github.io/research/2026/06/18/preference-packing-dpo-efficiency/</loc>
+  </url>
+  <url>
+    <loc>https://muted-color.github.io/research/2026/05/23/carbon-6mer-phase-sensitivity/</loc>
+  </url>
+  <url>
+    <loc>https://muted-color.github.io/research/2026/05/10/openbind-affinity-baseline-audit/</loc>
+  </url>
+  <url>
+    <loc>https://muted-color.github.io/research/2026/04/21/hspc-hierarchy-benchmark-lineage/</loc>
+  </url>
+  <url>
+    <loc>https://muted-color.github.io/research/2026/04/17/frozen-esm2-lora-low-label-protein-fitness/</loc>
+  </url>
+  <url>
+    <loc>https://muted-color.github.io/research/2026/04/12/gemma3-e4b-korean-sft/</loc>
+  </url>
+</urlset>
