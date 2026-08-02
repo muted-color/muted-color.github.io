@@ -1,58 +1,114 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="560" viewBox="0 0 1120 560">
-<rect width="100%" height="100%" fill="white"/>
-<style>text{font-family:Arial,sans-serif}.title{font-weight:700;font-size:15px}.axis{font-size:12px}.point{font-size:12px;font-weight:700}</style>
-<text class="title" x="306.5" y="24" text-anchor="middle">BFCL core vs guardrail regression</text>
-<line x1="72.0" y1="490.0" x2="541.0" y2="490.0" stroke="#333"/>
-<line x1="72.0" y1="48.0" x2="72.0" y2="490.0" stroke="#333"/>
-<line x1="512.8" y1="48.0" x2="512.8" y2="490.0" stroke="#999" stroke-width="0.8"/>
-<line x1="72.0" y1="413.4" x2="541.0" y2="413.4" stroke="#999" stroke-width="0.8"/>
-<text class="axis" x="306.5" y="540" text-anchor="middle">IFEval prompt-strict delta vs SFT baseline (pp)</text>
-<text class="axis" x="24.0" y="269.0" text-anchor="middle" transform="rotate(-90 24.0 269.0)">BFCL core delta vs SFT baseline (pp)</text>
-<line x1="292.4" y1="138.4" x2="108.7" y2="256.2" stroke="#2364aa" stroke-width="1.2" opacity="0.55"/>
-<line x1="329.1" y1="334.8" x2="255.7" y2="452.7" stroke="#c43b3b" stroke-width="1.2" opacity="0.55"/>
-<line x1="292.4" y1="158.0" x2="145.5" y2="236.6" stroke="#2364aa" stroke-width="1.2" opacity="0.55"/>
-<line x1="329.1" y1="315.2" x2="255.7" y2="433.0" stroke="#c43b3b" stroke-width="1.2" opacity="0.55"/>
-<circle cx="292.4" cy="138.4" r="6.5" fill="#2364aa" stroke="white" stroke-width="1"/>
-<text class="point" x="301.4" y="131.4">A</text>
-<circle cx="108.7" cy="256.2" r="6.5" fill="#2364aa" stroke="white" stroke-width="1"/>
-<text class="point" x="117.7" y="249.2">B</text>
-<circle cx="329.1" cy="334.8" r="6.5" fill="#c43b3b" stroke="white" stroke-width="1"/>
-<text class="point" x="338.1" y="327.8">C</text>
-<circle cx="255.7" cy="452.7" r="6.5" fill="#c43b3b" stroke="white" stroke-width="1"/>
-<text class="point" x="264.7" y="445.7">D</text>
-<rect x="285.9" y="151.5" width="13" height="13" fill="#2364aa" stroke="white" stroke-width="1"/>
-<text class="point" x="301.4" y="151.0">E</text>
-<rect x="139.0" y="230.1" width="13" height="13" fill="#2364aa" stroke="white" stroke-width="1"/>
-<text class="point" x="154.5" y="229.6">F</text>
-<rect x="322.6" y="308.7" width="13" height="13" fill="#c43b3b" stroke="white" stroke-width="1"/>
-<text class="point" x="338.1" y="308.2">G</text>
-<rect x="249.2" y="426.5" width="13" height="13" fill="#c43b3b" stroke="white" stroke-width="1"/>
-<text class="point" x="264.7" y="426.0">H</text>
-<text class="title" x="853.5" y="24" text-anchor="middle">When2Call macro F1 vs guardrail regression</text>
-<line x1="619.0" y1="490.0" x2="1088.0" y2="490.0" stroke="#333"/>
-<line x1="619.0" y1="48.0" x2="619.0" y2="490.0" stroke="#333"/>
-<line x1="1059.8" y1="48.0" x2="1059.8" y2="490.0" stroke="#999" stroke-width="0.8"/>
-<line x1="619.0" y1="409.1" x2="1088.0" y2="409.1" stroke="#999" stroke-width="0.8"/>
-<text class="axis" x="853.5" y="540" text-anchor="middle">IFEval prompt-strict delta vs SFT baseline (pp)</text>
-<text class="axis" x="571.0" y="269.0" text-anchor="middle" transform="rotate(-90 571.0 269.0)">When2Call macro F1 delta vs SFT baseline (pp)</text>
-<line x1="839.4" y1="436.8" x2="655.7" y2="418.7" stroke="#2364aa" stroke-width="1.2" opacity="0.55"/>
-<line x1="876.1" y1="106.2" x2="802.7" y2="117.8" stroke="#c43b3b" stroke-width="1.2" opacity="0.55"/>
-<line x1="839.4" y1="402.6" x2="692.5" y2="373.2" stroke="#2364aa" stroke-width="1.2" opacity="0.55"/>
-<line x1="876.1" y1="140.7" x2="802.7" y2="109.2" stroke="#c43b3b" stroke-width="1.2" opacity="0.55"/>
-<circle cx="839.4" cy="436.8" r="6.5" fill="#2364aa" stroke="white" stroke-width="1"/>
-<text class="point" x="848.4" y="429.8">A</text>
-<circle cx="655.7" cy="418.7" r="6.5" fill="#2364aa" stroke="white" stroke-width="1"/>
-<text class="point" x="664.7" y="411.7">B</text>
-<circle cx="876.1" cy="106.2" r="6.5" fill="#c43b3b" stroke="white" stroke-width="1"/>
-<text class="point" x="885.1" y="99.2">C</text>
-<circle cx="802.7" cy="117.8" r="6.5" fill="#c43b3b" stroke="white" stroke-width="1"/>
-<text class="point" x="811.7" y="110.8">D</text>
-<rect x="832.9" y="396.1" width="13" height="13" fill="#2364aa" stroke="white" stroke-width="1"/>
-<text class="point" x="848.4" y="395.6">E</text>
-<rect x="686.0" y="366.7" width="13" height="13" fill="#2364aa" stroke="white" stroke-width="1"/>
-<text class="point" x="701.5" y="366.2">F</text>
-<rect x="869.6" y="134.2" width="13" height="13" fill="#c43b3b" stroke="white" stroke-width="1"/>
-<text class="point" x="885.1" y="133.7">G</text>
-<rect x="796.2" y="102.7" width="13" height="13" fill="#c43b3b" stroke="white" stroke-width="1"/>
-<text class="point" x="811.7" y="102.2">H</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="pareto-title pareto-desc" data-renderer="editorial-systems-figure-v2" data-theme="paper" data-palette="editorial">
+  <title id="pareto-title">Checkpoint movement across intended metrics and the IFEval guardrail</title>
+  <desc id="pareto-desc">Two measured scatter plots show percentage-point deltas from the same SFT baseline. The horizontal axis is IFEval prompt-strict delta. The left vertical axis is BFCL core delta and the right vertical axis is When2Call macro F1 delta. Blue solid paths represent structural negatives and gray dashed paths represent behavior negatives. Circles mark clean conditions, squares mark unfiltered controls, and arrowheads point from step50 to the final checkpoint.</desc>
+  <defs>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#5E7FD8"/>
+    </marker>
+    <marker id="arrow-gray" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#686B66"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="675" fill="#FFFFFF"/>
+  <text class="figure-title" x="72" y="64" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#11120F">Checkpoint profiles under a fixed DPO budget</text>
+
+  <!-- Legend: source uses color plus line style; filtering uses marker shape. -->
+  <line x1="72" y1="103" x2="104" y2="103" stroke="#5E7FD8" stroke-width="2.5"/>
+  <circle cx="88" cy="103" r="6" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="2"/>
+  <text class="series-label" x="114" y="109" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#11120F">Structural</text>
+  <line x1="238" y1="103" x2="270" y2="103" stroke="#686B66" stroke-width="2.5" stroke-dasharray="8 6"/>
+  <circle cx="254" cy="103" r="6" fill="#686B66" stroke="#FFFFFF" stroke-width="2"/>
+  <text class="series-label" x="280" y="109" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#11120F">Behavior</text>
+  <circle cx="410" cy="103" r="7" fill="#FFFFFF" stroke="#11120F" stroke-width="2"/>
+  <text class="series-label" x="428" y="109" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#11120F">Clean</text>
+  <rect x="526" y="96" width="14" height="14" fill="#FFFFFF" stroke="#11120F" stroke-width="2"/>
+  <text class="series-label" x="550" y="109" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#11120F">Unfiltered</text>
+  <line x1="678" y1="103" x2="724" y2="103" stroke="#11120F" stroke-width="2" marker-end="url(#arrow-gray)"/>
+  <text class="series-label" x="740" y="109" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#11120F">step50 to final</text>
+
+  <text class="panel-title" x="92" y="137" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#11120F">A. BFCL core vs guardrail regression</text>
+  <text class="panel-title" x="684" y="137" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#11120F">B. When2Call macro F1 vs guardrail regression</text>
+
+  <!-- Panel A: exact domains x [-12.5, 0.8], y [-1.3, 6.2]. -->
+  <line class="grid-line" x1="134" y1="377.08" x2="556" y2="377.08" stroke="#D9DCD7" stroke-width="1"/>
+  <line class="grid-line" x1="134" y1="285.61" x2="556" y2="285.61" stroke="#D9DCD7" stroke-width="1"/>
+  <line class="grid-line" x1="134" y1="194.15" x2="556" y2="194.15" stroke="#D9DCD7" stroke-width="1"/>
+  <line class="zero-line" x1="134" y1="468.55" x2="556" y2="468.55" stroke="#B8BBB5" stroke-width="1.8"/>
+  <line class="zero-line" x1="530.62" y1="185" x2="530.62" y2="528" stroke="#B8BBB5" stroke-width="1.8"/>
+  <line class="axis-x" data-axis-id="bfcl" x1="134" y1="528" x2="556" y2="528" stroke="#11120F" stroke-width="1.8"/>
+  <line class="axis-y" data-axis-id="bfcl" x1="134" y1="185" x2="134" y2="528" stroke="#11120F" stroke-width="1.8"/>
+
+  <g stroke="#11120F" stroke-width="1.4">
+    <line x1="149.86" y1="528" x2="149.86" y2="534"/><line x1="245.05" y1="528" x2="245.05" y2="534"/>
+    <line x1="340.24" y1="528" x2="340.24" y2="534"/><line x1="435.43" y1="528" x2="435.43" y2="534"/>
+    <line x1="530.62" y1="528" x2="530.62" y2="534"/>
+    <line x1="128" y1="514.28" x2="134" y2="514.28"/><line x1="128" y1="468.55" x2="134" y2="468.55"/>
+    <line x1="128" y1="377.08" x2="134" y2="377.08"/><line x1="128" y1="285.61" x2="134" y2="285.61"/>
+    <line x1="128" y1="194.15" x2="134" y2="194.15"/>
+  </g>
+  <g class="axis-tick" font-family="Arial, sans-serif" font-size="15" font-weight="400" fill="#686B66" text-anchor="middle">
+    <text x="149.86" y="553">−12</text><text x="245.05" y="553">−9</text><text x="340.24" y="553">−6</text>
+    <text x="435.43" y="553">−3</text><text x="530.62" y="553">0</text>
+  </g>
+  <g class="axis-tick" font-family="Arial, sans-serif" font-size="15" font-weight="400" fill="#686B66" text-anchor="end">
+    <text x="120" y="519.28">−1</text><text x="120" y="473.55">0</text><text x="120" y="382.08">2</text>
+    <text x="120" y="290.61">4</text><text x="120" y="199.15">6</text>
+  </g>
+  <text x="345" y="590" font-family="Arial, sans-serif" font-size="15" font-weight="400" fill="#11120F" text-anchor="middle">IFEval prompt-strict delta vs SFT (pp)</text>
+  <text x="73" y="356.5" font-family="Arial, sans-serif" font-size="15" font-weight="400" fill="#11120F" text-anchor="middle" transform="rotate(-90 73 356.5)">BFCL core delta vs SFT (pp)</text>
+
+  <g fill="none" stroke-width="2.5">
+    <line x1="325.31" y1="259.00" x2="176.68" y2="341.26" stroke="#5E7FD8" marker-end="url(#arrow-blue)"/>
+    <line x1="325.04" y1="273.72" x2="210.09" y2="326.74" stroke="#5E7FD8" marker-end="url(#arrow-blue)"/>
+    <line x1="360.67" y1="414.05" x2="305.70" y2="490.12" stroke="#686B66" stroke-dasharray="8 6" marker-end="url(#arrow-gray)"/>
+    <line x1="360.67" y1="398.81" x2="305.70" y2="474.88" stroke="#686B66" stroke-dasharray="8 6" marker-end="url(#arrow-gray)"/>
+  </g>
+  <g class="data-mark" stroke="#FFFFFF" stroke-width="2.5">
+    <circle cx="332.31" cy="255.12" r="8" fill="#5E7FD8"/><circle cx="167.05" cy="346.59" r="8" fill="#5E7FD8"/>
+    <circle cx="365.36" cy="407.57" r="8" fill="#686B66"/><circle cx="299.26" cy="499.04" r="8" fill="#686B66"/>
+    <rect x="324.31" y="262.37" width="16" height="16" fill="#5E7FD8"/><rect x="192.10" y="323.35" width="16" height="16" fill="#5E7FD8"/>
+    <rect x="357.36" y="384.32" width="16" height="16" fill="#686B66"/><rect x="291.26" y="475.79" width="16" height="16" fill="#686B66"/>
+  </g>
+
+  <!-- Panel B: exact domains x [-12.5, 0.8], y [-1.3, 5.8]. -->
+  <line class="grid-line" x1="726" y1="368.58" x2="1148" y2="368.58" stroke="#D9DCD7" stroke-width="1"/>
+  <line class="grid-line" x1="726" y1="271.96" x2="1148" y2="271.96" stroke="#D9DCD7" stroke-width="1"/>
+  <line class="grid-line" x1="726" y1="223.65" x2="1148" y2="223.65" stroke="#D9DCD7" stroke-width="1"/>
+  <line class="zero-line" x1="726" y1="465.20" x2="1148" y2="465.20" stroke="#B8BBB5" stroke-width="1.8"/>
+  <line class="zero-line" x1="1122.62" y1="185" x2="1122.62" y2="528" stroke="#B8BBB5" stroke-width="1.8"/>
+  <line class="axis-x" data-axis-id="when2call" x1="726" y1="528" x2="1148" y2="528" stroke="#11120F" stroke-width="1.8"/>
+  <line class="axis-y" data-axis-id="when2call" x1="726" y1="185" x2="726" y2="528" stroke="#11120F" stroke-width="1.8"/>
+
+  <g stroke="#11120F" stroke-width="1.4">
+    <line x1="741.86" y1="528" x2="741.86" y2="534"/><line x1="837.05" y1="528" x2="837.05" y2="534"/>
+    <line x1="932.24" y1="528" x2="932.24" y2="534"/><line x1="1027.43" y1="528" x2="1027.43" y2="534"/>
+    <line x1="1122.62" y1="528" x2="1122.62" y2="534"/>
+    <line x1="720" y1="513.51" x2="726" y2="513.51"/><line x1="720" y1="465.20" x2="726" y2="465.20"/>
+    <line x1="720" y1="368.58" x2="726" y2="368.58"/><line x1="720" y1="271.96" x2="726" y2="271.96"/>
+    <line x1="720" y1="223.65" x2="726" y2="223.65"/>
+  </g>
+  <g class="axis-tick" font-family="Arial, sans-serif" font-size="15" font-weight="400" fill="#686B66" text-anchor="middle">
+    <text x="741.86" y="553">−12</text><text x="837.05" y="553">−9</text><text x="932.24" y="553">−6</text>
+    <text x="1027.43" y="553">−3</text><text x="1122.62" y="553">0</text>
+  </g>
+  <g class="axis-tick" font-family="Arial, sans-serif" font-size="15" font-weight="400" fill="#686B66" text-anchor="end">
+    <text x="712" y="518.51">−1</text><text x="712" y="470.20">0</text><text x="712" y="373.58">2</text>
+    <text x="712" y="276.96">4</text><text x="712" y="228.65">5</text>
+  </g>
+  <text x="937" y="590" font-family="Arial, sans-serif" font-size="15" font-weight="400" fill="#11120F" text-anchor="middle">IFEval prompt-strict delta vs SFT (pp)</text>
+  <text x="665" y="356.5" font-family="Arial, sans-serif" font-size="15" font-weight="400" fill="#11120F" text-anchor="middle" transform="rotate(-90 665 356.5)">When2Call macro F1 delta vs SFT (pp)</text>
+
+  <g fill="none" stroke-width="2.5">
+    <line x1="916.34" y1="486.07" x2="770.01" y2="473.58" stroke="#5E7FD8" marker-end="url(#arrow-blue)"/>
+    <line x1="916.43" y1="458.81" x2="802.94" y2="439.21" stroke="#5E7FD8" marker-end="url(#arrow-blue)"/>
+    <line x1="949.43" y1="231.28" x2="902.16" y2="237.70" stroke="#686B66" stroke-dasharray="8 6" marker-end="url(#arrow-gray)"/>
+    <line x1="949.86" y1="254.18" x2="901.57" y2="236.33" stroke="#686B66" stroke-dasharray="8 6" marker-end="url(#arrow-gray)"/>
+  </g>
+  <g class="data-mark" stroke="#FFFFFF" stroke-width="2.5">
+    <circle cx="924.31" cy="486.75" r="8" fill="#5E7FD8"/><circle cx="759.05" cy="472.64" r="8" fill="#5E7FD8"/>
+    <circle cx="957.36" cy="230.20" r="8" fill="#686B66"/><circle cx="891.26" cy="239.19" r="8" fill="#686B66"/>
+    <rect x="916.31" y="452.18" width="16" height="16" fill="#5E7FD8"/><rect x="784.10" y="429.34" width="16" height="16" fill="#5E7FD8"/>
+    <rect x="949.36" y="248.95" width="16" height="16" fill="#686B66"/><rect x="883.26" y="224.52" width="16" height="16" fill="#686B66"/>
+  </g>
 </svg>

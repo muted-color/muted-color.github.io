@@ -1,13 +1,14 @@
 ---
 title: "Reporting Fixed-Budget Tool-Use DPO as Recipe-Checkpoint Profiles"
 date: 2026-06-27 11:04:00 +0900
-last_modified_at: 2026-06-30 20:48:01 +0900
+last_modified_at: 2026-08-01 08:31:45 +0900
+lang: en
 categories: ["LLM EVAL"]
 tags: [llm, tool-use, dpo, function-calling, bfcl, when2call, ifeval, qwen3]
 lab_path: "experiment-lab/projects/tool-use-dpo-negative-sources"
 featured: true
 home_rank: 2
-excerpt: "A fixed-budget tool-use DPO comparison is better reported as a recipe-checkpoint profile than as a single recipe winner."
+excerpt: "A fixed-budget tool-use DPO comparison is better reported as a recipe-checkpoint profile than as a single recipe ranking."
 description: "A mini research note on fixed-budget Qwen3-8B tool-use DPO, where structural and behavior negatives move different evaluation axes and checkpoint selection changes the IFEval guardrail trade-off."
 permalink: /research/2026/06/27/tool-use-dpo-fixed-budget-reporting-profile/
 image: /assets/images/posts/tool-use-dpo-fixed-budget-reporting-profile/social-thumbnail.png
@@ -28,22 +29,22 @@ This note compares DPO negative recipes under the same pair budget and optimizer
 
 ## Summary
 
-- The main reporting unit is a recipe-checkpoint profile, not a single recipe winner.
+- The main reporting unit is a recipe-checkpoint profile, not a single recipe ranking.
 - The comparison used a fixed budget of `3000` pairs, `375` optimizer steps, DPO beta `0.1`, LR `5e-6`, LoRA rank `16`, and effective batch size `8`.
 - At the preferred `step50` checkpoint, clean structural DPO was `+3.33` points above clean behavior DPO on BFCL core, but `-6.67` points lower on When2Call behavior accuracy and `-5.31` points lower on When2Call macro F1.
 - Clean-vs-unfiltered effects within the same source family were small or uncertain. In this setting, semantic filtering behaved more like a pair-quality gate than a downstream performance axis.
 - The final checkpoint was not automatically the best reporting point: in the reported clean conditions, it worsened the IFEval guardrail trade-off relative to step50.
 - Additional seeds and an independent pool-B replicate preserved the source-axis sign pattern, but the robustness claim remains narrow.
 
-## Repository and Paper
+## Public Artifacts
 
 {% include model-mention-cards.html label="GitHub repository" aria_label="Tool-use DPO fixed-budget report GitHub repository" models="Artifact release|muted-color/tool-use-dpo-fixed-budget-report|https://github.com/muted-color/tool-use-dpo-fixed-budget-report" %}
 
 {% include model-mention-cards.html label="Paper" aria_label="Tool-use DPO fixed-budget report paper PDF" models="Paper PDF|paper.pdf|https://github.com/muted-color/tool-use-dpo-fixed-budget-report/blob/main/paper.pdf" %}
 
-This section is only for the GitHub repository and paper PDF. The result tables in this note and Figure 1 can be checked against the public artifact repository, using sanitized evaluation outputs and aggregate tables. The repository is an artifact-level verification release for the reported tables, confidence intervals, and Pareto figure. It is not an end-to-end retraining bundle.
+The result tables in this note and Figure 1 can be checked against the public artifact repository using sanitized evaluation outputs and aggregate tables. The repository is an artifact-level verification release for the reported tables, confidence intervals, and Pareto figure; it is not an end-to-end retraining bundle <a class="citation-ref" href="#ref-artifact-release" aria-label="Reference 21">[21]</a>.
 
-For the full paper-style report and appendix, see the separate [paper PDF](https://github.com/muted-color/tool-use-dpo-fixed-budget-report/blob/main/paper.pdf). The result snapshot is pinned by the `arxiv-v1` tag, which currently points to commit `3f4799e`. For a quick check, start with `reproduced/tables/` and `reproduced/figures/` in the repository.
+For the full paper-style report and appendix, see the separate [paper PDF](https://github.com/muted-color/tool-use-dpo-fixed-budget-report/blob/main/paper.pdf). The result snapshot is pinned by the [`arxiv-v1` tag](https://github.com/muted-color/tool-use-dpo-fixed-budget-report/tree/arxiv-v1), which points to [commit `3f4799e`](https://github.com/muted-color/tool-use-dpo-fixed-budget-report/commit/3f4799ed830e6807d50f0e4b1457b346b2bbe37a). For a quick check, start with `reproduced/tables/` and `reproduced/figures/` in the repository.
 
 ## Evaluation Design
 
@@ -63,7 +64,7 @@ Table 1 fixes the unit of interpretation for this note. A fixed budget means the
         <tr>
           <td><code>Negative recipe</code></td>
           <td>clean structural, clean behavior,<br><span class="table-note-inline">same-budget unfiltered controls</span></td>
-          <td>Separates source-axis movement instead of ranking one recipe as the winner.</td>
+          <td>Separates source-axis movement instead of making a single best-recipe claim.</td>
         </tr>
         <tr>
           <td><code>Fixed budget</code></td>
@@ -82,16 +83,36 @@ Table 1 fixes the unit of interpretation for this note. A fixed budget means the
         </tr>
         <tr>
           <td><code>Guardrail metric</code></td>
-          <td>IFEval prompt-level strict accuracy</td>
+          <td>IFEval prompt-strict accuracy</td>
           <td>Reports intended gain together with instruction-following regression.</td>
+        </tr>
+        <tr>
+          <td><code>Reported checkpoint</code></td>
+          <td>Exploratory <code>step50</code>,<br><span class="table-note-inline">reported with the final checkpoint</span></td>
+          <td>Treats the lower-regression checkpoint choice as part of the result, not as a universal early-stopping rule.</td>
+        </tr>
+        <tr>
+          <td><code>Data-quality gate</code></td>
+          <td>Semantic clean gate,<br><span class="table-note-inline">with same-budget unfiltered controls</span></td>
+          <td>Separates pair-validity control from downstream performance movement.</td>
+        </tr>
+        <tr>
+          <td><code>Robustness scope</code></td>
+          <td>Original seed plus seeds 2–3;<br><span class="table-note-inline">pool-A plus independent pool-B</span></td>
+          <td>Bounds the claim to fixed-pool seed stability and one independent pair-pool reconstruction.</td>
+        </tr>
+        <tr>
+          <td><code>Coverage and overlap</code></td>
+          <td>BFCL core, represented When2Call slices,<br><span class="table-note-inline">pair-id and content-hash overlap checks</span></td>
+          <td>Records benchmark limits and the exact duplicate checks without implying broad distribution coverage.</td>
         </tr>
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 1.</strong> Core fields of the reporting profile used in this note. The paper and repository manifest also include seed scope, pair-sampling scope, data-quality gates, benchmark coverage, and overlap checks in the same profile.</figcaption>
+  <figcaption><strong>Table 1.</strong> Reporting profile used in this note. The detailed evidence for seed scope, pair sampling, benchmark coverage, and overlap checks is reported in Table 5 and the pinned artifact manifest.</figcaption>
 </figure>
 
-The evaluation is read across three axes. **BFCL core** is mainly a structural function-calling axis, focused on function selection and argument correctness <a class="citation-ref" href="#ref-bfcl" aria-label="Reference 11">[11]</a>. **When2Call** evaluates call-decision behavior such as tool call, follow-up question, and unable-to-answer decisions <a class="citation-ref" href="#ref-when2call" aria-label="Reference 15">[15]</a>. **IFEval prompt-strict** is not the primary intended metric; it is a guardrail metric for measuring how much DPO perturbs instruction following <a class="citation-ref" href="#ref-ifeval" aria-label="Reference 20">[20]</a>.
+The evaluation is read across three axes. **BFCL core** is mainly a structural function-calling axis, focused on function selection and argument correctness <a class="citation-ref" href="#ref-bfcl" aria-label="Reference 11">[11]</a>. **When2Call** evaluates call-decision behavior such as tool call, follow-up question, and unable-to-answer decisions <a class="citation-ref" href="#ref-when2call" aria-label="Reference 15">[15]</a>. **IFEval prompt-strict accuracy** is not the primary intended metric; it is a guardrail metric for measuring how much DPO perturbs instruction following <a class="citation-ref" href="#ref-ifeval" aria-label="Reference 20">[20]</a>.
 
 ## Results
 
@@ -99,7 +120,7 @@ The results are easiest to read in four groups. First, the source-axis split bet
 
 ### Source-Axis Comparison
 
-Table 2 compares the structural and behavior recipes at the preferred `step50` checkpoint. Values are percentage-point deltas computed as `structural - behavior`. A positive BFCL row means the structural recipe scored higher; a negative When2Call row means the behavior recipe scored higher.
+Table 2 compares the structural and behavior recipes at the preferred `step50` checkpoint. Here, “preferred” means an exploratory lower-regression reporting point selected after checkpoint analysis; it is not a pre-registered or universal early-stopping rule. Values are percentage-point deltas computed as `structural - behavior`. A positive BFCL row means the structural recipe scored higher; a negative When2Call row means the behavior recipe scored higher. In the tables, `W2C` abbreviates When2Call.
 
 <figure class="table-figure table-figure--comparison">
   <div class="table-shell">
@@ -108,9 +129,9 @@ Table 2 compares the structural and behavior recipes at the preferred `step50` c
         <tr>
           <th>Comparison</th>
           <th>Metric</th>
-          <th class="align-right">Delta</th>
-          <th class="align-right">CI95 low</th>
-          <th class="align-right">CI95 high</th>
+          <th class="align-right">Delta (pp)</th>
+          <th class="align-right">95% CI low</th>
+          <th class="align-right">95% CI high</th>
           <th>How to read it</th>
         </tr>
       </thead>
@@ -176,9 +197,9 @@ Semantic filtering was used as a pair-quality gate: whether the rejected output 
         <tr>
           <th>Comparison</th>
           <th>Metric</th>
-          <th class="align-right">Delta</th>
-          <th class="align-right">CI95 low</th>
-          <th class="align-right">CI95 high</th>
+          <th class="align-right">Delta (pp)</th>
+          <th class="align-right">95% CI low</th>
+          <th class="align-right">95% CI high</th>
         </tr>
       </thead>
       <tbody>
@@ -209,8 +230,8 @@ This is not a reason to drop filtering. Tool-use negatives easily mix optional/d
 Figure 1 plots intended-axis gain against IFEval prompt-strict regression, while Table 4 gives the corresponding absolute scores. Even within the same recipe, moving from `step50` to the final checkpoint changes both the intended metric and the guardrail metric.
 
 <figure class="media-figure media-figure--wide-visual">
-  <img src="/assets/images/posts/tool-use-dpo-fixed-budget-reporting-profile/pareto-2panel.svg" alt="Two-panel Pareto figure comparing BFCL core and When2Call macro F1 gains against IFEval prompt-strict regression">
-  <figcaption><strong>Figure 1.</strong> Pareto view of intended-axis gain and IFEval prompt-strict regression under a fixed-budget tool-use DPO setting. The left panel uses BFCL core as the intended metric; the right panel uses When2Call macro F1. Arrows show the movement from the step50 checkpoint to the final checkpoint within the same condition.</figcaption>
+  <img src="/assets/images/posts/tool-use-dpo-fixed-budget-reporting-profile/pareto-2panel.svg" alt="Two-panel scatter plot of IFEval prompt-strict delta against BFCL core or When2Call macro F1 delta; solid blue structural and dashed gray behavior paths connect circle clean and square unfiltered points from step50 to final">
+  <figcaption><strong>Figure 1.</strong> Intended-metric gains against IFEval prompt-strict deltas from the shared SFT baseline. Circles and squares distinguish clean and unfiltered conditions; solid blue and dashed gray paths distinguish structural and behavior recipes, and arrowheads run from <code>step50</code> to final. Axes show percentage-point deltas using the report’s original domains.</figcaption>
 </figure>
 
 For the clean structural condition, `step50` had BFCL core `+4.67` points and IFEval prompt-strict `-6.25` points. The final checkpoint changed to BFCL core `+2.67` points and IFEval prompt-strict `-11.46` points. In this condition, the final checkpoint reduced intended gain and increased guardrail regression.
@@ -226,7 +247,7 @@ For the clean behavior condition, `step50` had When2Call macro F1 `+4.86` points
           <th>Checkpoint</th>
           <th class="align-right">BFCL core</th>
           <th class="align-right">W2C macro F1</th>
-          <th class="align-right">IFEval prompt strict</th>
+          <th class="align-right">IFEval prompt-strict</th>
         </tr>
       </thead>
       <tbody>
@@ -268,7 +289,7 @@ For the clean behavior condition, `step50` had When2Call macro F1 `+4.86` points
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 4.</strong> Absolute scores for the baseline and clean conditions. Deltas alone can hide the starting point and the size of guardrail regression, so the reporting profile should include absolute scores as well.</figcaption>
+  <figcaption><strong>Table 4.</strong> Absolute scores for the baseline and clean conditions, reported as proportions where higher is better. IFEval prompt-strict accuracy is interpreted as the guardrail axis. Deltas alone can hide the starting point and the size of guardrail regression, so the reporting profile should include absolute scores as well.</figcaption>
 </figure>
 
 This does not imply that early checkpoints are always better. It does show that automatically reporting the final checkpoint can hide the trade-off between intended-axis gain and guardrail regression. In this setting, checkpoint selection is part of the empirical claim.
@@ -344,20 +365,21 @@ The IFEval slice should be read as a guardrail diagnostic. Bootstrap intervals a
   <li id="ref-diatool-dpo">Jung, Sunghee et al. <strong>DiaTool-DPO: Multi-Turn Direct Preference Optimization for Tool-Augmented Large Language Models</strong>. SIGDIAL, 2025. <a href="https://aclanthology.org/2025.sigdial-1.32/">ACL Anthology</a></li>
   <li id="ref-functionchat-bench">Lee, Shinbok et al. <strong>FunctionChat-Bench: Comprehensive Evaluation of Language Models' Generative Capabilities in Korean Tool-use Dialogs</strong>. arXiv:2411.14054, 2024. <a href="https://arxiv.org/abs/2411.14054">arXiv</a></li>
   <li id="ref-api-bank">Li, Minghao et al. <strong>API-Bank: A Comprehensive Benchmark for Tool-Augmented LLMs</strong>. EMNLP, 2023. DOI: <a href="https://doi.org/10.18653/v1/2023.emnlp-main.187">10.18653/v1/2023.emnlp-main.187</a></li>
-  <li id="ref-helm">Liang, Percy et al. <strong>Holistic Evaluation of Language Models</strong>. <em>Transactions on Machine Learning Research</em>, 2023.</li>
+  <li id="ref-helm">Liang, Percy et al. <strong>Holistic Evaluation of Language Models</strong>. <em>Transactions on Machine Learning Research</em>, 2023. <a href="https://arxiv.org/abs/2211.09110">arXiv</a></li>
   <li id="ref-toolace">Liu, Weiwen et al. <strong>ToolACE: Winning the Points of LLM Function Calling</strong>. arXiv:2409.00920, 2024. <a href="https://arxiv.org/abs/2409.00920">arXiv</a></li>
-  <li id="ref-apigen">Liu, Zuxin et al. <strong>APIGen: Automated Pipeline for Generating Verifiable and Diverse Function-Calling Datasets</strong>. NeurIPS, 2024.</li>
+  <li id="ref-apigen">Liu, Zuxin et al. <strong>APIGen: Automated Pipeline for Generating Verifiable and Diverse Function-Calling Datasets</strong>. NeurIPS, 2024. <a href="https://proceedings.neurips.cc/paper_files/paper/2024/hash/61cce86d180b1184949e58939c4f983d-Abstract-Datasets_and_Benchmarks_Track.html">NeurIPS</a></li>
   <li id="ref-what-matters-dpo">Pan, Yu et al. <strong>What Matters in Data for DPO?</strong> arXiv:2508.18312, 2025. <a href="https://arxiv.org/abs/2508.18312">arXiv</a></li>
   <li id="ref-bfcl">Patil, Shishir G. et al. <strong>The Berkeley Function Calling Leaderboard (BFCL): From Tool Use to Agentic Evaluation of Large Language Models</strong>. ICML, 2025. <a href="https://proceedings.mlr.press/v267/patil25a.html">PMLR</a>; <a href="https://gorilla.cs.berkeley.edu/leaderboard.html">Project page</a></li>
   <li id="ref-toollm">Qin, Yujia et al. <strong>ToolLLM: Facilitating Large Language Models to Master 16000+ Real-world APIs</strong>. ICLR, 2024. <a href="https://openreview.net/forum?id=dHng2O0Jjr">OpenReview</a></li>
   <li id="ref-dpo">Rafailov, Rafael et al. <strong>Direct Preference Optimization: Your Language Model is Secretly a Reward Model</strong>. NeurIPS, 2023. <a href="https://arxiv.org/abs/2305.18290">arXiv</a></li>
   <li id="ref-overoptimization">Rafailov, Rafael et al. <strong>Scaling Laws for Reward Model Overoptimization in Direct Alignment Algorithms</strong>. arXiv:2406.02900, 2024. <a href="https://arxiv.org/abs/2406.02900">arXiv</a></li>
   <li id="ref-when2call">Ross, Hayley, Mahabaleshwarkar, Ameya Sunil, and Suhara, Yoshi. <strong>When2Call: When (not) to Call Tools</strong>. NAACL, 2025. DOI: <a href="https://doi.org/10.18653/v1/2025.naacl-long.174">10.18653/v1/2025.naacl-long.174</a>; <a href="https://huggingface.co/datasets/nvidia/When2Call">Dataset card</a></li>
-  <li id="ref-toolformer">Schick, Timo et al. <strong>Toolformer: Language Models Can Teach Themselves to Use Tools</strong>. NeurIPS, 2023.</li>
+  <li id="ref-toolformer">Schick, Timo et al. <strong>Toolformer: Language Models Can Teach Themselves to Use Tools</strong>. NeurIPS, 2023. <a href="https://proceedings.neurips.cc/paper/2023/hash/d842425e4bf79ba039352da0f658a906-Abstract-Conference.html">NeurIPS</a></li>
   <li id="ref-yan-function-calling">Yan, Fanjia. <strong>A Function Calling Perspective on Scalable Large Language Model Agent Evaluation</strong>. Master's thesis, UC Berkeley EECS, 2025. <a href="https://www2.eecs.berkeley.edu/Pubs/TechRpts/2025/EECS-2025-184.html">Technical report</a></li>
   <li id="ref-qwen3">Yang, An et al. <strong>Qwen3 Technical Report</strong>. arXiv:2505.09388, 2025. <a href="https://arxiv.org/abs/2505.09388">arXiv</a>; Qwen Team. <strong>Qwen3-8B</strong>. Hugging Face model repository. <a href="https://huggingface.co/Qwen/Qwen3-8B">Model card</a></li>
   <li id="ref-xlam">Zhang, Jianguo et al. <strong>xLAM: A Family of Large Action Models to Empower AI Agent Systems</strong>. NAACL, 2025. <a href="https://arxiv.org/abs/2409.03215">arXiv</a></li>
   <li id="ref-ifeval">Zhou, Jeffrey et al. <strong>Instruction-Following Evaluation for Large Language Models</strong>. arXiv:2311.07911, 2023. <a href="https://arxiv.org/abs/2311.07911">arXiv</a></li>
+  <li id="ref-artifact-release">Ahn, Ilho. <strong>Reporting Tool-Use DPO Under Fixed Budgets: Recipe–Checkpoint Profiles and Guardrail Trade-offs</strong>. Artifact release, June 5, 2026. <a href="https://github.com/muted-color/tool-use-dpo-fixed-budget-report/tree/arxiv-v1">Pinned artifact snapshot</a>; <a href="https://github.com/muted-color/tool-use-dpo-fixed-budget-report/blob/main/paper.pdf">Current paper PDF</a></li>
 </ol>
 
 </div>
