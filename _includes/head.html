@@ -70,6 +70,9 @@
   {%- unless asset_version -%}
     {%- assign asset_version = site.time | date: "%s" -%}
   {%- endunless -%}
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ "/assets/images/common/favicon-32x32.png" | relative_url }}?v={{ asset_version | uri_escape }}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ "/assets/images/common/favicon-16x16.png" | relative_url }}?v={{ asset_version | uri_escape }}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ "/assets/images/common/apple-touch-icon.png" | relative_url }}?v={{ asset_version | uri_escape }}">
   <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}?v={{ asset_version | uri_escape }}">
   <link type="application/atom+xml" rel="alternate" href="{{ "/feed.xml" | absolute_url }}" title="{{ site.title | escape }}">
   {%- if page.plotly -%}
