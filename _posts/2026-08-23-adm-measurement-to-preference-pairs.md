@@ -1,7 +1,7 @@
 ---
 title: "Alignment Data Map: From Measurements to Preference-Pair Supervision"
 date: 2026-08-23 20:10:32 +0900
-last_modified_at: 2026-08-24 18:14:54 +0900
+last_modified_at: 2026-08-26 19:52:48 +0900
 lang: en
 categories: ["LLM ALIGNMENT"]
 tags: [llm, alignment, preference-data, data-selection, adm, simpo, ultrafeedback]
@@ -11,13 +11,12 @@ excerpt: "This note traces how Alignment Data Map coordinates vary with the refe
 description: "A mini research note connecting Alignment Data Map measurement sensitivity and cohort composition on 4,500 UltraFeedback instructions to instantiated preference pairs and single-seed SimPO results."
 permalink: /research/2026/08/23/adm-measurement-to-preference-pairs/
 translation_url: /research/2026/08/23/adm-measurement-to-preference-pairs/ko/
-image: /assets/images/posts/adm-measurement-to-preference-pairs/social-thumbnail.png
-image_alt: "Social thumbnail summarizing the path from reference-based Alignment Data Map measurement to region selection and preference-pair construction"
-hero_image: /assets/images/posts/adm-measurement-to-preference-pairs/adm-measurement-to-training-pairs.svg
-hero_alt: "Four-stage flow from measuring four candidate responses for each of 4,500 instructions to mapping instructions into three ADM regions, instantiating 17,301 training pairs, and evaluating region-specific SimPO pipelines on a shared 600-pair set."
-hero_caption: "<strong>Figure 1.</strong> Data path from reference-conditioned candidate measurement to region-specific SimPO evaluation. ADM selects instructions, whereas training uses instantiated response pairs; the highlighted stage marks this change in analysis unit. Counts are observed totals, but box widths are conceptual and do not encode scale."
+image: /assets/images/posts/adm-measurement-to-preference-pairs/hero-adm-map-highavg.png
+image_alt: "A translucent three-dimensional Alignment Data Map with three measured regions, with HighAvg highlighted in pale blue"
+hero_image: /assets/images/posts/adm-measurement-to-preference-pairs/hero-adm-map-highavg.png
+hero_alt: "A translucent three-dimensional Alignment Data Map with three measured regions, with HighAvg highlighted in pale blue."
 hero_frame: true
-hero_variant: flow-diagram
+hero_compact: true
 math: true
 published: true
 publication_status: "published"
@@ -58,9 +57,16 @@ The analysis of actual training pairs used a map recomputed with overlapping-win
 
 ### Preference Pairs and Training Comparison
 
-ADM selects instructions, whereas Meng et al.'s SimPO <a class="citation-ref" href="#ref-simpo" aria-label="Reference 11">[11]</a> trains on chosen–rejected response pairs. This analysis constructed all pairs of candidate responses whose source ratings differed and matched instruction quotas across the three regions within each source-by-task-type stratum. The final training data contained 17,301 pairs.
+ADM selects instructions, whereas Meng et al.'s SimPO <a class="citation-ref" href="#ref-simpo" aria-label="Reference 11">[11]</a> trains on chosen–rejected response pairs. This analysis constructed all pairs of candidate responses whose source ratings differed and matched instruction quotas across the three regions within each source-by-task-type stratum. The realized training split contained 1,080 instructions per region, or 3,240 in total, which expanded into 17,301 pairs.
 
 <a href="https://huggingface.co/Qwen/Qwen2.5-3B-Instruct"><code>Qwen2.5-3B-Instruct</code></a> was trained for up to 5 epochs with LoRA and SimPO. The learning rate was 5e-6 and the global batch size was 63. Within each region-specific development set, models were selected by the number of pairs matching the preferred direction, then by loss, then by earlier checkpoint. They were then compared on the same 600-pair development set with no prompt or pair overlap with the training data. The analysis separately tracked the instructions selected by ADM and the response pairs used by SimPO.
+
+Figure 1 summarizes the full path from reference-conditioned candidate measurement to region-specific SimPO evaluation.
+
+<figure class="media-figure media-figure--wide-visual">
+  <img src="/assets/images/posts/adm-measurement-to-preference-pairs/adm-measurement-to-training-pairs.svg" alt="Four-stage flow from measuring four candidate responses for each of 4,500 instructions to mapping instructions into three ADM regions, instantiating 17,301 training pairs, and evaluating region-specific SimPO pipelines on a shared 600-pair set.">
+  <figcaption><strong>Figure 1.</strong> Data path from reference-conditioned candidate measurement to region-specific SimPO evaluation. ADM selects instructions, whereas training uses instantiated response pairs; the highlighted stage marks this change in analysis unit. Counts are observed totals, but box widths are conceptual and do not encode scale.</figcaption>
+</figure>
 
 ## Results
 
@@ -68,7 +74,7 @@ ADM selects instructions, whereas Meng et al.'s SimPO <a class="citation-ref" hr
 
 When GPT-4o and Qwen3.5 reference-answer generation policies were applied to the same 100 instructions and identical candidate responses, candidate-order agreement was .760, with a 95% bootstrap CI of .710–.808. The rank correlation for variance was .854, region macro-F1 was .7395, and 64 of 100 instructions had at least one reversal in candidate order.
 
-In a separate comparison that added gpt-oss-120B on a shared set of 60 samples, pairwise candidate-order agreement across the three reference-answer policies and their repeated runs ranged from .7722 to .8472, and region macro-F1 ranged from .6500 to .8000.
+In a separate comparison on a shared set of 60 samples, pairwise candidate-order agreement across GPT-4o, Qwen3.5, and three gpt-oss-120B repeats ranged from .7722 to .8472, and region macro-F1 ranged from .6500 to .8000.
 
 Region shifts remained even when candidate responses and reference answers were fixed and only the long-text processing method changed. In Figure 2, higher values on all three metrics indicate greater agreement with the prefix baseline. Overlapping-window mean was farther from the baseline than head–tail segment mean on every metric.
 

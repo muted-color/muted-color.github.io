@@ -2,7 +2,7 @@
 layout: post
 title: "Alignment Data Map: 측정값에서 선호 학습 쌍까지"
 date: 2026-08-23 20:10:32 +0900
-last_modified_at: 2026-08-24 18:14:54 +0900
+last_modified_at: 2026-08-26 19:52:48 +0900
 lang: ko
 categories: ["LLM ALIGNMENT"]
 tags: [llm, alignment, preference-data, data-selection, adm, simpo, ultrafeedback]
@@ -12,13 +12,12 @@ excerpt: "Alignment Data Map의 상대 좌표가 reference answer와 텍스트 �
 description: "UltraFeedback 4,500개 지시문에서 Alignment Data Map의 측정 민감도, 코호트 구성, 실제 선호 쌍과 단일 seed SimPO 결과를 연결해 분석한 미니 리서치 노트."
 permalink: /research/2026/08/23/adm-measurement-to-preference-pairs/ko/
 translation_url: /research/2026/08/23/adm-measurement-to-preference-pairs/
-image: /assets/images/posts/adm-measurement-to-preference-pairs/social-thumbnail.png
-image_alt: "Alignment Data Map의 reference 기반 측정에서 영역 선택과 선호 학습 쌍 구성으로 이어지는 과정을 요약한 소셜 썸네일"
-hero_image: /assets/images/posts/adm-measurement-to-preference-pairs/adm-measurement-to-training-pairs.svg
-hero_alt: "Four-stage flow from measuring four candidate responses for each of 4,500 instructions to mapping instructions into three ADM regions, instantiating 17,301 training pairs, and evaluating region-specific SimPO pipelines on a shared 600-pair set."
-hero_caption: "<strong>Figure 1.</strong> Data path from reference-conditioned candidate measurement to region-specific SimPO evaluation. ADM selects instructions, whereas training uses instantiated response pairs; the highlighted stage marks this change in analysis unit. Counts are observed totals, but box widths are conceptual and do not encode scale."
+image: /assets/images/posts/adm-measurement-to-preference-pairs/hero-adm-map-highavg.png
+image_alt: "세 측정 영역 가운데 HighAvg를 옅은 파란색으로 강조한 반투명 3차원 Alignment Data Map"
+hero_image: /assets/images/posts/adm-measurement-to-preference-pairs/hero-adm-map-highavg.png
+hero_alt: "세 측정 영역 가운데 HighAvg를 옅은 파란색으로 강조한 반투명 3차원 Alignment Data Map."
 hero_frame: true
-hero_variant: flow-diagram
+hero_compact: true
 math: true
 published: true
 publication_status: "published"
@@ -59,9 +58,16 @@ Song의 data-centric alignment pipeline <a class="citation-ref" href="#ref-data-
 
 ### 선호 쌍과 학습 비교
 
-ADM은 지시문을 선택하지만, Meng et al.의 SimPO <a class="citation-ref" href="#ref-simpo" aria-label="Reference 11">[11]</a>는 chosen–rejected 응답 쌍을 학습한다. 이 분석에서는 출처 평점이 다른 모든 후보 응답 쌍을 만들고, 출처×과제 유형별 지시문 할당량을 세 영역에서 맞췄다. 최종 학습 데이터는 총 17,301쌍이다.
+ADM은 지시문을 선택하지만, Meng et al.의 SimPO <a class="citation-ref" href="#ref-simpo" aria-label="Reference 11">[11]</a>는 chosen–rejected 응답 쌍을 학습한다. 이 분석에서는 출처 평점이 다른 모든 후보 응답 쌍을 만들고, 출처×과제 유형별 지시문 할당량을 세 영역에서 맞췄다. 실제 학습 split은 영역당 1,080개, 총 3,240개 지시문으로 구성되었고, 이를 확장한 최종 학습 데이터는 17,301쌍이다.
 
 <a href="https://huggingface.co/Qwen/Qwen2.5-3B-Instruct"><code>Qwen2.5-3B-Instruct</code></a>는 LoRA·SimPO로 최대 5 epoch 학습했다. 학습률은 5e-6, global batch는 63이다. 영역별 전용 개발 세트에서 선호 방향 일치 쌍 수, loss, 이른 시점 순으로 모델을 선택한 뒤, 학습 데이터와 prompt·pair가 겹치지 않는 동일한 600쌍 개발 세트에서 비교했다. 분석에서는 ADM이 선택하는 지시문과 SimPO가 학습하는 응답 쌍을 구분해 추적했다.
+
+Figure 1은 reference-conditioned candidate measurement에서 영역별 SimPO 평가까지의 전체 경로를 요약한다.
+
+<figure class="media-figure media-figure--wide-visual">
+  <img src="/assets/images/posts/adm-measurement-to-preference-pairs/adm-measurement-to-training-pairs.svg" alt="Four-stage flow from measuring four candidate responses for each of 4,500 instructions to mapping instructions into three ADM regions, instantiating 17,301 training pairs, and evaluating region-specific SimPO pipelines on a shared 600-pair set.">
+  <figcaption><strong>Figure 1.</strong> Data path from reference-conditioned candidate measurement to region-specific SimPO evaluation. ADM selects instructions, whereas training uses instantiated response pairs; the highlighted stage marks this change in analysis unit. Counts are observed totals, but box widths are conceptual and do not encode scale.</figcaption>
+</figure>
 
 ## 결과
 
@@ -69,7 +75,7 @@ ADM은 지시문을 선택하지만, Meng et al.의 SimPO <a class="citation-ref
 
 같은 100개 지시문과 동일한 후보 응답에 GPT-4o와 Qwen3.5의 reference answer 생성 정책을 적용했을 때 후보 순서 일치율은 .760이었고, 95% bootstrap CI는 .710–.808이었다. 분산 순위 상관은 .854, 영역 macro-F1은 .7395였으며, 64/100개 지시문에서 적어도 한 번의 후보 순서 반전이 있었다.
 
-별도의 공통 60개 표본에 gpt-oss-120B를 추가한 비교에서는 세 reference answer 정책의 쌍별 비교와 반복 실행에서 후보 순서 일치율 .7722–.8472, 영역 macro-F1 .6500–.8000이 관찰됐다.
+별도의 공통 60개 표본에서 GPT-4o, Qwen3.5, gpt-oss-120B 3회 반복을 쌍별로 비교했을 때 후보 순서 일치율 .7722–.8472, 영역 macro-F1 .6500–.8000이 관찰됐다.
 
 후보 응답과 reference answer를 고정하고 장문 처리 방식만 바꿔도 영역 이동이 남았다. Figure 2에서 세 지표는 높을수록 앞부분 기준선에 가깝다. Overlapping-window mean은 모든 지표에서 Head–tail segment mean보다 기준선에서 더 멀었다.
 
