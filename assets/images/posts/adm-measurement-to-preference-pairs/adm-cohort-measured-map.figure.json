@@ -1,0 +1,50 @@
+{
+  "layout": "custom_quantitative_scatter",
+  "scale": "measured",
+  "palette": "editorial",
+  "title": "Qwen-ADM cohort map (n=4,500)",
+  "description": "Two scatter panels show mean cosine similarity to the reference answer and population variance across four candidate responses for a fixed cohort of 4,500 instructions. The left panel shows the full measured range; the right panel enlarges the variability range from 0 to 0.03.",
+  "claim_boundary": "This cohort map is defined by the Qwen reference answer; it does not establish equivalence to a GPT-4o-defined map or exact reproduction of the original paper's map.",
+  "rows": 4500,
+  "coordinate_fields": {
+    "x": "variability_var",
+    "y": "quality_mu"
+  },
+  "coordinate_domains": {
+    "full_x": [0, 0.27],
+    "detail_x": [0, 0.03],
+    "y": [0, 1]
+  },
+  "boundaries": {
+    "variability": 0.015259860709812001,
+    "low_variance_quality": 0.788182444870472
+  },
+  "region_counts": {
+    "HighAvg": 1500,
+    "HighVar": 1500,
+    "LowAvg": 1500
+  },
+  "series_encoding": {
+    "HighAvg": "editorial accent",
+    "LowAvg": "editorial accent mid",
+    "HighVar": "primary ink"
+  },
+  "layout_geometry": {
+    "outer_x": [72, 1112],
+    "panel_fraction": [0.63, 0.37],
+    "shared_anchors": {
+      "title_x": 72,
+      "left_plot_x": 134,
+      "right_plot_x": 832,
+      "axis_y": 555
+    },
+    "panel_gap": 48,
+    "grid_policy": "major-grid-and-axes",
+    "actual_display_width": 600
+  },
+  "data_provenance": {
+    "source": "frozen 4,500-row Qwen-defined analysis cohort",
+    "source_sha256": "3008ef567bf1a9e9f01e7b95173e16d185f7b8c993f6a1d5cdec65a9741febac"
+  },
+  "regeneration_note": "The public spec preserves the measured domains, boundaries, counts, layout contract, and source digest. Re-rendering individual points requires the frozen source rows matching source_sha256."
+}

@@ -1,0 +1,54 @@
+{
+  "layout": "custom_dot",
+  "title": "Stability under long-text processing changes",
+  "description": "A measured dot plot compares two long-text processing methods with the prefix baseline across candidate-pair order agreement, region macro-F1, and retention of the original HighAvg set.",
+  "scale": "measured",
+  "palette": "editorial",
+  "canvas": {
+    "width": 1200,
+    "height": 560
+  },
+  "domain_percent": [80, 100],
+  "baseline_percent": 100,
+  "series": [
+    {
+      "id": "head_tail",
+      "label": "Head–tail segment mean",
+      "marker": "circle",
+      "values_percent": {
+        "candidate_pair_order_agreement": 90.14,
+        "region_macro_f1": 89.93,
+        "original_highavg_retained": 88.6
+      }
+    },
+    {
+      "id": "overlapping_window",
+      "label": "Overlapping-window mean",
+      "marker": "diamond",
+      "values_percent": {
+        "candidate_pair_order_agreement": 87.29,
+        "region_macro_f1": 86.33,
+        "original_highavg_retained": 83.7333333333
+      }
+    }
+  ],
+  "source_counts": {
+    "head_tail_region_changes": "453/4,500",
+    "overlapping_window_region_changes": "615/4,500",
+    "head_tail_original_highavg_retained": "1,329/1,500",
+    "overlapping_window_original_highavg_retained": "1,256/1,500"
+  },
+  "layout_geometry": {
+    "outer_x": [72, 1128],
+    "shared_anchors": {
+      "title_x": 72,
+      "label_x": 72,
+      "plot_x": 430,
+      "plot_end_x": 1090,
+      "axis_y": 460
+    },
+    "plot_bounds": [430, 150, 1090, 460],
+    "grid_policy": "major ticks with an emphasized 100% reference line",
+    "actual_display_width": 720
+  }
+}

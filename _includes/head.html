@@ -4,6 +4,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   {%- seo -%}
+  {%- if page.translation_url -%}
+    {%- if page.lang == "ko" -%}
+      {%- assign alternate_lang = "en" -%}
+      {%- assign default_translation_url = page.translation_url -%}
+    {%- else -%}
+      {%- assign alternate_lang = "ko" -%}
+      {%- assign default_translation_url = page.url -%}
+    {%- endif -%}
+    <link rel="alternate" hreflang="{{ page.lang | default: site.lang }}" href="{{ page.url | absolute_url }}">
+    <link rel="alternate" hreflang="{{ alternate_lang }}" href="{{ page.translation_url | absolute_url }}">
+    <link rel="alternate" hreflang="x-default" href="{{ default_translation_url | absolute_url }}">
+  {%- endif -%}
   {%- if page.hidden == true or page.noindex == true -%}
     <meta name="robots" content="noindex, nofollow, noarchive">
   {%- endif -%}
@@ -41,6 +53,7 @@
         },
         "headline": {{ page.title | jsonify }},
         "description": {{ article_description | jsonify }},
+        "inLanguage": {{ page.lang | default: site.lang | jsonify }},
         "datePublished": {{ page.date | date_to_xmlschema | jsonify }},
         "dateModified": {{ article_modified | date_to_xmlschema | jsonify }},
         "author": {
