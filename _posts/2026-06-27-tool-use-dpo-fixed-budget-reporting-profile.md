@@ -1,7 +1,7 @@
 ---
 title: "Reporting Fixed-Budget Tool-Use DPO as Recipe-Checkpoint Profiles"
 date: 2026-06-27 11:04:00 +0900
-last_modified_at: 2026-08-01 08:31:45 +0900
+last_modified_at: 2026-08-26 20:33:23 +0900
 lang: en
 categories: ["LLM EVAL"]
 tags: [llm, tool-use, dpo, function-calling, bfcl, when2call, ifeval, qwen3]
@@ -11,10 +11,10 @@ home_rank: 2
 excerpt: "A fixed-budget tool-use DPO comparison is better reported as a recipe-checkpoint profile than as a single recipe ranking."
 description: "A mini research note on fixed-budget Qwen3-8B tool-use DPO, where structural and behavior negatives move different evaluation axes and checkpoint selection changes the IFEval guardrail trade-off."
 permalink: /research/2026/06/27/tool-use-dpo-fixed-budget-reporting-profile/
-image: /assets/images/posts/tool-use-dpo-fixed-budget-reporting-profile/social-thumbnail.png
-image_alt: "Translucent checkpoint beads connected by branching gray paths and one subtle light-blue selected path on a near-white background"
-hero_image: /assets/images/posts/tool-use-dpo-fixed-budget-reporting-profile/social-thumbnail.png
-hero_alt: "A near-white glass-style scene with translucent checkpoint beads, branching recipe-checkpoint paths, and one subtle light-blue selected path"
+image: /assets/images/posts/tool-use-dpo-fixed-budget-reporting-profile/hero-checkpoint-prism.png
+image_alt: "Two equal translucent recipe streams pass through a clear checkpoint prism and emerge as three differently shaped evaluation signals"
+hero_image: /assets/images/posts/tool-use-dpo-fixed-budget-reporting-profile/hero-checkpoint-prism.png
+hero_alt: "Two equal translucent recipe streams pass through a clear checkpoint prism and emerge as three differently shaped evaluation signals"
 hero_frame: true
 hero_compact: true
 ---
