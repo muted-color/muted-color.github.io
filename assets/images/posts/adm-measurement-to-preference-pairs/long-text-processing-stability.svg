@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560" role="img" aria-labelledby="figure-title figure-desc" data-renderer="editorial-systems-figure-custom" data-theme="paper" data-palette="editorial">
+  <title id="figure-title">Stability under long-text processing changes</title>
+  <desc id="figure-desc">Head–tail segment mean and overlapping-window mean are compared with a 100 percent prefix baseline. Overlapping-window mean is farther from the baseline for candidate-pair order agreement, region macro-F1, and original HighAvg retention.</desc>
+  <rect width="1200" height="560" fill="#FFFFFF"/>
+  <g font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif">
+    <text class="figure-title" x="72" y="60" font-size="24" font-weight="700" fill="#11120F">Stability under long-text processing changes</text>
+
+    <g aria-label="Series key">
+      <circle class="data-mark" cx="80" cy="110" r="8" fill="#11120F"/>
+      <text class="series-label" x="98" y="116" font-size="18" font-weight="400" fill="#11120F">Head–tail segment mean</text>
+      <path class="data-mark" d="M395 101 L404 110 L395 119 L386 110 Z" fill="#5E7FD8"/>
+      <text class="series-label" x="416" y="116" font-size="18" font-weight="400" fill="#11120F">Overlapping-window mean</text>
+      <line x1="785" y1="110" x2="819" y2="110" stroke="#11120F" stroke-width="1.6" stroke-dasharray="6 6"/>
+      <text class="series-label" x="833" y="116" font-size="18" font-weight="400" fill="#11120F">Prefix baseline</text>
+    </g>
+
+    <g aria-label="Plot scaffold">
+      <line class="grid-line" x1="430" y1="150" x2="430" y2="460" stroke="#B8BBB5" stroke-width="1" opacity="0.5"/>
+      <line class="grid-line" x1="595" y1="150" x2="595" y2="460" stroke="#B8BBB5" stroke-width="1" opacity="0.5"/>
+      <line class="grid-line" x1="760" y1="150" x2="760" y2="460" stroke="#B8BBB5" stroke-width="1" opacity="0.5"/>
+      <line class="grid-line" x1="925" y1="150" x2="925" y2="460" stroke="#B8BBB5" stroke-width="1" opacity="0.5"/>
+      <line class="grid-line baseline-reference" x1="1090" y1="150" x2="1090" y2="460" stroke="#11120F" stroke-width="1.6" stroke-dasharray="6 6"/>
+      <line x1="430" y1="190" x2="1090" y2="190" stroke="#B8BBB5" stroke-width="1" opacity="0.45"/>
+      <line x1="430" y1="300" x2="1090" y2="300" stroke="#B8BBB5" stroke-width="1" opacity="0.45"/>
+      <line x1="430" y1="410" x2="1090" y2="410" stroke="#B8BBB5" stroke-width="1" opacity="0.45"/>
+      <line class="axis-x" data-axis-id="stability" x1="430" y1="460" x2="1090" y2="460" stroke="#686B66" stroke-width="1.5"/>
+    </g>
+
+    <g aria-label="Candidate-pair order agreement">
+      <text x="72" y="196" font-size="19" font-weight="400" fill="#11120F">Candidate-pair order agreement</text>
+      <line x1="670.57" y1="190" x2="764.62" y2="190" stroke="#C8D5F5" stroke-width="4"/>
+      <circle class="data-mark" cx="764.62" cy="190" r="8" fill="#11120F"/>
+      <path class="data-mark" d="M670.57 180 L680.57 190 L670.57 200 L660.57 190 Z" fill="#5E7FD8"/>
+      <text class="value-label" x="764.62" y="171" font-size="17" font-weight="400" text-anchor="middle" fill="#11120F">90.14%</text>
+      <text class="value-label" x="670.57" y="221" font-size="17" font-weight="400" text-anchor="middle" fill="#5E7FD8">87.29%</text>
+    </g>
+
+    <g aria-label="Region macro-F1">
+      <text x="72" y="306" font-size="19" font-weight="400" fill="#11120F">Region macro-F1</text>
+      <line x1="638.89" y1="300" x2="757.69" y2="300" stroke="#C8D5F5" stroke-width="4"/>
+      <circle class="data-mark" cx="757.69" cy="300" r="8" fill="#11120F"/>
+      <path class="data-mark" d="M638.89 290 L648.89 300 L638.89 310 L628.89 300 Z" fill="#5E7FD8"/>
+      <text class="value-label" x="757.69" y="281" font-size="17" font-weight="400" text-anchor="middle" fill="#11120F">89.93%</text>
+      <text class="value-label" x="638.89" y="331" font-size="17" font-weight="400" text-anchor="middle" fill="#5E7FD8">86.33%</text>
+    </g>
+
+    <g aria-label="Original HighAvg retained">
+      <text x="72" y="416" font-size="19" font-weight="400" fill="#11120F">Original HighAvg retained</text>
+      <line x1="553.20" y1="410" x2="713.80" y2="410" stroke="#C8D5F5" stroke-width="4"/>
+      <circle class="data-mark" cx="713.80" cy="410" r="8" fill="#11120F"/>
+      <path class="data-mark" d="M553.20 400 L563.20 410 L553.20 420 L543.20 410 Z" fill="#5E7FD8"/>
+      <text class="value-label" x="713.80" y="391" font-size="17" font-weight="400" text-anchor="middle" fill="#11120F">88.60%</text>
+      <text class="value-label" x="553.20" y="441" font-size="17" font-weight="400" text-anchor="middle" fill="#5E7FD8">83.73%</text>
+    </g>
+
+    <g aria-label="Metric value axis">
+      <text class="axis-tick" x="430" y="486" font-size="16" font-weight="400" text-anchor="middle" fill="#686B66">80</text>
+      <text class="axis-tick" x="595" y="486" font-size="16" font-weight="400" text-anchor="middle" fill="#686B66">85</text>
+      <text class="axis-tick" x="760" y="486" font-size="16" font-weight="400" text-anchor="middle" fill="#686B66">90</text>
+      <text class="axis-tick" x="925" y="486" font-size="16" font-weight="400" text-anchor="middle" fill="#686B66">95</text>
+      <text class="axis-tick" x="1090" y="486" font-size="16" font-weight="400" text-anchor="middle" fill="#686B66">100</text>
+      <text x="760" y="526" font-size="17" font-weight="400" text-anchor="middle" fill="#686B66">Metric value (%)</text>
+    </g>
+  </g>
+</svg>

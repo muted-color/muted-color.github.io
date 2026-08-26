@@ -1,0 +1,27 @@
+{
+  "layout": "flow",
+  "title": "From ADM measurements to training pairs",
+  "description": "A four-stage flow traces 4,500 instructions from reference-conditioned response measurement through instruction-level ADM regions, pair instantiation, and region-specific SimPO evaluation. The highlighted transition marks the change from selected instructions to actual training pairs.",
+  "scale": "conceptual",
+  "palette": "editorial",
+  "canvas_height": 430,
+  "nodes": [
+    {
+      "label": "Measure candidates",
+      "detail": "4,500 instructions\n4 responses each"
+    },
+    {
+      "label": "Map instructions",
+      "detail": "Quality + variability\n3 × 1,500 regions"
+    },
+    {
+      "label": "Instantiate pairs",
+      "detail": "Matched source × task quotas\n17,301 training pairs",
+      "accent": true
+    },
+    {
+      "label": "Train + evaluate",
+      "detail": "Region-specific SimPO\nShared 600-pair set"
+    }
+  ]
+}

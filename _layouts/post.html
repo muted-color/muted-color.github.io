@@ -15,7 +15,7 @@ layout: default
           <span class="research-affiliation"> {{ page.affiliation }}</span>
         {% endif %}
       </p>
-      <time class="research-date" datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%b %d, %Y" }}</time>
+      <time class="research-date" datetime="{{ page.date | date_to_xmlschema }}">{% if page.lang == "ko" %}{{ page.date | date: "%Y년 %-m월 %-d일" }}{% else %}{{ page.date | date: "%b %d, %Y" }}{% endif %}</time>
       {% if page.excerpt %}
         <p class="research-dek">{{ page.excerpt | strip_html }}</p>
       {% endif %}
@@ -48,7 +48,7 @@ layout: default
     <aside class="research-sidebar">
       <button class="toc-backdrop" type="button" aria-hidden="true" tabindex="-1"></button>
       <div class="research-sidebar-inner">
-        <button class="toc-label toc-toggle" type="button" aria-expanded="false" aria-controls="toc"><span class="toc-toggle-label">On this page</span></button>
+        <button class="toc-label toc-toggle" type="button" aria-expanded="false" aria-controls="toc" data-contents-label="Contents"><span class="toc-toggle-label">On this page</span></button>
         <div class="toc-sheet">
           <nav class="toc-nav" id="toc"></nav>
         </div>
@@ -56,6 +56,17 @@ layout: default
     </aside>
 
     <section class="research-body" id="research-body">
+      {% if page.translation_url %}
+        <nav class="language-switcher" aria-label="{% if page.lang == 'ko' %}언어{% else %}Language{% endif %}">
+          {% if page.lang == "ko" %}
+            <a class="language-switcher-link" href="{{ page.translation_url | relative_url }}" lang="en">English</a>
+            <span class="language-switcher-current" lang="ko" aria-current="page">한국어</span>
+          {% else %}
+            <span class="language-switcher-current" lang="en" aria-current="page">English</span>
+            <a class="language-switcher-link" href="{{ page.translation_url | relative_url }}" lang="ko">한국어</a>
+          {% endif %}
+        </nav>
+      {% endif %}
       {{ content }}
     </section>
   </div>
@@ -68,6 +79,7 @@ layout: default
     var grid = document.querySelector(".research-grid");
     var sidebar = document.querySelector(".research-sidebar");
     var sidebarInner = document.querySelector(".research-sidebar-inner");
+    var tocSheet = sidebar ? sidebar.querySelector(".toc-sheet") : null;
     if (!root || !toc) return;
 
     function cssVar(name, fallback) {
@@ -480,12 +492,17 @@ layout: default
     var tocToggle = sidebar ? sidebar.querySelector(".toc-toggle") : null;
     var tocToggleLabel = tocToggle ? tocToggle.querySelector(".toc-toggle-label") : null;
     var tocDefaultLabel = tocToggleLabel ? tocToggleLabel.textContent.trim() : "On this page";
+    var tocContentsLabel = tocToggle ? tocToggle.dataset.contentsLabel || tocDefaultLabel : tocDefaultLabel;
     var activeTocLabel = tocDefaultLabel;
 
     function renderTocToggleLabel() {
       if (!tocToggleLabel || !sidebar) return;
 
-      tocToggleLabel.textContent = sidebar.classList.contains("is-toc-stuck") ? activeTocLabel : tocDefaultLabel;
+      tocToggleLabel.textContent = sidebar.classList.contains("is-toc-open")
+        ? tocContentsLabel
+        : sidebar.classList.contains("is-toc-stuck")
+          ? activeTocLabel
+          : tocDefaultLabel;
     }
 
     function enhanceTocDisclosure() {
@@ -498,6 +515,19 @@ layout: default
       function setOpen(isOpen) {
         sidebar.classList.toggle("is-toc-open", isOpen);
         toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        renderTocToggleLabel();
+
+        if (!isOpen || !tocSheet) return;
+
+        window.requestAnimationFrame(function () {
+          var activeLink = toc.querySelector(".toc-item a.is-active");
+          if (!activeLink) return;
+
+          var sheetRect = tocSheet.getBoundingClientRect();
+          var activeRect = activeLink.getBoundingClientRect();
+          var targetTop = tocSheet.scrollTop + activeRect.top - sheetRect.top - (tocSheet.clientHeight - activeRect.height) / 2;
+          tocSheet.scrollTop = Math.max(0, targetTop);
+        });
       }
 
       function syncForViewport() {
@@ -625,6 +655,57 @@ layout: default
     activeTocLabel = links[0] ? links[0].link.textContent : tocDefaultLabel;
     renderTocToggleLabel();
 
+    function setActiveTocPair(pair) {
+      if (!pair) return;
+
+      links.forEach(function (candidate) {
+        candidate.link.classList.toggle("is-active", candidate === pair);
+      });
+      activeTocLabel = pair.link.textContent;
+      renderTocToggleLabel();
+    }
+
+    var mobileTocQuery = window.matchMedia ? window.matchMedia("(max-width: 860px)") : null;
+    var mobileTocTicking = false;
+
+    function syncMobileActiveToc() {
+      mobileTocTicking = false;
+
+      if (!mobileTocQuery || !mobileTocQuery.matches || !sidebar || sidebar.classList.contains("is-toc-open")) return;
+
+      var marker = sidebar.classList.contains("is-toc-stuck") && sidebarInner
+        ? Math.ceil(sidebarInner.getBoundingClientRect().bottom)
+        : 0;
+      var activePair = links[0];
+
+      links.forEach(function (pair) {
+        if (pair.heading.getBoundingClientRect().top <= marker) {
+          activePair = pair;
+        }
+      });
+
+      setActiveTocPair(activePair);
+    }
+
+    function requestMobileActiveTocSync() {
+      if (mobileTocTicking) return;
+      mobileTocTicking = true;
+      window.requestAnimationFrame(syncMobileActiveToc);
+    }
+
+    window.addEventListener("scroll", requestMobileActiveTocSync, { passive: true });
+    window.addEventListener("resize", requestMobileActiveTocSync);
+
+    if (mobileTocQuery) {
+      if (mobileTocQuery.addEventListener) {
+        mobileTocQuery.addEventListener("change", requestMobileActiveTocSync);
+      } else if (mobileTocQuery.addListener) {
+        mobileTocQuery.addListener(requestMobileActiveTocSync);
+      }
+    }
+
+    requestMobileActiveTocSync();
+
     if (!("IntersectionObserver" in window)) return;
 
     var observer = new IntersectionObserver(
@@ -634,15 +715,10 @@ layout: default
             return pair.heading === entry.target;
           });
 
-          if (!matched) return;
+          if (!matched || (mobileTocQuery && mobileTocQuery.matches)) return;
 
           if (entry.isIntersecting) {
-            links.forEach(function (pair) {
-              pair.link.classList.remove("is-active");
-            });
-            matched.link.classList.add("is-active");
-            activeTocLabel = matched.link.textContent;
-            renderTocToggleLabel();
+            setActiveTocPair(matched);
           }
         });
       },
@@ -704,20 +780,3 @@ layout: default
     scheduleMermaidRender();
   })();
 </script>
-{% if page.math %}
-<script>
-  window.MathJax = {
-    tex: {
-      inlineMath: [['$', '$'], ['\\(', '\\)']],
-      displayMath: [['$$', '$$'], ['\\[', '\\]']]
-    },
-    svg: {
-      fontCache: 'global'
-    }
-  };
-</script>
-<script
-  id="MathJax-script"
-  async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
-{% endif %}
