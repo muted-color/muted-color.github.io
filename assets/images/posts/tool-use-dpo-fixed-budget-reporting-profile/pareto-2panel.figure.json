@@ -1,7 +1,7 @@
 {
   "layout": "custom_measured_two_panel",
-  "title": "Checkpoint profiles under a fixed DPO budget",
-  "description": "Eight recipe-checkpoint profiles compare intended-metric deltas with IFEval prompt-strict deltas from the same SFT baseline. Structural and behavior sources use solid blue and dashed neutral paths; clean and unfiltered conditions use circle and square markers; arrows run from step50 to final.",
+  "title": "Metric trade-offs under a fixed DPO budget",
+  "description": "Eight evaluation profiles compare intended-metric deltas with IFEval prompt-strict deltas from the same SFT baseline. Function-call structure and call-decision sources use solid blue and dashed neutral paths; quality-gated and ungated control conditions use circle and square markers; arrows run from the earlier to the final checkpoint.",
   "scale": "measured",
   "palette": "editorial",
   "canvas": {
@@ -9,27 +9,22 @@
     "height": 675
   },
   "source": {
-    "description": "Exact values come from the released Stage 4 Pareto aggregate. Domains and percentage-point conversion follow the paper figure build script.",
-    "source_root": "Resolve local relative paths from front matter lab_path: experiment-lab/projects/tool-use-dpo-negative-sources.",
-    "data_file": "repo/artifacts/stage4/pareto/pareto_points.csv",
-    "data_url": "https://github.com/muted-color/tool-use-dpo-fixed-budget-report/blob/3f4799ed830e6807d50f0e4b1457b346b2bbe37a/artifacts/stage4/pareto/pareto_points.csv",
-    "mapping_file": "repo/artifacts/stage4/pareto/pareto_point_mapping.csv",
-    "mapping_url": "https://github.com/muted-color/tool-use-dpo-fixed-budget-report/blob/3f4799ed830e6807d50f0e4b1457b346b2bbe37a/artifacts/stage4/pareto/pareto_point_mapping.csv",
-    "domain_source": "paper/scripts/build_figures.py under the same lab_path source root"
+    "description": "Exact values come from the public Pareto aggregates released with the report; domains and percentage-point conversion follow the accompanying figure specification.",
+    "artifact_repository": "https://github.com/muted-color/tool-use-dpo-fixed-budget-report"
   },
   "encodings": {
     "x": "IFEval prompt-strict delta vs SFT baseline, percentage points",
     "left_y": "BFCL core delta vs SFT baseline, percentage points",
     "right_y": "When2Call macro F1 delta vs SFT baseline, percentage points",
-    "source": {
-      "structural": "cool-blue solid path",
-      "behavior": "neutral-gray dashed path"
+    "recipe": {
+      "function_call_structure": "Function-call structure: cool-blue solid path",
+      "call_decision": "Call-decision: neutral-gray dashed path"
     },
-    "cleanliness": {
-      "clean": "circle",
-      "unfiltered": "square"
+    "quality_gate": {
+      "applied": "Quality-gated: circle marker",
+      "ungated_control": "Ungated control: square marker"
     },
-    "checkpoint_direction": "arrow from step50 to final"
+    "checkpoint_direction": "Arrow from the earlier to the final checkpoint"
   },
   "domains": {
     "x": [-12.5, 0.8],
@@ -58,13 +53,13 @@
     "mobile_scroll_min_width": 720
   },
   "points": [
-    {"source": "structural", "cleanliness": "clean", "checkpoint": "step50", "ifeval_prompt_strict_pp": -6.25, "bfcl_core_pp": 4.6666666666666745, "when2call_macro_f1_pp": -0.4462176193548217},
-    {"source": "structural", "cleanliness": "clean", "checkpoint": "final", "ifeval_prompt_strict_pp": -11.458333333333326, "bfcl_core_pp": 2.6666666666666727, "when2call_macro_f1_pp": -0.15412995848747557},
-    {"source": "behavior", "cleanliness": "clean", "checkpoint": "step50", "ifeval_prompt_strict_pp": -5.208333333333326, "bfcl_core_pp": 1.333333333333342, "when2call_macro_f1_pp": 4.8644148612692895},
-    {"source": "behavior", "cleanliness": "clean", "checkpoint": "final", "ifeval_prompt_strict_pp": -7.291666666666663, "bfcl_core_pp": -0.6666666666666599, "when2call_macro_f1_pp": 4.678351503607042},
-    {"source": "structural", "cleanliness": "unfiltered", "checkpoint": "step50", "ifeval_prompt_strict_pp": -6.25, "bfcl_core_pp": 4.333333333333334, "when2call_macro_f1_pp": 0.10395137623619433},
-    {"source": "structural", "cleanliness": "unfiltered", "checkpoint": "final", "ifeval_prompt_strict_pp": -10.416666666666663, "bfcl_core_pp": 3.0000000000000027, "when2call_macro_f1_pp": 0.5766315482601481},
-    {"source": "behavior", "cleanliness": "unfiltered", "checkpoint": "step50", "ifeval_prompt_strict_pp": -5.208333333333326, "bfcl_core_pp": 1.666666666666672, "when2call_macro_f1_pp": 4.310624975327554},
-    {"source": "behavior", "cleanliness": "unfiltered", "checkpoint": "final", "ifeval_prompt_strict_pp": -7.291666666666663, "bfcl_core_pp": -0.3333333333333299, "when2call_macro_f1_pp": 4.816431814101146}
+    {"recipe": "function_call_structure", "quality_gate": "applied", "checkpoint": "50_step", "ifeval_prompt_strict_pp": -6.25, "bfcl_core_pp": 4.6666666666666745, "when2call_macro_f1_pp": -0.4462176193548217},
+    {"recipe": "function_call_structure", "quality_gate": "applied", "checkpoint": "final", "ifeval_prompt_strict_pp": -11.458333333333326, "bfcl_core_pp": 2.6666666666666727, "when2call_macro_f1_pp": -0.15412995848747557},
+    {"recipe": "call_decision", "quality_gate": "applied", "checkpoint": "50_step", "ifeval_prompt_strict_pp": -5.208333333333326, "bfcl_core_pp": 1.333333333333342, "when2call_macro_f1_pp": 4.8644148612692895},
+    {"recipe": "call_decision", "quality_gate": "applied", "checkpoint": "final", "ifeval_prompt_strict_pp": -7.291666666666663, "bfcl_core_pp": -0.6666666666666599, "when2call_macro_f1_pp": 4.678351503607042},
+    {"recipe": "function_call_structure", "quality_gate": "ungated_control", "checkpoint": "50_step", "ifeval_prompt_strict_pp": -6.25, "bfcl_core_pp": 4.333333333333334, "when2call_macro_f1_pp": 0.10395137623619433},
+    {"recipe": "function_call_structure", "quality_gate": "ungated_control", "checkpoint": "final", "ifeval_prompt_strict_pp": -10.416666666666663, "bfcl_core_pp": 3.0000000000000027, "when2call_macro_f1_pp": 0.5766315482601481},
+    {"recipe": "call_decision", "quality_gate": "ungated_control", "checkpoint": "50_step", "ifeval_prompt_strict_pp": -5.208333333333326, "bfcl_core_pp": 1.666666666666672, "when2call_macro_f1_pp": 4.310624975327554},
+    {"recipe": "call_decision", "quality_gate": "ungated_control", "checkpoint": "final", "ifeval_prompt_strict_pp": -7.291666666666663, "bfcl_core_pp": -0.3333333333333299, "when2call_macro_f1_pp": 4.816431814101146}
   ]
 }
