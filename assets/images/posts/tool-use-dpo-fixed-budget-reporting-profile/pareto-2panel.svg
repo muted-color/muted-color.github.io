@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="pareto-title pareto-desc" data-renderer="editorial-systems-figure-v2" data-theme="paper" data-palette="editorial">
-  <title id="pareto-title">Checkpoint movement across intended metrics and the IFEval guardrail</title>
-  <desc id="pareto-desc">Two measured scatter plots show percentage-point deltas from the same SFT baseline. The horizontal axis is IFEval prompt-strict delta. The left vertical axis is BFCL core delta and the right vertical axis is When2Call macro F1 delta. Blue solid paths represent structural negatives and gray dashed paths represent behavior negatives. Circles mark clean conditions, squares mark unfiltered controls, and arrowheads point from step50 to the final checkpoint.</desc>
+  <title id="pareto-title">Metric trade-offs under a fixed DPO budget</title>
+  <desc id="pareto-desc">Two measured scatter plots show percentage-point deltas from the same SFT baseline. The horizontal axis is IFEval prompt-strict delta. The left vertical axis is BFCL core delta and the right vertical axis is When2Call macro F1 delta. Blue solid paths represent function-call structure examples and gray dashed paths represent call-decision examples. Circles mark quality-gated conditions, squares mark ungated controls, and arrowheads point from the earlier to the final checkpoint.</desc>
   <defs>
     <marker id="arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
       <path d="M 0 0 L 10 5 L 0 10 Z" fill="#5E7FD8"/>
@@ -11,21 +11,21 @@
   </defs>
 
   <rect x="0" y="0" width="1200" height="675" fill="#FFFFFF"/>
-  <text class="figure-title" x="72" y="64" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#11120F">Checkpoint profiles under a fixed DPO budget</text>
+  <text class="figure-title" x="72" y="64" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#11120F">Metric trade-offs under a fixed DPO budget</text>
 
   <!-- Legend: source uses color plus line style; filtering uses marker shape. -->
   <line x1="72" y1="103" x2="104" y2="103" stroke="#5E7FD8" stroke-width="2.5"/>
   <circle cx="88" cy="103" r="6" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="2"/>
-  <text class="series-label" x="114" y="109" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#11120F">Structural</text>
-  <line x1="238" y1="103" x2="270" y2="103" stroke="#686B66" stroke-width="2.5" stroke-dasharray="8 6"/>
-  <circle cx="254" cy="103" r="6" fill="#686B66" stroke="#FFFFFF" stroke-width="2"/>
-  <text class="series-label" x="280" y="109" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#11120F">Behavior</text>
-  <circle cx="410" cy="103" r="7" fill="#FFFFFF" stroke="#11120F" stroke-width="2"/>
-  <text class="series-label" x="428" y="109" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#11120F">Clean</text>
-  <rect x="526" y="96" width="14" height="14" fill="#FFFFFF" stroke="#11120F" stroke-width="2"/>
-  <text class="series-label" x="550" y="109" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#11120F">Unfiltered</text>
-  <line x1="678" y1="103" x2="724" y2="103" stroke="#11120F" stroke-width="2" marker-end="url(#arrow-gray)"/>
-  <text class="series-label" x="740" y="109" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#11120F">step50 to final</text>
+  <text class="series-label" x="114" y="109" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#11120F">Function-call structure</text>
+  <line x1="296" y1="103" x2="328" y2="103" stroke="#686B66" stroke-width="2.5" stroke-dasharray="8 6"/>
+  <circle cx="312" cy="103" r="6" fill="#686B66" stroke="#FFFFFF" stroke-width="2"/>
+  <text class="series-label" x="338" y="109" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#11120F">Call-decision</text>
+  <circle cx="464" cy="103" r="7" fill="#FFFFFF" stroke="#11120F" stroke-width="2"/>
+  <text class="series-label" x="482" y="109" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#11120F">Quality-gated</text>
+  <rect x="605" y="96" width="14" height="14" fill="#FFFFFF" stroke="#11120F" stroke-width="2"/>
+  <text class="series-label" x="629" y="109" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#11120F">Ungated control</text>
+  <line x1="772" y1="103" x2="818" y2="103" stroke="#11120F" stroke-width="2" marker-end="url(#arrow-gray)"/>
+  <text class="series-label" x="834" y="109" font-family="Arial, sans-serif" font-size="17" font-weight="400" fill="#11120F">Earlier to final checkpoint</text>
 
   <text class="panel-title" x="92" y="137" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#11120F">A. BFCL core vs guardrail regression</text>
   <text class="panel-title" x="684" y="137" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#11120F">B. When2Call macro F1 vs guardrail regression</text>
