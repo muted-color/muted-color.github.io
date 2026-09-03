@@ -1,7 +1,7 @@
 ---
 title: "Alignment Data Map: From Measurements to Preference-Pair Supervision"
 date: 2026-08-23 20:10:32 +0900
-last_modified_at: 2026-08-26 19:52:48 +0900
+last_modified_at: 2026-09-03 10:23:20 +0900
 lang: en
 categories: ["LLM ALIGNMENT"]
 tags: [llm, alignment, preference-data, data-selection, adm, simpo, ultrafeedback]
@@ -22,11 +22,7 @@ published: true
 publication_status: "published"
 ---
 
-Lee et al.'s Alignment Data Map (ADM) <a class="citation-ref" href="#ref-adm" aria-label="Reference 1">[1]</a> selects preference data by grouping instructions according to the mean and variance of alignment scores computed over their candidate responses. Whether these coordinates remain stable across reference answers and text-processing methods, and how instruction selection translates into the composition of the actual training pairs, require separate validation. This note traces 4,500 instructions from changes in coordinates and regions under different measurement conditions to the conversion of selected instructions into preference pairs used for training.
-
-ADM regions changed with the reference answer, long-text processing method, and cohort composition. Even with the same instruction quotas, expanding the selected instructions into response pairs produced different preference directions, score gaps, and repeated-exposure structures.
-
-> In this note, **quality** is the mean sentence-embedding similarity between candidate responses and the reference answer. It does not denote overall response quality or agreement with human preferences.
+Lee et al.'s Alignment Data Map (ADM) <a class="citation-ref" href="#ref-adm" aria-label="Reference 1">[1]</a> selects preference data by grouping instructions according to the mean and variance of alignment scores computed over their candidate responses. The ADM regions alone do not reveal how much these coordinates change across reference answers and text-processing methods, or how selected instructions materialize as training pairs. This note traces 4,500 instructions from changes in coordinates and regions under different measurement conditions to the conversion of selected instructions into preference pairs used for training.
 
 ## Summary
 
@@ -37,13 +33,19 @@ ADM regions changed with the reference answer, long-text processing method, and 
 
 ## Problem Setting
 
-ADM forms HighAvg, LowAvg, and HighVar regions from the mean and variation of candidate-level alignment scores. The use of mean and variation to characterize data follows Swayamdipta et al.'s Dataset Cartography <a class="citation-ref" href="#ref-dataset-cartography" aria-label="Reference 2">[2]</a>, while ADM applies this view to preference-data selection.
+ADM uses the mean and variation of candidate-level alignment scores to divide instructions into HighAvg, LowAvg, and HighVar regions. The original ADM study measured alignment scores with LLM-as-a-judge, reward-model, and reference-based approaches. It reported that training on only **the 33% of samples with high mean and low variability—the HighAvg region**—achieved alignment performance **comparable to or better than training on the full dataset** across MT-Bench, Evol-Instruct, and AlpacaEval <a class="citation-ref" href="#ref-adm" aria-label="Reference 1">[1]</a>.
 
-The original ADM study reported that the aggregate training-performance advantage of HighAvg selection persisted across maps built with LLM-as-a-judge, reward-model, and reference-based scoring <a class="citation-ref" href="#ref-adm" aria-label="Reference 1">[1]</a>. Rather than re-evaluating aggregate performance, this analysis examines **whether the coordinates and region of the same instruction remain stable across measurement conditions, and how instruction-level selection is transformed into actual training pairs**. Stability of aggregate performance and stability of individual-sample region assignments are distinct questions.
+Stable aggregate training performance, however, does not imply that the coordinates and region of the same instruction are themselves stable. This note separates two questions. First, **how well are an instruction's ADM coordinates and region preserved** when the reference answer or text-processing method changes? Second, **what training signal emerges** when instructions selected from each region are instantiated as preference pairs?
 
-Song's data-centric alignment pipeline <a class="citation-ref" href="#ref-data-centric-alignment" aria-label="Reference 3">[3]</a> separates alignment data construction into response synthesis, preference evaluation, and preference instantiation. The contribution here is not this pipeline view itself, but a quantitative case study of the transformation from ADM's reference-based measurement to actual SimPO preference pairs.
+The questions are connected, but **their units of analysis differ**. ADM selects instructions whereas preference optimization trains on chosen–rejected response pairs. A single instruction can produce multiple pairs with different score gaps and preference directions.
 
-Preference-pair score gaps and composition have been studied by Yang et al. <a class="citation-ref" href="#ref-pair-efficiency" aria-label="Reference 4">[4]</a>, Deng et al. <a class="citation-ref" href="#ref-preference-selection" aria-label="Reference 5">[5]</a>, and Xiao et al. <a class="citation-ref" href="#ref-sweet-spot" aria-label="Reference 6">[6]</a>, while Pan et al. analyzed the quality of chosen responses <a class="citation-ref" href="#ref-what-matters-dpo" aria-label="Reference 7">[7]</a>. This note does not evaluate the general superiority of a particular selection rule; it analyzes the response-pair-level training signal formed after instruction-level selection.
+This note therefore quantifies, in one experimental case, how ADM's reference-based measurement becomes actual SimPO preference pairs. The analysis concerns the response-pair-level training signal formed after instruction-level selection; it does not establish the general superiority of a selection rule or propose a new data-construction pipeline.
+
+## Related Work
+
+The use of mean and variation to characterize data follows Swayamdipta et al.'s Dataset Cartography <a class="citation-ref" href="#ref-dataset-cartography" aria-label="Reference 2">[2]</a>, while ADM applies the approach to preference-data selection. Song's data-centric alignment pipeline <a class="citation-ref" href="#ref-data-centric-alignment" aria-label="Reference 3">[3]</a> separates alignment data construction into response synthesis, preference evaluation, and preference instantiation. This distinction provides a framework for treating ADM measurement and the construction of actual preference pairs as separate stages.
+
+Preference-pair score gaps and composition have been studied by Yang et al. <a class="citation-ref" href="#ref-pair-efficiency" aria-label="Reference 4">[4]</a>, Deng et al. <a class="citation-ref" href="#ref-preference-selection" aria-label="Reference 5">[5]</a>, and Xiao et al. <a class="citation-ref" href="#ref-sweet-spot" aria-label="Reference 6">[6]</a>, while Pan et al. analyzed the quality of chosen responses <a class="citation-ref" href="#ref-what-matters-dpo" aria-label="Reference 7">[7]</a>. Rather than comparing new selection rules, this note focuses on the response-pair-level signal formed when instructions selected by ADM are instantiated as training pairs.
 
 ## Experimental Setup
 
@@ -52,6 +54,8 @@ Preference-pair score gaps and composition have been studied by Yang et al. <a c
 The measurement cohort contained 4,500 UltraFeedback instructions <a class="citation-ref" href="#ref-ultrafeedback" aria-label="Reference 8">[8]</a>, sampled with consideration of source dataset, task type, and instruction length, with 4 candidate responses per instruction. Reference answers were generated using <a href="https://huggingface.co/Qwen/Qwen3.5-122B-A10B"><code>Qwen3.5-122B-A10B</code></a> in non-thinking mode with temperature 0 and a maximum of 4,096 tokens.
 
 For each candidate response, cosine similarity to the reference answer was computed with the Sentence-BERT-family <a href="https://huggingface.co/sentence-transformers/all-mpnet-base-v2"><code>all-mpnet-base-v2</code></a> model <a class="citation-ref" href="#ref-sentence-bert" aria-label="Reference 9">[9]</a> <a class="citation-ref" href="#ref-mpnet" aria-label="Reference 10">[10]</a>. The prefix baseline used at most 384 tokens. For each instruction, the mean of the four similarities was defined as quality and their population variance as variability. Based on ranks within the full cohort, LowAvg, HighAvg, and HighVar were each assigned 1,500 instructions. A region therefore denotes a relative position within a particular reference-answer, scoring-method, and cohort configuration, not an absolute grade.
+
+> In this note, **quality** is the mean sentence-embedding similarity between candidate responses and the reference answer. It does not denote overall response quality or agreement with human preferences.
 
 The analysis of actual training pairs used a map recomputed with overlapping-window means and stratified by source and task type. This condition is not the same as the initial map partitioned directly over the full cohort.
 
@@ -223,6 +227,8 @@ Reproducing data selection and interpreting the scope of training results theref
 - The reference-answer comparison changed both the model and generation settings, and the 60-sample ranges summarize pairwise comparisons and repeated runs rather than confidence intervals. A complete measurement validation would apply multiple reference answers to the same 4,500 instructions and candidate responses, then compare long-text scoring methods against human judgments or task-answer-grounded annotations.
 - The shared 600 pairs formed a repeatedly used development set, and pair-level confidence intervals were not computed. The pipeline comparison lacked random-selection and full-data conditions, and every training result came from a single seed. Region-specific model selection and response-pair composition also varied, so the comparison does not isolate an ADM-region effect. A multi-seed comparison should change only response-pair direction while holding data composition, model, and training settings fixed.
 - Generalization to external data and downstream benchmarks was outside the evaluation scope.
+
+{% include related-research-note.html label="Next research note" aria_label="The follow-up research note on Alignment Data Map" title="Alignment Data Map: Timing of SimPO Boundary Crossings and Model-Specific Differences" description="A multi-seed trajectory analysis of when HighAvg and Random pairs cross policy-relative SimPO boundaries" image="/assets/images/posts/selected-preference-pairs-helped-earlier-not-uniformly/social-thumbnail.png" url="/research/2026/09/01/selected-preference-pairs-helped-earlier-not-uniformly/" %}
 
 ## Appendix: Main Metrics
 

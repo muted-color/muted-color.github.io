@@ -1215,6 +1215,101 @@ h6 {
   line-height: 1.25;
 }
 
+.research-body .related-research-note {
+  margin: 1.55rem 0 2.15rem;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.research-body .related-research-note__link {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem 0.15rem 1.05rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.research-body .related-research-note--with-image .related-research-note__link {
+  grid-template-columns: 6.25rem minmax(0, 1fr) auto;
+  gap: 1rem;
+}
+
+.research-body .related-research-note__thumbnail {
+  display: block;
+  width: 6.25rem;
+  aspect-ratio: 1200 / 627;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--surface-tint);
+}
+
+.research-body .related-research-note__thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.research-body .related-research-note__body,
+.research-body .related-research-note__eyebrow,
+.research-body .related-research-note__title,
+.research-body .related-research-note__description {
+  display: block;
+}
+
+.research-body .related-research-note__body {
+  min-width: 0;
+}
+
+.research-body .related-research-note__eyebrow {
+  margin-bottom: 0.28rem;
+  color: var(--muted);
+  font-family: "IBM Plex Mono", "SFMono-Regular", "JetBrains Mono", monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.075em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.research-body .related-research-note__title {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.42;
+  overflow-wrap: anywhere;
+  word-break: keep-all;
+}
+
+.research-body .related-research-note__description {
+  margin-top: 0.28rem;
+  color: var(--muted);
+  font-size: 0.84rem;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+  word-break: keep-all;
+}
+
+.research-body .related-research-note__arrow {
+  color: var(--accent-strong);
+  font-size: 1.15rem;
+  line-height: 1;
+  transition: transform 140ms ease;
+}
+
+.research-body .related-research-note__link:hover,
+.research-body .related-research-note__link:focus-visible {
+  color: var(--accent-strong);
+  text-decoration: none;
+  outline: none;
+}
+
+.research-body .related-research-note__link:hover .related-research-note__arrow,
+.research-body .related-research-note__link:focus-visible .related-research-note__arrow {
+  transform: translateX(0.2rem);
+}
+
 .research-body img {
   display: block;
   width: 100%;
@@ -3220,6 +3315,15 @@ hr {
 
   .research-body .model-mention-grid {
     grid-template-columns: 1fr;
+  }
+
+  .research-body .related-research-note--with-image .related-research-note__link {
+    grid-template-columns: 4.75rem minmax(0, 1fr) auto;
+    gap: 0.8rem;
+  }
+
+  .research-body .related-research-note__thumbnail {
+    width: 4.75rem;
   }
 
   .research-body h2,

@@ -8,6 +8,8 @@ lang: en
 categories: ["BIO ML"]
 tags: [openbind, affinity-prediction, structure-based-ai, ligand-baseline, benchmark-check, rdkit, ecfp]
 lab_path: "experiment-lab/projects/openbind-affinity-baseline-stress"
+featured: true
+home_rank: 1
 excerpt: "A reproducible benchmark audit comparing OpenBind prediction-score correlations with property baselines and ligand-only controls to examine the limits of structural-signal interpretation."
 description: "An audit of public OpenBind EV-A71 2A prediction scores against property baselines and ligand-only controls, examining why pKD correlation alone makes it difficult to identify an independent structural contribution and what further evaluation would be needed."
 permalink: /research/2026/05/10/openbind-affinity-baseline-audit/

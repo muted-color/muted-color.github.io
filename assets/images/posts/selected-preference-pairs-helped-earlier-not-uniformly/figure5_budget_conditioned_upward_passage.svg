@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="figure-title figure-desc">
+<title id="figure-title">Upward passage across the training budget</title>
+<desc id="figure-desc">State-and-headroom-standardized cumulative upward passage for HighAvg and Random at three evaluation checkpoints, with a descriptive matrix of checkpoint-grid-equivalent advantages by initial boundary-distance quartile.</desc>
+<style>text{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}.figure-title{font-size:24px;font-weight:700;fill:#11120F}.panel-title{font-size:18px;font-weight:600;fill:#11120F}.label,.series-label,.value-label{font-size:16px;font-weight:400;fill:#11120F}.axis-tick,.note{font-size:15px;font-weight:400;fill:#686B66}.value-label{font-variant-numeric:tabular-nums}.axis-x,.axis-y{stroke:#11120F;stroke-width:1.5}.zero-line{stroke:#11120F;stroke-width:2}.grid-line{stroke:#B8BBB5;stroke-width:1;opacity:.55}.data-mark{stroke-linecap:round;stroke-linejoin:round}</style>
+<rect width="1200" height="675" fill="#FFFFFF"/>
+<text x="72" y="64" class="figure-title" font-size="24" font-weight="700">Upward passage across the training budget</text>
+<rect x="72.00" y="104.00" width="330.00" height="290.00" fill="#EEF3FD" stroke="none" stroke-width="0" rx="10"/>
+<text x="237.00" y="132.00" class="panel-title emphasis" text-anchor="middle" font-size="18" font-weight="600">1.5B</text>
+<line x1="120.00" y1="343.84" x2="354.00" y2="343.84" stroke="#B8BBB5" stroke-width="1" class="grid-line"/>
+<text x="108.00" y="348.84" class="axis-tick" text-anchor="end" font-size="15" font-weight="400">10</text>
+<line x1="120.00" y1="293.03" x2="354.00" y2="293.03" stroke="#B8BBB5" stroke-width="1" class="grid-line"/>
+<text x="108.00" y="298.03" class="axis-tick" text-anchor="end" font-size="15" font-weight="400">20</text>
+<line x1="120.00" y1="242.22" x2="354.00" y2="242.22" stroke="#B8BBB5" stroke-width="1" class="grid-line"/>
+<text x="108.00" y="247.22" class="axis-tick" text-anchor="end" font-size="15" font-weight="400">30</text>
+<line x1="120.00" y1="191.41" x2="354.00" y2="191.41" stroke="#B8BBB5" stroke-width="1" class="grid-line"/>
+<text x="108.00" y="196.41" class="axis-tick" text-anchor="end" font-size="15" font-weight="400">40</text>
+<text x="120.00" y="382.00" class="axis-tick" text-anchor="middle" font-size="15" font-weight="400">92</text>
+<text x="237.00" y="382.00" class="axis-tick" text-anchor="middle" font-size="15" font-weight="400">184</text>
+<text x="354.00" y="382.00" class="axis-tick" text-anchor="middle" font-size="15" font-weight="400">276</text>
+<path d="M 120.00 302.47 L 237.00 207.28 L 354.00 193.28" fill="none" stroke="#5E7FD8" stroke-width="4" class="data-mark"/>
+<path d="M 120.00 335.22 L 237.00 254.41 L 354.00 237.92" fill="none" stroke="#686B66" stroke-width="3" class="data-mark" stroke-dasharray="10 7"/>
+<circle cx="120.00" cy="302.47" r="6" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="1.5" class="data-mark"/>
+<circle cx="237.00" cy="207.28" r="6" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="1.5" class="data-mark"/>
+<circle cx="354.00" cy="193.28" r="6" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="1.5" class="data-mark"/>
+<rect x="115.00" y="330.22" width="10.00" height="10.00" fill="#FFFFFF" stroke="#686B66" stroke-width="2" rx="1" class="data-mark"/>
+<rect x="232.00" y="249.41" width="10.00" height="10.00" fill="#FFFFFF" stroke="#686B66" stroke-width="2" rx="1" class="data-mark"/>
+<rect x="349.00" y="232.92" width="10.00" height="10.00" fill="#FFFFFF" stroke="#686B66" stroke-width="2" rx="1" class="data-mark"/>
+<text x="363.00" y="183.28" class="value-label" text-anchor="start" font-size="17" font-weight="400" fill="#5E7FD8">39.6%</text>
+<text x="363.00" y="259.92" class="value-label" text-anchor="start" font-size="17" font-weight="400" fill="#686B66">30.8%</text>
+<rect x="444.00" y="104.00" width="330.00" height="290.00" fill="#EEF3FD" stroke="none" stroke-width="0" rx="10"/>
+<text x="609.00" y="132.00" class="panel-title emphasis" text-anchor="middle" font-size="18" font-weight="600">3B</text>
+<line x1="492.00" y1="343.84" x2="726.00" y2="343.84" stroke="#B8BBB5" stroke-width="1" class="grid-line"/>
+<line x1="492.00" y1="293.03" x2="726.00" y2="293.03" stroke="#B8BBB5" stroke-width="1" class="grid-line"/>
+<line x1="492.00" y1="242.22" x2="726.00" y2="242.22" stroke="#B8BBB5" stroke-width="1" class="grid-line"/>
+<line x1="492.00" y1="191.41" x2="726.00" y2="191.41" stroke="#B8BBB5" stroke-width="1" class="grid-line"/>
+<text x="492.00" y="382.00" class="axis-tick" text-anchor="middle" font-size="15" font-weight="400">92</text>
+<text x="609.00" y="382.00" class="axis-tick" text-anchor="middle" font-size="15" font-weight="400">184</text>
+<text x="726.00" y="382.00" class="axis-tick" text-anchor="middle" font-size="15" font-weight="400">276</text>
+<path d="M 492.00 313.51 L 609.00 243.19 L 726.00 228.94" fill="none" stroke="#5E7FD8" stroke-width="4" class="data-mark"/>
+<path d="M 492.00 327.66 L 609.00 281.98 L 726.00 258.32" fill="none" stroke="#686B66" stroke-width="3" class="data-mark" stroke-dasharray="10 7"/>
+<circle cx="492.00" cy="313.51" r="6" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="1.5" class="data-mark"/>
+<circle cx="609.00" cy="243.19" r="6" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="1.5" class="data-mark"/>
+<circle cx="726.00" cy="228.94" r="6" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="1.5" class="data-mark"/>
+<rect x="487.00" y="322.66" width="10.00" height="10.00" fill="#FFFFFF" stroke="#686B66" stroke-width="2" rx="1" class="data-mark"/>
+<rect x="604.00" y="276.98" width="10.00" height="10.00" fill="#FFFFFF" stroke="#686B66" stroke-width="2" rx="1" class="data-mark"/>
+<rect x="721.00" y="253.32" width="10.00" height="10.00" fill="#FFFFFF" stroke="#686B66" stroke-width="2" rx="1" class="data-mark"/>
+<text x="735.00" y="218.94" class="value-label" text-anchor="start" font-size="17" font-weight="400" fill="#5E7FD8">32.6%</text>
+<text x="735.00" y="280.32" class="value-label" text-anchor="start" font-size="17" font-weight="400" fill="#686B66">26.8%</text>
+<rect x="816.00" y="104.00" width="330.00" height="290.00" fill="#EEF3FD" stroke="none" stroke-width="0" rx="10"/>
+<text x="981.00" y="132.00" class="panel-title emphasis" text-anchor="middle" font-size="18" font-weight="600">7B</text>
+<line x1="864.00" y1="343.84" x2="1098.00" y2="343.84" stroke="#B8BBB5" stroke-width="1" class="grid-line"/>
+<line x1="864.00" y1="293.03" x2="1098.00" y2="293.03" stroke="#B8BBB5" stroke-width="1" class="grid-line"/>
+<line x1="864.00" y1="242.22" x2="1098.00" y2="242.22" stroke="#B8BBB5" stroke-width="1" class="grid-line"/>
+<line x1="864.00" y1="191.41" x2="1098.00" y2="191.41" stroke="#B8BBB5" stroke-width="1" class="grid-line"/>
+<text x="864.00" y="382.00" class="axis-tick" text-anchor="middle" font-size="15" font-weight="400">92</text>
+<text x="981.00" y="382.00" class="axis-tick" text-anchor="middle" font-size="15" font-weight="400">184</text>
+<text x="1098.00" y="382.00" class="axis-tick" text-anchor="middle" font-size="15" font-weight="400">276</text>
+<path d="M 864.00 312.84 L 981.00 204.72 L 1098.00 183.22" fill="none" stroke="#5E7FD8" stroke-width="4" class="data-mark"/>
+<path d="M 864.00 324.32 L 981.00 281.49 L 1098.00 253.77" fill="none" stroke="#686B66" stroke-width="3" class="data-mark" stroke-dasharray="10 7"/>
+<circle cx="864.00" cy="312.84" r="6" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="1.5" class="data-mark"/>
+<circle cx="981.00" cy="204.72" r="6" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="1.5" class="data-mark"/>
+<circle cx="1098.00" cy="183.22" r="6" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="1.5" class="data-mark"/>
+<rect x="859.00" y="319.32" width="10.00" height="10.00" fill="#FFFFFF" stroke="#686B66" stroke-width="2" rx="1" class="data-mark"/>
+<rect x="976.00" y="276.49" width="10.00" height="10.00" fill="#FFFFFF" stroke="#686B66" stroke-width="2" rx="1" class="data-mark"/>
+<rect x="1093.00" y="248.77" width="10.00" height="10.00" fill="#FFFFFF" stroke="#686B66" stroke-width="2" rx="1" class="data-mark"/>
+<text x="1107.00" y="173.22" class="value-label" text-anchor="start" font-size="17" font-weight="400" fill="#5E7FD8">41.6%</text>
+<text x="1107.00" y="275.77" class="value-label" text-anchor="start" font-size="17" font-weight="400" fill="#686B66">27.7%</text>
+<text x="34.00" y="250.00" class="label" text-anchor="middle" font-size="16" font-weight="400" transform="rotate(-90 34.00 250.00)">Cumulative upward passage (%)</text>
+<line x1="822.00" y1="88.00" x2="852.00" y2="88.00" stroke="#5E7FD8" stroke-width="4"/>
+<circle cx="837.00" cy="88.00" r="5" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="1.5" class="data-mark"/>
+<text x="862.00" y="94.00" class="series-label" text-anchor="start" font-size="17" font-weight="400">HighAvg</text>
+<line x1="994.00" y1="88.00" x2="1024.00" y2="88.00" stroke="#686B66" stroke-width="3" stroke-dasharray="10 7"/>
+<rect x="1004.00" y="83.00" width="10.00" height="10.00" fill="#FFFFFF" stroke="#686B66" stroke-width="2" rx="1" class="data-mark"/>
+<text x="1034.00" y="94.00" class="series-label" text-anchor="start" font-size="17" font-weight="400">Random</text>
+<text x="72.00" y="440.00" class="panel-title emphasis" text-anchor="start" font-size="18" font-weight="600">Initial distance to the next boundary</text>
+<text x="501.00" y="458.00" class="label" text-anchor="middle" font-size="16" font-weight="400">Q1</text>
+<text x="679.00" y="458.00" class="label" text-anchor="middle" font-size="16" font-weight="400">Q2</text>
+<text x="857.00" y="458.00" class="label" text-anchor="middle" font-size="16" font-weight="400">Q3</text>
+<text x="1035.00" y="458.00" class="label" text-anchor="middle" font-size="16" font-weight="400">Q4</text>
+<text x="388.00" y="499.00" class="label" text-anchor="end" font-size="16" font-weight="400">1.5B</text>
+<rect x="414.00" y="472.00" width="174.00" height="41.00" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="2" rx="7" class="data-mark" opacity="0.462514"/>
+<text x="501.00" y="499.00" class="value-label" text-anchor="middle" font-size="17" font-weight="400" fill="#11120F">18.9</text>
+<rect x="592.00" y="472.00" width="174.00" height="41.00" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="2" rx="7" class="data-mark" opacity="0.970900"/>
+<text x="679.00" y="499.00" class="value-label" text-anchor="middle" font-size="17" font-weight="400" fill="#FFFFFF">34.3</text>
+<rect x="770.00" y="472.00" width="174.00" height="41.00" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="2" rx="7" class="data-mark" opacity="0.634837"/>
+<text x="857.00" y="499.00" class="value-label" text-anchor="middle" font-size="17" font-weight="400" fill="#FFFFFF">24.1</text>
+<rect x="948.00" y="472.00" width="174.00" height="41.00" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="2" rx="7" class="data-mark" opacity="0.279802"/>
+<text x="1035.00" y="499.00" class="value-label" text-anchor="middle" font-size="17" font-weight="400" fill="#11120F">13.3</text>
+<text x="388.00" y="544.00" class="label" text-anchor="end" font-size="16" font-weight="400">3B</text>
+<rect x="414.00" y="517.00" width="174.00" height="41.00" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="2" rx="7" class="data-mark" opacity="0.246218"/>
+<text x="501.00" y="544.00" class="value-label" text-anchor="middle" font-size="17" font-weight="400" fill="#11120F">12.3</text>
+<rect x="592.00" y="517.00" width="174.00" height="41.00" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="2" rx="7" class="data-mark" opacity="0.629301"/>
+<text x="679.00" y="544.00" class="value-label" text-anchor="middle" font-size="17" font-weight="400" fill="#FFFFFF">23.9</text>
+<rect x="770.00" y="517.00" width="174.00" height="41.00" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="2" rx="7" class="data-mark" opacity="0.366727"/>
+<text x="857.00" y="544.00" class="value-label" text-anchor="middle" font-size="17" font-weight="400" fill="#11120F">15.9</text>
+<rect x="948.00" y="517.00" width="174.00" height="41.00" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="2" rx="7" class="data-mark" opacity="0.120000"/>
+<text x="1035.00" y="544.00" class="value-label" text-anchor="middle" font-size="17" font-weight="400" fill="#11120F">8.4</text>
+<text x="388.00" y="589.00" class="label" text-anchor="end" font-size="16" font-weight="400">7B</text>
+<rect x="414.00" y="562.00" width="174.00" height="41.00" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="2" rx="7" class="data-mark" opacity="1.000000"/>
+<text x="501.00" y="589.00" class="value-label" text-anchor="middle" font-size="17" font-weight="400" fill="#FFFFFF">35.2</text>
+<rect x="592.00" y="562.00" width="174.00" height="41.00" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="2" rx="7" class="data-mark" opacity="0.874443"/>
+<text x="679.00" y="589.00" class="value-label" text-anchor="middle" font-size="17" font-weight="400" fill="#FFFFFF">31.4</text>
+<rect x="770.00" y="562.00" width="174.00" height="41.00" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="2" rx="7" class="data-mark" opacity="0.836343"/>
+<text x="857.00" y="589.00" class="value-label" text-anchor="middle" font-size="17" font-weight="400" fill="#FFFFFF">30.2</text>
+<rect x="948.00" y="562.00" width="174.00" height="41.00" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="2" rx="7" class="data-mark" opacity="0.424473"/>
+<text x="1035.00" y="589.00" class="value-label" text-anchor="middle" font-size="17" font-weight="400" fill="#11120F">17.7</text>
+<text x="768.00" y="639.00" class="axis-tick" text-anchor="middle" font-size="15" font-weight="400">Q1 nearest  -&gt;  Q4 farthest</text>
+</svg>

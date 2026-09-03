@@ -1,0 +1,24 @@
+{%- assign label = include.label | default: "관련 연구 노트" -%}
+{%- assign aria_label = include.aria_label | default: include.title -%}
+{%- assign note_class = "related-research-note" -%}
+{%- if include.image -%}
+  {%- assign note_class = note_class | append: " related-research-note--with-image" -%}
+{%- endif -%}
+
+<aside class="{{ note_class }}" aria-label="{{ aria_label }}">
+  <a class="related-research-note__link" href="{{ include.url | relative_url }}">
+    {%- if include.image -%}
+      <span class="related-research-note__thumbnail" aria-hidden="true">
+        <img src="{{ include.image | relative_url }}" alt="" loading="lazy" decoding="async">
+      </span>
+    {%- endif -%}
+    <span class="related-research-note__body">
+      <span class="related-research-note__eyebrow">{{ label }}</span>
+      <span class="related-research-note__title">{{ include.title }}</span>
+      {%- if include.description -%}
+        <span class="related-research-note__description">{{ include.description }}</span>
+      {%- endif -%}
+    </span>
+    <span class="related-research-note__arrow" aria-hidden="true">→</span>
+  </a>
+</aside>
