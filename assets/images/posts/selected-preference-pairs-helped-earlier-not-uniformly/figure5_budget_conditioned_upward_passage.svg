@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="figure-title figure-desc">
 <title id="figure-title">Upward passage across the training budget</title>
-<desc id="figure-desc">State-and-headroom-standardized cumulative upward passage for HighAvg and Random at three evaluation checkpoints, with a descriptive matrix of checkpoint-grid-equivalent advantages by initial boundary-distance quartile.</desc>
+<desc id="figure-desc">Base-state-and-boundary-distance-standardized cumulative upward passage for HighAvg and Random at three evaluation checkpoints, with a descriptive matrix of checkpoint-grid-equivalent advantages by initial boundary-distance quartile.</desc>
 <style>text{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}.figure-title{font-size:24px;font-weight:700;fill:#11120F}.panel-title{font-size:18px;font-weight:600;fill:#11120F}.label,.series-label,.value-label{font-size:16px;font-weight:400;fill:#11120F}.axis-tick,.note{font-size:15px;font-weight:400;fill:#686B66}.value-label{font-variant-numeric:tabular-nums}.axis-x,.axis-y{stroke:#11120F;stroke-width:1.5}.zero-line{stroke:#11120F;stroke-width:2}.grid-line{stroke:#B8BBB5;stroke-width:1;opacity:.55}.data-mark{stroke-linecap:round;stroke-linejoin:round}</style>
 <rect width="1200" height="675" fill="#FFFFFF"/>
 <text x="72" y="64" class="figure-title" font-size="24" font-weight="700">Upward passage across the training budget</text>

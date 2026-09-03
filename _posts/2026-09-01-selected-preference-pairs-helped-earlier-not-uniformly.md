@@ -2,7 +2,7 @@
 layout: post
 title: "Alignment Data Map: Timing of SimPO Boundary Crossings and Model-Specific Differences"
 date: 2026-09-01 17:00:00 +0900
-last_modified_at: 2026-09-03 21:39:48 +0900
+last_modified_at: 2026-09-03 21:57:40 +0900
 lang: en
 categories: ["LLM ALIGNMENT"]
 tags: [llm, alignment, preference-data, data-selection, adm, simpo, qwen]
@@ -32,9 +32,9 @@ The region that ADM selects and the learning signal that the selected data produ
 ## Summary
 
 - Separate instances of Qwen2.5-Instruct 1.5B, 3B, and 7B were trained under the HighAvg and Random conditions. All models were compared on the same 600-pair evaluation set, with no overlap with the training data.
-- At all three model sizes, **more pairs moved toward stronger preference for the chosen response under HighAvg.** The advantage did not grow consistently with model size: it was largest for 7B, while the final difference for 3B was smaller than for 1.5B.
-- HighAvg did not produce small improvements across all pairs. It increased the number of pairs that crossed a boundary into a higher state rather than merely increasing margins within the same state, and was also associated with some regressions.
-- The clearest difference was that **HighAvg produced boundary-crossing preference changes earlier within the same training budget.** Random caught up on some pairs later in training, narrowing the final gap.
+- At all three model sizes, **a larger proportion of pairs ended in an `R/U/T` state above their pre-training state under HighAvg than under Random.** The advantage did not grow consistently with model size: it was largest for 7B, while the final difference for 3B was smaller than for 1.5B.
+- The difference did not reflect small improvements across all pairs. Compared with Random, HighAvg had more movements across a boundary into a higher state, fewer positive margin changes confined to the same state, and some additional regressions.
+- The clearest difference was that **boundary-crossing upward passages were observed at earlier checkpoints under HighAvg within the same training budget.** Random caught up on some pairs later in training, narrowing the final gap.
 
 ## Problem Setting
 
@@ -66,11 +66,11 @@ This note compares models trained under a fixed ADM selection on a shared evalua
 
 ### Data Selection and Training Comparison
 
-In this note, **HighAvg** refers to preference pairs constructed from instructions selected from the high-mean, low-variance region of an ADM built with a fixed set of reference answers and a fixed scorer. **Random** refers to pairs sampled at random from the same source pool.
+In this note, **HighAvg** refers to preference pairs constructed from instructions selected from the high-mean, low-variance region of an ADM built with a fixed set of reference answers and a fixed scorer. **Random** refers to preference pairs constructed from instructions sampled at random from the same source pool.
 
 The two conditions were constructed from the same source pool while preserving source and task composition, and were trained with the same LoRA and SimPO recipe. The training models were the official Qwen2.5-Instruct [1.5B](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct), [3B](https://huggingface.co/Qwen/Qwen2.5-3B-Instruct), and [7B](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct) checkpoints. Three runs with different random seeds were conducted at each size. To match training exposure rather than dataset size, both conditions were fixed at 276 optimizer updates, equivalent to approximately 3 epochs.
 
-A **shared evaluation set** of 600 pairs with no prompt or pair overlap with the training data was evaluated repeatedly at the base policy and at checkpoints at steps 92, 184, and 276. Keeping the same pairs made it possible to track not only endpoint aggregates but also the state into which each pair moved during training. Overall trends were compared over three seeds, while a single seed was used for the detailed transition decomposition. These were fixed development data used for the follow-up analysis, not a new blind test.
+A **shared evaluation set** of 600 pairs with no prompt or pair overlap with the training data was evaluated repeatedly at the base policy and at checkpoints at steps 92, 184, and 276. Keeping the same pairs made it possible to track not only endpoint aggregates but also the state into which each pair moved during training. This was a fixed development evaluation set used for the follow-up analysis, not a new blind test.
 
 ### SimPO Margin and State Trajectory
 
@@ -86,7 +86,7 @@ $$
 \frac{\log \pi(y_l\mid x)}{|y_l|}.
 $$
 
-Meng et al.'s SimPO <a class="citation-ref" href="#ref-simpo" aria-label="Reference 9">[9]</a> trains $β\Delta_{\pi}$ to exceed the target margin $γ$. With $β=2$ and $γ=1$ in this setup, the target boundary is $\Delta=0.5$. Each pair was therefore assigned to one of three states:
+Meng et al.'s SimPO <a class="citation-ref" href="#ref-simpo" aria-label="Reference 9">[9]</a> trains $\beta\Delta_{\pi}$ to exceed the target margin $\gamma$. With $\beta=2$ and $\gamma=1$ in this setup, the target boundary is $\Delta=0.5$. Each pair was therefore assigned to one of three states:
 
 $$
 R:\Delta\le 0,
@@ -111,7 +111,7 @@ Under this state definition, a pair for which the policy strongly prefers the re
 
 The **first observed upward passage** is the first evaluation checkpoint at which a state higher than the pre-training state is observed. **State-standardized upward movement** is the HighAvg-minus-Random difference in the proportion of pairs whose state at a given checkpoint is higher than at base, averaged over base-state-specific differences under a shared `R/U/T` distribution.
 
-The model-size comparison reports observations from the Qwen2.5-Instruct 1.5B, 3B, and 7B family. These official checkpoints differ in training conditions and post-training outcomes as well as parameter count; this is not a controlled experiment in which only parameter count changes.
+The model-size comparison reports observations from three official Qwen2.5-Instruct variants: 1.5B, 3B, and 7B. These model variants differ in training conditions and post-training outcomes as well as parameter count; this is not a controlled experiment in which only parameter count changes.
 
 ## Results
 
@@ -121,11 +121,11 @@ At step 276, HighAvg showed higher reward accuracy, policy margin, final upward 
 
 The effect size, however, did not follow the hypothesized monotonic order. After standardizing to a shared initial-state composition, the final HighAvg-minus-Random upward-movement differences were `+5.64 pp` for 1.5B, `+4.27 pp` for 3B, and `+8.06 pp` for 7B.
 
-The checkpoint trajectories in Figure 2 show that the smaller effect for 3B than 1.5B at step 276 did not hold throughout training. For both 3B and 7B, the HighAvg-minus-Random difference peaked at step 184 and then declined at the final checkpoint. Across the three 3B seeds, the difference likewise grew during steps `92→184` and shrank during steps `184→276`.
+The checkpoint trajectories in Figure 2 show that the smaller effect for 3B than 1.5B at step 276 did not hold throughout training. For both 3B and 7B, the mean HighAvg-minus-Random difference peaked at step 184 and then declined at the final checkpoint. Across the three 3B seeds, the difference likewise grew during steps `92→184` and shrank during steps `184→276`.
 
 <figure class="media-figure media-figure--wide-visual">
   <img src="/assets/images/posts/selected-preference-pairs-helped-earlier-not-uniformly/figure2_scale_and_checkpoint_timing.svg" alt="State-standardized HighAvg-minus-Random upward-movement differences at optimizer steps 92, 184, and 276. Qwen2.5-Instruct 1.5B uses gray circles and solid lines, 3B uses blue squares and dashed lines, and 7B uses black diamonds and dotted lines. Thin lines show seed trajectories and thick lines show means.">
-  <figcaption><strong>Figure 2.</strong> State-standardized HighAvg-minus-Random upward movement by model size and evaluation checkpoint. Gray circles denote 1.5B, blue squares 3B, and black diamonds 7B. Thin lines show individual seed trajectories and thick lines show their means. The final difference was smallest for 3B and largest for 7B, while both 3B and 7B peaked at step 184.</figcaption>
+  <figcaption><strong>Figure 2.</strong> State-standardized HighAvg-minus-Random upward movement by model size and evaluation checkpoint. Gray circles denote 1.5B, blue squares 3B, and black diamonds 7B. Thin lines show individual seed trajectories and thick lines show their means. The mean final difference was smallest for 3B and largest for 7B; the mean differences for 3B and 7B both peaked at step 184.</figcaption>
 </figure>
 
 The HighAvg effect did not increase consistently with model size, and it varied with evaluation checkpoint within the same model. The initial `R/U/T` state of each pair and its distance to the next boundary therefore need to be considered alongside model size.
@@ -134,7 +134,7 @@ The HighAvg effect did not increase consistently with model size, and it varied 
 
 Reward accuracy is based only on whether $\Delta>0$. Correction of a reversed preference, crossing of the target margin, within-state margin changes, and regression across either boundary are therefore combined into one endpoint value.
 
-A detailed decomposition of same-pair training trajectories showed that HighAvg did not produce slightly larger margin gains for every pair. At all three model sizes, fewer pairs stayed in the same state throughout training, while more pairs ended in a higher state without any downward transition or reached the target state by step 276. The changes were generally larger for 1.5B and 7B and smaller for 3B.
+A detailed decomposition of same-pair training trajectories showed that HighAvg did not simply produce slightly larger margin gains across all pairs. At all three model sizes, fewer pairs stayed in the same state throughout training, while more pairs ended in a higher state without any downward transition or reached the target state by step 276. The changes were generally larger for 1.5B and 7B and smaller for 3B.
 
 Not every movement was upward, as Figure 3 shows. At all three model sizes, the proportion of pairs that experienced at least one downward transition during training was also approximately `2 pp` higher under HighAvg than Random. HighAvg was associated with state changes in more pairs, including some regressions.
 
@@ -142,27 +142,27 @@ At the pair level on the shared evaluation set, the difference between HighAvg a
 
 <figure class="media-figure media-figure--wide-visual">
   <img src="/assets/images/posts/selected-preference-pairs-helped-earlier-not-uniformly/figure3_transition_redistribution.svg" alt="Diverging bars comparing HighAvg-minus-Random differences for no state change, upward progress, target reach, and downward transition across 1.5B, 3B, and 7B.">
-  <figcaption><strong>Figure 3.</strong> HighAvg-minus-Random transition composition. HighAvg reduced the number of pairs that remained in the same state and increased upward progress without a downward move and target reach, while also producing some downward movement. Whiskers show pair-cluster bootstrap 95% intervals. Target-reach rates exclude pairs already in <code>T</code> at base; this detailed decomposition uses a single seed.</figcaption>
+  <figcaption><strong>Figure 3.</strong> HighAvg-minus-Random transition composition. Compared with Random, HighAvg had fewer pairs that remained in the same state, more pairs showing upward progress without a downward move or reaching the target, and slightly more pairs with downward movement. Whiskers show pair-cluster bootstrap 95% intervals. Target-reach rates exclude pairs already in <code>T</code> at base.</figcaption>
 </figure>
 
 ### Reference Score and Distance to the Next Boundary
 
 One hypothesis for the model-size differences is that the chosen and rejected responses in pairs derived from HighAvg-selected instructions are difficult to distinguish, producing subtle learning signals. The absolute **reference score gap** between the chosen and rejected responses is an auxiliary measure of this ambiguity: a larger gap indicates a clearer distinction under the reference scorer.
 
-For each pair eligible for upward passage, **Random first-passage frequency** was the fraction of the three Random runs in which an upward passage was observed by step 276. In Figure 4, its Spearman correlations with the reference score gap were small, at `ρ=.070–.124`. Instruction-level ADM mean, variance, and score range were also nearly uncorrelated with passage within 276 updates.
+For each pair whose base state was `R` or `U`, **Random first-passage frequency** was the fraction of the three Random runs in which an upward passage was observed by step 276. In Figure 4, its Spearman correlations with the reference score gap were small, at `ρ=.070–.124`. Instruction-level ADM mean, variance, and score range were also nearly uncorrelated with passage within 276 updates.
 
 The distance from the pre-training policy to the next objective boundary showed a stronger association, with correlations between `ρ=−.469` and `−.443`. The farther away the next boundary was, the less likely upward passage was within 276 updates.
 
 <figure class="media-figure media-figure--wide-visual">
   <img src="/assets/images/posts/selected-preference-pairs-helped-earlier-not-uniformly/figure4_reference_gap_vs_policy_headroom.svg" alt="Points and 95% intervals on a shared Spearman-correlation axis compare Random first-passage frequency across three seeds with the reference score gap and the pre-training policy's distance to the next boundary for 1.5B, 3B, and 7B.">
-  <figcaption><strong>Figure 4.</strong> Spearman correlations between Random first-passage frequency across the three seeds and either the reference score gap or the pre-training policy's distance to the next boundary. Numbers at right give exact Spearman <span aria-label="rho">ρ</span> values; points and whiskers show estimates and pair-cluster bootstrap 95% intervals. The correlations for the reference score gap were close to zero, ranging from <code>+.070</code> to <code>+.124</code>, while distance to the next boundary showed a consistent negative correlation of <code>−.469–−.443</code>. A more distant boundary was therefore associated with a lower likelihood of upward passage within the limited update budget.</figcaption>
+  <figcaption><strong>Figure 4.</strong> Spearman correlations of Random first-passage frequency with the reference score gap and the pre-training policy's distance to the next boundary. Numbers at right give exact Spearman <span aria-label="rho">ρ</span> values; whiskers show pair-cluster bootstrap 95% intervals. Reference score gap had only small correlations of <code>+.070–+.124</code>, whereas next-boundary distance had consistently negative correlations of <code>−.469–−.443</code>.</figcaption>
 </figure>
 
 The two measurements answer different questions. ADM uses a fixed reference measurement to define data regions and select instructions. The pre-training policy's distance to the next boundary describes how far a selected pair is from its next state. In these results, a pair's observed trajectory varied not only with data properties, but also with how well the policy distinguished that pair at the start of training and with the update window over which the change was measured.
 
 ### Timing of Upward Passage
 
-For pairs whose base state was `R` or `U`, the analysis compared the first checkpoint at which each pair occupied a state above its base state. After direct standardization to a common distribution over pre-training state and within-state quartiles of distance to the next boundary, the HighAvg-minus-Random difference in cumulative upward passage was positive from step 92 and was generally largest at step 184 (Table 1).
+For pairs whose base state was `R` or `U`, the analysis compared the first checkpoint at which each pair occupied a state above its base state. The comparison was directly standardized to a common distribution over pre-training state and within-state quartiles of distance to the next boundary. The resulting HighAvg-minus-Random difference in cumulative upward passage was positive from step 92 and was generally largest at step 184 (Table 1).
 
 <figure class="table-figure table-figure--metrics">
   <div class="table-shell">
@@ -197,25 +197,25 @@ For pairs whose base state was `R` or `U`, the analysis compared the first check
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 1.</strong> HighAvg-minus-Random differences in cumulative upward passage after direct standardization over base state and within-state quartiles of distance to the next boundary. All nine pair-cluster bootstrap 95% intervals across three models and three checkpoints were above zero.</figcaption>
+  <figcaption><strong>Table 1.</strong> HighAvg-minus-Random differences in cumulative upward passage after direct standardization across eight base-state × boundary-distance-quartile strata. Positive values indicate more cumulative upward passage under HighAvg. All nine pair-cluster bootstrap 95% intervals were above zero.</figcaption>
 </figure>
 
-The gap narrowed after step 184, primarily because Random later crossed boundaries that HighAvg had crossed earlier. Among the 63 base-`U` pair-by-seed trajectories for which HighAvg had reached `T` while Random remained in `U` at step 184, 61 remained in `T` under HighAvg at step 276, while Random had reached `T` in 35. The final gap narrowed because of Random's later catch-up rather than a broad retreat under HighAvg. Figure 5 shows both cumulative passage and the difference across distance-to-next-boundary bins.
+The gap narrowed after step 184, primarily because Random later crossed boundaries that HighAvg had crossed earlier. For 3B, 63 base-`U` pair-by-seed trajectories had reached `T` under HighAvg at step 184 while remaining in `U` under Random. By step 276, 61 of these remained in `T` under HighAvg, whereas 35 had reached `T` under Random. The final gap narrowed because of Random's later catch-up rather than a broad retreat under HighAvg. Figure 5 shows both cumulative passage and the difference across distance-to-next-boundary bins.
 
 <figure class="media-figure media-figure--wide-visual">
   <img src="/assets/images/posts/selected-preference-pairs-helped-earlier-not-uniformly/figure5_budget_conditioned_upward_passage.svg" alt="Cumulative upward-passage curves for HighAvg and Random on 1.5B, 3B, and 7B, with a checkpoint-grid advantage heatmap by quartile of initial distance to the next boundary.">
-  <figcaption><strong>Figure 5.</strong> The upper panel shows cumulative upward passage after direct standardization over base state and within-state quartiles of distance to the next boundary. Values in the lower panel summarize quartile-specific cumulative-passage differences over the 92-step evaluation intervals; larger values indicate a larger HighAvg advantage in cumulative upward passage over time. They are not optimizer updates actually saved. Q1 is closest to the boundary and Q4 farthest; Q4 was weakest for every model.</figcaption>
+  <figcaption><strong>Figure 5.</strong> The upper panel shows cumulative upward passage standardized across eight base-state × boundary-distance-quartile strata. The lower panel summarizes quartile-specific differences over the 92-step evaluation intervals; larger values indicate a larger cumulative HighAvg advantage over time, not optimizer updates saved. Q1 is closest to the boundary and Q4 farthest; Q4 was weakest for every model.</figcaption>
 </figure>
 
-The largest effect did not occur among pairs farthest from the boundary. The HighAvg difference was concentrated in distance ranges from which the pre-training policy could reach the next state within the observation window. The effective distance range was wider for the 7B policy than for the 1.5B and 3B policies, but three official checkpoints do not establish a monotonic model-size effect.
+The largest effect did not occur among pairs farthest from the boundary. The HighAvg difference was concentrated in distance ranges from which the pre-training policy could reach the next state within the observation window. The effective distance range was wider for the 7B policy than for the 1.5B and 3B policies, but these three model variants do not establish a monotonic model-size effect.
 
 Here, **earlier** means that upward passage was observed at an earlier evaluation checkpoint within the same 276-update window. Because checkpoints were evaluated only at steps 92, 184, and 276, the exact optimizer step at which an individual pair crossed a boundary is unknown.
 
 ### Supporting Evidence from Training Metrics
 
-In seed 42, increases in training accuracy and training reward margin from epochs 1 to 3 were larger under HighAvg than Random for all three models. The change in SimPO loss also favored HighAvg for 1.5B and 7B, while the two conditions were nearly equal for 3B. Exact values by model are reported in Appendix Table 1.
+From epochs 1 to 3, increases in training accuracy and training reward margin were larger under HighAvg than Random for all three models. The change in SimPO loss also favored HighAvg for 1.5B and 7B, while the two conditions were nearly equal for 3B. Exact values and the analysis scope are reported in Appendix Table 1.
 
-The 3B model nevertheless showed differences in the training metrics even though its final transition difference was the smallest. These metrics were measured on different training datasets and do not substitute for trajectories on the shared evaluation set; they serve only as supporting evidence of optimization-related differences under HighAvg at all three model sizes.
+The 3B model nevertheless showed differences in the training metrics even though its final upward-movement difference was the smallest. These metrics were measured on different training datasets and do not substitute for trajectories on the shared evaluation set; they serve only as supporting evidence of optimization-related differences between HighAvg and Random at all three model sizes.
 
 ## Conclusion
 
@@ -239,7 +239,7 @@ $$
 \text{observed training effect}.
 $$
 
-Model capacity may still matter, but the three checkpoints differed in their initial `R/U/T` composition and distances to the next boundary; those differences more directly described the observed model-specific patterns. This interpretation is consistent with the non-monotonic result—positive HighAvg effects for all three models, larger for 1.5B than 3B, and largest for 7B—and with changes over training. It is also consistent with the effect growing midway through training and then declining as Random caught up later.
+Model capacity may still matter. However, the three model variants also differed in their initial `R/U/T` composition and distances to the next boundary, and those differences more directly described the observed model-specific patterns. This interpretation is consistent with the non-monotonic result—positive HighAvg effects for all three models, larger for 1.5B than 3B, and largest for 7B—and with changes over training. It is also consistent with the effect growing midway through training and then declining as Random caught up later.
 
 A fixed ADM data map identifies the measurement region from which data were selected. The policy margin at each checkpoint shows which objective boundary a pair is currently close to crossing. Connecting these two pieces of information through the training trajectory of the same pair yields the central result of this comparison:
 
@@ -250,7 +250,7 @@ Understanding the learning effect of selected preference data required consideri
 ## Limitations
 
 - The shared evaluation set was development data held fixed for the follow-up analysis; whether the same transition pattern persists on a new external evaluation set was not tested.
-- The three official checkpoints differ in training conditions and post-training outcomes as well as parameter count, so the observed differences cannot be interpreted as a pure model-size effect.
+- The three official model variants differ in training conditions and post-training outcomes as well as parameter count, so the observed differences cannot be interpreted as a pure model-size effect.
 - Upward passage was observed only at steps 92, 184, and 276, so the exact optimizer step at which each pair crossed a boundary is unknown.
 
 ## Appendix
@@ -299,7 +299,7 @@ Understanding the learning effect of selected preference data required consideri
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Appendix Table 1.</strong> Seed-42 HighAvg-minus-Random differences in training-metric changes from epochs 1 to 3. These are in-distribution supporting metrics measured on different training datasets; they do not substitute for trajectories on the shared evaluation set.</figcaption>
+  <figcaption><strong>Appendix Table 1.</strong> Seed-42 HighAvg-minus-Random differences in training-metric changes from epochs 1 to 3. Positive differences in training accuracy and reward margin, and negative differences in SimPO loss, favor HighAvg. These are in-distribution supporting metrics measured on different training datasets; they do not substitute for trajectories on the shared evaluation set.</figcaption>
 </figure>
 
 ### Key Metrics

@@ -1,7 +1,7 @@
 {
   "layout": "custom_small_multiples_plus_matrix",
   "title": "Upward passage across the training budget",
-  "description": "State-and-headroom-standardized cumulative upward passage for HighAvg and Random at three evaluation checkpoints, with a descriptive matrix of checkpoint-grid-equivalent advantages by initial boundary-distance quartile.",
+  "description": "Base-state-and-boundary-distance-standardized cumulative upward passage for HighAvg and Random at three evaluation checkpoints, with a descriptive matrix of checkpoint-grid-equivalent advantages by initial boundary-distance quartile.",
   "source_artifact": "Frozen budget-conditioned transition analysis",
   "source_sha256": "87bcc48349dde04c9ef4b26fbdcc61abd178bed1a177f85ce96d6361e71bdb97",
   "scale": "measured",
