@@ -2,13 +2,13 @@
 layout: post
 title: "Alignment Data Map: 선별된 선호 쌍의 SimPO 경계 통과 시점과 모델별 차이"
 date: 2026-09-01 17:00:00 +0900
-last_modified_at: 2026-09-03 09:59:54 +0900
+last_modified_at: 2026-09-03 21:39:48 +0900
 lang: ko
 categories: ["LLM ALIGNMENT"]
 tags: [llm, alignment, preference-data, data-selection, adm, simpo, qwen]
 lab_host: "dgx1"
 lab_path: "projects/adm-toolcall"
-excerpt: "ADM의 데이터 선택 기준이 실제 preference optimization에서도 같은 학습 가치로 이어지는지는 별개의 문제다. Qwen2.5-Instruct 세 모델의 SimPO 궤적을 따라가며, 선택된 pair가 언제 경계를 넘고 그 양상이 모델마다 어떻게 달라지는지 살펴본다."
+excerpt: "ADM으로 선택한 preference pair가 SimPO boundary를 통과하는 시점과 그 양상이 Qwen2.5-Instruct 모델별로 어떻게 달라지는지 추적한다."
 description: "Qwen2.5-Instruct 1.5B·3B·7B에서 ADM HighAvg pair와 Random pair의 SimPO 경계 통과 시점, 그리고 모델과 checkpoint에 따른 차이를 살펴본 후속 연구 노트."
 permalink: /research/2026/09/01/selected-preference-pairs-helped-earlier-not-uniformly/ko/
 translation_url: /research/2026/09/01/selected-preference-pairs-helped-earlier-not-uniformly/

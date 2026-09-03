@@ -2,13 +2,13 @@
 layout: post
 title: "Alignment Data Map: Timing of SimPO Boundary Crossings and Model-Specific Differences"
 date: 2026-09-01 17:00:00 +0900
-last_modified_at: 2026-09-03 09:59:54 +0900
+last_modified_at: 2026-09-03 21:39:48 +0900
 lang: en
 categories: ["LLM ALIGNMENT"]
 tags: [llm, alignment, preference-data, data-selection, adm, simpo, qwen]
 lab_host: "dgx1"
 lab_path: "projects/adm-toolcall"
-excerpt: "Whether ADM's data-selection criterion carries comparable learning value into preference optimization is a separate question. This note follows SimPO trajectories across three Qwen2.5-Instruct models to examine when selected pairs cross boundaries and how the pattern varies across models."
+excerpt: "This note tracks when ADM-selected preference pairs cross SimPO boundaries and how the pattern differs across Qwen2.5-Instruct models."
 description: "A follow-up research note examining when preference pairs derived from ADM's HighAvg region crossed SimPO boundaries relative to Random pairs across Qwen2.5-Instruct 1.5B, 3B, and 7B, and how the difference varied by model and checkpoint."
 permalink: /research/2026/09/01/selected-preference-pairs-helped-earlier-not-uniformly/
 translation_url: /research/2026/09/01/selected-preference-pairs-helped-earlier-not-uniformly/ko/
