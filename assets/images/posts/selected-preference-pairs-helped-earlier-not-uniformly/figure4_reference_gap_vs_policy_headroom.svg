@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="figure-title figure-desc" data-renderer="editorial-systems-figure-custom" data-palette="editorial" data-theme="paper">
+<title id="figure-title">Reference score gap and distance to the next boundary</title>
+<desc id="figure-desc">A shared-axis interval plot compares model-wise Spearman correlations between Random first-passage frequency across three seeds and either reference score gap or initial policy distance to the next boundary. Reference correlations cluster near zero, while boundary-distance correlations cluster near minus 0.45. Exact correlations are aligned at right.</desc>
+<style>text{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}.figure-title{font-size:24px;font-weight:700;fill:#11120F}.panel-title{font-size:19px;font-weight:400;fill:#11120F}.series-label{font-size:18px;font-weight:400;fill:#11120F}.value-label{font-size:17px;font-weight:400;fill:#11120F;font-variant-numeric:tabular-nums}.axis-tick{font-size:16px;font-weight:400;fill:#686B66}.axis-label{font-size:17px;font-weight:400;fill:#686B66}.axis-x{stroke:#686B66;stroke-width:1.5}.zero-line{stroke:#686B66;stroke-width:1.2;stroke-dasharray:5 6;opacity:.62}.grid-line{stroke:#B8BBB5;stroke-width:1;opacity:.42}.row-guide{stroke:#B8BBB5;stroke-width:1;opacity:.34}.data-mark{stroke-linecap:round;stroke-linejoin:round}</style>
+<rect width="1200" height="675" fill="#FFFFFF"/>
+<text x="72" y="60" class="figure-title" font-size="24" font-weight="700">Reference score gap and distance to the next boundary</text>
+
+<rect x="72" y="100" width="1056" height="210" rx="8" fill="#F1F2EF" opacity=".55"/>
+<rect x="72" y="326" width="1056" height="210" rx="8" fill="#EEF3FD" opacity=".70"/>
+
+<g aria-label="Reference score gap">
+  <circle cx="96" cy="128" r="7" fill="#11120F" class="data-mark"/>
+  <text x="116" y="134" class="panel-title">Reference score gap</text>
+
+  <line x1="440.87" y1="150" x2="440.87" y2="286" class="grid-line"/>
+  <line x1="603.91" y1="150" x2="603.91" y2="286" class="grid-line"/>
+  <line x1="766.96" y1="150" x2="766.96" y2="286" class="zero-line"/>
+  <line x1="930.00" y1="150" x2="930.00" y2="286" class="grid-line"/>
+  <line x1="430" y1="178" x2="930" y2="178" class="row-guide"/>
+  <line x1="430" y1="228" x2="930" y2="228" class="row-guide"/>
+  <line x1="430" y1="278" x2="930" y2="278" class="row-guide"/>
+
+  <text x="330" y="184" class="series-label" text-anchor="end">1.5B</text>
+  <line x1="785.39" y1="178" x2="883.89" y2="178" stroke="#B8BBB5" stroke-width="3" class="data-mark"/>
+  <line x1="785.39" y1="170" x2="785.39" y2="186" stroke="#686B66" stroke-width="1.6"/>
+  <line x1="883.89" y1="170" x2="883.89" y2="186" stroke="#686B66" stroke-width="1.6"/>
+  <circle cx="834.12" cy="178" r="8" fill="#11120F" stroke="#FFFFFF" stroke-width="1.5" class="data-mark"/>
+  <text x="1070" y="184" class="value-label" text-anchor="end">+0.124</text>
+
+  <text x="330" y="234" class="series-label" text-anchor="end">3B</text>
+  <line x1="772.25" y1="228" x2="883.09" y2="228" stroke="#B8BBB5" stroke-width="3" class="data-mark"/>
+  <line x1="772.25" y1="220" x2="772.25" y2="236" stroke="#686B66" stroke-width="1.6"/>
+  <line x1="883.09" y1="220" x2="883.09" y2="236" stroke="#686B66" stroke-width="1.6"/>
+  <circle cx="829.32" cy="228" r="8" fill="#11120F" stroke="#FFFFFF" stroke-width="1.5" class="data-mark"/>
+  <text x="1070" y="234" class="value-label" text-anchor="end">+0.115</text>
+
+  <text x="330" y="284" class="series-label" text-anchor="end">7B</text>
+  <line x1="748.46" y1="278" x2="862.31" y2="278" stroke="#B8BBB5" stroke-width="3" class="data-mark"/>
+  <line x1="748.46" y1="270" x2="748.46" y2="286" stroke="#686B66" stroke-width="1.6"/>
+  <line x1="862.31" y1="270" x2="862.31" y2="286" stroke="#686B66" stroke-width="1.6"/>
+  <circle cx="804.92" cy="278" r="8" fill="#11120F" stroke="#FFFFFF" stroke-width="1.5" class="data-mark"/>
+  <text x="1070" y="284" class="value-label" text-anchor="end">+0.070</text>
+</g>
+
+<g aria-label="Distance to next boundary">
+  <path d="M96 345 L105 354 L96 363 L87 354 Z" fill="#5E7FD8" class="data-mark"/>
+  <text x="116" y="360" class="panel-title">Distance to next boundary</text>
+
+  <line x1="440.87" y1="376" x2="440.87" y2="512" class="grid-line"/>
+  <line x1="603.91" y1="376" x2="603.91" y2="512" class="grid-line"/>
+  <line x1="766.96" y1="376" x2="766.96" y2="512" class="zero-line"/>
+  <line x1="930.00" y1="376" x2="930.00" y2="512" class="grid-line"/>
+  <line x1="430" y1="404" x2="930" y2="404" class="row-guide"/>
+  <line x1="430" y1="454" x2="930" y2="454" class="row-guide"/>
+  <line x1="430" y1="504" x2="930" y2="504" class="row-guide"/>
+
+  <text x="330" y="410" class="series-label" text-anchor="end">1.5B</text>
+  <line x1="476.37" y1="404" x2="558.53" y2="404" stroke="#C8D5F5" stroke-width="4" class="data-mark"/>
+  <line x1="476.37" y1="396" x2="476.37" y2="412" stroke="#5E7FD8" stroke-width="1.8"/>
+  <line x1="558.53" y1="396" x2="558.53" y2="412" stroke="#5E7FD8" stroke-width="1.8"/>
+  <path d="M515.69 394 L525.69 404 L515.69 414 L505.69 404 Z" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="1.5" class="data-mark"/>
+  <text x="1070" y="410" class="value-label" text-anchor="end" fill="#5E7FD8">-0.462</text>
+
+  <text x="330" y="460" class="series-label" text-anchor="end">3B</text>
+  <line x1="481.79" y1="454" x2="575.77" y2="454" stroke="#C8D5F5" stroke-width="4" class="data-mark"/>
+  <line x1="481.79" y1="446" x2="481.79" y2="462" stroke="#5E7FD8" stroke-width="1.8"/>
+  <line x1="575.77" y1="446" x2="575.77" y2="462" stroke="#5E7FD8" stroke-width="1.8"/>
+  <path d="M526.37 444 L536.37 454 L526.37 464 L516.37 454 Z" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="1.5" class="data-mark"/>
+  <text x="1070" y="460" class="value-label" text-anchor="end" fill="#5E7FD8">-0.443</text>
+
+  <text x="330" y="510" class="series-label" text-anchor="end">7B</text>
+  <line x1="465.21" y1="504" x2="563.67" y2="504" stroke="#C8D5F5" stroke-width="4" class="data-mark"/>
+  <line x1="465.21" y1="496" x2="465.21" y2="512" stroke="#5E7FD8" stroke-width="1.8"/>
+  <line x1="563.67" y1="496" x2="563.67" y2="512" stroke="#5E7FD8" stroke-width="1.8"/>
+  <path d="M511.97 494 L521.97 504 L511.97 514 L501.97 504 Z" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="1.5" class="data-mark"/>
+  <text x="1070" y="510" class="value-label" text-anchor="end" fill="#5E7FD8">-0.469</text>
+</g>
+
+<g aria-label="Spearman correlation axis">
+  <line x1="430" y1="560" x2="930" y2="560" class="axis-x" data-axis-id="shared"/>
+  <text x="440.87" y="588" class="axis-tick" text-anchor="middle">-0.6</text>
+  <text x="603.91" y="588" class="axis-tick" text-anchor="middle">-0.3</text>
+  <text x="766.96" y="588" class="axis-tick" text-anchor="middle">0.0</text>
+  <text x="930.00" y="588" class="axis-tick" text-anchor="middle">0.3</text>
+  <text x="680" y="630" class="axis-label" text-anchor="middle">Spearman rho with Random first-passage frequency</text>
+</g>
+</svg>

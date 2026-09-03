@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-labelledby="figure-title figure-desc">
+<title id="figure-title">Selection effect across checkpoints</title>
+<desc id="figure-desc">State-standardized HighAvg minus Random upward movement for three Qwen2.5-Instruct sizes at optimizer steps 92, 184, and 276. Thin lines are individual seeds and thick lines are seed means.</desc>
+<style>text{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}.figure-title{font-size:24px;font-weight:700;fill:#11120F}.panel-title{font-size:18px;font-weight:600;fill:#11120F}.label,.series-label,.value-label{font-size:16px;font-weight:400;fill:#11120F}.axis-tick,.note{font-size:15px;font-weight:400;fill:#686B66}.value-label{font-variant-numeric:tabular-nums}.axis-x,.axis-y{stroke:#11120F;stroke-width:1.5}.zero-line{stroke:#11120F;stroke-width:2}.grid-line{stroke:#B8BBB5;stroke-width:1;opacity:.55}.data-mark{stroke-linecap:round;stroke-linejoin:round}</style>
+<rect width="1200" height="650" fill="#FFFFFF"/>
+<text x="72" y="64" class="figure-title" font-size="24" font-weight="700">Selection effect across checkpoints</text>
+<line x1="128.00" y1="548.00" x2="1070.00" y2="548.00" stroke="#11120F" stroke-width="2" class="zero-line"/>
+<text x="112.00" y="553.00" class="axis-tick" text-anchor="end" font-size="15" font-weight="400">0</text>
+<line x1="128.00" y1="471.27" x2="1070.00" y2="471.27" stroke="#B8BBB5" stroke-width="1" class="grid-line"/>
+<text x="112.00" y="476.27" class="axis-tick" text-anchor="end" font-size="15" font-weight="400">2</text>
+<line x1="128.00" y1="394.55" x2="1070.00" y2="394.55" stroke="#B8BBB5" stroke-width="1" class="grid-line"/>
+<text x="112.00" y="399.55" class="axis-tick" text-anchor="end" font-size="15" font-weight="400">4</text>
+<line x1="128.00" y1="317.82" x2="1070.00" y2="317.82" stroke="#B8BBB5" stroke-width="1" class="grid-line"/>
+<text x="112.00" y="322.82" class="axis-tick" text-anchor="end" font-size="15" font-weight="400">6</text>
+<line x1="128.00" y1="241.09" x2="1070.00" y2="241.09" stroke="#B8BBB5" stroke-width="1" class="grid-line"/>
+<text x="112.00" y="246.09" class="axis-tick" text-anchor="end" font-size="15" font-weight="400">8</text>
+<line x1="128.00" y1="164.36" x2="1070.00" y2="164.36" stroke="#B8BBB5" stroke-width="1" class="grid-line"/>
+<text x="112.00" y="169.36" class="axis-tick" text-anchor="end" font-size="15" font-weight="400">10</text>
+<line x1="128.00" y1="126.00" x2="128.00" y2="548.00" stroke="#11120F" stroke-width="1.5" class="axis-y" data-axis-id="f1"/>
+<line x1="128.00" y1="548.00" x2="1070.00" y2="548.00" stroke="#11120F" stroke-width="1.5" class="axis-x" data-axis-id="f1"/>
+<line x1="128.00" y1="548.00" x2="128.00" y2="555.00" stroke="#11120F" stroke-width="1"/>
+<text x="128.00" y="578.00" class="axis-tick" text-anchor="middle" font-size="15" font-weight="400">92</text>
+<line x1="599.00" y1="548.00" x2="599.00" y2="555.00" stroke="#11120F" stroke-width="1"/>
+<text x="599.00" y="578.00" class="axis-tick" text-anchor="middle" font-size="15" font-weight="400">184</text>
+<line x1="1070.00" y1="548.00" x2="1070.00" y2="555.00" stroke="#11120F" stroke-width="1"/>
+<text x="1070.00" y="578.00" class="axis-tick" text-anchor="middle" font-size="15" font-weight="400">276</text>
+<text x="599.00" y="612.00" class="label" text-anchor="middle" font-size="16" font-weight="400">Optimizer step</text>
+<text x="38.00" y="337.00" class="label" text-anchor="middle" font-size="16" font-weight="400" transform="rotate(-90 38.00 337.00)">HighAvg - Random (percentage points)</text>
+<path d="M 128.00 420.70 L 599.00 368.95 L 1070.00 346.35" fill="none" stroke="#686B66" stroke-width="1.5" class="data-mark" opacity="0.28"/>
+<path d="M 128.00 324.64 L 599.00 312.15 L 1070.00 307.39" fill="none" stroke="#686B66" stroke-width="1.5" class="data-mark" opacity="0.28"/>
+<path d="M 128.00 403.45 L 599.00 283.00 L 1070.00 340.70" fill="none" stroke="#686B66" stroke-width="1.5" class="data-mark" opacity="0.28"/>
+<path d="M 128.00 382.93 L 599.00 321.37 L 1070.00 331.48" fill="none" stroke="#686B66" stroke-width="4" class="data-mark"/>
+<circle cx="128.00" cy="382.93" r="6" fill="#686B66" stroke="#FFFFFF" stroke-width="1.5" class="data-mark"/>
+<circle cx="599.00" cy="321.37" r="6" fill="#686B66" stroke="#FFFFFF" stroke-width="1.5" class="data-mark"/>
+<circle cx="1070.00" cy="331.48" r="6" fill="#686B66" stroke="#FFFFFF" stroke-width="1.5" class="data-mark"/>
+<text x="1084.00" y="336.48" class="series-label" text-anchor="start" font-size="17" font-weight="400" fill="#686B66">1.5B  5.64 pp</text>
+<path d="M 128.00 495.23 L 599.00 363.54 L 1070.00 400.55" fill="none" stroke="#5E7FD8" stroke-width="1.5" class="data-mark" stroke-dasharray="12 7" opacity="0.22"/>
+<path d="M 128.00 477.54 L 599.00 351.02 L 1070.00 382.58" fill="none" stroke="#5E7FD8" stroke-width="1.5" class="data-mark" stroke-dasharray="12 7" opacity="0.22"/>
+<path d="M 128.00 470.20 L 599.00 319.19 L 1070.00 369.25" fill="none" stroke="#5E7FD8" stroke-width="1.5" class="data-mark" stroke-dasharray="12 7" opacity="0.22"/>
+<path d="M 128.00 480.99 L 599.00 344.58 L 1070.00 384.13" fill="none" stroke="#5E7FD8" stroke-width="4" class="data-mark" stroke-dasharray="12 7"/>
+<rect x="122.00" y="474.99" width="12.00" height="12.00" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="1.5" rx="2" class="data-mark"/>
+<rect x="593.00" y="338.58" width="12.00" height="12.00" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="1.5" rx="2" class="data-mark"/>
+<rect x="1064.00" y="378.13" width="12.00" height="12.00" fill="#5E7FD8" stroke="#FFFFFF" stroke-width="1.5" rx="2" class="data-mark"/>
+<text x="1084.00" y="389.13" class="series-label" text-anchor="start" font-size="17" font-weight="400" fill="#5E7FD8">3B  4.27 pp</text>
+<path d="M 128.00 505.31 L 599.00 148.14 L 1070.00 241.06" fill="none" stroke="#11120F" stroke-width="1.5" class="data-mark" stroke-dasharray="3 6" opacity="0.24"/>
+<path d="M 128.00 469.81 L 599.00 226.33 L 1070.00 219.25" fill="none" stroke="#11120F" stroke-width="1.5" class="data-mark" stroke-dasharray="3 6" opacity="0.24"/>
+<path d="M 128.00 484.08 L 599.00 248.14 L 1070.00 255.56" fill="none" stroke="#11120F" stroke-width="1.5" class="data-mark" stroke-dasharray="3 6" opacity="0.24"/>
+<path d="M 128.00 486.40 L 599.00 207.54 L 1070.00 238.62" fill="none" stroke="#11120F" stroke-width="4" class="data-mark" stroke-dasharray="3 6"/>
+<path d="M 128.00 479.40 L 135.00 486.40 L 128.00 493.40 L 121.00 486.40 Z" fill="#11120F" stroke="#FFFFFF" stroke-width="1.5" class="data-mark"/>
+<path d="M 599.00 200.54 L 606.00 207.54 L 599.00 214.54 L 592.00 207.54 Z" fill="#11120F" stroke="#FFFFFF" stroke-width="1.5" class="data-mark"/>
+<path d="M 1070.00 231.62 L 1077.00 238.62 L 1070.00 245.62 L 1063.00 238.62 Z" fill="#11120F" stroke="#FFFFFF" stroke-width="1.5" class="data-mark"/>
+<text x="1084.00" y="243.62" class="series-label" text-anchor="start" font-size="17" font-weight="400" fill="#11120F">7B  8.06 pp</text>
+</svg>

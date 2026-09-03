@@ -1,0 +1,56 @@
+{
+  "layout": "custom_grouped_interval_plot",
+  "title": "Reference score gap and distance to the next boundary",
+  "description": "A single shared-axis interval plot groups model-wise Spearman correlations by reference score gap and initial policy distance to the next SimPO boundary. Exact correlations are aligned in a separate right-hand column.",
+  "source_artifact": "Frozen reference ambiguity analysis",
+  "source_sha256": "6986f768cab78401bb7ad222391025fa33780f0d87d52aad497103cdfb9bf938",
+  "scale": "measured",
+  "palette": "editorial",
+  "layout_geometry": {
+    "canvas": [1200, 675],
+    "outer_x": [72, 1128],
+    "shared_anchors": {
+      "title_x": 72,
+      "group_label_x": 116,
+      "model_label_x": 330,
+      "plot_x": [430, 930],
+      "value_column_x": 1070,
+      "axis_y": 560
+    },
+    "group_rows": {
+      "reference_abs_gap": [178, 228, 278],
+      "boundary_distance": [404, 454, 504]
+    },
+    "group_fields": [[72, 100, 1056, 210], [72, 326, 1056, 210]],
+    "grid_policy": "faint major grid with a muted dashed zero reference",
+    "annotation_strategy": "Exact correlations appear as numbers only in a fixed right-hand column; their meaning is defined in the external caption.",
+    "actual_display_width": 720
+  },
+  "x_axis": {
+    "label": "Spearman rho with Random first-passage frequency",
+    "domain": [-0.62, 0.3],
+    "ticks": [-0.6, -0.3, 0, 0.3]
+  },
+  "groups": [
+    {
+      "id": "reference_abs_gap",
+      "label": "Reference score gap",
+      "style": "black circle with a neutral interval"
+    },
+    {
+      "id": "boundary_distance",
+      "label": "Distance to next boundary",
+      "style": "blue diamond with a light-blue interval"
+    }
+  ],
+  "correlations": [
+    {"group": "reference_abs_gap", "model": "1.5B", "spearman_rho": 0.12357281189773424, "ci_low": 0.03390911187798492, "ci_high": 0.21516478950012097, "pairs": 420},
+    {"group": "reference_abs_gap", "model": "3B", "spearman_rho": 0.11474747452373246, "ci_low": 0.009744664515499879, "ci_high": 0.21368316563194448, "pairs": 379},
+    {"group": "reference_abs_gap", "model": "7B", "spearman_rho": 0.0698444621402423, "ci_low": -0.03404251639965232, "ci_high": 0.1754455263121365, "pairs": 340},
+    {"group": "boundary_distance", "model": "1.5B", "spearman_rho": -0.4623389642309929, "ci_low": -0.5346842330362745, "ci_high": -0.38350723407622506, "pairs": 420},
+    {"group": "boundary_distance", "model": "3B", "spearman_rho": -0.4426711058757566, "ci_low": -0.5247082908350902, "ci_high": -0.3517771877115166, "pairs": 379},
+    {"group": "boundary_distance", "model": "7B", "spearman_rho": -0.46917306360067385, "ci_low": -0.5552105766014657, "ci_high": -0.3740548542827144, "pairs": 340}
+  ],
+  "interval": "Pair-cluster bootstrap 95% interval.",
+  "suggested_caption": "Spearman correlations between Random first-passage frequency across three seeds and either reference score gap or the policy's initial distance to the next boundary. Numbers at right are Spearman correlations; whiskers are pair-cluster bootstrap 95% intervals."
+}

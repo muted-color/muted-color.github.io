@@ -1,0 +1,31 @@
+{
+  "layout": "custom_interval_band",
+  "title": "SimPO margin states",
+  "description": "A horizontal interval band divides the policy margin into preference reversed, correct but below target, and target satisfied states at boundaries zero and 0.5.",
+  "source_artifact": "SimPO state definition used in the evaluation",
+  "scale": "conceptual",
+  "palette": "editorial",
+  "layout_geometry": {
+    "canvas": [1200, 420],
+    "outer_x": [72, 1128],
+    "shared_anchors": {
+      "title_x": 72,
+      "band_y": 220,
+      "preference_boundary_x": 455,
+      "target_boundary_x": 750
+    },
+    "region_widths": "Conceptual; the R and T intervals are unbounded and are shown with open arrow ends.",
+    "actual_display_width": 720
+  },
+  "direction": "Higher policy margin moves from left to right.",
+  "boundaries": [
+    {"label": "Preference boundary", "margin": 0},
+    {"label": "Target boundary", "margin": 0.5}
+  ],
+  "states": [
+    {"id": "R", "label": "Preference reversed", "range": "Delta <= 0", "encoding": "neutral hatch"},
+    {"id": "U", "label": "Correct, below target", "range": "0 < Delta < 0.5", "encoding": "accent wash"},
+    {"id": "T", "label": "Target satisfied", "range": "Delta >= 0.5", "encoding": "accent mid"}
+  ],
+  "caveat": "Region widths are conceptual and do not encode the size or frequency of each state."
+}

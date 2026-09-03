@@ -1,0 +1,437 @@
+{
+  "layout": "custom_quantitative_line",
+  "title": "Selection effect across checkpoints",
+  "description": "State-standardized HighAvg minus Random upward movement for three Qwen2.5-Instruct sizes at optimizer steps 92, 184, and 276. Thin lines are individual seeds and thick lines are seed means.",
+  "source_artifact": "Frozen checkpoint trajectory analysis",
+  "source_sha256": "468038841073703f50f1b439fa4954cb300e43effd6dd4d431b3ccc61088484e",
+  "scale": "measured",
+  "palette": "editorial",
+  "layout_geometry": {
+    "canvas": [
+      1200,
+      650
+    ],
+    "outer_x": [
+      72,
+      1128
+    ],
+    "plot_bounds": [
+      128,
+      126,
+      1070,
+      548
+    ],
+    "panel_fraction": [
+      1.0
+    ],
+    "shared_anchors": {
+      "title_x": 72,
+      "plot_x": 128,
+      "axis_y": 548
+    },
+    "panel_gap": 0,
+    "grid_policy": "major-y-grid-and-zero",
+    "actual_display_width": 720
+  },
+  "x_axis": {
+    "label": "Optimizer step",
+    "domain": [
+      92,
+      276
+    ],
+    "ticks": [
+      92,
+      184,
+      276
+    ]
+  },
+  "y_axis": {
+    "label": "HighAvg - Random (percentage points)",
+    "domain": [
+      0,
+      11
+    ],
+    "ticks": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10
+    ]
+  },
+  "series_identity": {
+    "models": [
+      "1.5B",
+      "3B",
+      "7B"
+    ],
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "encoding": "Model size uses color, line style, and marker shape; seed trajectories are thin and translucent; means are thick.",
+    "model_colors": {
+      "1.5B": "#686B66",
+      "3B": "#5E7FD8",
+      "7B": "#11120F"
+    }
+  },
+  "mean_step_effects": [
+    {
+      "continuous_delta_advantage": 0.052578156841142726,
+      "model": "1.5B",
+      "optimizer_step": 92,
+      "reversed_correction_difference": 0.07703081232492998,
+      "standardized_final_net_up": 0.04302718523306759,
+      "target_satisfied_delta_advantage": 0.11522334974293631,
+      "under_target_crossing_difference": 0.056776556776556776
+    },
+    {
+      "continuous_delta_advantage": 0.08088918413552973,
+      "model": "1.5B",
+      "optimizer_step": 184,
+      "reversed_correction_difference": 0.10364145658263306,
+      "standardized_final_net_up": 0.059075271134094665,
+      "target_satisfied_delta_advantage": 0.14578543826937676,
+      "under_target_crossing_difference": 0.08058608058608059
+    },
+    {
+      "continuous_delta_advantage": 0.076641524049143,
+      "model": "1.5B",
+      "optimizer_step": 276,
+      "reversed_correction_difference": 0.10644257703081234,
+      "standardized_final_net_up": 0.05643898585075056,
+      "target_satisfied_delta_advantage": 0.1303252199664712,
+      "under_target_crossing_difference": 0.06776556776556776
+    },
+    {
+      "continuous_delta_advantage": 0.048453159224684184,
+      "model": "3B",
+      "optimizer_step": 92,
+      "reversed_correction_difference": 0.042071197411003236,
+      "standardized_final_net_up": 0.01746719585627493,
+      "target_satisfied_delta_advantage": 0.11389652422651377,
+      "under_target_crossing_difference": 0.009633911368015413
+    },
+    {
+      "continuous_delta_advantage": 0.08190028575008505,
+      "model": "3B",
+      "optimizer_step": 184,
+      "reversed_correction_difference": 0.056634304207119734,
+      "standardized_final_net_up": 0.053024097249502716,
+      "target_satisfied_delta_advantage": 0.19832915640431067,
+      "under_target_crossing_difference": 0.11753371868978806
+    },
+    {
+      "continuous_delta_advantage": 0.07869903234959363,
+      "model": "3B",
+      "optimizer_step": 276,
+      "reversed_correction_difference": 0.05825242718446602,
+      "standardized_final_net_up": 0.04271572374889059,
+      "target_satisfied_delta_advantage": 0.18658029248301325,
+      "under_target_crossing_difference": 0.0789980732177264
+    },
+    {
+      "continuous_delta_advantage": 0.04537824106575398,
+      "model": "7B",
+      "optimizer_step": 92,
+      "reversed_correction_difference": 0.0124777183600713,
+      "standardized_final_net_up": 0.01605653484738452,
+      "target_satisfied_delta_advantage": 0.10064951577254853,
+      "under_target_crossing_difference": 0.04139433551198257
+    },
+    {
+      "continuous_delta_advantage": 0.1308538309532903,
+      "model": "7B",
+      "optimizer_step": 184,
+      "reversed_correction_difference": 0.1461675579322638,
+      "standardized_final_net_up": 0.08874650645892475,
+      "target_satisfied_delta_advantage": 0.2154396941846547,
+      "under_target_crossing_difference": 0.1328976034858388
+    },
+    {
+      "continuous_delta_advantage": 0.13392285505665413,
+      "model": "7B",
+      "optimizer_step": 276,
+      "reversed_correction_difference": 0.1265597147950089,
+      "standardized_final_net_up": 0.08064314165621354,
+      "target_satisfied_delta_advantage": 0.22182148701424756,
+      "under_target_crossing_difference": 0.12854030501089325
+    }
+  ],
+  "seed_step_effects": [
+    {
+      "continuous_delta_advantage": 0.04251553044809649,
+      "model": "1.5B",
+      "optimizer_step": 92,
+      "reversed_correction_difference": 0.05042016806722689,
+      "seed": 42,
+      "standardized_final_net_up": 0.03318178553472671,
+      "target_satisfied_delta_advantage": 0.09285205131293171,
+      "under_target_crossing_difference": 0.054945054945054944
+    },
+    {
+      "continuous_delta_advantage": 0.07207881090852121,
+      "model": "1.5B",
+      "optimizer_step": 184,
+      "reversed_correction_difference": 0.07563025210084033,
+      "seed": 42,
+      "standardized_final_net_up": 0.04667133520074696,
+      "target_satisfied_delta_advantage": 0.1583573971564571,
+      "under_target_crossing_difference": 0.07142857142857142
+    },
+    {
+      "continuous_delta_advantage": 0.07740231912272671,
+      "model": "1.5B",
+      "optimizer_step": 276,
+      "reversed_correction_difference": 0.09243697478991597,
+      "seed": 42,
+      "standardized_final_net_up": 0.05256302521008403,
+      "target_satisfied_delta_advantage": 0.1466900332727366,
+      "under_target_crossing_difference": 0.07142857142857142
+    },
+    {
+      "continuous_delta_advantage": 0.07057665711967274,
+      "model": "1.5B",
+      "optimizer_step": 92,
+      "reversed_correction_difference": 0.12184873949579832,
+      "seed": 43,
+      "standardized_final_net_up": 0.05822146807440925,
+      "target_satisfied_delta_advantage": 0.1625469767385059,
+      "under_target_crossing_difference": 0.054945054945054944
+    },
+    {
+      "continuous_delta_advantage": 0.08698748801214,
+      "model": "1.5B",
+      "optimizer_step": 184,
+      "reversed_correction_difference": 0.1134453781512605,
+      "seed": 43,
+      "standardized_final_net_up": 0.06147830927242692,
+      "target_satisfied_delta_advantage": 0.1509511265075869,
+      "under_target_crossing_difference": 0.07692307692307693
+    },
+    {
+      "continuous_delta_advantage": 0.08195980472800632,
+      "model": "1.5B",
+      "optimizer_step": 276,
+      "reversed_correction_difference": 0.13025210084033614,
+      "seed": 43,
+      "standardized_final_net_up": 0.06271798462974934,
+      "target_satisfied_delta_advantage": 0.14229126961694824,
+      "under_target_crossing_difference": 0.06043956043956044
+    },
+    {
+      "continuous_delta_advantage": 0.04464228295565893,
+      "model": "1.5B",
+      "optimizer_step": 92,
+      "reversed_correction_difference": 0.058823529411764705,
+      "seed": 44,
+      "standardized_final_net_up": 0.0376783020900668,
+      "target_satisfied_delta_advantage": 0.09027102117737135,
+      "under_target_crossing_difference": 0.06043956043956044
+    },
+    {
+      "continuous_delta_advantage": 0.08360125348592798,
+      "model": "1.5B",
+      "optimizer_step": 184,
+      "reversed_correction_difference": 0.12184873949579832,
+      "seed": 44,
+      "standardized_final_net_up": 0.0690761689291101,
+      "target_satisfied_delta_advantage": 0.12804779114408626,
+      "under_target_crossing_difference": 0.09340659340659341
+    },
+    {
+      "continuous_delta_advantage": 0.07056244829669595,
+      "model": "1.5B",
+      "optimizer_step": 276,
+      "reversed_correction_difference": 0.09663865546218488,
+      "seed": 44,
+      "standardized_final_net_up": 0.054035947712418306,
+      "target_satisfied_delta_advantage": 0.10199435700972875,
+      "under_target_crossing_difference": 0.07142857142857142
+    },
+    {
+      "continuous_delta_advantage": 0.035243849017036456,
+      "model": "3B",
+      "optimizer_step": 92,
+      "reversed_correction_difference": 0.04854368932038835,
+      "seed": 42,
+      "standardized_final_net_up": 0.013754575328457141,
+      "target_satisfied_delta_advantage": 0.0661450635401608,
+      "under_target_crossing_difference": -0.011560693641618497
+    },
+    {
+      "continuous_delta_advantage": 0.086326989024116,
+      "model": "3B",
+      "optimizer_step": 184,
+      "reversed_correction_difference": 0.05339805825242718,
+      "seed": 42,
+      "standardized_final_net_up": 0.048083147825978514,
+      "target_satisfied_delta_advantage": 0.22082276354596278,
+      "under_target_crossing_difference": 0.10404624277456648
+    },
+    {
+      "continuous_delta_advantage": 0.07251148555721253,
+      "model": "3B",
+      "optimizer_step": 276,
+      "reversed_correction_difference": 0.06310679611650485,
+      "seed": 42,
+      "standardized_final_net_up": 0.03843586122179197,
+      "target_satisfied_delta_advantage": 0.1643919404530903,
+      "under_target_crossing_difference": 0.057803468208092484
+    },
+    {
+      "continuous_delta_advantage": 0.05323457293207563,
+      "model": "3B",
+      "optimizer_step": 92,
+      "reversed_correction_difference": 0.02912621359223301,
+      "seed": 43,
+      "standardized_final_net_up": 0.018367067611974736,
+      "target_satisfied_delta_advantage": 0.14603520451114635,
+      "under_target_crossing_difference": 0.028901734104046242
+    },
+    {
+      "continuous_delta_advantage": 0.08449992925858775,
+      "model": "3B",
+      "optimizer_step": 184,
+      "reversed_correction_difference": 0.05339805825242718,
+      "seed": 43,
+      "standardized_final_net_up": 0.0513458324759464,
+      "target_satisfied_delta_advantage": 0.21166952979132375,
+      "under_target_crossing_difference": 0.11560693641618497
+    },
+    {
+      "continuous_delta_advantage": 0.09588471623238244,
+      "model": "3B",
+      "optimizer_step": 276,
+      "reversed_correction_difference": 0.04854368932038835,
+      "seed": 43,
+      "standardized_final_net_up": 0.04311873717816812,
+      "target_satisfied_delta_advantage": 0.24189764602336694,
+      "under_target_crossing_difference": 0.09248554913294797
+    },
+    {
+      "continuous_delta_advantage": 0.056881055724940476,
+      "model": "3B",
+      "optimizer_step": 92,
+      "reversed_correction_difference": 0.04854368932038835,
+      "seed": 44,
+      "standardized_final_net_up": 0.020279944628392915,
+      "target_satisfied_delta_advantage": 0.12950930462823418,
+      "under_target_crossing_difference": 0.011560693641618497
+    },
+    {
+      "continuous_delta_advantage": 0.07487393896755141,
+      "model": "3B",
+      "optimizer_step": 184,
+      "reversed_correction_difference": 0.06310679611650485,
+      "seed": 44,
+      "standardized_final_net_up": 0.059643311446583226,
+      "target_satisfied_delta_advantage": 0.1624951758756454,
+      "under_target_crossing_difference": 0.1329479768786127
+    },
+    {
+      "continuous_delta_advantage": 0.06770089525918593,
+      "model": "3B",
+      "optimizer_step": 276,
+      "reversed_correction_difference": 0.06310679611650485,
+      "seed": 44,
+      "standardized_final_net_up": 0.046592572846711686,
+      "target_satisfied_delta_advantage": 0.15345129097258248,
+      "under_target_crossing_difference": 0.08670520231213873
+    },
+    {
+      "continuous_delta_advantage": 0.036629647505299845,
+      "model": "7B",
+      "optimizer_step": 92,
+      "reversed_correction_difference": 0.0106951871657754,
+      "seed": 42,
+      "standardized_final_net_up": 0.011127616029576813,
+      "target_satisfied_delta_advantage": 0.07954226117474789,
+      "under_target_crossing_difference": 0.026143790849673203
+    },
+    {
+      "continuous_delta_advantage": 0.14092958386987448,
+      "model": "7B",
+      "optimizer_step": 184,
+      "reversed_correction_difference": 0.1657754010695187,
+      "seed": 42,
+      "standardized_final_net_up": 0.10422823001254373,
+      "target_satisfied_delta_advantage": 0.2363471620640037,
+      "under_target_crossing_difference": 0.16339869281045752
+    },
+    {
+      "continuous_delta_advantage": 0.1350908936635824,
+      "model": "7B",
+      "optimizer_step": 276,
+      "reversed_correction_difference": 0.12299465240641712,
+      "seed": 42,
+      "standardized_final_net_up": 0.08000825245923285,
+      "target_satisfied_delta_advantage": 0.21906764196151365,
+      "under_target_crossing_difference": 0.13071895424836602
+    },
+    {
+      "continuous_delta_advantage": 0.05541956041211961,
+      "model": "7B",
+      "optimizer_step": 92,
+      "reversed_correction_difference": 0.016042780748663103,
+      "seed": 43,
+      "standardized_final_net_up": 0.020380603419819107,
+      "target_satisfied_delta_advantage": 0.11911391033544742,
+      "under_target_crossing_difference": 0.05228758169934641
+    },
+    {
+      "continuous_delta_advantage": 0.13473666599330802,
+      "model": "7B",
+      "optimizer_step": 184,
+      "reversed_correction_difference": 0.1497326203208556,
+      "seed": 43,
+      "standardized_final_net_up": 0.08384762659272463,
+      "target_satisfied_delta_advantage": 0.22033987075376968,
+      "under_target_crossing_difference": 0.1111111111111111
+    },
+    {
+      "continuous_delta_advantage": 0.13695189722677847,
+      "model": "7B",
+      "optimizer_step": 276,
+      "reversed_correction_difference": 0.1497326203208556,
+      "seed": 43,
+      "standardized_final_net_up": 0.08569221628045157,
+      "target_satisfied_delta_advantage": 0.22300831873301202,
+      "under_target_crossing_difference": 0.11764705882352941
+    },
+    {
+      "continuous_delta_advantage": 0.04408551527984249,
+      "model": "7B",
+      "optimizer_step": 92,
+      "reversed_correction_difference": 0.0106951871657754,
+      "seed": 44,
+      "standardized_final_net_up": 0.016661385092757643,
+      "target_satisfied_delta_advantage": 0.10329237580745029,
+      "under_target_crossing_difference": 0.0457516339869281
+    },
+    {
+      "continuous_delta_advantage": 0.11689524299668846,
+      "model": "7B",
+      "optimizer_step": 184,
+      "reversed_correction_difference": 0.12299465240641712,
+      "seed": 44,
+      "standardized_final_net_up": 0.07816366277150591,
+      "target_satisfied_delta_advantage": 0.18963204973619074,
+      "under_target_crossing_difference": 0.12418300653594772
+    },
+    {
+      "continuous_delta_advantage": 0.12972577427960155,
+      "model": "7B",
+      "optimizer_step": 276,
+      "reversed_correction_difference": 0.10695187165775401,
+      "seed": 44,
+      "standardized_final_net_up": 0.07622895622895623,
+      "target_satisfied_delta_advantage": 0.22338850034821706,
+      "under_target_crossing_difference": 0.13725490196078433
+    }
+  ],
+  "caveat": "Official model sizes differ in more than parameter count."
+}

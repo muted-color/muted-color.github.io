@@ -1,0 +1,34 @@
+{
+  "layout": "custom_diverging_interval_bars",
+  "title": "Transition redistribution under HighAvg",
+  "description": "Seed-42 HighAvg minus Random transition-rate differences for 1.5B, 3B, and 7B models, with pair-cluster bootstrap 95% confidence intervals.",
+  "source_artifact": "Frozen transition attribution analysis",
+  "source_sha256": "4049b578a08d688cf0154eb56432d8db536a0ee44de15911c4516fd4dd63d961",
+  "scale": "measured",
+  "palette": "editorial",
+  "layout_geometry": {
+    "canvas": [1200, 675],
+    "outer_x": [72, 1128],
+    "panel_fraction": [0.27, 0.73],
+    "shared_anchors": {"title_x": 72, "label_x": 330, "plot_x_zero": 720, "axis_y": 550},
+    "grid_policy": "major-x-grid-and-zero",
+    "actual_display_width": 720
+  },
+  "x_axis": {"label": "HighAvg - Random (percentage points)", "domain": [-12, 12], "ticks": [-10, -5, 0, 5, 10]},
+  "series_identity": {"models": ["1.5B", "3B", "7B"], "encoding": "Solid, diagonal hatch, and dotted hatch distinguish model sizes."},
+  "values": [
+    {"metric":"no_state_change","metric_label":"No state change","model":"1.5B","difference":-0.07833333333333334,"ci_low":-0.10333333333333333,"ci_high":-0.05333333333333334,"eligible_pairs":600},
+    {"metric":"no_state_change","metric_label":"No state change","model":"3B","difference":-0.05,"ci_low":-0.07166666666666667,"ci_high":-0.028333333333333332,"eligible_pairs":600},
+    {"metric":"no_state_change","metric_label":"No state change","model":"7B","difference":-0.09,"ci_low":-0.115,"ci_high":-0.06666666666666667,"eligible_pairs":600},
+    {"metric":"monotone_progress","metric_label":"Upward progress, no downward move","model":"1.5B","difference":0.058333333333333334,"ci_low":0.03666666666666667,"ci_high":0.08,"eligible_pairs":600},
+    {"metric":"monotone_progress","metric_label":"Upward progress, no downward move","model":"3B","difference":0.03166666666666667,"ci_low":0.015,"ci_high":0.05,"eligible_pairs":600},
+    {"metric":"monotone_progress","metric_label":"Upward progress, no downward move","model":"7B","difference":0.06833333333333333,"ci_low":0.04666666666666667,"ci_high":0.09166666666666666,"eligible_pairs":600},
+    {"metric":"target_reach","metric_label":"Target reached by step 276","model":"1.5B","difference":0.07857142857142857,"ci_low":0.05238095238095238,"ci_high":0.10714285714285714,"eligible_pairs":420},
+    {"metric":"target_reach","metric_label":"Target reached by step 276","model":"3B","difference":0.0395778364116095,"ci_low":0.0158311345646438,"ci_high":0.0633245382585752,"eligible_pairs":379},
+    {"metric":"target_reach","metric_label":"Target reached by step 276","model":"7B","difference":0.07941176470588235,"ci_low":0.052941176470588235,"ci_high":0.10882352941176471,"eligible_pairs":340},
+    {"metric":"ever_downward","metric_label":"Any downward transition","model":"1.5B","difference":0.02,"ci_low":0.0033333333333333335,"ci_high":0.03666666666666667,"eligible_pairs":600},
+    {"metric":"ever_downward","metric_label":"Any downward transition","model":"3B","difference":0.018333333333333333,"ci_low":0.0033333333333333335,"ci_high":0.03333333333333333,"eligible_pairs":600},
+    {"metric":"ever_downward","metric_label":"Any downward transition","model":"7B","difference":0.021666666666666667,"ci_low":0.006666666666666667,"ci_high":0.03666666666666667,"eligible_pairs":600}
+  ],
+  "denominator_caveat": "Target-reach rates exclude pairs already in T at base; all other rates use the paired 600-pair evaluation panel."
+}

@@ -2,7 +2,7 @@
 layout: post
 title: "Alignment Data Map: 측정값에서 선호 학습 쌍까지"
 date: 2026-08-23 20:10:32 +0900
-last_modified_at: 2026-08-26 19:52:48 +0900
+last_modified_at: 2026-09-03 10:23:20 +0900
 lang: ko
 categories: ["LLM ALIGNMENT"]
 tags: [llm, alignment, preference-data, data-selection, adm, simpo, ultrafeedback]
@@ -23,11 +23,7 @@ published: true
 publication_status: "published"
 ---
 
-Lee et al.의 Alignment Data Map(ADM) <a class="citation-ref" href="#ref-adm" aria-label="Reference 1">[1]</a>은 한 지시문의 후보 응답에서 계산한 alignment score의 평균과 분산으로 선호 데이터를 구분해 학습 데이터를 선택하는 방법이다. 그러나 이 좌표가 reference answer와 텍스트 처리 방식에 얼마나 민감한지, 지시문 선택이 실제 학습 쌍의 구성으로 어떻게 이어지는지는 별도의 검증이 필요하다. 이 글에서는 4,500개 지시문을 대상으로 측정 조건에 따른 좌표와 영역의 변화부터, 선택된 지시문이 실제 선호 학습 쌍으로 변환되는 과정까지 추적했다.
-
-ADM 영역은 reference answer, 장문 처리 방식, 코호트 구성에 따라 달라졌다. 지시문 할당량을 같게 맞춰도 응답 쌍으로 확장한 뒤에는 방향·점수 차이·반복 노출 구조가 달랐다.
-
-> 이 글에서 **quality**는 후보 응답과 reference answer 사이의 평균 문장 임베딩 유사도다. 응답 품질 전반이나 인간 선호와의 일치를 뜻하지 않는다.
+Lee et al.의 Alignment Data Map(ADM) <a class="citation-ref" href="#ref-adm" aria-label="Reference 1">[1]</a>은 한 지시문의 후보 응답에서 계산한 alignment score의 평균과 분산으로 선호 데이터를 구분해 학습 데이터를 선택하는 방법이다. 그러나 ADM 영역만으로는 이 좌표가 reference answer와 텍스트 처리 방식에 따라 얼마나 달라지는지, 선택된 지시문이 어떤 학습 쌍으로 구체화되는지 알 수 없다. 이 글에서는 4,500개 지시문을 대상으로, 측정 조건에 따른 좌표와 영역의 변화부터 선택된 지시문이 실제 선호 학습 쌍으로 변환되는 과정까지 분석했다.
 
 ## 요약
 
@@ -38,13 +34,19 @@ ADM 영역은 reference answer, 장문 처리 방식, 코호트 구성에 따라
 
 ## 문제 설정
 
-ADM은 후보 응답별 alignment score의 평균과 변동으로 HighAvg·LowAvg·HighVar 영역을 구성한다. 평균과 변동으로 데이터의 특성을 구분한다는 관점은 Swayamdipta et al.의 Dataset Cartography <a class="citation-ref" href="#ref-dataset-cartography" aria-label="Reference 2">[2]</a>에서 이어지지만, ADM은 이를 선호 데이터 선택에 적용한다.
+ADM은 후보 응답별 alignment score의 평균과 변동을 이용해 지시문을 HighAvg·LowAvg·HighVar 영역으로 나눈다. 원 ADM 연구는 LLM-as-a-judge, reward model, reference-based scoring으로 alignment score를 측정했다. 이 가운데 **높은 평균과 낮은 변동을 보인 HighAvg 표본 33%**만으로 학습해도, 전체 데이터를 사용한 학습과 비교해 MT-Bench, Evol-Instruct, AlpacaEval에서 **비슷하거나 더 높은 alignment 성능**을 얻었다고 보고했다 <a class="citation-ref" href="#ref-adm" aria-label="Reference 1">[1]</a>.
 
-원 ADM 연구는 LLM-as-a-judge, reward model, reference-based scoring으로 만든 서로 다른 지도에서도 HighAvg 선택의 집계 학습 성능 우위가 유지됐다고 보고했다 <a class="citation-ref" href="#ref-adm" aria-label="Reference 1">[1]</a>. 집계 성능을 다시 검증하는 대신, **측정 조건에 따른 동일 지시문의 좌표·영역 유지와 실제 학습 쌍으로의 변환 구조**를 분석했다. 집계 성능의 안정성과 개별 표본 영역의 안정성은 서로 다른 질문이다.
+그러나 집계 학습 성능의 안정성이 동일한 지시문의 좌표와 영역까지 안정적이라는 뜻은 아니다. 이 글은 두 질문을 구분한다. 첫째, reference answer와 텍스트 처리 방식이 달라질 때 **동일한 지시문의 ADM 좌표와 영역이 얼마나 유지되는가**. 둘째, 각 영역에서 선택된 지시문이 실제 선호 학습 쌍으로 변환될 때 **어떤 학습 신호가 형성되는가**.
 
-Song의 data-centric alignment pipeline <a class="citation-ref" href="#ref-data-centric-alignment" aria-label="Reference 3">[3]</a>은 alignment data construction을 response synthesis, preference evaluation, preference instantiation으로 나눈다. 이 글의 기여는 이 파이프라인 관점 자체가 아니라, ADM의 reference-based measurement에서 실제 SimPO 선호 쌍까지 이어지는 변환을 한 사례에서 수치화한 데 있다.
+두 질문은 연결되어 있지만 **분석 단위가 다르다**. ADM은 지시문을 선택하지만 실제 선호 학습은 chosen–rejected 응답 쌍을 사용한다. 하나의 지시문에서 여러 응답 쌍이 만들어질 수 있으며, 각 쌍의 점수 차이와 선호 방향도 다를 수 있다.
 
-선호 데이터에서 응답 쌍의 점수 차이(pair margin)와 구성은 Yang et al. <a class="citation-ref" href="#ref-pair-efficiency" aria-label="Reference 4">[4]</a>, Deng et al. <a class="citation-ref" href="#ref-preference-selection" aria-label="Reference 5">[5]</a>, Xiao et al. <a class="citation-ref" href="#ref-sweet-spot" aria-label="Reference 6">[6]</a>이 각각 다뤘고, Pan et al.은 chosen 응답의 품질을 분석했다 <a class="citation-ref" href="#ref-what-matters-dpo" aria-label="Reference 7">[7]</a>. 이 글은 특정 selection rule의 일반적 우위를 평가하지 않는다. 분석 대상은 지시문 단위 선택 뒤에 형성되는 응답 쌍 단위 학습 신호다.
+따라서 이 글은 ADM의 reference-based measurement가 실제 SimPO 선호 쌍으로 이어지는 과정을 하나의 실험 사례로 수치화한다. 분석 대상은 지시문 단위 선택 뒤에 형성되는 응답 쌍 단위 학습 신호이며, 특정 selection rule의 일반적 우위나 새로운 data-construction pipeline을 제안하지 않는다.
+
+## 관련 연구
+
+평균과 변동으로 데이터의 특성을 구분하는 관점은 Swayamdipta et al.의 Dataset Cartography <a class="citation-ref" href="#ref-dataset-cartography" aria-label="Reference 2">[2]</a>에서 이어지며, ADM은 이를 선호 데이터 선택에 적용한다. Song의 data-centric alignment pipeline <a class="citation-ref" href="#ref-data-centric-alignment" aria-label="Reference 3">[3]</a>은 alignment data construction을 response synthesis, preference evaluation, preference instantiation으로 나눈다. 이 구분은 ADM의 측정과 실제 선호 쌍 구성이 서로 다른 단계임을 설명하는 틀을 제공한다.
+
+선호 데이터에서 응답 쌍의 점수 차이와 구성은 Yang et al. <a class="citation-ref" href="#ref-pair-efficiency" aria-label="Reference 4">[4]</a>, Deng et al. <a class="citation-ref" href="#ref-preference-selection" aria-label="Reference 5">[5]</a>, Xiao et al. <a class="citation-ref" href="#ref-sweet-spot" aria-label="Reference 6">[6]</a>이 다뤘고, Pan et al.은 chosen 응답의 품질을 분석했다 <a class="citation-ref" href="#ref-what-matters-dpo" aria-label="Reference 7">[7]</a>. 이 글은 새로운 selection rule을 비교하기보다, ADM에서 선택된 지시문이 실제 학습 쌍으로 구체화될 때 형성되는 응답 쌍 단위 신호에 초점을 둔다.
 
 ## 평가 설계
 
@@ -53,6 +55,8 @@ Song의 data-centric alignment pipeline <a class="citation-ref" href="#ref-data-
 측정 코호트는 UltraFeedback <a class="citation-ref" href="#ref-ultrafeedback" aria-label="Reference 8">[8]</a>에서 원천 데이터셋, 과제 유형, 지시문 길이를 고려해 뽑은 4,500개 지시문과 지시문당 후보 응답 4개로 구성했다. Reference answer는 <a href="https://huggingface.co/Qwen/Qwen3.5-122B-A10B"><code>Qwen3.5-122B-A10B</code></a>의 non-thinking 설정에서 temperature 0, 최대 4,096토큰으로 생성했다.
 
 각 후보 응답은 Sentence-BERT 계열의 <a href="https://huggingface.co/sentence-transformers/all-mpnet-base-v2"><code>all-mpnet-base-v2</code></a> <a class="citation-ref" href="#ref-sentence-bert" aria-label="Reference 9">[9]</a> <a class="citation-ref" href="#ref-mpnet" aria-label="Reference 10">[10]</a>로 reference answer와의 cosine similarity를 계산했다. 앞부분 기준선은 최대 384토큰을 사용한다. 지시문별 네 유사도의 평균을 quality, 모분산을 variability로 두고, 전체 코호트의 상대 순위에 따라 LowAvg·HighAvg·HighVar를 각 1,500개로 나눴다. 따라서 영역은 절대 등급이 아니라 해당 reference answer·채점 방식·코호트 안의 상대적 위치다.
+
+> 이 글에서 **quality**는 후보 응답과 reference answer 사이의 평균 문장 임베딩 유사도다. 응답 품질 전반이나 인간 선호와의 일치를 뜻하지 않는다.
 
 실제 학습 쌍 분석에는 중첩 창 평균으로 다시 계산하고 출처×과제 유형별로 나눈 지도를 사용했다. 이 조건은 전체 코호트에서 직접 나눈 초기 지도와 동일하지 않다.
 
@@ -224,6 +228,8 @@ ADM 좌표는 reference answer와 텍스트 처리 방식에 의존하는 상대
 - Reference answer 비교에서는 모델과 생성 설정을 함께 바꿨고, 60개 표본의 범위는 신뢰구간이 아니라 쌍별 비교와 반복 실행을 요약한 값이다. 측정 타당성을 확인하려면 같은 4,500개 지시문과 후보 응답 집합에 여러 reference answer를 적용하고, 장문 채점 방식을 사람 평가나 과제 정답에 근거한 주석과 비교해야 한다.
 - 공통 600쌍은 반복 사용된 개발 세트이며 쌍 단위 신뢰구간을 계산하지 않았다. 파이프라인 비교에는 무작위 선택과 전체 데이터 조건이 없고, 모든 학습 결과는 하나의 seed에서 나왔다. 영역별 모델 선택과 응답 쌍 구성도 함께 달라져 ADM 영역 자체의 효과를 분리할 수 없다. 후속 비교에서는 데이터 구성·모델·학습 설정을 고정하고 응답 쌍 방향만 바꾼 조건을 여러 seed로 확인해야 한다.
 - 외부 데이터와 downstream benchmark에 대한 일반화는 평가 범위에 포함하지 않았다.
+
+{% include related-research-note.html label="다음 연구 노트" aria_label="이 글에 이어지는 Alignment Data Map 후속 연구 노트" title="Alignment Data Map: 선별된 선호 쌍의 SimPO 경계 통과 시점과 모델별 차이" description="HighAvg와 Random pair가 policy 기준 SimPO boundary를 언제 통과하는지 비교한 multi-seed trajectory 분석" image="/assets/images/posts/selected-preference-pairs-helped-earlier-not-uniformly/social-thumbnail.png" url="/research/2026/09/01/selected-preference-pairs-helped-earlier-not-uniformly/ko/" %}
 
 ## Appendix: 주요 지표
 
