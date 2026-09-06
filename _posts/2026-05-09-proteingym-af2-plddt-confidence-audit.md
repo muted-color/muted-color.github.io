@@ -1,15 +1,16 @@
 ---
-title: "ProteinGym low-label fitness에서 AlphaFold WT geometry와 pLDDT gate 한계 점검"
+lang: ko
+title: "ProteinGym 6-assay에서 WT geometry의 보완 신호와 pLDDT gate 비용"
 date: 2026-05-09 09:58:14 +0900
-last_modified_at: 2026-05-09 21:37:40 +0900
+last_modified_at: 2026-09-06 00:00:00 +0900
 categories: ["PROTEIN ML"]
 tags: [protein, proteingym, alphafold, plddt, esm2, protein-fitness, structure-features, low-label]
 lab_path: "experiment-lab/projects/proteingym-af2-plddt-confidence-audit"
 hidden: true
 published: false
 publication_status: "unpublished"
-lock_reason: "초기 가설이 WT 구조 맥락과 mutant effect prediction을 충분히 구분하지 못해 공개 글로 두지 않는다."
-excerpt: "ProteinGym single-mutant low-label 조건에서 AlphaFold WT 구조 geometry feature의 단순 추가와 pLDDT threshold gate가 뚜렷한 개선 경로로 보이지 않았다는 6-assay 점검."
+lock_reason: "geometry feature 정의·threshold 선택 규칙·assay별 paired 결과를 보완해야 하는 진단 초안이다."
+excerpt: "ProteinGym 6-assay에서 WT geometry의 작은 양의 차이와 pLDDT threshold replacement의 음의 차이를 분리한 low-label Ridge 평가."
 description: "ProteinGym single-mutant low-label 6-assay 점검에서 AlphaFold WT 구조 geometry feature의 단순 추가 차이는 작았고, pLDDT threshold replacement는 음수로 남았다."
 permalink: /research/2026/05/09/proteingym-af2-plddt-confidence-audit/
 image: /assets/images/posts/proteingym-af2-plddt-confidence-audit/social-thumbnail.png
@@ -20,46 +21,32 @@ hero_frame: true
 hero_compact: true
 ---
 
-## 비공개 메모
+AlphaFold가 예측한 변이 전 단백질(wild type, WT)의 구조 정보가 변이의 fitness 순위 예측을 보완하는지 평가했다. 또 구조 신뢰도인 pLDDT가 낮은 위치의 정보를 끄는 규칙이 도움이 되는지 별도로 비교했다. 6개 실험(assay)의 집계에서 **구조 특징을 그대로 추가한 차이는 양수였고, pLDDT 임계값으로 걸러 대체한 차이는 음수였다.**
 
-이 글은 공개하지 않는다. 핵심 이유는 결과가 약해서가 아니라, 초기 가설 설정이 충분히 정교하지 않았기 때문이다. AlphaFold wild-type (WT) geometry는 변이 전 구조 맥락을 설명하는 context descriptor에 가깝고, ProteinGym fitness prediction은 변이 후 기능 방향을 맞히는 mutation effect prediction 문제다. 초기 설계는 이 둘을 충분히 구분하지 못한 채, WT local geometry를 low-label Ridge feature로 단순 추가하면 sequence baseline 위에 보조 신호가 남을 수 있다는 느슨한 가설에서 출발했다.
+Notin et al.의 ProteinGym은 단백질 변이 효과를 평가하는 벤치마크다 <a class="citation-ref" href="#ref-proteingym" aria-label="Reference 1">[1]</a>. 여기서는 아미노산 하나만 바뀐 변이를 대상으로, 적은 수의 측정값으로 학습해 학습에서 제외한 변이의 순위를 예측하는 조건을 사용했다. Fitness는 각 assay가 측정한 기능 지표를 뜻한다. 기준선은 단백질 서열을 수치 벡터로 바꾼 embedding에 Ridge 회귀를 적용한 모델이다. Ridge는 계수 크기를 제한하는 선형 회귀다.
 
-따라서 이 글의 공개 가능한 결론은 제한적이다. 실험은 AlphaFold 구조 정보 전체의 무용성을 보인 것이 아니라, WT-only local geometry와 pLDDT threshold를 직접 feature로 붙이는 설계가 context descriptor와 mutation effect predictor 사이의 간격을 메우지 못했다는 내부 실패 기록에 가깝다. 후속 실험은 WT 구조 맥락 자체보다 mutant-aware 변화량, energy-like feature, assay mechanism별 readout, 또는 residue-pair/nonlinear interaction을 먼저 가설에 포함해야 한다.
-
-ProteinGym single-mutant supervised low-label 조건에서는 적은 mutant label로 held-out mutant의 fitness 순위를 예측해야 한다 <a class="citation-ref" href="#ref-proteingym" aria-label="Reference 1">[1]</a>. Sequence embedding 기반 Ridge baseline은 단순하고 안정적인 비교 기준이지만, mutation이 놓인 wild-type (WT) 구조 주변의 geometry를 직접 보지는 않는다.
-
-평가 질문은 AlphaFold WT 구조 feature의 단순 추가와 pLDDT confidence를 threshold gate로 쓰는 방식이 low-label fitness prediction의 뚜렷한 개선 경로로 남는지다 <a class="citation-ref" href="#ref-plddt-guide" aria-label="Reference 2">[2]</a>. 비교 목적은 새 구조 모델 제안이 아니라 feature 사용 방식의 한계 점검이며, 해석 범위는 official single-mutant supervised folds를 사용한 6-assay 결과로 제한한다.
-
-> **pLDDT**는 AlphaFold 계열 구조 예측의 residue-level local confidence score다. 이 값은 local 구조 신뢰도를 읽는 데 유용하지만, domain 간 상대 배치나 fitness prediction 성능을 직접 보장하는 점수는 아니다 <a class="citation-ref" href="#ref-plddt-guide" aria-label="Reference 2">[2]</a>.
+> **Raw geometry**는 pLDDT로 걸러내기 전의 WT 구조 특징이다. **Threshold gate**는 pLDDT 임계값에 따라 구조 특징의 사용 여부를 정하는 규칙이다. 이 글은 구조 특징 자체의 추가 효용과 이 규칙의 효용을 분리한다.
 >
-> **DMS**는 deep mutational scanning assay다. ProteinGym의 substitution DMS 중 single-mutant row만 사용해, 이미 측정된 변이의 fitness ranking을 예측한다.
+> **pLDDT**는 AlphaFold 계열 구조 예측에서 각 아미노산 잔기 주변 구조의 신뢰도를 나타낸다. 도메인 간 상대 배치나 fitness 예측 성능을 직접 보장하지는 않는다 <a class="citation-ref" href="#ref-plddt-guide" aria-label="Reference 2">[2]</a>.
+>
+> **DMS(deep mutational scanning)**는 많은 변이의 효과를 측정하는 실험이다. 이 글은 ProteinGym의 DMS 치환 자료 중 단일 변이만 사용한다.
 
 {% include model-mention-cards.html label="사용한 주요 리소스" aria_label="사용한 핵심 벤치마크와 모델 리소스" models="ProteinGym|proteingym.org|https://proteingym.org/;ProteinGym v1|DMS substitutions|https://huggingface.co/datasets/OATML-Markslab/ProteinGym_v1;ESM2-8M|facebook/esm2_t6_8M_UR50D|https://huggingface.co/facebook/esm2_t6_8M_UR50D;ESM2-35M|facebook/esm2_t12_35M_UR50D|https://huggingface.co/facebook/esm2_t12_35M_UR50D" %}
 
 ## 요약
 
-- AlphaFold WT geometry는 변이 위치의 구조적 제약이 sequence-only baseline 위에 보조 신호로 남을 수 있다는 가설에서 평가했다.
-- 6개 assay 점검에서 AlphaFold WT 구조 geometry feature의 단순 추가와 pLDDT threshold gate는 뚜렷한 개선 경로로 분리되지 않았다.
-- pLDDT를 보조 변수로 넣은 차이는 거의 없었고, pLDDT threshold replacement는 Modulo/Random과 Contiguous 모두에서 음수였다.
-- Sequence-only Ridge 기준선에 raw geometry를 더하면 median ΔSpearman은 양수였지만 차이는 작았다. ESM2-8M 기준 Modulo/Random 합산 값은 `+0.019805`, Contiguous split 값은 `+0.014991`였다.
-- ESM2-35M + mutation/position 보강 기준선에서는 raw geometry 차이가 `+0.005989`로 더 줄었다.
-- 가능한 이유는 WT-only static geometry, coarse local feature, assay readout과 구조 feature의 불일치, sequence 기준선과의 정보 중복으로 나뉜다.
-- pLDDT는 geometry feature의 fitness prediction 유용성이 아니라 구조 예측 confidence에 가까워, 현 설정에서는 gate보다 mapping 점검과 low-confidence region별 성능 보고에 더 적합하다.
-- 해석 범위는 ProteinGym 전체가 아니라 official single-mutant supervised folds를 사용한 6-assay 결과로 제한하며, 통계적 유의성을 주장하지 않는다.
+- 6개 ProteinGym assay의 single-mutant supervised folds에서 ESM2/Ridge에 WT geometry와 pLDDT feature를 추가했다.
+- ESM2-8M 기준 raw geometry의 paired median ΔSpearman은 Modulo/Random `+0.019805`, Contiguous `+0.014991`였다.
+- ESM2-35M + mutation/position 기준선에서도 raw geometry 차이는 `+0.005989`로 양수였다. 작은 보완 신호를 관찰했으며 geometry의 무용성을 보인 결과는 아니다.
+- 같은 보강 조건의 threshold replacement 차이는 `-0.003190`이었다. 이는 raw geometry 추가 효과와 별개의 비교다.
+- pLDDT는 구조의 local confidence이며 fitness feature의 효용 점수가 아니다. 이 threshold 규칙을 통한 제거는 지지되지 않았다.
+- 반복 fold·budget·seed 집계는 6개 assay의 범위를 넓히지 않는다. assay별 이질성과 불확실성 없이 일반적인 개선이나 실패를 주장하지 않는다.
 
 ## 배경 가설
 
-AlphaFold WT geometry를 평가한 배경은 단백질 변이 효과가 sequence identity만이 아니라 구조적 위치에도 영향을 받는다는 점이다. buried residue, contact-dense core, secondary structure, active site나 interface 근처의 mutation은 solvent-exposed loop의 mutation과 다른 제약을 받을 수 있다. Sequence embedding은 이런 제약을 간접적으로 담을 수 있지만, low-label Ridge 조건에서는 특정 단백질의 3D 이웃, local packing, backbone geometry처럼 구조에서 바로 읽히는 정보를 명시적으로 쓰지는 않는다.
+AlphaFold WT geometry를 평가한 배경은 단백질 변이 효과가 아미노산 서열뿐 아니라 구조적 위치에도 영향을 받는다는 점이다. buried residue, contact-dense core, secondary structure, active site나 interface 근처의 mutation은 solvent-exposed loop의 mutation과 다른 제약을 받을 수 있다. 서열 embedding은 이런 제약을 간접적으로 담을 수 있지만, low-label Ridge 조건에서는 특정 단백질의 3D 이웃, local packing, backbone geometry처럼 구조에서 바로 읽히는 정보를 명시적으로 쓰지는 않는다.
 
 평가 가설은 두 부분으로 나뉜다. AlphaFold WT 구조에서 변이 위치 주변의 raw geometry를 붙이면 sequence-only baseline 위에 일부 추가 정보가 남을 수 있다. 또한 pLDDT가 낮은 위치의 geometry는 예측 신뢰도가 낮으므로, threshold gate로 줄이는 편이 더 안정적일 수 있다. 이 가설은 AlphaFold 구조가 변이 후 기능 변화를 직접 예측한다는 뜻이 아니라, WT 구조 맥락이 low-label fitness ranking에서 보조 신호로 남는지 확인하는 질문에 가깝다.
-
-## 문제 설정
-
-분리해야 할 축은 두 가지다. 하나는 WT 구조에서 계산한 raw geometry가 sequence embedding이 놓치는 위치 주변 신호를 보완하는지이고, 다른 하나는 AlphaFold confidence인 pLDDT가 그 geometry를 직접 켜고 끄는 기준으로 충분한지다.
-
-이 구분이 필요한 이유는 AlphaFold WT 구조와 pLDDT가 서로 다른 종류의 정보를 담기 때문이다. WT geometry는 변이 위치의 정적 구조 맥락을 제공하지만, 변이 후 안정성, 활성, 발현, binding 변화의 방향을 직접 예측하지는 않는다. pLDDT는 구조 예측의 local confidence이며, 해당 geometry feature가 fitness prediction에 유용한지까지 보장하지 않는다.
-
-따라서 평가 질문은 **성능 feature 발굴이 아니라, AlphaFold WT geometry와 pLDDT confidence를 low-label fitness prediction에서 어디까지 진단 신호로만 남겨야 하는지**로 좁혀진다.
 
 ## 평가 설정
 
@@ -67,7 +54,7 @@ AlphaFold WT geometry를 평가한 배경은 단백질 변이 효과가 sequence
 
 Split 이름은 ProteinGym supervised protocol을 따른다. `Random`은 mutant row를 무작위로 나누는 비교이고, `Modulo`는 mutation position 기준으로 held-out position에 가까운 일반화를 더 보게 하는 비교다. `Contiguous`는 연속된 position block을 held-out으로 두는 보강 점검이다.
 
-Primary metric은 Spearman이다. MSE, NDCG, Top-10% recall은 diagnostic metric으로 남기고, 본문 결론은 paired median ΔSpearman 중심으로 제한한다.
+주 지표는 예측 순위와 측정값 순위의 일치도를 나타내는 Spearman 상관계수다. 같은 assay·분할·학습량·seed에서 두 조건의 Spearman 차이를 구한 뒤 그 중앙값을 보고한다(paired median ΔSpearman). 양수는 앞 조건이 뒤 조건보다 높다는 뜻이다. MSE, NDCG, Top-10% recall은 보조 진단 지표로 두었다.
 
 Table 1은 최종 분석에 포함한 6개 assay의 구조 mapping 상태와 mutated-position pLDDT 범위를 먼저 고정한다.
 
@@ -136,12 +123,12 @@ Table 1은 최종 분석에 포함한 6개 assay의 구조 mapping 상태와 mut
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 1.</strong> 최종 6개 assay의 mutated-position pLDDT와 mapping 상태다. Median pLDDT와 IQR은 mutated position에서의 confidence 분포를 요약한다. pLDDT threshold의 성능을 주장하기보다, 서로 다른 confidence 범위의 assay가 모두 exact mapping 조건을 통과했음을 확인하는 기준이다.</figcaption>
+  <figcaption><strong>Table 1.</strong> 최종 6개 assay의 mutated-position pLDDT와 mapping 상태다. Median pLDDT는 변이 위치의 신뢰도 중앙값이고, IQR은 사분위 범위다. pLDDT threshold의 성능을 주장하기보다, 서로 다른 confidence 범위의 assay가 모두 exact mapping 조건을 통과했음을 확인하는 기준이다.</figcaption>
 </figure>
 
-## 비교 조건
+### Feature 비교 조건
 
-비교 조건은 구조 신호와 confidence 신호의 역할을 분리하도록 구성했다. `B1`은 ESM2-8M sequence embedding 기반 Ridge 기준선이다. `B2`는 raw geometry feature를 추가한 조건이고, `B2.5`는 pLDDT를 보조 변수로 더한 조건이다. `B3`는 raw geometry를 pLDDT threshold feature로 대체하며, `B4`는 raw geometry를 유지한 채 gated geometry interaction을 추가한다. Table 2는 이 조건들의 역할을 요약한다.
+비교 조건은 구조 신호와 confidence 신호의 역할을 분리하도록 구성했다. `B1`은 ESM2-8M sequence embedding 기반 Ridge 기준선이다. `B2`는 raw geometry feature를 추가한 조건이고, `B2.5`는 pLDDT를 보조 변수로 더한 조건이다. `B3`는 raw geometry를 pLDDT 임계값으로 걸러낸 구조 특징으로 대체하며, `B4`는 raw geometry를 유지한 채 gated geometry interaction을 추가한다. Table 2는 이 조건들의 역할을 요약한다.
 
 <figure class="table-figure table-figure--comparison">
   <div class="table-shell">
@@ -182,7 +169,7 @@ Table 1은 최종 분석에 포함한 6개 assay의 구조 mapping 상태와 mut
         <tr>
           <td><code>B3</code></td>
           <td><code>B1 + gated geometry</code><br><span class="table-note-inline">+ pLDDT covariates</span></td>
-          <td>raw geometry를 pLDDT threshold feature로 대체</td>
+          <td>raw geometry를 pLDDT 임계값으로 걸러낸 구조 특징으로 대체</td>
         </tr>
         <tr>
           <td><code>B4</code></td>
@@ -195,15 +182,15 @@ Table 1은 최종 분석에 포함한 6개 assay의 구조 mapping 상태와 mut
   <figcaption><strong>Table 2.</strong> 비교한 Ridge feature 구성이다. raw geometry를 그대로 추가하는 조건, pLDDT를 보조 변수로 두는 조건, pLDDT threshold가 raw geometry를 대체하는 조건을 분리해 읽기 위한 표다.</figcaption>
 </figure>
 
-중요한 구분은 replacement와 additive interaction이다. pLDDT가 낮은 위치의 geometry를 끄는 규칙이 실제로 도움이 되는지, 아니면 confidence를 진단 변수로만 두는 편이 나은지를 분리한다.
+Replacement는 기존 구조 특징을 걸러낸 특징으로 바꾸는 조건이다. Additive interaction은 기존 특징을 유지하면서 gate를 적용한 특징을 추가하는 조건이다. 두 비교를 분리해야 낮은 신뢰도의 정보를 제거하는 효과와 보조 정보로 더하는 효과를 구분할 수 있다.
 
-## 결과: 개선 경로 점검
+## 결과
 
 ### pLDDT gate와 raw geometry
 
-6개 assay, official Modulo/Random split, train budget `24/48/96/192/384`, seed 5개 조건에서 총 1500개 paired 결과를 비교했다. 가장 안정적인 결론은 raw WT geometry의 작은 양수가 아니라, pLDDT threshold gate가 개선 경로로 분리되지 않았다는 점이다.
+6개 assay, official Modulo/Random split, train budget `24/48/96/192/384`, seed 5개 조건에서 총 1500개 paired 결과를 비교했다. Raw WT geometry의 양의 차이와 threshold gate의 음의 차이는 별개로 읽는다. 1500개는 같은 assay에서 fold·budget·seed를 반복한 비교 수이며 독립 assay 수는 6개다.
 
-Modulo/Random 합산에서 raw geometry 추가 조건인 `B2 - B1`은 `+0.019805`였지만, pLDDT covariate 추가인 `B2.5 - B2`는 `+0.001938`에 그쳤다. 반면 pLDDT threshold replacement인 `B3 - B2.5`는 `-0.005542`였다. Additive interaction인 `B4 - B2.5`는 `+0.001289`로 거의 중립에 가까웠지만, `B4 - B3`는 `+0.006355`로 replacement 조건보다 안정적이었다.
+Modulo/Random 합산에서 raw geometry 추가 조건인 `B2 - B1`은 `+0.019805`였지만, pLDDT covariate 추가인 `B2.5 - B2`는 `+0.001938`에 그쳤다. 반면 pLDDT threshold replacement인 `B3 - B2.5`는 `-0.005542`였다. Additive interaction인 `B4 - B2.5`는 `+0.001289`로 거의 중립에 가까웠지만, `B4 - B3`는 `+0.006355`로 replacement 조건보다 높았다.
 
 Table 3은 메인 비교를 paired median ΔSpearman으로 압축한다.
 
@@ -241,7 +228,7 @@ Table 3은 메인 비교를 paired median ΔSpearman으로 압축한다.
         <tr>
           <td><code>B4 - B3</code></td>
           <td class="align-right"><code>+0.006355</code></td>
-          <td>additive가 replacement보다 안정적</td>
+          <td>additive가 replacement보다 높음</td>
         </tr>
       </tbody>
     </table>
@@ -249,7 +236,7 @@ Table 3은 메인 비교를 paired median ΔSpearman으로 압축한다.
   <figcaption><strong>Table 3.</strong> Modulo와 Random split을 합친 paired median ΔSpearman이다. 양수는 앞 조건이 뒤 조건보다 Spearman이 높다는 뜻이다. raw geometry 추가 조건의 차이는 작았고, pLDDT threshold replacement는 음수로 남았다.</figcaption>
 </figure>
 
-pLDDT가 직접적인 성능 gate라는 해석은 지지되지 않았다. raw WT geometry 추가 조건도 큰 개선으로 보기 어렵고, pLDDT는 그 작은 차이를 해석하고 stratify하는 보조 축에 가깝다.
+이 threshold 규칙이 성능을 높인다는 해석은 지지되지 않았다. Raw WT geometry의 양의 차이는 별도로 남는다. Confidence 구간별 성능 보고는 후속 진단 후보이며 여기서 그 효용까지 입증한 것은 아니다.
 
 ### 기준선 강화 후 축소된 geometry 차이
 
@@ -293,10 +280,38 @@ Table 4는 보강 기준선에서도 raw geometry 차이가 남는지와 pLDDT g
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 4.</strong> 보강 기준선 결과다. ESM2-8M baseline이 약해서 생긴 착시 가능성을 줄이기 위한 비교다. raw geometry 차이는 ESM2-35M embedding에 mutation/position feature를 보강한 baseline에서 더 작아졌다. 비교 열은 각 조건의 기능적 역할을 기준으로 표기했다.</figcaption>
+  <figcaption><strong>Table 4.</strong> 보강 기준선 결과다. 기준선의 표현력이 부족해 구조 특징의 차이가 커 보였을 가능성을 점검한 비교다. raw geometry 차이는 ESM2-35M embedding에 mutation/position feature를 보강한 baseline에서 더 작아졌다. 비교 열은 각 조건의 기능적 역할을 기준으로 표기했다.</figcaption>
 </figure>
 
-보강 비교에서는 raw WT geometry 차이가 더 작아졌다. 따라서 결론은 “AlphaFold WT 구조 geometry를 단순 추가하는 방식은 뚜렷한 개선 경로로 보기 어렵다”에 가깝다. 이 값은 baseline 강도를 높인 조건에서 나온 것이지, assay 수를 늘린 검증은 아니다.
+보강 비교에서도 raw WT geometry의 양의 차이는 남았고 크기는 줄었다. 이는 강한 기준선 위에서도 일부 보완 신호가 남을 가능성을 보여주지만, 실용적 가치와 불확실성은 별도 확인이 필요하다. 기준선을 강화한 비교이며 assay 수를 늘린 검증은 아니다.
+
+분할별 수치와 연속 위치 점검은 Appendix에 둔다.
+
+## 해석: 보완 신호와 threshold 비용
+
+작은 보완 신호와 gate 대체의 음의 차이는 서로 다른 원인에서 생겼을 수 있다. 아래는 WT 구조 특징과 DMS 측정값의 성격을 바탕으로 한 가능한 설명이며, 이번 비교가 원인까지 분리한 것은 아니다.
+
+첫 번째 가능한 요인은 WT의 정적 구조만 사용하는 한계다. 사용한 구조 feature는 mutant별 구조 변화가 아니라 AlphaFold WT 구조에서 변이 위치 주변의 local geometry를 요약한 값이다. 이 정보는 mutation이 놓인 구조 맥락을 알려주지만, side-chain 재배치, contact loss/gain, ΔΔG, 활성 부위 화학, binding interface 변화처럼 변이 후 fitness 방향을 직접 결정할 수 있는 변화량을 담지는 않는다.
+
+두 번째 가능한 요인은 구조 특징의 해상도와 assay 측정 대상의 불일치다. DMS fitness label은 assay에 따라 folding, expression, binding, catalytic activity, stability, growth selection이 섞인 결과일 수 있다. 반면 이 실험의 raw geometry는 변이 위치 근처의 local packing과 backbone context에 가까운 요약 feature다. 기능 변화가 장거리 allostery, domain orientation, partner binding, expression burden처럼 local geometry 밖에서 결정되면, WT 주변 geometry만으로는 label을 충분히 설명하기 어렵다.
+
+세 번째 가능한 요인은 sequence 기준선과의 정보 중복 또는 추가 개선 여지의 감소다. ESM2 embedding은 residue context와 position-dependent sequence pattern을 이미 품고 있고, mutation identity, position fraction, BLOSUM62, physicochemical delta를 더하면 위치와 치환 성격에 대한 저비용 정보도 보강된다. 실제로 ESM2-35M + mutation/position 보강 기준선에서는 raw geometry 차이가 `+0.005989`로 줄었다. 이 결과는 정보 중복을 직접 증명하지는 않지만, 강한 sequence/mutation 기준선 위에서 단순 local geometry가 새로 남기는 신호가 제한적일 수 있음을 시사한다.
+
+네 번째 가능한 요인은 pLDDT의 역할 불일치다. pLDDT는 AlphaFold 계열 prediction에서 residue-level local confidence를 나타내는 점수이며, 해당 위치의 geometry feature가 fitness prediction에 유용한지까지 말해주지는 않는다. 따라서 현 threshold replacement에서는 낮은-confidence geometry를 줄이는 효과와 함께, 유효할 수 있는 구조 맥락을 약화했을 가능성도 있다. 다만 이 결과만으로는 threshold 설계 문제와 pLDDT 자체의 부적합성을 분리하지 못한다.
+
+마지막으로 현재 비교는 Ridge feature 비교다. 구조 feature가 fitness에 영향을 주더라도 그 관계가 nonlinear interaction, residue-pair interaction, assay-specific mechanism으로 나타나면 단순 additive feature가 충분히 표현하지 못할 수 있다. 따라서 이 결과는 AlphaFold 구조 정보 전체의 부정이라기보다, WT local geometry와 pLDDT threshold를 low-label Ridge feature로 직접 붙이는 방식의 한계로 해석하는 편이 더 정확하다.
+
+## 일반화 범위와 적용 기준
+
+현 6-assay 결과에서 raw geometry는 작은 양의 보완 신호를 남겼고, threshold replacement는 그와 별개로 음의 차이를 보였다. Geometry를 채택할 실용적 가치는 추가 feature 계산 비용과 assay별 차이를 함께 평가해야 한다. pLDDT의 confidence 분포와 구간별 성능을 보고하는 것은 가능한 후속 진단이며, 이 비교만으로 최선의 사용법을 확정하지 않는다.
+
+분석 범위는 6-assay 점검이다. ProteinGym 전체 benchmark, UniProt-level aggregate, functional category-level 평균으로 일반화하지 않는다. 본문 수치는 paired median ΔSpearman의 방향과 크기를 보는 점검이며, 통계적 유의성을 주장하지 않는다.
+
+구조 confidence도 pLDDT에 제한된다. PAE, domain orientation confidence, multimer context, disorder-specific interpretation은 다루지 않았다. 따라서 pLDDT가 fitness prediction 성능을 직접 예측한다는 주장은 두지 않는다.
+
+후속 검증에서는 assay 수와 단백질 계열의 다양성을 늘려, 작은 구조 보완 신호와 gate 대체의 음의 차이가 유지되는지 먼저 확인할 필요가 있다. Soft gate나 임계값 탐색은 그다음의 설계 질문으로 남는다.
+
+## Appendix: 분할별 결과
 
 ### 분할 조건별 안정성
 
@@ -348,37 +363,17 @@ Table 5는 같은 비교를 Modulo, Random, Contiguous 조건으로 나눠 보�
 
 ### 연속 위치 분할 점검
 
-Contiguous split에서도 raw geometry의 작은 양수 방향은 유지됐다. 6개 assay, 5 folds, 5 budgets, 5 seeds 조건에서 총 750개 paired 결과를 비교했고, `B2 - B1`은 `+0.014991`였다. 이 값은 Modulo/Random 조건에만 제한되지 않는 보조 관찰이지만, 효과 크기와 통계적 유의성을 주장하는 근거는 아니다.
+Contiguous split에서도 raw geometry의 작은 양수 방향은 유지됐다. 6개 assay, 5 folds, 5 budgets, 5 seeds 조건에서 총 750개 paired 결과를 비교했고, `B2 - B1`은 `+0.014991`였다. 이 값은 Modulo/Random 밖에서도 양의 차이를 관찰했다는 보조 근거다. 통계적 유의성이나 새로운 assay로의 일반화를 보장하지는 않는다.
 
 pLDDT threshold replacement는 이 조건에서도 음수였다. `B3 - B2.5`는 `-0.007403`이었고, `B4 - B2.5`는 `+0.000061`로 사실상 중립이었다. 따라서 pLDDT gate interaction 자체의 독립적 개선은 현재 점검에서는 주장하기 어렵다.
 
-Leave-one-assay-out 성격의 점검에서도 raw geometry 추가 차이는 양수 방향을 자주 유지했다. Modulo/Random에서는 6개 assay 모두 `B2-B1`이 양수였고, LOO median range는 `+0.01263`에서 `+0.02483`이었다. Contiguous에서는 6개 중 5개 assay에서 양수였고, LOO median range는 `+0.00937`에서 `+0.02421`이었다. 이 안정성은 진단적으로는 남지만, pLDDT gate 실패와 작은 차이라는 결론을 바꾸지는 않는다.
+Leave-one-assay-out 성격의 점검에서도 raw geometry 추가 차이는 양수 방향을 자주 유지했다. Modulo/Random에서는 6개 assay 모두 `B2-B1`이 양수였고, LOO median range는 `+0.01263`에서 `+0.02483`이었다. Contiguous에서는 6개 중 5개 assay에서 양수였고, LOO median range는 `+0.00937`에서 `+0.02421`이었다. 이 안정성은 진단적으로는 남지만, geometry의 보완 신호와 threshold replacement의 비용을 분리해서 읽게 한다.
 
-## 뚜렷한 개선으로 이어지지 않은 가능한 요인
+## Appendix: 재현과 불확실성의 공백
 
-결과 자체는 원인이 아니다. 가능한 설명은 AlphaFold WT geometry가 제공하는 정보와 DMS fitness label이 요구하는 정보 사이의 간격에서 찾는 편이 더 적절하다.
+표는 동일 조건 간 paired 차이의 중앙값이다. 중앙값끼리 더하거나 빼서 다른 비교의 중앙값을 재구성할 수 없다. `B4 - B3`는 `B4 - B2.5`와 `B3 - B2.5`의 중앙값 차이와 반드시 같지 않다.
 
-첫 번째 가능한 요인은 WT-only static geometry의 한계다. 사용한 구조 feature는 mutant별 구조 변화가 아니라 AlphaFold WT 구조에서 변이 위치 주변의 local geometry를 요약한 값이다. 이 정보는 mutation이 놓인 구조 맥락을 알려주지만, side-chain 재배치, contact loss/gain, ΔΔG, 활성 부위 화학, binding interface 변화처럼 변이 후 fitness 방향을 직접 결정할 수 있는 변화량을 담지는 않는다.
-
-두 번째 가능한 요인은 feature의 해상도와 assay readout의 불일치다. DMS fitness label은 assay에 따라 folding, expression, binding, catalytic activity, stability, growth selection이 섞인 결과일 수 있다. 반면 이 실험의 raw geometry는 변이 위치 근처의 local packing과 backbone context에 가까운 요약 feature다. 기능 변화가 장거리 allostery, domain orientation, partner binding, expression burden처럼 local geometry 밖에서 결정되면, WT 주변 geometry만으로는 label을 충분히 설명하기 어렵다.
-
-세 번째 가능한 요인은 sequence 기준선과의 정보 중복 또는 추가 headroom 감소다. ESM2 embedding은 residue context와 position-dependent sequence pattern을 이미 품고 있고, mutation identity, position fraction, BLOSUM62, physicochemical delta를 더하면 위치와 치환 성격에 대한 저비용 정보도 보강된다. 실제로 ESM2-35M + mutation/position 보강 기준선에서는 raw geometry 차이가 `+0.005989`로 줄었다. 이 결과는 정보 중복을 직접 증명하지는 않지만, 강한 sequence/mutation 기준선 위에서 단순 local geometry가 새로 남기는 신호가 제한적일 수 있음을 시사한다.
-
-네 번째 가능한 요인은 pLDDT의 역할 불일치다. pLDDT는 AlphaFold 계열 prediction에서 residue-level local confidence를 나타내는 점수이며, 해당 위치의 geometry feature가 fitness prediction에 유용한지까지 말해주지는 않는다. 따라서 현 threshold replacement에서는 낮은-confidence geometry를 줄이는 효과와 함께, 유효할 수 있는 구조 맥락을 약화했을 가능성도 있다. 다만 이 결과만으로는 threshold 설계 문제와 pLDDT 자체의 부적합성을 분리하지 못한다.
-
-마지막으로 현재 비교는 Ridge feature 비교다. 구조 feature가 fitness에 영향을 주더라도 그 관계가 nonlinear interaction, residue-pair interaction, assay-specific mechanism으로 나타나면 단순 additive feature가 충분히 표현하지 못할 수 있다. 따라서 이 결과는 AlphaFold 구조 정보 전체의 부정이라기보다, WT local geometry와 pLDDT threshold를 low-label Ridge feature로 직접 붙이는 방식의 한계로 해석하는 편이 더 정확하다.
-
-## 일반화 범위와 적용 기준
-
-이 결과에서 일반화할 수 있는 적용 기준은 제한적이다. AlphaFold WT geometry의 단순 추가는 뚜렷한 성능 개선용 feature보다 진단용 비교 축으로 두고, pLDDT는 직접적인 성능 gate가 아니라 진단 신호로 둔다. pLDDT는 assay별 mapping 품질, mutated-position confidence 분포, low-confidence region별 성능 보고에 더 적합하다.
-
-분석 범위는 6-assay 점검이다. ProteinGym 전체 benchmark, UniProt-level aggregate, functional category-level 평균으로 일반화하지 않는다. 본문 수치는 paired median ΔSpearman의 방향과 크기를 보는 점검이며, 통계적 유의성을 주장하지 않는다.
-
-구조 confidence도 pLDDT에 제한된다. PAE, domain orientation confidence, multimer context, disorder-specific interpretation은 다루지 않았다. 따라서 pLDDT가 fitness prediction 성능을 직접 예측한다는 주장은 두지 않는다.
-
-또한 현재 결과는 Ridge feature 비교다. 더 복잡한 model class, mutation-aware structure feature, energy-like feature, learned confidence model을 쓰면 다른 결과가 나올 수 있지만, 결론은 현 설정의 diagnostic 점검으로 제한한다.
-
-가장 실용적인 다음 질문은 현 threshold rule을 더 미세 조정하는 것보다, 먼저 assay 수를 늘렸을 때 6-assay 결론이 유지되는지 확인하는 쪽이다. 별도의 soft gate나 threshold sweep은 그 다음의 설계 질문으로 남는다. 후속 실험은 assay coverage와 protein family 다양성을 늘려, AlphaFold WT geometry 단순 추가가 구조적으로 제한적인지 확인하는 편이 더 직접적이다.
+보존된 집계만으로는 raw geometry feature 목록·계산 반경·정규화, pLDDT threshold 값과 선택 집합, Ridge 규제 선택, assay별 fold·budget·seed 대응 결과를 확인할 수 없다. 따라서 assay 단위 불확실성이나 threshold 최적화 여부를 재구성하지 않으며, 위 결과는 기록된 비교 조건의 집계 관찰로 해석한다.
 
 ## References
 
@@ -403,7 +398,7 @@ Leave-one-assay-out 성격의 점검에서도 raw geometry 추가 차이는 양�
 이 글을 인용할 때는 아래 형식을 사용할 수 있다.
 
 ```text
-Ilho Ahn, "ProteinGym low-label fitness에서 AlphaFold WT geometry와 pLDDT gate 한계 점검", Mini Research, May 9, 2026.
+Ilho Ahn, "ProteinGym 6-assay에서 WT geometry의 보완 신호와 pLDDT gate 비용", Mini Research, May 9, 2026.
 ```
 
 또는 BibTeX 형식으로는 다음처럼 적을 수 있다.
@@ -411,7 +406,7 @@ Ilho Ahn, "ProteinGym low-label fitness에서 AlphaFold WT geometry와 pLDDT gat
 ```bibtex
 @article{ahn2026proteingymaf2plddt,
   author = {Ilho Ahn},
-  title = {ProteinGym low-label fitness에서 AlphaFold WT geometry와 pLDDT gate 한계 점검},
+  title = {ProteinGym 6-assay에서 WT geometry의 보완 신호와 pLDDT gate 비용},
   journal = {Mini Research},
   year = {2026},
   month = may,

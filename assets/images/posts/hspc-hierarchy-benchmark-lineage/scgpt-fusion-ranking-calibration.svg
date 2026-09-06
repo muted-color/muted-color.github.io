@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" role="img" aria-labelledby="figure-title figure-desc">
+<title id="figure-title">Ranking and probability quality</title>
+<desc id="figure-desc">Outer-test aggregate mean macro AUPRC, mean ECE, and mean Brier for pca30-B3, whole-human scGPT PCA400-linear, and their nested-validation fusion. Points are preserved table aggregates, without uncertainty intervals. AUPRC uses a focused linear axis.</desc>
+<rect width="1200" height="520" fill="#FFFFFF"/>
+<g font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" fill="#11120F">
+<text x="72.00" y="62" class="figure-title" font-size="22" text-anchor="start" fill="#11120F" font-weight="700">Ranking and probability quality</text>
+<text x="72.00" y="226" class="series-label" font-size="22" text-anchor="start" fill="#11120F" font-weight="400">pca30-B3</text>
+<text x="72.00" y="306" class="series-label" font-size="22" text-anchor="start" fill="#11120F" font-weight="400">Whole-human scGPT</text>
+<text x="72.00" y="334" class="series-label" font-size="22" text-anchor="start" fill="#686B66" font-weight="400">PCA400-linear</text>
+<text x="72.00" y="386" class="series-label" font-size="22" text-anchor="start" fill="#11120F" font-weight="400">Nested fusion</text>
+<text x="408.00" y="132" class="panel-title" font-size="22" text-anchor="start" fill="#11120F" font-weight="400">Mean macro AUPRC</text>
+<text x="408.00" y="162" class="" font-size="22" text-anchor="start" fill="#686B66" font-weight="400">higher is better</text>
+<line x1="408" y1="430" x2="610" y2="430" class="axis-x" stroke="#B8BBB5" stroke-width="1.5"/>
+<line x1="408.0" y1="430" x2="408.0" y2="438" class="" stroke="#B8BBB5" stroke-width="1.5"/>
+<text x="408.00" y="465" class="axis-tick" font-size="22" text-anchor="middle" fill="#686B66" font-weight="400">0.89</text>
+<line x1="475.3333333333333" y1="430" x2="475.3333333333333" y2="438" class="" stroke="#B8BBB5" stroke-width="1.5"/>
+<text x="475.33" y="465" class="axis-tick" font-size="22" text-anchor="middle" fill="#686B66" font-weight="400">0.90</text>
+<line x1="542.6666666666666" y1="430" x2="542.6666666666666" y2="438" class="" stroke="#B8BBB5" stroke-width="1.5"/>
+<text x="542.67" y="465" class="axis-tick" font-size="22" text-anchor="middle" fill="#686B66" font-weight="400">0.91</text>
+<line x1="610.0" y1="430" x2="610.0" y2="438" class="" stroke="#B8BBB5" stroke-width="1.5"/>
+<text x="610.00" y="465" class="axis-tick" font-size="22" text-anchor="middle" fill="#686B66" font-weight="400">0.92</text>
+<circle class="data-mark" cx="471.717533" cy="220" r="7" fill="#686B66"/>
+<text x="471.72" y="200" class="value-label" font-size="22" text-anchor="middle" fill="#11120F" font-weight="400">0.899463</text>
+<rect class="data-mark" x="419.267533" y="293" width="14" height="14" fill="#FFFFFF" stroke="#686B66" stroke-width="2"/>
+<text x="426.27" y="280" class="value-label" font-size="22" text-anchor="middle" fill="#11120F" font-weight="400">0.892713</text>
+<path class="data-mark" d="M 574.542267 371 L 583.542267 380 L 574.542267 389 L 565.542267 380 Z" fill="#5E7FD8"/>
+<text x="574.54" y="360" class="value-label" font-size="22" text-anchor="middle" fill="#11120F" font-weight="400">0.914734</text>
+<text x="662.00" y="132" class="panel-title" font-size="22" text-anchor="start" fill="#11120F" font-weight="400">Mean ECE</text>
+<text x="662.00" y="162" class="" font-size="22" text-anchor="start" fill="#686B66" font-weight="400">lower is better</text>
+<line x1="662" y1="430" x2="864" y2="430" class="axis-x" stroke="#B8BBB5" stroke-width="1.5"/>
+<line x1="662.0" y1="430" x2="662.0" y2="438" class="" stroke="#B8BBB5" stroke-width="1.5"/>
+<text x="662.00" y="465" class="axis-tick" font-size="22" text-anchor="middle" fill="#686B66" font-weight="400">0.00</text>
+<line x1="763.0" y1="430" x2="763.0" y2="438" class="" stroke="#B8BBB5" stroke-width="1.5"/>
+<text x="763.00" y="465" class="axis-tick" font-size="22" text-anchor="middle" fill="#686B66" font-weight="400">0.05</text>
+<line x1="864.0" y1="430" x2="864.0" y2="438" class="" stroke="#B8BBB5" stroke-width="1.5"/>
+<text x="864.00" y="465" class="axis-tick" font-size="22" text-anchor="middle" fill="#686B66" font-weight="400">0.10</text>
+<circle class="data-mark" cx="709.724520" cy="220" r="7" fill="#686B66"/>
+<text x="709.72" y="200" class="value-label" font-size="22" text-anchor="middle" fill="#11120F" font-weight="400">0.023626</text>
+<rect class="data-mark" x="800.290520" y="293" width="14" height="14" fill="#FFFFFF" stroke="#686B66" stroke-width="2"/>
+<text x="807.29" y="280" class="value-label" font-size="22" text-anchor="middle" fill="#11120F" font-weight="400">0.071926</text>
+<path class="data-mark" d="M 845.272580 371 L 854.272580 380 L 845.272580 389 L 836.272580 380 Z" fill="#5E7FD8"/>
+<text x="845.27" y="360" class="value-label" font-size="22" text-anchor="middle" fill="#11120F" font-weight="400">0.090729</text>
+<text x="916.00" y="132" class="panel-title" font-size="22" text-anchor="start" fill="#11120F" font-weight="400">Mean Brier</text>
+<text x="916.00" y="162" class="" font-size="22" text-anchor="start" fill="#686B66" font-weight="400">lower is better</text>
+<line x1="916" y1="430" x2="1118" y2="430" class="axis-x" stroke="#B8BBB5" stroke-width="1.5"/>
+<line x1="916.0" y1="430" x2="916.0" y2="438" class="" stroke="#B8BBB5" stroke-width="1.5"/>
+<text x="916.00" y="465" class="axis-tick" font-size="22" text-anchor="middle" fill="#686B66" font-weight="400">0.00</text>
+<line x1="1017.0" y1="430" x2="1017.0" y2="438" class="" stroke="#B8BBB5" stroke-width="1.5"/>
+<text x="1017.00" y="465" class="axis-tick" font-size="22" text-anchor="middle" fill="#686B66" font-weight="400">0.175</text>
+<line x1="1118.0" y1="430" x2="1118.0" y2="438" class="" stroke="#B8BBB5" stroke-width="1.5"/>
+<text x="1118.00" y="465" class="axis-tick" font-size="22" text-anchor="middle" fill="#686B66" font-weight="400">0.35</text>
+<circle class="data-mark" cx="1043.532411" cy="220" r="7" fill="#686B66"/>
+<text x="1043.53" y="200" class="value-label" font-size="22" text-anchor="middle" fill="#11120F" font-weight="400">0.220972</text>
+<rect class="data-mark" x="1090.902154" y="293" width="14" height="14" fill="#FFFFFF" stroke="#686B66" stroke-width="2"/>
+<text x="1097.90" y="280" class="value-label" font-size="22" text-anchor="middle" fill="#11120F" font-weight="400">0.315177</text>
+<path class="data-mark" d="M 1053.411366 371 L 1062.411366 380 L 1053.411366 389 L 1044.411366 380 Z" fill="#5E7FD8"/>
+<text x="1053.41" y="360" class="value-label" font-size="22" text-anchor="middle" fill="#11120F" font-weight="400">0.238089</text>
+</g>
+</svg>

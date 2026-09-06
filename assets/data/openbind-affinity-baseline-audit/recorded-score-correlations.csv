@@ -1,0 +1,12 @@
+method,measured_pkd_spearman,adjusted_pkd_spearman,recorded_difference_vs_ecfp
+ECFP ridge,0.672,0.430,0.000
+RDKit descriptor RF,0.627,0.337,-0.093
+RDKit descriptor ridge,0.605,0.264,-0.166
+Boltz-2,0.397,0.097,-0.334
+Smina crystal,0.255,0.038,-0.392
+Gnina crystal,0.453,0.018,-0.412
+cLogP,0.174,0.014,-0.416
+molecular weight,0.484,-0.017,-0.448
+MW+cLogP ridge,0.484,-0.020,-0.451
+AqAffinity,0.117,-0.057,-0.487
+AEV-PLIG,0.227,-0.085,-0.516

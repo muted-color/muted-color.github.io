@@ -1,15 +1,15 @@
 ---
 layout: post
-title: "Alignment Data Map: 선별된 선호 쌍의 SimPO 경계 통과 시점과 모델별 차이"
+title: "Alignment Data Map: 공통 평가 쌍의 SimPO 경계 통과 시점과 모델별 차이"
 date: 2026-09-01 17:00:00 +0900
-last_modified_at: 2026-09-03 21:57:40 +0900
+last_modified_at: 2026-09-06 11:11:34 +0900
 lang: ko
 categories: ["LLM ALIGNMENT"]
 tags: [llm, alignment, preference-data, data-selection, adm, simpo, qwen]
 lab_host: "dgx1"
 lab_path: "projects/adm-toolcall"
-excerpt: "ADM으로 선택한 preference pair가 SimPO boundary를 통과하는 시점과 그 양상이 Qwen2.5-Instruct 모델별로 어떻게 달라지는지 추적한다."
-description: "Qwen2.5-Instruct 1.5B·3B·7B에서 ADM HighAvg pair와 Random pair의 SimPO 경계 통과 시점, 그리고 모델과 checkpoint에 따른 차이를 살펴본 후속 연구 노트."
+excerpt: "ADM HighAvg와 Random 데이터로 학습한 모델을 동일한 평가 쌍에서 비교하고, SimPO 경계 통과 시점이 모델과 체크포인트에 따라 어떻게 달라지는지 추적한다."
+description: "Qwen2.5-Instruct 세 모델과 세 시드에서 공통 평가 600쌍의 SimPO 경계 통과를 추적했다. HighAvg의 이른 경계 통과 이점은 모델과 체크포인트에 따라 달랐다."
 permalink: /research/2026/09/01/selected-preference-pairs-helped-earlier-not-uniformly/ko/
 translation_url: /research/2026/09/01/selected-preference-pairs-helped-earlier-not-uniformly/
 image: /assets/images/posts/selected-preference-pairs-helped-earlier-not-uniformly/social-thumbnail.png
@@ -25,16 +25,17 @@ publication_status: "published"
 
 Lee et al.의 Alignment Data Map(ADM) <a class="citation-ref" href="#ref-adm" aria-label="Reference 1">[1]</a>은 한 지시문의 후보 응답에서 계산한 alignment score의 평균과 분산으로 학습 데이터를 구분한다. 핵심은 모든 preference data가 같은 학습 가치를 갖는다고 보지 않고, 후보 응답의 **평균 품질과 응답 간 분산**으로 선택 구간을 찾는 것이다. 원 연구는 평균 점수가 높고 분산이 낮은 HighAvg 표본 33%만으로도 전체 데이터와 비슷하거나 더 높은 alignment 성능을 얻을 수 있다고 보고했다.
 
-그러나 ADM이 어떤 데이터 영역을 선택하는지와, 선택된 데이터가 학습 대상 모델에서 실제로 어떤 학습 신호가 되는지는 별개의 문제다. 이 후속 분석은 ADM으로 선택한 지시문이 실제 preference pair로 바뀐 뒤, Qwen2.5-Instruct 1.5B·3B·7B가 **학습 전에 각 응답 쌍을 얼마나 구분하고 있었는지**와 학습 시점에 따라 어떤 변화가 나타나는지를 추적한다.
+선택된 학습 데이터와 학습 효과를 측정할 평가 쌍은 역할이 다르다. 이 후속 분석은 Qwen2.5-Instruct 1.5B·3B·7B를 HighAvg 또는 Random 데이터로 학습한 뒤, 두 정책에서 **동일한 비중복 평가 600쌍**의 변화를 추적한다. 학습 데이터 선택에 따라 평가 쌍의 선호 방향을 바로잡거나 SimPO 목표 margin에 도달하는 시점이 달라지는지가 질문이다.
 
 {% include related-research-note.html label="이전 연구 노트" aria_label="이 글에 앞선 Alignment Data Map 연구 노트" title="Alignment Data Map: 측정값에서 선호 학습 쌍까지" description="ADM의 선택 기준과 preference pair 구성 과정을 정리한 앞선 분석" image="/assets/images/posts/adm-measurement-to-preference-pairs/hero-adm-map-highavg.png" url="/research/2026/08/23/adm-measurement-to-preference-pairs/ko/" %}
 
 ## 요약
 
-- HighAvg와 Random 조건에서 Qwen2.5-Instruct 1.5B·3B·7B를 각각 별도로 학습했다. 모든 모델은 학습 데이터와 겹치지 않는 600쌍의 공통 평가 데이터에서 비교했다.
+- HighAvg와 Random 조건에서 Qwen2.5-Instruct 1.5B·3B·7B를 각각 세 시드, 276 optimizer update로 학습했다. 추적 대상은 학습 쌍이 아니라 두 조건에 공통으로 사용한 비중복 평가 600쌍이다.
 - 세 모델 크기 모두에서 **학습 전보다 높은 `R/U/T` state로 끝난 pair 비율은 HighAvg가 Random보다 높았다.** 그러나 이점은 모델 크기에 따라 일정하게 커지지 않았다. 7B에서 가장 컸지만, 3B의 최종 차이는 1.5B보다 작았다.
 - 이 차이는 모든 pair의 작은 개선에서 나온 것이 아니었다. HighAvg에서는 Random보다 boundary를 넘어 더 높은 state로 이동한 pair가 많고, 같은 state 안에서 margin만 증가한 pair는 적었으며, 일부 regression도 더 관찰됐다.
 - 가장 분명한 차이는 **같은 학습량 안에서 boundary를 넘는 upward passage가 HighAvg에서 더 이른 checkpoint에 관찰됐다는 점**이다. 후반에는 Random이 일부 pair에서 따라오며 최종 격차가 줄었다.
+- 이 결과는 이미 주어진 응답 쌍에 정책이 부여하는 점수의 변화다. Objective 경계 통과가 생성 답변이나 실제 도구 사용의 개선을 뜻하지는 않으며, 이 비교에서는 그 성능을 평가하지 않았다.
 
 ## 문제 설정
 
@@ -42,9 +43,9 @@ ADM은 측정된 응답 집합의 특성을 나타내고 학습할 지시문을 
 
 이 구분을 바탕으로 다음 질문을 검토했다.
 
-> 높은 품질·낮은 분산 영역에서 선택된 preference pair도, 학습 대상 모델이 학습 전에 chosen–rejected 응답을 얼마나 구분하고 있었는지에 따라 서로 다른 학습 신호가 되는가?
+> HighAvg와 Random 데이터로 학습했을 때, 공통 평가 쌍의 경계 통과는 정책의 초기 상태, 모델 변형, 학습 시점에 따라 어떻게 달라지는가?
 
-검토한 가설은 모델 규모가 커질수록 HighAvg의 효과도 단조 증가할 수 있다는 것이었다. 선택된 pair가 미묘하지만 유용한 차이를 담고 있다면 더 큰 모델이 이를 더 효과적으로 학습할 수 있다고 예상했다.
+검토한 가설은 모델 규모가 커질수록 HighAvg의 효과도 단조 증가할 수 있다는 것이었다. 선택된 학습 쌍이 미묘하지만 유용한 차이를 담고 있다면 더 큰 모델이 이를 더 효과적으로 학습할 수 있다고 예상했다.
 
 ## 관련 연구
 
@@ -60,7 +61,7 @@ Preference pair의 가치는 먼저 **데이터 자체에서 측정한 특성**�
 
 ### 이 글의 분석 범위
 
-이 글은 고정된 ADM selection으로 학습한 조건을 학습 데이터와 분리된 공통 평가 데이터에서 비교하고, policy state transition과 제한된 update budget 안에서 더 높은 state가 관측되는 시점을 추적한다. 분석 대상은 데이터의 정적 품질만이 아니라 선택된 pair가 현재 policy에서 보이는 학습 궤적이다. 새로운 selection rule이나 weighting method를 제안하지는 않는다.
+이 글은 고정된 ADM selection 조건으로 학습한 모델을 학습 데이터와 분리된 공통 평가 세트에서 비교한다. 이 평가 쌍의 상태 전이와 제한된 update budget 안에서 처음 더 높은 상태가 관측되는 시점을 추적한다. 학습 데이터 선택의 효과를 비중복 평가 쌍의 점수 궤적으로 확인하는 분석이며, 새로운 선택 규칙이나 가중치 방법을 제안하지는 않는다.
 
 ## 실험 설계
 
@@ -68,7 +69,7 @@ Preference pair의 가치는 먼저 **데이터 자체에서 측정한 특성**�
 
 이 글에서 **HighAvg**는 고정된 reference answer 집합과 scorer로 만든 ADM의 높은 평균·낮은 분산 영역에서 선택한 지시문으로 구성한 preference pair, **Random**은 같은 원천 pool에서 무작위로 선택한 지시문으로 구성한 preference pair를 뜻한다.
 
-두 조건은 같은 원천 pool에서 source와 task 구성을 유지해 만들고, 동일한 LoRA·SimPO recipe로 학습했다. 학습 대상 모델은 official Qwen2.5-Instruct [1.5B](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct), [3B](https://huggingface.co/Qwen/Qwen2.5-3B-Instruct), [7B](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct)이며, 각 모델 크기마다 서로 다른 seed로 세 번씩 실행했다. 데이터 수가 아니라 학습량을 맞추기 위해 두 조건 모두 약 3 epoch에 해당하는 276 optimizer update로 고정했다.
+두 조건은 같은 원천 pool에서 source와 task 구성을 유지해 만들고, 동일한 LoRA·SimPO recipe로 학습했다. 학습 대상 모델은 official Qwen2.5-Instruct [1.5B](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct), [3B](https://huggingface.co/Qwen/Qwen2.5-3B-Instruct), [7B](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct)이며, 각 모델 크기마다 서로 다른 seed로 세 번씩 실행했다. 두 조건은 약 3 epoch에 해당하는 276 optimizer update와 명목상 batch 예산을 맞췄다. 처리 토큰 수나 실제 소요시간까지 동일하게 맞춘 비교는 아니다.
 
 학습 데이터와 prompt·pair가 겹치지 않는 600쌍을 **공통 평가 데이터**로 정하고, base policy와 step 92·184·276 checkpoint에서 반복 평가했다. 같은 pair를 유지했기 때문에 endpoint aggregate뿐 아니라 각 pair가 학습 중 어느 상태로 이동했는지도 추적할 수 있다. 이 데이터는 새 blind test가 아니라 후속 분석에서도 고정해 사용한 development 자료다.
 
@@ -96,7 +97,7 @@ U:0<\Delta<0.5,
 T:\Delta\ge0.5.
 $$
 
-- **R — preference reversed:** policy가 rejected 응답을 더 선호한다.
+- **R — reversed or tied:** rejected 응답의 순위가 chosen 이상이며, $\Delta=0$인 동점도 포함한다.
 - **U — correct, below target:** chosen 응답의 순위는 높지만 separation이 SimPO target보다 작다.
 - **T — target satisfied:** chosen–rejected separation이 target에 도달했다.
 
@@ -117,7 +118,7 @@ Figure 1은 두 objective boundary가 세 state를 어떻게 나누는지 보여
 
 ### 모델 크기별·학습 시점별 효과
 
-Step 276에서 HighAvg는 세 모델 크기의 세 seed 모두에서 Random보다 reward accuracy, policy margin, final upward movement, target reach가 높았고 SimPO loss는 낮았다.
+Step 276에서 HighAvg는 세 모델 크기의 세 seed 모두에서 Random보다 reward accuracy, policy margin, final upward movement, target reach가 높았고 SimPO loss는 낮았다. Appendix Table 2에 모델·시드별 endpoint accuracy와 loss 차이를 기록했다. 표의 반복 범위는 세 학습 시드이며, 신뢰구간으로 요약하지 않았다.
 
 그러나 효과 크기는 예상한 단조 순서를 만들지 않았다. 초기 state 구성을 공통 분포로 표준화한 HighAvg-minus-Random 최종 upward-movement 차이는 1.5B `+5.64%p`, 3B `+4.27%p`, 7B `+8.06%p`였다.
 
@@ -132,7 +133,7 @@ HighAvg의 효과는 모델 크기가 커질수록 일정하게 증가하지 않
 
 ### Endpoint accuracy와 transition 구성
 
-Reward accuracy는 $\Delta>0$인지 여부만 본다. 따라서 reversed preference의 교정, target margin 돌파, state가 바뀌지 않은 margin 변화, 두 boundary를 가로지르는 regression이 하나의 endpoint 값 안에 섞인다.
+Reward accuracy는 $\Delta>0$인 쌍만 센다. 0 경계를 넘을 때 값이 바뀌지만 `U→T`, `T→U`, 같은 상태 안의 margin 변화는 드러나지 않는다. 최종 값만으로는 그 상태에 도달한 경로도 알 수 없다. 상태 분해는 accuracy가 보여 주지 않는 변화를 추가로 설명한다.
 
 동일 pair의 학습 궤적을 세부 분해하면, HighAvg가 모든 pair에서 조금씩 더 큰 margin 증가를 만든 것은 아니었다. 세 모델 모두에서 학습 내내 같은 state에 머문 pair가 줄었고, downward transition 없이 더 높은 state로 끝나거나 step 276까지 target state에 도달한 pair가 늘었다. 변화 폭은 대체로 1.5B와 7B에서 크고 3B에서 작았다.
 
@@ -142,7 +143,7 @@ Figure 3과 같이 이동이 모두 위쪽이었던 것은 아니다. 학습 중
 
 <figure class="media-figure media-figure--wide-visual">
   <img src="/assets/images/posts/selected-preference-pairs-helped-earlier-not-uniformly/figure3_transition_redistribution.svg" alt="No-state-change, upward progress, target reach, downward transition에서 HighAvg-minus-Random 차이를 1.5B, 3B, 7B별로 비교한 발산형 막대그래프.">
-  <figcaption><strong>Figure 3.</strong> HighAvg-minus-Random transition 구성. Random과 비교하면 HighAvg에서는 같은 state에 머문 pair가 적고, downward move 없이 upward progress를 보이거나 target에 도달한 pair가 많았으며, downward movement를 보인 pair도 소폭 많았다. Whisker는 pair-cluster bootstrap 95% 구간이다. Target-reach 비율은 base부터 <code>T</code>였던 pair를 제외한다.</figcaption>
+  <figcaption><strong>Figure 3.</strong> Seed 42의 HighAvg-minus-Random transition 구성. Random과 비교하면 HighAvg에서는 같은 state에 머문 pair가 적고, downward move 없이 upward progress를 보이거나 target에 도달한 pair가 많았으며, downward movement를 보인 pair도 소폭 많았다. Whisker는 이 seed의 pair-cluster bootstrap 95% 구간이다. Target-reach 비율은 base부터 <code>T</code>였던 pair를 제외한다.</figcaption>
 </figure>
 
 ### Reference score와 다음 boundary까지의 거리
@@ -153,12 +154,14 @@ Base state가 `R` 또는 `U`인 각 pair에서 **Random의 첫 upward passage �
 
 학습 전 policy에서 다음 objective boundary까지의 거리는 더 강한 연관을 보였고, 상관은 `ρ=−.469`에서 `−.443` 사이였다. 다음 boundary가 멀수록 276 update 안에 upward passage가 발생할 가능성이 낮았다.
 
+거리와 passage는 같은 policy margin과 경계로 정의된다. 따라서 이 상관은 그 좌표계 안의 기술적 관계이며, 별도의 학습 메커니즘을 입증하지 않는다. 다음 절에서는 초기 상태와 거리 구간을 맞춘 뒤에도 HighAvg–Random 차이가 남는지를 비교한다.
+
 <figure class="media-figure media-figure--wide-visual">
   <img src="/assets/images/posts/selected-preference-pairs-helped-earlier-not-uniformly/figure4_reference_gap_vs_policy_headroom.svg" alt="하나의 공통 Spearman 상관 축에서 세 seed의 Random 첫 upward passage 빈도와 reference score gap·초기 policy의 next-boundary distance 사이의 상관을 1.5B, 3B, 7B별 점과 95% 구간으로 비교한 그림.">
   <figcaption><strong>Figure 4.</strong> Random의 첫 upward passage 빈도와 reference score gap·학습 전 policy의 next-boundary distance 사이의 Spearman 상관. 오른쪽 숫자는 정확한 Spearman <span aria-label="rho">ρ</span> 값이며, whisker는 pair-cluster bootstrap 95% 구간이다. Reference score gap의 상관은 <code>+.070–+.124</code>로 작았고, next-boundary distance는 <code>−.469–−.443</code>으로 일관된 음의 상관을 보였다.</figcaption>
 </figure>
 
-두 측정은 서로 다른 질문에 답한다. ADM은 고정된 reference measurement로 데이터 영역을 정의하고 지시문을 선택한다. 학습 전 policy에서 다음 boundary까지의 거리는 선택된 pair가 다음 state와 얼마나 떨어져 있는지를 나타낸다. 이번 결과에서 pair의 관측 궤적은 데이터 특성뿐 아니라 학습 시작 시 policy가 해당 pair를 얼마나 구분하고 있었는지, 그리고 어느 update 구간에서 변화를 측정했는지에 따라서도 달라졌다.
+두 측정은 서로 다른 질문에 답한다. ADM은 고정된 reference 측정으로 영역을 정의하고 학습 지시문을 선택한다. 다음 경계까지의 거리는 평가 대상 정책에서 각 공통 평가 쌍이 출발한 위치를 나타낸다. 학습 데이터 선택과 관측된 학습 궤적을 연결할 때도 이 두 역할을 구분해야 한다.
 
 ### Upward passage의 시점 차이
 
@@ -217,31 +220,13 @@ Epoch 1부터 3까지 training accuracy와 training reward margin의 변화량�
 
 최종 upward-movement 차이가 가장 작았던 3B에서도 training metric 차이는 관찰됐다. 다만 이 값은 서로 다른 학습 데이터에서 측정한 학습 배치 지표다. 공통 평가 데이터에서 관찰한 궤적을 대신하지 않으며, 세 모델 크기에서 HighAvg와 Random 사이에 최적화 관련 차이가 있었음을 보여 주는 보조 근거로만 사용했다.
 
-## 결론
+## 해석
 
-모델 크기만을 기준으로 한 가설은 다음과 같았다.
-
-$$
-\text{larger parameter scale}
-\quad\Rightarrow\quad
-\text{larger HighAvg advantage}.
-$$
-
-관측 결과는 다음 연결에 더 가까웠다.
-
-$$
-\text{initial policy state}
-\rightarrow
-\text{distance to the next boundary}
-\rightarrow
-\text{transition reachable within the budget}
-\rightarrow
-\text{observed training effect}.
-$$
+모델이 커질수록 HighAvg 이점도 커진다는 가설은 세 변형에서 단조적으로 성립하지 않았다. 초기 policy 상태, 다음 경계까지의 거리, 관측 예산은 이 양상을 설명하는 틀이다. 측정된 궤적을 해석하기 위한 연결이며, 원인이 순서대로 확인된 인과 경로는 아니다.
 
 모델 역량이 영향을 줄 가능성은 남아 있다. 다만 세 모델 변형은 초기 `R/U/T` 구성과 다음 boundary까지의 거리에서도 달랐고, 이 차이가 관찰된 모델별 양상을 더 직접적으로 설명했다. 이 해석은 HighAvg 효과가 세 모델에서 모두 양수이면서 3B보다 1.5B에서 크고, 다시 7B에서 가장 큰 비단조 결과와 시점별 변화에 부합한다. 또한 효과가 학습 중간에 커졌다가 Random의 후반 추격으로 줄어든 관찰과도 부합한다.
 
-고정된 ADM data map은 데이터가 어느 측정 영역에서 선택됐는지를 알려 준다. 각 checkpoint의 policy margin은 그 pair가 현재 어떤 objective boundary 통과에 가까운지를 보여 준다. 두 정보를 동일 pair의 학습 궤적으로 연결했을 때 이번 비교의 중심 결과는 다음과 같았다.
+고정된 ADM data map은 학습 데이터가 선택된 영역을 알려 준다. 각 체크포인트의 policy margin은 공통 평가 쌍의 궤적을 나타낸다. 학습 데이터 선택 조건과 이 비중복 평가 궤적을 연결했을 때 이번 비교의 중심 결과는 다음과 같았다.
 
 > **HighAvg는 이 고정 비교에서 일관된 집계상 우위를 보였지만, 모든 pair에서 더 큰 개선을 만들거나 모델 크기에 따라 단조 증가한 것은 아니었다. 가장 분명한 차이는 policy 기준 SimPO boundary를 더 일찍 넘긴 upward passage였다.**
 
@@ -252,6 +237,8 @@ $$
 - 공통 평가 데이터는 후속 분석에서도 고정해 사용한 development 자료이므로, 같은 transition pattern이 새로운 외부 평가 데이터에서도 유지되는지는 확인하지 않았다.
 - 세 official Qwen2.5-Instruct 모델 변형은 parameter count 외의 학습 조건과 post-training 결과도 함께 다르므로, 관측 차이를 순수한 모델 크기 효과로 해석할 수 없다.
 - Upward passage는 step 92·184·276에서만 관찰했으므로, 각 pair가 정확히 어느 optimizer step에서 boundary를 넘었는지는 알 수 없다.
+- Pair-cluster bootstrap은 학습된 실행들을 고정하고 평가 쌍을 재표집한다. 학습 시드 모집단의 불확실성을 추정하지 않으며, 재표집 단위는 개별 pair ID다.
+- 주요 결과는 주어진 응답 쌍의 점수로 측정했다. 생성 답변의 품질이나 downstream 과제 성능은 이 비교에 포함하지 않았다.
 
 ## Appendix
 
@@ -302,6 +289,24 @@ $$
   <figcaption><strong>Appendix Table 1.</strong> Seed 42에서 epoch 1부터 3까지 training metric 변화량의 HighAvg-minus-Random 차이. Training accuracy와 reward margin은 양수, SimPO loss는 음수일 때 HighAvg에 유리한 방향이다. 이 값은 서로 다른 학습 데이터에서 측정한 in-distribution 보조 지표이며, 공통 평가 데이터의 trajectory를 대신하지 않는다.</figcaption>
 </figure>
 
+### 공통 평가 세트의 시드별 endpoint
+
+<figure class="table-figure table-figure--metrics">
+  <div class="table-shell">
+    <table class="metrics-table metrics-table--numeric-columns">
+      <thead><tr><th>모델</th><th>HighAvg accuracy<br><span class="table-note-inline">세 시드 평균</span></th><th>Random accuracy<br><span class="table-note-inline">세 시드 평균</span></th><th>Accuracy 차이 (%p)<br><span class="table-note-inline">시드 42 / 43 / 44</span></th><th>SimPO loss 차이<br><span class="table-note-inline">시드 42 / 43 / 44</span></th></tr></thead>
+      <tbody>
+        <tr><td>1.5B</td><td class="align-right"><code>70.06%</code></td><td class="align-right"><code>68.72%</code></td><td class="align-right"><code>+1.00 / +1.83 / +1.17</code></td><td class="align-right"><code>-0.0195 / -0.0228 / -0.0280</code></td></tr>
+        <tr><td>3B</td><td class="align-right"><code>72.56%</code></td><td class="align-right"><code>71.11%</code></td><td class="align-right"><code>+1.17 / +1.50 / +1.67</code></td><td class="align-right"><code>-0.0062 / -0.0029 / -0.0051</code></td></tr>
+        <tr><td>7B</td><td class="align-right"><code>76.17%</code></td><td class="align-right"><code>73.17%</code></td><td class="align-right"><code>+2.50 / +3.83 / +2.67</code></td><td class="align-right"><code>-0.0336 / -0.0382 / -0.0257</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <figcaption><strong>Appendix Table 2.</strong> Step 276의 공통 평가 600쌍에서 계산한 HighAvg-minus-Random 차이. Accuracy는 높을수록, loss는 낮을수록 좋다. 서로 다른 학습 데이터에서 계산한 Appendix Table 1의 학습 메트릭과 구분된다. 보존된 18개 평가 기록의 SHA-256을 확인하고 기존 집계와 대조했다. <a href="/assets/data/selected-preference-pairs-helped-earlier-not-uniformly/step276-seed-summary.csv">CSV: per-seed counts, accuracy, and loss</a>.</figcaption>
+</figure>
+
+최종 상태 이동의 표준화는 세 모델의 초기 상태를 합친 분포(R 0.350556, U 0.282222, T 0.367222)를 사용한다. 이는 Table 1의 R/U × 거리 사분위 8개 층 표준화와 구분된다.
+
 ### 주요 지표
 
 - **Policy margin $\Delta$:** policy의 length-normalized chosen–rejected log-probability 차이.
@@ -339,7 +344,7 @@ $$
 Text citation:
 
 ```text
-Ilho Ahn, "Alignment Data Map: 선별된 선호 쌍의 SimPO 경계 통과 시점과 모델별 차이", Mini Research, September 1, 2026.
+Ilho Ahn, "Alignment Data Map: 공통 평가 쌍의 SimPO 경계 통과 시점과 모델별 차이", Mini Research, September 1, 2026.
 ```
 
 BibTeX:
@@ -347,7 +352,7 @@ BibTeX:
 ```bibtex
 @article{ahn2026selectedpreferencepairsearlier,
   author = {Ilho Ahn},
-  title = {Alignment Data Map: 선별된 선호 쌍의 SimPO 경계 통과 시점과 모델별 차이},
+  title = {Alignment Data Map: 공통 평가 쌍의 SimPO 경계 통과 시점과 모델별 차이},
   journal = {Mini Research},
   year = {2026},
   month = sep,

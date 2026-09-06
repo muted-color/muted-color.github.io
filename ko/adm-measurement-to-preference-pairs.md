@@ -2,7 +2,7 @@
 layout: post
 title: "Alignment Data Map: 측정값에서 선호 학습 쌍까지"
 date: 2026-08-23 20:10:32 +0900
-last_modified_at: 2026-09-03 10:23:20 +0900
+last_modified_at: 2026-09-06 11:12:37 +0900
 lang: ko
 categories: ["LLM ALIGNMENT"]
 tags: [llm, alignment, preference-data, data-selection, adm, simpo, ultrafeedback]
@@ -49,6 +49,25 @@ ADM은 후보 응답별 alignment score의 평균과 변동을 이용해 지시�
 선호 데이터에서 응답 쌍의 점수 차이와 구성은 Yang et al. <a class="citation-ref" href="#ref-pair-efficiency" aria-label="Reference 4">[4]</a>, Deng et al. <a class="citation-ref" href="#ref-preference-selection" aria-label="Reference 5">[5]</a>, Xiao et al. <a class="citation-ref" href="#ref-sweet-spot" aria-label="Reference 6">[6]</a>이 다뤘고, Pan et al.은 chosen 응답의 품질을 분석했다 <a class="citation-ref" href="#ref-what-matters-dpo" aria-label="Reference 7">[7]</a>. 이 글은 새로운 selection rule을 비교하기보다, ADM에서 선택된 지시문이 실제 학습 쌍으로 구체화될 때 형성되는 응답 쌍 단위 신호에 초점을 둔다.
 
 ## 평가 설계
+
+### 측정 조건과 비교 단위
+
+이 글의 결과는 하나의 고정 지도에서 모두 나온 것이 아니다. Table 1은 reference 비교, 장문 처리, 출처별 재구성, 학습 평가를 구분한다.
+
+<figure class="table-figure table-figure--comparison">
+  <div class="table-shell">
+    <table class="comparison-table">
+      <thead><tr><th>비교</th><th>대상 단위</th><th>바뀐 조건 / 해석 역할</th></tr></thead>
+      <tbody>
+        <tr><td>Reference answer</td><td>100개 지시문; 별도 60개 표본</td><td>후보 응답을 유지하고 reference 생성 정책을 비교</td></tr>
+        <tr><td>장문 처리</td><td>4,500개 지시문 × 후보 4개</td><td>동일 reference에서 prefix·head–tail·overlapping-window 점수 비교</td></tr>
+        <tr><td>출처·과제별 지도 재구성</td><td>같은 4,500개 지시문</td><td>전체 코호트 경계와 출처×과제 층별 영역을 구분</td></tr>
+        <tr><td>선호 학습</td><td>3,240개 지시문 → 17,301쌍</td><td>영역별 파이프라인을 비중복 개발 600쌍에서 평가</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <figcaption><strong>Table 1.</strong> 측정과 학습 비교의 단위. 영역 이름이 같아도 reference·텍스트 처리·분할 방식이 달라지면 동일한 지시문이나 응답 쌍을 뜻하지 않는다.</figcaption>
+</figure>
 
 ### Reference 기반 측정과 영역 구성
 
@@ -103,9 +122,9 @@ Figure 3은 전체 4,500개 지시문의 ADM 좌표와 상대 순위 경계를 �
 
 ### 지시문 선택과 실제 선호 쌍
 
-별도의 HighAvg 데이터 구성에서 종합 품질 평점 방향과 alignment score 방향은 동점이 아닌 3,229쌍 중 862쌍, 즉 26.7%에서 반대였다. ADM의 지시문 선택과 응답 쌍의 선호 레이블 결정은 같은 단계가 아니다.
+별도의 HighAvg 데이터 구성에서 종합 품질 평점 방향과 alignment score 방향은 동점이 아닌 3,229쌍 중 862쌍, 즉 26.7%에서 반대였다. ADM의 지시문 선택과 응답 쌍의 선호 레이블 결정은 같은 단계가 아니다. 이 26.7%와 Table 2의 HighAvg 32.95%는 서로 다른 데이터 구성에서 나온 값이므로 같은 모집단의 반복 측정으로 비교하지 않는다.
 
-출처×과제 유형별 지시문 할당량을 맞춘 세 영역에서도 실제 학습 쌍의 구성이 달랐다. Table 1에서 출처 평점과 alignment score의 차이는 절댓값이다. 두 점수의 방향 반대 비율은 낮을수록 두 기준이 더 자주 일치한다.
+출처×과제 유형별 지시문 할당량을 맞춘 세 영역에서도 실제 학습 쌍의 구성이 달랐다. Table 2에서 출처 평점과 alignment score의 차이는 절댓값이다. 두 점수의 방향 반대 비율은 낮을수록 두 기준이 더 자주 일치한다.
 
 <figure class="table-figure table-figure--metrics">
   <div class="table-shell">
@@ -152,7 +171,7 @@ Figure 3은 전체 4,500개 지시문의 ADM 좌표와 상대 순위 경계를 �
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 1.</strong> Composition of instantiated training pairs derived from source ratings. HighAvg had the smallest median alignment-score gap and the largest share of pairs below .05.</figcaption>
+  <figcaption><strong>Table 2.</strong> Composition of instantiated training pairs derived from source ratings. HighAvg had the smallest median alignment-score gap and the largest share of pairs below .05.</figcaption>
 </figure>
 
 지시문 기준 출처×과제 유형 TV는 0이었지만, 응답 쌍 확장 뒤 출처×과제 유형 TV는 .0101–.0127, 길이 구간 TV는 .0418–.0728로 남았다. 지시문 구성을 맞추는 것만으로 응답 쌍의 방향, 점수 차이, 반복 노출까지 같아지지는 않았다.
@@ -161,7 +180,7 @@ Figure 3은 전체 4,500개 지시문의 ADM 좌표와 상대 순위 경계를 �
 
 Reward accuracy는 모델이 chosen 응답에 rejected 응답보다 높은 reward를 부여한 쌍의 비율이며 높을수록 좋다. Reward margin은 두 reward의 평균 차이이며 높을수록 좋다. SimPO loss는 목표 margin 미달과 음수 margin 꼬리에 민감하며 낮을수록 좋다.
 
-Table 2는 영역별 모델 선택을 포함한 세 파이프라인과 기초 모델을 동일한 600쌍 공통 개발 세트에서 비교한다.
+Table 3은 영역별 모델 선택을 포함한 세 파이프라인과 기초 모델을 동일한 600쌍 공통 개발 세트에서 비교한다.
 
 <figure class="table-figure table-figure--metrics">
   <div class="table-shell">
@@ -212,7 +231,7 @@ Table 2는 영역별 모델 선택을 포함한 세 파이프라인과 기초 �
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 2.</strong> Region pipelines, including region-specific model selection, evaluated on the same shared 600-pair development set. Higher reward accuracy and reward margin are better; lower SimPO loss is better.</figcaption>
+  <figcaption><strong>Table 3.</strong> Region pipelines, including region-specific model selection, evaluated on the same shared 600-pair development set. Higher reward accuracy and reward margin are better; lower SimPO loss is better.</figcaption>
 </figure>
 
 이 단일 seed 비교에서 HighAvg는 HighVar보다 선호 방향 일치가 11쌍 많았고, reward accuracy·reward margin·SimPO loss에서 가장 좋은 관측값을 기록했다.
@@ -229,7 +248,9 @@ ADM 좌표는 reference answer와 텍스트 처리 방식에 의존하는 상대
 - 공통 600쌍은 반복 사용된 개발 세트이며 쌍 단위 신뢰구간을 계산하지 않았다. 파이프라인 비교에는 무작위 선택과 전체 데이터 조건이 없고, 모든 학습 결과는 하나의 seed에서 나왔다. 영역별 모델 선택과 응답 쌍 구성도 함께 달라져 ADM 영역 자체의 효과를 분리할 수 없다. 후속 비교에서는 데이터 구성·모델·학습 설정을 고정하고 응답 쌍 방향만 바꾼 조건을 여러 seed로 확인해야 한다.
 - 외부 데이터와 downstream benchmark에 대한 일반화는 평가 범위에 포함하지 않았다.
 
-{% include related-research-note.html label="다음 연구 노트" aria_label="이 글에 이어지는 Alignment Data Map 후속 연구 노트" title="Alignment Data Map: 선별된 선호 쌍의 SimPO 경계 통과 시점과 모델별 차이" description="HighAvg와 Random pair가 policy 기준 SimPO boundary를 언제 통과하는지 비교한 multi-seed trajectory 분석" image="/assets/images/posts/selected-preference-pairs-helped-earlier-not-uniformly/social-thumbnail.png" url="/research/2026/09/01/selected-preference-pairs-helped-earlier-not-uniformly/ko/" %}
+후속 글은 HighAvg–Random을 여러 시드와 고정된 update 예산에서 비교한다. 그 결과가 이 글의 reference 측정이나 선호 방향 혼입을 소급해서 통제하는 것은 아니다.
+
+{% include related-research-note.html label="다음 연구 노트" aria_label="이 글에 이어지는 Alignment Data Map 후속 연구 노트" title="Alignment Data Map: 공통 평가 쌍의 SimPO 경계 통과 시점과 모델별 차이" description="HighAvg와 Random 데이터로 학습한 정책을 동일한 평가 쌍에서 비교한 multi-seed trajectory 분석" image="/assets/images/posts/selected-preference-pairs-helped-earlier-not-uniformly/social-thumbnail.png" url="/research/2026/09/01/selected-preference-pairs-helped-earlier-not-uniformly/ko/" %}
 
 ## Appendix: 주요 지표
 

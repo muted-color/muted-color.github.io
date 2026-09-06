@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="635" viewBox="0 0 780 635" role="img" aria-labelledby="figure-title figure-desc" data-renderer="editorial-systems-figure-v2" data-theme="paper" data-palette="editorial">
+  <title id="figure-title">When2Call: correct behavior labels</title>
+  <desc id="figure-desc">Correct behavior-label predictions among 100 prompts per gold class in the original quality-gated step-50 comparison. Function-call structure: tool call 94, follow-up 32, unable to answer 66. Call decision: tool call 88, follow-up 57, unable to answer 64. Label equality excludes function and argument exact-match requirements. These are two DPO recipes, not a before-and-after comparison.</desc>
+  <rect width="780" height="635" fill="#FFFFFF" />
+  <defs>
+    <style>.system-label{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;letter-spacing:.035em}</style>
+    <pattern id="diagonal-hatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="10" height="10" fill="#EEF3FD" />
+      <line x1="0" y1="0" x2="0" y2="10" stroke="#11120F" stroke-width="2" opacity=".35" />
+    </pattern>
+    <pattern id="dot-pattern" width="10" height="10" patternUnits="userSpaceOnUse">
+      <rect width="10" height="10" fill="#FFFFFF" />
+      <circle cx="3" cy="3" r="1.4" fill="#11120F" opacity=".35" />
+    </pattern>
+    <pattern id="bar-hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="8" height="8" fill="#FFFFFF" />
+      <line x1="0" y1="0" x2="0" y2="8" stroke="#5E7FD8" stroke-width="5" opacity=".72" />
+    </pattern>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0 0L8 4L0 8Z" fill="context-stroke" />
+    </marker>
+  </defs>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="72" y="60" font-size="24" font-weight="700" fill="#11120F" text-anchor="start" class="figure-title">When2Call: correct behavior labels</text>
+    <rect x="72" y="96" width="24" height="18" fill="url(#bar-hatch)" stroke="#5E7FD8" stroke-width="1.4" />
+    <text x="108" y="116" font-size="26" font-weight="400" fill="#686B66" text-anchor="start" class="series-label">Structure-focused</text>
+    <rect x="420" y="96" width="24" height="18" fill="#D9DCD7" stroke="#686B66" stroke-width="1.4" />
+    <text x="456" y="116" font-size="26" font-weight="400" fill="#686B66" text-anchor="start" class="series-label">Decision-focused</text>
+    <text x="100" y="174" font-size="26" font-weight="400" fill="#686B66" text-anchor="start">Correct labels / 100</text>
+    <text x="84" y="519.0" font-size="26" font-weight="400" fill="#686B66" text-anchor="end" class="axis-tick">0</text>
+    <text x="84" y="444.0" font-size="26" font-weight="400" fill="#686B66" text-anchor="end" class="axis-tick">25</text>
+    <text x="84" y="369.0" font-size="26" font-weight="400" fill="#686B66" text-anchor="end" class="axis-tick">50</text>
+    <text x="84" y="294.0" font-size="26" font-weight="400" fill="#686B66" text-anchor="end" class="axis-tick">75</text>
+    <text x="84" y="219.0" font-size="26" font-weight="400" fill="#686B66" text-anchor="end" class="axis-tick">100</text>
+    <line x1="100" y1="210" x2="100" y2="510" stroke="#11120F" stroke-width="1.5" class="axis-y" data-axis-id="main" />
+    <line x1="100" y1="510" x2="760" y2="510" stroke="#11120F" stroke-width="1.5" class="axis-x zero-line" data-axis-id="main" />
+    <rect x="144.0" y="228.0" width="60" height="282.0" fill="url(#bar-hatch)" stroke="#5E7FD8" stroke-width="1.4" class="data-mark" data-series="structure" data-category="tool_call" data-value="94" />
+    <text x="174.0" y="214.0" font-size="26" font-weight="400" fill="#11120F" text-anchor="middle" class="value-label">94</text>
+    <rect x="216.0" y="246.0" width="60" height="264.0" fill="#D9DCD7" stroke="#686B66" stroke-width="1.4" class="data-mark" data-series="decision" data-category="tool_call" data-value="88" />
+    <text x="246.0" y="232.0" font-size="26" font-weight="400" fill="#11120F" text-anchor="middle" class="value-label">88</text>
+    <text x="210.0" y="550" font-size="26" font-weight="400" fill="#686B66" text-anchor="middle" class="category-label">Tool call</text>
+    <rect x="364.0" y="414.0" width="60" height="96.0" fill="url(#bar-hatch)" stroke="#5E7FD8" stroke-width="1.4" class="data-mark" data-series="structure" data-category="follow_up" data-value="32" />
+    <text x="394.0" y="400.0" font-size="26" font-weight="400" fill="#11120F" text-anchor="middle" class="value-label">32</text>
+    <rect x="436.0" y="339.0" width="60" height="171.0" fill="#D9DCD7" stroke="#686B66" stroke-width="1.4" class="data-mark" data-series="decision" data-category="follow_up" data-value="57" />
+    <text x="466.0" y="325.0" font-size="26" font-weight="400" fill="#11120F" text-anchor="middle" class="value-label">57</text>
+    <text x="430.0" y="550" font-size="26" font-weight="400" fill="#686B66" text-anchor="middle" class="category-label">Follow-up</text>
+    <rect x="584.0" y="312.0" width="60" height="198.0" fill="url(#bar-hatch)" stroke="#5E7FD8" stroke-width="1.4" class="data-mark" data-series="structure" data-category="unable" data-value="66" />
+    <text x="614.0" y="298.0" font-size="26" font-weight="400" fill="#11120F" text-anchor="middle" class="value-label">66</text>
+    <rect x="656.0" y="318.0" width="60" height="192.0" fill="#D9DCD7" stroke="#686B66" stroke-width="1.4" class="data-mark" data-series="decision" data-category="unable" data-value="64" />
+    <text x="686.0" y="304.0" font-size="26" font-weight="400" fill="#11120F" text-anchor="middle" class="value-label">64</text>
+    <text x="650.0" y="550" font-size="26" font-weight="400" fill="#686B66" text-anchor="middle" class="category-label">Unable to</text>
+    <text x="650.0" y="582" font-size="26" font-weight="400" fill="#686B66" text-anchor="middle" class="category-label">answer</text>
+  </g>
+</svg>

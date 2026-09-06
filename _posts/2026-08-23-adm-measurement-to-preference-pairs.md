@@ -1,7 +1,7 @@
 ---
 title: "Alignment Data Map: From Measurements to Preference-Pair Supervision"
 date: 2026-08-23 20:10:32 +0900
-last_modified_at: 2026-09-03 10:23:20 +0900
+last_modified_at: 2026-09-06 11:12:37 +0900
 lang: en
 categories: ["LLM ALIGNMENT"]
 tags: [llm, alignment, preference-data, data-selection, adm, simpo, ultrafeedback]
@@ -48,6 +48,25 @@ The use of mean and variation to characterize data follows Swayamdipta et al.'s 
 Preference-pair score gaps and composition have been studied by Yang et al. <a class="citation-ref" href="#ref-pair-efficiency" aria-label="Reference 4">[4]</a>, Deng et al. <a class="citation-ref" href="#ref-preference-selection" aria-label="Reference 5">[5]</a>, and Xiao et al. <a class="citation-ref" href="#ref-sweet-spot" aria-label="Reference 6">[6]</a>, while Pan et al. analyzed the quality of chosen responses <a class="citation-ref" href="#ref-what-matters-dpo" aria-label="Reference 7">[7]</a>. Rather than comparing new selection rules, this note focuses on the response-pair-level signal formed when instructions selected by ADM are instantiated as training pairs.
 
 ## Experimental Setup
+
+### Measurement Conditions and Comparison Units
+
+The results do not all come from one unchanged map. Table 1 distinguishes reference comparisons, text processing, source-stratified reconstruction, and training evaluation.
+
+<figure class="table-figure table-figure--comparison">
+  <div class="table-shell">
+    <table class="comparison-table">
+      <thead><tr><th>Comparison</th><th>Unit / cohort</th><th>Changed condition or role</th></tr></thead>
+      <tbody>
+        <tr><td>Reference answers</td><td>100 instructions; a separate 60-sample set</td><td>Compare reference-generation policies while retaining candidate responses</td></tr>
+        <tr><td>Long-text processing</td><td>4,500 instructions × 4 candidates</td><td>Compare prefix, head–tail, and overlapping-window scores under the same reference</td></tr>
+        <tr><td>Source-by-task reconstruction</td><td>The same 4,500 instructions</td><td>Distinguish full-cohort boundaries from regions assigned within source × task strata</td></tr>
+        <tr><td>Preference training</td><td>3,240 instructions → 17,301 pairs</td><td>Evaluate region pipelines on a separate 600-pair development set</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <figcaption><strong>Table 1.</strong> Units used in measurement and training comparisons. A shared region name does not imply identical instructions or response pairs after the reference, text processing, or stratification changes.</figcaption>
+</figure>
 
 ### Reference-Based Measurement and Region Construction
 
@@ -102,9 +121,9 @@ On the overlapping-window-mean map, the source-distribution TV between the HighA
 
 ### Instruction Selection and Instantiated Preference Pairs
 
-In a separate HighAvg data construction, the overall-quality rating direction and alignment-score direction disagreed on 862 of 3,229 non-tied pairs, or 26.7%. ADM instruction selection and response-pair preference labeling are not the same stage.
+In a separate HighAvg data construction, the overall-quality rating direction and alignment-score direction disagreed on 862 of 3,229 non-tied pairs, or 26.7%. ADM instruction selection and response-pair preference labeling are not the same stage. This 26.7% and the HighAvg 32.95% in Table 2 come from different data constructions, not repeated measurements of the same population.
 
-The instantiated training-pair composition also differed across the three regions after matching instruction quotas within each source-by-task-type stratum. In Table 1, the differences in source rating and alignment score are absolute values. A lower opposite-direction rate means the two criteria agree more often.
+The instantiated training-pair composition also differed across the three regions after matching instruction quotas within each source-by-task-type stratum. In Table 2, the differences in source rating and alignment score are absolute values. A lower opposite-direction rate means the two criteria agree more often.
 
 <figure class="table-figure table-figure--metrics">
   <div class="table-shell">
@@ -151,7 +170,7 @@ The instantiated training-pair composition also differed across the three region
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 1.</strong> Composition of instantiated training pairs derived from source ratings. HighAvg had the smallest median alignment-score gap and the largest share of pairs below .05.</figcaption>
+  <figcaption><strong>Table 2.</strong> Composition of instantiated training pairs derived from source ratings. HighAvg had the smallest median alignment-score gap and the largest share of pairs below .05.</figcaption>
 </figure>
 
 Source-by-task-type TV was 0 at the instruction level, but after expansion into response pairs, source-by-task-type TV remained .0101–.0127 and length-bin TV remained .0418–.0728. Matching instruction composition alone did not equalize response-pair direction, score gap, or repeated exposure.
@@ -160,7 +179,7 @@ Source-by-task-type TV was 0 at the instruction level, but after expansion into 
 
 Reward accuracy is the proportion of pairs for which the model assigns a higher reward to the chosen response than to the rejected response; higher is better. Reward margin is the mean difference between the two rewards; higher is better. SimPO loss is sensitive to failures to reach the target margin and to the negative-margin tail; lower is better.
 
-Table 2 compares three region pipelines, each including region-specific model selection, with the base model on the same shared 600-pair development set.
+Table 3 compares three region pipelines, each including region-specific model selection, with the base model on the same shared 600-pair development set.
 
 <figure class="table-figure table-figure--metrics">
   <div class="table-shell">
@@ -211,7 +230,7 @@ Table 2 compares three region pipelines, each including region-specific model se
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 2.</strong> Region pipelines, including region-specific model selection, evaluated on the same shared 600-pair development set. Higher reward accuracy and reward margin are better; lower SimPO loss is better.</figcaption>
+  <figcaption><strong>Table 3.</strong> Region pipelines, including region-specific model selection, evaluated on the same shared 600-pair development set. Higher reward accuracy and reward margin are better; lower SimPO loss is better.</figcaption>
 </figure>
 
 In this single-seed comparison, HighAvg had 11 more preferred-direction matches than HighVar and the best observed reward accuracy, reward margin, and SimPO loss.
@@ -228,7 +247,9 @@ Reproducing data selection and interpreting the scope of training results theref
 - The shared 600 pairs formed a repeatedly used development set, and pair-level confidence intervals were not computed. The pipeline comparison lacked random-selection and full-data conditions, and every training result came from a single seed. Region-specific model selection and response-pair composition also varied, so the comparison does not isolate an ADM-region effect. A multi-seed comparison should change only response-pair direction while holding data composition, model, and training settings fixed.
 - Generalization to external data and downstream benchmarks was outside the evaluation scope.
 
-{% include related-research-note.html label="Next research note" aria_label="The follow-up research note on Alignment Data Map" title="Alignment Data Map: Timing of SimPO Boundary Crossings and Model-Specific Differences" description="A multi-seed trajectory analysis of when HighAvg and Random pairs cross policy-relative SimPO boundaries" image="/assets/images/posts/selected-preference-pairs-helped-earlier-not-uniformly/social-thumbnail.png" url="/research/2026/09/01/selected-preference-pairs-helped-earlier-not-uniformly/" %}
+The follow-up compares HighAvg and Random across multiple seeds under a fixed update budget. Those results do not retroactively control the reference-measurement or preference-direction differences examined here.
+
+{% include related-research-note.html label="Next research note" aria_label="The follow-up research note on Alignment Data Map" title="Alignment Data Map: Timing of SimPO Boundary Crossings and Model-Specific Differences" description="A multi-seed comparison of HighAvg- and Random-trained policies on the same held-out evaluation pairs" image="/assets/images/posts/selected-preference-pairs-helped-earlier-not-uniformly/social-thumbnail.png" url="/research/2026/09/01/selected-preference-pairs-helped-earlier-not-uniformly/" %}
 
 ## Appendix: Main Metrics
 

@@ -25,5 +25,17 @@
       {"id": "primary", "label": "Primary DPO", "value": 15},
       {"id": "prefix_synchronized", "label": "Prefix-synchronized DPO", "value": 15}
     ]
+  },
+  "typography": {
+    "figure_title_weight": 700,
+    "ordinary_text_weight": 400,
+    "implementation": "Custom SVG text weights follow editorial-systems-figure style tokens; existing measured geometry is unchanged."
+  },
+  "social_export": {
+    "source": "posthoc-sensitivity-deltas.svg",
+    "output": "social-thumbnail.png",
+    "width": 1200,
+    "height": 627,
+    "fit": "xMidYMid meet; full 1200x650 viewBox preserved, no crop"
   }
 }

@@ -1,7 +1,7 @@
 ---
 title: "Carbon-3B: Measuring 6-mer Token Phase Sensitivity"
 date: 2026-05-23 16:50:00 +0900
-last_modified_at: 2026-07-30 21:59:25 +0900
+last_modified_at: 2026-09-06 10:59:45 +0900
 lang: en
 categories: ["BIO ML"]
 tags: [carbon-3b, dna-foundation-model, brca2, variant-effect-prediction, tokenization, phase-sensitivity, fns]
@@ -13,17 +13,15 @@ image: /assets/images/posts/carbon-6mer-phase-sensitivity/social-thumbnail.png
 image_alt: "Bar chart comparing 6-mer phase sensitivity across Carbon-3B scoring conditions with a prespecified 0.10 reference threshold"
 hero_image: /assets/images/posts/carbon-6mer-phase-sensitivity/phase-instability-by-scorer.svg
 hero_alt: "Bar chart comparing normalized phase ranges for full-sequence FNS, local-target FNS, downstream token, full-window token, and target-token scores"
-hero_caption: "<strong>Figure 1.</strong> Normalized phase ranges across scoring conditions for 500 SNVs sampled from the BRCA2 MAVE. The dashed line marks the prespecified 0.10 reference threshold. All three token conditions exceeded it; both FNS conditions were lower than their corresponding token conditions but remained above the threshold."
+hero_caption: "<strong>Figure 1.</strong> Normalized phase ranges across scoring conditions for 500 SNVs sampled from the BRCA2 MAVE. Each range is divided by its own scorer’s pooled score IQR; bar heights therefore compare relative sensitivity on different denominators. The dashed line marks the prespecified 0.10 reference threshold. All three token conditions exceeded it; both FNS conditions were lower than their corresponding token conditions but remained above the threshold. <a href='/assets/images/posts/carbon-6mer-phase-sensitivity/phase-instability-by-scorer.svg'>Open full-size figure</a>."
 hero_frame: true
 hero_compact: true
 hero_variant: featured-plot
 ---
 
-Carbon presents non-overlapping 6-mer tokenization as an efficiency trade-off: encoding six nucleotides per token expands the nucleotide context covered by a fixed token budget, and the authors report that this scheme worked better than BPE for DNA. FNS is presented as the bridge from this coarse representation to single-nucleotide supervision and scoring <a class="citation-ref" href="#ref-carbon-paper" aria-label="Reference 1">[1]</a> <a class="citation-ref" href="#ref-carbon-3b" aria-label="Reference 2">[2]</a>.
+Ben Allal et al. present Carbon’s non-overlapping 6-mer tokenization as an efficiency trade-off: encoding six nucleotides per token expands the nucleotide context covered by a fixed token budget, and the authors report that this scheme worked better than BPE for DNA. FNS is presented as the bridge from this coarse representation to single-nucleotide supervision and scoring <a class="citation-ref" href="#ref-carbon-paper" aria-label="Reference 1">[1]</a> <a class="citation-ref" href="#ref-carbon-3b" aria-label="Reference 2">[2]</a>.
 
 Because Carbon also reports training-free VEP (variant effect prediction) results on BRCA2, phase stability is a practical complementary question: does the same SNV receive a stable reference-minus-alternative score across the six possible token offsets? This note tests that scoring-protocol question in 500 BRCA2 MAVE SNVs and compares the corresponding token and FNS pipelines; it does not re-evaluate overall Carbon VEP performance.
-
-The normalized token-score phase range exceeded the 0.10 reference threshold across most variants. The paired FNS pipeline comparisons showed lower ranges, but the sensitivity remained.
 
 > **6-mer phase** is the offset occupied by the variant base within a 6 bp token. Here, the same SNV is scored at all six phases.
 >
@@ -38,11 +36,14 @@ The normalized token-score phase range exceeded the 0.10 reference threshold acr
 - The evaluation covers six token offsets for 500 BRCA2 MAVE SNVs: 85 LOF (loss-of-function) and 415 FUNC (functional)/INT (intermediate). Phase range is normalized by scorer-specific score IQR, with 0.10 as the prespecified reference threshold.
 - Median normalized ranges were 0.409 for Full-window, 0.349 for Target-token, and 0.466 for Downstream-only; 93.6–100% of variants met or exceeded 0.10.
 - Target-token is the most direct measure of sensitivity in scoring the variant-containing token. Full-window and Downstream-only also include global segmentation and edge/context changes; the shifted-reference control prevents a purely local attribution.
-- FNS ranges were lower at 0.353 for Full-sequence and 0.331 for Local-target. Median paired differences were 0.0544 and 0.0198, but both FNS conditions remained above 0.10.
+- FNS normalized ranges were lower at 0.353 for Full-sequence and 0.331 for Local-target. Median paired differences were 0.0544 and 0.0198, but both FNS conditions remained above 0.10. Scorer code and IQR denominators differ, so this is a pipeline comparison.
+- Six-phase mean-score AUROC was 0.913 for both full-sequence conditions after rounding. This confirms retained label-direction signal in the subset; phase-specific AUROC and ranking changes are not reported here.
 
 ## Evaluation setup
 
 The data are an SNV subset reconstructed from the Huang et al. BRCA2 MAVE resource against the hg19 chr13 reference <a class="citation-ref" href="#ref-huang-brca2" aria-label="Reference 4">[4]</a> <a class="citation-ref" href="#ref-brca2-source-table" aria-label="Reference 5">[5]</a> <a class="citation-ref" href="#ref-ucsc-hg19-chr13" aria-label="Reference 6">[6]</a>. Of 6,836 source variants that passed the reference-allele match and SNV filters, 500 were sampled with stratification and `seed=20260523`. Strata covered label, functional-score quantile, genomic-position decile, reference/alternative base, and genomic position modulo 6. The 100-variant protocol pilot is included in this subset.
+
+The six-phase protocol shifts the genomic window around the same SNV so that the variant occupies each possible offset within a 6-mer. Each phase contains a matched reference/alternative sequence pair. Moving the window also changes edge bases and the segmentation of the surrounding sequence; this is not an intervention on the variant-containing token alone.
 
 The primary window is 8,190 bp. Its length is divisible by six, so it creates no tail padding in the Carbon tokenizer. An 8,192 bp window matching the Carbon BRCA2 evaluation was checked separately <a class="citation-ref" href="#ref-carbon-eval" aria-label="Reference 3">[3]</a> <a class="citation-ref" href="#ref-carbon-brca2-prep" aria-label="Reference 7">[7]</a> and was not mixed into the primary phase-score result.
 
@@ -92,15 +93,15 @@ The primary window is 8,190 bp. Its length is divisible by six, so it creates no
   <figcaption><strong>Table 1.</strong> Evaluation scope for testing scoring-protocol phase sensitivity in the 500-SNV BRCA2 MAVE subset.</figcaption>
 </figure>
 
-Within Table 1's scope, score scales differ across scoring methods. Token conditions are distinguished by the region over which scores are aggregated.
+Within Table 1's scope, each variant score is the reference aggregate minus the alternative aggregate. A positive value favors the reference sequence under that scorer. The token conditions differ in which log-probabilities enter the aggregate:
 
 - **Full-window** averages log-probability scores over all valid DNA tokens in the 8,190 bp window.
 - **Target-token** uses only the single 6-mer token containing the variant.
 - **Downstream-only** uses only tokens after the variant, measuring how the changed variant context affects subsequent token predictions in the autoregressive model.
 
-FNS Full-sequence and FNS Local-target scores are also on different raw scales from token scores. Raw ranges are therefore not compared across scoring methods. For each variant, the numerator of the normalized phase range is the difference between the maximum and minimum scores across six phases. The denominator is one IQR calculated over all `score_ref_minus_alt` values for the same scorer across 500 variants × 6 phases. Reported values are the medians of the 500 variant-level normalized ranges.
+FNS uses nucleotide-resolution scores: Full-sequence aggregates across the sequence, while Local-target restricts the score to the variant position. These are also on different raw scales from token scores. Raw ranges are therefore not compared across scoring methods. For each variant, the numerator of the normalized phase range is the difference between the maximum and minimum scores across six phases. The denominator is one IQR calculated over all `score_ref_minus_alt` values for the same scorer across 500 variants × 6 phases. Reported values are the medians of the 500 variant-level normalized ranges. Each scorer thus has one fixed denominator for all variants, but the denominator changes between scorers. A lower normalized range can reflect changes in either the phase range or the scorer’s overall spread; it is not an absolute reduction on a shared raw scale.
 
-The 0.10 reference threshold was prespecified during experiment design as 10% of score IQR. It provides a common relative scale for phase ranges whose raw score scales differ.
+The 0.10 reference threshold was prespecified during experiment design as 10% of score IQR. It is a descriptive effect-size reference, not a statistical significance threshold or a validated cutoff for biological harm.
 
 ## Results
 
@@ -156,7 +157,7 @@ Figure 2 expands the Table 2 distribution by variant to test whether the observa
 
 <figure class="media-figure media-figure--wide-visual">
   <img src="/assets/images/posts/carbon-6mer-phase-sensitivity/full-window-phase-range-distribution.svg" alt="Ranked distribution of per-variant six-phase ranges divided by score IQR for the Full-window token score">
-  <figcaption><strong>Figure 2.</strong> Each point represents one variant. The y-axis shows its six-phase score range on a log scale, and the x-axis ranks variants from the smallest to largest range. The dashed line marks 0.10; 498/500 variants were at or above it.</figcaption>
+  <figcaption><strong>Figure 2.</strong> Each point represents one variant. The y-axis shows its six-phase score range divided by the Full-window score IQR on a log scale, and the x-axis ranks variants from the smallest to largest range. The dashed line marks 0.10; 498/500 variants were at or above it.</figcaption>
 </figure>
 
 ### Padding and shifted-reference control
@@ -205,11 +206,11 @@ Target-token and Full-window should therefore be interpreted separately. Target-
 
 Within these bounds, FNS base-level scoring was compared with the corresponding token conditions. The normalized range was 0.353 for FNS Full-sequence versus 0.409 for token Full-window, and 0.331 for FNS Local-target versus 0.349 for token Target-token. Both FNS values exceeded the 0.10 threshold.
 
-Figure 4 places both paired comparisons on the same normalized scale.
+Figure 4 places both pairs in dimensionless range/IQR units, using a separate IQR for each scorer.
 
 <figure class="media-figure media-figure--wide-visual">
   <img src="/assets/images/posts/carbon-6mer-phase-sensitivity/fns-mitigation-normalized-range.svg" alt="Bar chart comparing normalized phase ranges between token and FNS scores for full-sequence and local-target pairs">
-  <figcaption><strong>Figure 4.</strong> Paired normalized phase ranges for FNS and token scores. FNS was lower in both pairs, but both FNS values remained above 0.10. Variant-level paired differences and bootstrap confidence intervals are reported in Table 4.</figcaption>
+  <figcaption><strong>Figure 4.</strong> Median normalized phase ranges for FNS and token scores, each divided by its own scorer-specific IQR. FNS was lower in both pairs, but both FNS values remained above 0.10. Variant-level paired differences and bootstrap confidence intervals are reported in Table 4.</figcaption>
 </figure>
 
 <figure class="table-figure table-figure--comparison table-figure--metrics">
@@ -311,7 +312,7 @@ Three reporting rules follow for this setting:
 - Results are limited to 500 SNVs from the BRCA2 MAVE and an 8,190 bp window. The 100-variant protocol pilot is included in the subset, although normalized ranges for all three token scorers also exceeded 0.10 in the remaining 400 variants.
 - Bootstrap confidence intervals were not calculated for the primary phase effects. The values `0.409`, `0.349`, and `0.466` are observations above the prespecified effect-size threshold in this subset; generalization to other genes or window conditions requires further evaluation.
 - The shifted-reference control changes both edge context and global 6-mer segmentation phase. It does not separate a pure edge effect, a local token-boundary effect, or their causal contributions.
-- Table 5 AUROCs exceeded the shuffled-label null, but no simple sequence/position baseline, reverse-complement evaluation, or external VEP benchmark was included. These results do not establish overall Carbon VEP performance or improved biological performance from FNS.
+- Table 5 AUROCs exceeded the shuffled-label null, but no simple sequence/position baseline, reverse-complement evaluation, or external VEP benchmark was included. These results do not establish overall Carbon VEP performance or improved biological performance from FNS. Phase-specific AUROC, rank correlations across phases, and candidate-selection changes are not reported here, so score sensitivity cannot be translated into those performance effects.
 - The paired FNS confidence intervals are from a post-hoc audit rather than the prespecified primary analysis. Differences in scorer code and normalization scale between token and FNS revisions prevent isolation of the FNS objective's effect.
 
 ## Appendix: Reproduction conditions
@@ -370,7 +371,7 @@ Three reporting rules follow for this setting:
   <li id="ref-carbon-brca2-prep">Hugging Face Biology Research. <strong>Carbon BRCA2 data preparation script</strong>. <a href="https://raw.githubusercontent.com/huggingface/carbon/0c4a63e985f376426d3e656a4be875e27440473f/evaluation/data_prep/prep_brca2.py">pinned <code>prep_brca2.py</code></a>. Source content frozen with the experiment inputs; accessed 2026-05-23.</li>
 </ol>
 
-Appendix Table 1 summarizes the computations. Detailed reproduction metadata are preserved in the experiment record referenced by the front matter <code>lab_path</code>.
+Appendix Table 1 summarizes the computations. The public source links identify the model and input resources; the summary tables do not provide the complete per-variant score artifacts needed to independently recompute the reported statistics.
 
 </div>
 
