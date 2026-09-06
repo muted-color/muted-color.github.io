@@ -4,7 +4,7 @@
 
 ## 필수 Front Matter
 
-공개 글은 아래 값을 둔다.
+공개 연구 글은 아래 값을 둔다. `hero_image`와 `hero_alt`는 본문 hero가 있을 때만 필요하다. 일반 소개·목록 페이지에 연구 글의 필수 항목을 일괄 적용하지 않는다.
 
 ```yaml
 title: "검색 결과에서 잘려도 핵심 질문이 남는 제목"
@@ -30,6 +30,25 @@ hero_alt: "본문 hero 이미지의 내용 설명"
 - `image`는 PNG/JPG 대표 이미지로 둔다. SVG hero만 두지 않는다.
 - `image_alt`는 대표 이미지 설명이다. 키워드를 반복하지 않는다.
 - `hero_alt`는 본문 이미지 접근성 설명이다. `image_alt`와 역할이 다를 수 있다.
+
+## 렌더링과 URL
+
+- LaTeX는 `math: true`, Mermaid는 `mermaid: true`, Plotly는 `plotly: true`를 둔다. 사용하지 않는 flag는 새로 추가하지 않는다.
+- `_posts`의 URL은 `_config.yml`의 permalink 규칙을 기본으로 쓴다. 모든 글에 개별 `permalink`를 강제하지 않는다. 기존 공개 URL과 발행일은 요청 없이 변경하지 않는다.
+- 영문 원문·국문 번역은 각각 `lang`과 서로를 가리키는 `translation_url`을 둔다. 국문 page의 `layout: post`와 `permalink` 예시는 템플릿의 다국어 섹션을 따른다.
+- `hidden: true`는 목록·feed·sitemap에서 제외하고 robots meta에 `noindex, nofollow, noarchive`를 넣지만 URL 접근을 막지 않는다. 검색만 제외하려면 `noindex: true`, 빌드 대상에서 제외할 초안에는 `published: false`를 사용한다.
+- 대표 이미지 기본 크기·스타일과 Figure 제작은 글쓰기 스킬의 `references/visuals.md`, 실제 embedding은 템플릿을 따른다.
+
+## 실험 출처
+
+실험 기반 글은 확인된 `lab_host`와 `lab_path`를 함께 둔다. `lab_path`는 `~/lab/` 뒤의 상대 경로다. 실제 프로젝트 위치를 확인하지 않고 host나 예전 경로를 일괄 보정하지 않는다. 현재 템플릿의 host 값은 `dgx1` 또는 `dgx3`이며, 다른 위치가 확인되면 그 근거에 따라 기록한다.
+
+```yaml
+lab_host: "dgx1"
+lab_path: "projects/project-slug"
+```
+
+이 두 필드는 원문 위치를 찾는 편집용 메타데이터다. 본문·caption·자산·코드 주석에 절대 로컬 경로나 비공개 run 식별자를 복사하지 않는다. 공개된 코드 예제의 일반 상대 경로는 비공개 노출로 단정하지 않는다. Git 저장소 자체에 남기는 정보도 공개 가능한 범위인지 확인한다.
 
 ## 피할 것
 

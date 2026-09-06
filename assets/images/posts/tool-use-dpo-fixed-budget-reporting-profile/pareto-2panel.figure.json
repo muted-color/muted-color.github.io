@@ -1,7 +1,7 @@
 {
   "layout": "custom_measured_two_panel",
   "title": "Metric trade-offs under a fixed DPO budget",
-  "description": "Eight evaluation profiles compare intended-metric deltas with IFEval prompt-strict deltas from the same SFT baseline. Function-call structure and call-decision sources use solid blue and dashed neutral paths; quality-gated and ungated control conditions use circle and square markers; arrows run from the earlier to the final checkpoint.",
+  "description": "Eight evaluation profiles compare intended-metric deltas with IFEval-style prompt-strict deltas from the same SFT baseline. Function-call structure and call-decision sources use solid blue and dashed neutral paths; quality-gated and ungated control conditions use circle and square markers; arrows run from the earlier to the final checkpoint.",
   "scale": "measured",
   "palette": "editorial",
   "canvas": {
@@ -13,7 +13,7 @@
     "artifact_repository": "https://github.com/muted-color/tool-use-dpo-fixed-budget-report"
   },
   "encodings": {
-    "x": "IFEval prompt-strict delta vs SFT baseline, percentage points",
+    "x": "IFEval-style prompt-strict delta vs SFT baseline, percentage points",
     "left_y": "BFCL core delta vs SFT baseline, percentage points",
     "right_y": "When2Call macro F1 delta vs SFT baseline, percentage points",
     "recipe": {

@@ -1,0 +1,148 @@
+{
+  "layout": "custom_dot_panels",
+  "scale": "measured",
+  "palette": "editorial",
+  "title": "Ranking and probability quality",
+  "description": "Outer-test aggregate mean macro AUPRC, mean ECE, and mean Brier for pca30-B3, whole-human scGPT PCA400-linear, and their nested-validation fusion. Points are preserved table aggregates, without uncertainty intervals. AUPRC uses a focused linear axis.",
+  "source": "HSPC hierarchy benchmark post, Table 3",
+  "custom_layout_reason": "The installed renderer supports grouped bars and outcome-cost curves, but not multiple metric dot panels with distinct domains. A focused AUPRC axis requires points rather than truncated bars.",
+  "layout_geometry": {
+    "canvas": [
+      1200,
+      520
+    ],
+    "outer_x": [
+      72,
+      1128
+    ],
+    "panel_fraction": [
+      0.3333333333333333,
+      0.3333333333333333,
+      0.3333333333333333
+    ],
+    "panel_gap": 52,
+    "shared_anchors": {
+      "title_x": 72,
+      "title_y": 62,
+      "panel_title_y": 132,
+      "label_x": 72,
+      "row_y": [
+        220,
+        300,
+        380
+      ],
+      "axis_y": 430
+    },
+    "plot_bounds": [
+      [
+        408,
+        610
+      ],
+      [
+        662,
+        864
+      ],
+      [
+        916,
+        1118
+      ]
+    ],
+    "grid_policy": "axes-only",
+    "actual_display_width": 720,
+    "value_label_offset_y": -20,
+    "value_label_font_size": 22,
+    "label_font_size": 22,
+    "spacing_decisions": "Shared method rows and axis baseline; direct six-decimal value labels above each point; no grid lines. Twenty-two-pixel labels retain eleven-pixel effective size at 600px."
+  },
+  "metrics": [
+    {
+      "id": "mean_macro_auprc",
+      "label": "Mean macro AUPRC",
+      "direction": "higher is better",
+      "domain": [
+        0.89,
+        0.92
+      ],
+      "ticks": [
+        0.89,
+        0.9,
+        0.91,
+        0.92
+      ]
+    },
+    {
+      "id": "mean_ece",
+      "label": "Mean ECE",
+      "direction": "lower is better",
+      "domain": [
+        0,
+        0.1
+      ],
+      "ticks": [
+        0,
+        0.05,
+        0.1
+      ]
+    },
+    {
+      "id": "mean_brier",
+      "label": "Mean Brier",
+      "direction": "lower is better",
+      "domain": [
+        0,
+        0.35
+      ],
+      "ticks": [
+        0,
+        0.175,
+        0.35
+      ]
+    }
+  ],
+  "methods": [
+    {
+      "id": "pca30_b3",
+      "label": [
+        "pca30-B3"
+      ],
+      "marker": "circle",
+      "values": [
+        0.899463,
+        0.023626,
+        0.220972
+      ]
+    },
+    {
+      "id": "scgpt",
+      "label": [
+        "Whole-human scGPT",
+        "PCA400-linear"
+      ],
+      "marker": "square",
+      "values": [
+        0.892713,
+        0.071926,
+        0.315177
+      ]
+    },
+    {
+      "id": "nested_fusion",
+      "label": [
+        "Nested fusion"
+      ],
+      "marker": "diamond",
+      "accent": true,
+      "values": [
+        0.914734,
+        0.090729,
+        0.238089
+      ]
+    }
+  ],
+  "uncertainty": {
+    "available": false,
+    "display": "none",
+    "reason": "Only retained aggregates are available; no intervals inferred."
+  },
+  "value_decimals": 6
+}

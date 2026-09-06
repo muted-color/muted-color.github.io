@@ -1,197 +1,79 @@
 ---
-title: "4B급 Gemma3와 Gemma4 한국어 SFT 비교: 품질, 학습, 노이즈"
+title: "Gemma3 4B와 Gemma4 E4B의 한국어 SFT 비교"
 date: 2026-04-12 09:00:00 +0900
-last_modified_at: 2026-04-19 15:45:00 +0900
+last_modified_at: 2026-09-06 08:39:03 +0900
+lang: ko
 categories: ["LLM EVAL"]
 tags: [gemma, korean, sft, eval]
-excerpt: "Gemma3와 Gemma4를 한국어 instruction 환경에서 비교했다. base 품질, QLoRA SFT 후 성능, 학습 효율, 입력 노이즈 안정성을 정리한다."
-description: "Gemma3와 Gemma4 4B급 한국어 instruction 모델을 base 품질, QLoRA SFT 반응, 입력 노이즈 안정성 관점에서 비교한 실험 노트."
+excerpt: "한국어 holdout에서 Gemma3 4B와 Gemma4 E4B의 추가 SFT, 답안 구성, 입력 노이즈를 비교했다. Judge 선택률·형식 준수와 표현 중복, 절대 점수·하락폭을 구분해 해석한다."
+description: "Gemma3 4B와 Gemma4 E4B의 한국어 SFT 비교에서 Gemma4의 judge 선택률과 형식 준수가 높았지만, 답안 다양성 효과와 일반적 강건성은 분리해 해석해야 했다."
 permalink: /research/2026/04/12/gemma3-e4b-korean-sft/
 image: /assets/images/posts/gemma3-e4b-korean-sft/social-thumbnail.png
 image_alt: "Gemma3와 Gemma4 한국어 SFT 비교 결과를 질문별 evidence map으로 요약한 소셜 썸네일"
 hero_image: /assets/images/posts/gemma3-e4b-korean-sft/evidence-map.svg
 hero_alt: "Gemma4와 Gemma3 한국어 비교의 핵심 질문별 결과 요약"
-hero_caption: "<strong>Figure 1.</strong> 전체 결과를 먼저 압축한 요약이다. 각 행은 서로 다른 단위의 지표이므로 행 안에서 두 모델의 상대 차이만 읽으면 된다. 모든 행은 값이 클수록 좋은 방향으로 맞췄고, <code>Format alignment</code>는 <code>1 - Violation</code>으로 계산했다. 세부 수치는 본문에서 따로 설명한다."
+hero_caption: "<strong>Figure 1.</strong> 기록된 결과의 요약. 행마다 척도가 다르므로 같은 행 안에서만 비교한다. Format alignment는 형식 준수율이며, Noise readability는 두 손상 조건의 평균이다. Training speed는 100-step 소요시간의 역비율(Gemma3/Gemma4)을 약 1.8배로 요약한 값으로, 토큰 처리량 측정이 아니다. <a href='/assets/images/posts/gemma3-e4b-korean-sft/evidence-map.svg'>그림 원본 크게 보기</a>."
 ---
 
-이 글은 <code>google/gemma-3-4b-it</code>와 <code>google/gemma-4-E4B-it</code>를 같은 한국어 instruction 평가 조건에서 비교한다. Gemma4는 judge가 더 자주 선택했고, 출력 형식도 더 잘 지켰다. 질문에 오타나 전사 오류가 섞여도 답변이 더 읽을 만하게 남았고, 같은 100-step QLoRA SFT도 더 빨리 끝났다. Gemma3는 일부 reference overlap 지표와 다중 답안 SFT의 상대 개선폭에서 볼 만한 신호를 보였다. 그래서 이 비교는 단순한 승패보다 응답 품질, 학습 반응, 입력 노이즈 안정성이 어디서 갈라지는지를 본다.
+한국어 instruction 응답 비교에서는 답변 내용과 출력 형식이 같은 judge 점수에 반영될 수 있다. 이 글은 Gemma3 4B와 Gemma4 E4B를 추가 지도 미세조정(supervised fine-tuning, SFT) 전후로 비교하고, judge 선택률·기준 답안과의 표현 중복·형식 준수가 같은 방향으로 움직이는지 확인한다. 답안 구성과 입력 손상에 따른 변화도 별도로 살폈다.
 
-{% include model-mention-cards.html label="비교 대상 모델" aria_label="비교 대상 Hugging Face 모델" models="Gemma3|google/gemma-3-4b-it|https://huggingface.co/google/gemma-3-4b-it;Gemma4|google/gemma-4-E4B-it|https://huggingface.co/google/gemma-4-E4B-it" %}
+## 요약
 
-## 평가 방법
+- **추가 SFT 전 100문항:** Gemma4의 Judge Preference는 0.70, Gemma3는 0.30이었다. 형식 위반율은 0.11 대 0.90으로 차이가 컸지만, judge 차이 중 형식과 내용이 각각 기여한 비중은 분리하지 않았다.
+- **SFT checkpoint 비교:** Gemma4의 선택률은 step50·200·500에서 0.92·0.85·0.79였다. 학습이 길어질수록 모델 간 상대 격차가 계속 커지는 패턴은 아니었다.
+- **답안 구성 30문항 비교:** 다중 답안 조건에서 모델 간 judge 격차가 줄었다. 두 모델의 답변이 함께 바뀌므로, 선택률 변화만으로 특정 모델의 답안 다양성 효과를 확정할 수 없다.
+- **100-step 소요시간:** DGX Spark GB10의 세 구성 모두 Gemma4가 짧았다. 같은 step 수를 맞춘 결과이며, 총 파라미터·처리 토큰·연산량을 맞춘 효율 비교는 아니다.
+- **입력 손상 50문항 비교:** 손상 후 Readability는 Gemma4가 높았지만, 원본 대비 하락폭은 Gemma3가 작았다. 절대 점수 우위와 변화에 대한 민감도는 구분해야 한다.
 
-평가는 세 축으로 나눴다. 첫째, base 모델의 한국어 응답 품질을 본다. 둘째, 같은 데이터로 SFT한 뒤 응답 품질과 학습 효율이 어떻게 달라지는지 본다. 셋째, 질문 본문에 타이핑 오타나 음성 전사체 오류가 들어갔을 때 답변이 얼마나 흔들리는지 본다.
+아래는 기존 노트에 남은 집계값·설정·답변 예시를 정리한 결과다. 이번 개정에서는 원자료 재분석이나 실험 재실행을 하지 않았으며, 반복 실행의 변동과 통계적 유의성은 확인하지 않았다.
 
-모든 생성 평가는 같은 출력 제약 아래에서 진행했다.
+## Experimental Setup
 
-- 한국어 일반 문장으로 답변하기
-- 한 문단으로 쓰고, 400자와 5문장을 넘기지 않기
-- Markdown, 제목, 표, 목록, 불릿, 코드, 굵게 쓰기 금지
+### 모델과 데이터
 
-### 평가 메트릭
+비교 대상은 Google의 instruction-tuned checkpoint `google/gemma-3-4b-it`와 `google/gemma-4-E4B-it`이다. 이 글의 **base는 추가 SFT 전 상태**를 뜻하며, 사전학습 전용 모델을 뜻하지 않는다. [[1]](#ref-gemma3), [[2]](#ref-gemma4)
 
-메트릭은 네 가지 축으로 나눠 읽었다.
+{% include model-mention-cards.html label="비교 대상 모델" aria_label="비교 대상 Hugging Face 모델" models="Gemma3 4B|google/gemma-3-4b-it|https://huggingface.co/google/gemma-3-4b-it;Gemma4 E4B|google/gemma-4-E4B-it|https://huggingface.co/google/gemma-4-E4B-it" %}
 
-<div class="content-tabs">
-  <input class="content-tabs__radio" type="radio" name="evaluation-metric-tabs" id="evaluation-metric-tab-judge" checked="checked">
-  <input class="content-tabs__radio" type="radio" name="evaluation-metric-tabs" id="evaluation-metric-tab-reference">
-  <input class="content-tabs__radio" type="radio" name="evaluation-metric-tabs" id="evaluation-metric-tab-format">
-  <input class="content-tabs__radio" type="radio" name="evaluation-metric-tabs" id="evaluation-metric-tab-noise">
+> Gemma4 E4B의 E는 effective를 뜻한다. 공식 모델카드는 4.5B effective, 임베딩을 포함하면 8B로 기재한다. 따라서 두 모델의 총 파라미터 수를 맞춘 비교로 해석할 수 없다. 이하에서는 각각 Gemma3와 Gemma4로 줄여 쓴다. [[2]](#ref-gemma4)
 
-  <div class="content-tabs__list" aria-label="평가 메트릭">
-    <label class="content-tabs__tab" id="evaluation-metric-tab-label-judge" for="evaluation-metric-tab-judge">Judge Preference</label>
-    <label class="content-tabs__tab" id="evaluation-metric-tab-label-reference" for="evaluation-metric-tab-reference">Reference Match</label>
-    <label class="content-tabs__tab" id="evaluation-metric-tab-label-format" for="evaluation-metric-tab-format">Format Alignment</label>
-    <label class="content-tabs__tab" id="evaluation-metric-tab-label-noise" for="evaluation-metric-tab-noise">Noise Readability</label>
-  </div>
-
-  <div class="content-tabs__panels">
-    <section class="content-tabs__panel content-tabs__panel--judge" aria-labelledby="evaluation-metric-tab-label-judge">
-      <p><code>Judge Preference</code>는 <code>gpt-oss-120b</code>를 판정기로 쓴 pairwise 선택률이다. 같은 질문에 대한 두 모델 답변을 나란히 보여주고, 답변 순서는 섞은 뒤 더 나은 쪽을 고르게 했다. 핵심 비교는 기준 답안을 보여주지 않는 <code>blind_to_reference</code>로 진행했다.</p>
-      <p class="metric-detail__eyebrow">Rubric</p>
-      <ul>
-        <li>질문에 직접 답하는가</li>
-        <li>사실적으로 무리한 설명이 적은가</li>
-        <li>한국어 문장이 자연스럽고 완결적인가</li>
-        <li>요청한 출력 형식을 지키는가</li>
-      </ul>
-      <p>이 rubric은 한 가지 점수만 보지 않기 위한 장치다. 따라서 <code>Judge Preference</code>는 절대 점수라기보다, 같은 질문에서 두 답 중 어느 쪽이 더 좋아 보였는지를 나타내는 상대 지표다. 표의 <code>Judge Score</code>는 같은 rubric으로 개별 답변에 부여한 1-10점 평균이다.</p>
-      <p class="metric-detail__eyebrow">Formula</p>
-      <div class="metric-formulas">
-        <div class="metric-formula">
-          <span class="metric-formula__label">Judge Preference</span>
-          <span class="metric-formula__body">selected answers / total pairwise comparisons</span>
-        </div>
-      </div>
-      <p>예를 들어 <code>0.70</code>은 같은 질문 100개에서 해당 모델 답변이 70번 선택됐다는 뜻이다.</p>
-    </section>
-
-    <section class="content-tabs__panel content-tabs__panel--reference" aria-labelledby="evaluation-metric-tab-label-reference">
-      <p><code>Reference Match</code>는 기준 답안과 표현이 얼마나 겹치는지를 보는 자동 지표다. 여기서는 <code>Char F1</code>과 <code>ROUGE-L F1</code>을 함께 봤다. 이 값은 기준 답안에 가까운 표현을 잘 잡지만, 더 자연스러운 패러프레이즈나 더 짧고 완결적인 답을 과소평가할 수 있다.</p>
-      <p><code>Char F1</code>은 예측 답변과 기준 답안의 문자 overlap을 precision과 recall로 나눠 본 뒤 F1로 합친 값이다.</p>
-      <div class="metric-formulas">
-        <div class="metric-formula">
-          <span class="metric-formula__label">Char Precision</span>
-          <span class="metric-formula__body"><var>P</var><sub>char</sub> = |C(pred) ∩ C(ref)| / |C(pred)|</span>
-        </div>
-        <div class="metric-formula">
-          <span class="metric-formula__label">Char Recall</span>
-          <span class="metric-formula__body"><var>R</var><sub>char</sub> = |C(pred) ∩ C(ref)| / |C(ref)|</span>
-        </div>
-        <div class="metric-formula">
-          <span class="metric-formula__label">Char F1</span>
-          <span class="metric-formula__body"><var>F1</var><sub>char</sub> = 2PR / (P + R)</span>
-        </div>
-      </div>
-      <p><code>ROUGE-L F1</code>은 두 텍스트 사이의 longest common subsequence, 즉 순서를 유지한 최장 공통 부분열을 기반으로 한다.</p>
-      <div class="metric-formulas">
-        <div class="metric-formula">
-          <span class="metric-formula__label">ROUGE-L Precision</span>
-          <span class="metric-formula__body"><var>P</var><sub>LCS</sub> = LCS(pred, ref) / |pred|</span>
-        </div>
-        <div class="metric-formula">
-          <span class="metric-formula__label">ROUGE-L Recall</span>
-          <span class="metric-formula__body"><var>R</var><sub>LCS</sub> = LCS(pred, ref) / |ref|</span>
-        </div>
-        <div class="metric-formula">
-          <span class="metric-formula__label">ROUGE-L F1</span>
-          <span class="metric-formula__body"><var>F1</var><sub>LCS</sub> = 2PR / (P + R)</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="content-tabs__panel content-tabs__panel--format" aria-labelledby="evaluation-metric-tab-label-format">
-      <p><code>Violation</code>은 출력 형식 제약을 어긴 비율이다. 이 글에서는 모든 생성 평가에 같은 출력 제약을 걸었다.</p>
-      <p class="metric-detail__eyebrow">Checked Constraints</p>
-      <ul>
-        <li>한국어 일반 문장으로 답변하기</li>
-        <li>한 문단으로 쓰기</li>
-        <li>400자와 5문장을 넘기지 않기</li>
-        <li>Markdown, 제목, 표, 목록, 불릿, 코드, 굵게 쓰기 금지</li>
-      </ul>
-      <p><code>Violation</code>이 낮을수록 형식을 더 잘 지킨 것이다.</p>
-      <p>Figure 1에서는 모든 행을 “높을수록 좋음” 방향으로 맞추기 위해 <code>Format alignment</code>로 바꿔 표시했다.</p>
-      <div class="metric-formulas">
-        <div class="metric-formula">
-          <span class="metric-formula__label">Format Alignment</span>
-          <span class="metric-formula__body">1 - violation rate</span>
-        </div>
-      </div>
-      <p>예를 들어 base 조건에서 Gemma4의 violation은 <code>0.11</code>이므로 <code>Format alignment = 0.89</code>가 된다. Gemma3의 violation은 <code>0.90</code>이므로 <code>Format alignment = 0.10</code>으로 표시했다.</p>
-    </section>
-
-    <section class="content-tabs__panel content-tabs__panel--noise" aria-labelledby="evaluation-metric-tab-label-noise">
-      <p>질문 손상 안정성은 시스템 프롬프트나 템플릿을 바꾸지 않고, 질문 본문만 손상시켜 봤다. <code>Real typo</code>는 타이핑 오타와 띄어쓰기 붕괴, <code>ASR noise</code>는 음성 전사체처럼 구두점이 사라지거나 발음 유사 표현이 섞인 입력이다. 즉 모델이 사용자의 불완전한 입력을 얼마나 안정적으로 처리하는지를 보는 축이다.</p>
-      <p>여기서 <code>Readability</code>는 <code>Judge Preference</code>와 같은 <code>gpt-oss-120b</code>를 사용하지만, 방식은 다르다. <code>Judge Preference</code>는 두 모델 답변을 직접 비교하는 pairwise 선택률이고, <code>Readability</code>는 각 답변 하나를 1-10점으로 채점한 단일 답변 judge 점수다.</p>
-      <p class="metric-detail__eyebrow">How to read</p>
-      <ul>
-        <li><code>Noise Avg</code>: 손상된 질문 답변을 <code>gpt-oss-120b</code> <code>Readability</code> judge가 1-10점으로 평가한 평균</li>
-        <li><code>Raw Avg</code>: 같은 질문을 손상하지 않았을 때의 답변을 같은 <code>Readability</code> judge로 평가한 평균</li>
-        <li><code>Delta</code>: 같은 모델 안에서 손상 질문 평균에서 원래 질문 평균을 뺀 값</li>
-      </ul>
-      <p class="metric-detail__eyebrow">Readability Rubric</p>
-      <ul>
-        <li>문장으로 자연스럽게 읽히는가</li>
-        <li>손상된 질문의 의도를 대체로 복원했는가</li>
-        <li>반복이나 중간 끊김이 적은가</li>
-        <li>설명이 과도하게 무너지지 않았는가</li>
-      </ul>
-      <p>이 rubric은 정답과 똑같은 표현을 쓰는지를 보는 기준이 아니다. 손상 입력에서도 답변이 읽을 만하게 남는지를 <code>gpt-oss-120b</code>가 1-10점으로 평가한 judge 점수다.</p>
-    </section>
-  </div>
-</div>
-
-### 평가 설계 요약
-
-세 축을 한 번에 비교하기 위한 해석 가이드다.
+한국어 instruction 데이터는 `beomi/KoAlpaca-v1.1a`의 train split을 사용했다. 기록된 분할 방식은 random holdout, 분할 seed는 42이며, 각 비교 안에서 두 모델에 같은 평가 index를 적용했다. 평가별 문항 수와 변경 조건은 Table 1에 정리했다. [[3]](#ref-koalpaca)
 
 <figure class="table-figure table-figure--comparison">
   <div class="table-shell">
     <table class="comparison-table">
-      <thead>
-        <tr>
-          <th>평가 축</th>
-          <th>무엇을 봤나</th>
-          <th>대표 지표</th>
-          <th>주의할 점</th>
-        </tr>
-      </thead>
+      <thead><tr><th>비교</th><th class="align-right">평가 문항 수</th><th>변경 조건</th><th>주요 관찰</th></tr></thead>
       <tbody>
-        <tr>
-          <td><strong>Base</strong></td>
-          <td>한국어 instruction 응답의 기본 품질</td>
-          <td><code>Judge Preference</code>, <code>Char F1</code>, <code>ROUGE-L</code>, <code>Violation</code></td>
-          <td><code>Violation</code>은 출력 형식 제약을 어긴 비율</td>
-        </tr>
-        <tr>
-          <td><strong>SFT</strong></td>
-          <td>학습 후 품질, loss 변화, runtime</td>
-          <td><code>Judge Preference</code>, <code>Train loss</code>, runtime</td>
-          <td>모델 간 절대 loss만으로 품질을 비교하면 안 됨</td>
-        </tr>
-        <tr>
-          <td><strong>Noise</strong></td>
-          <td>질문 본문 손상에 대한 안정성</td>
-          <td><code>Noise Avg</code>, <code>Raw Avg</code>, <code>Char F1</code>, <code>Violation</code></td>
-          <td>같은 모델 안의 하락폭과 noise 상태의 절대 품질을 분리해서 봐야 함</td>
-        </tr>
+        <tr><td><strong>Base</strong></td><td class="align-right">100</td><td>추가 SFT 전 두 모델</td><td>Judge·표현 중복·형식 준수</td></tr>
+        <tr><td><strong>SFT checkpoint</strong></td><td class="align-right">100</td><td>base, step50, step200, step500</td><td>같은 평가셋에서 학습 단계별 변화</td></tr>
+        <tr><td><strong>SFT 구성</strong></td><td class="align-right">30</td><td>single, multi, duplicate; 각 100-step</td><td>답안 구성에 따른 점수와 소요시간</td></tr>
+        <tr><td><strong>입력 손상</strong></td><td class="align-right">50</td><td>원본, Real typo, ASR noise</td><td>손상 후 점수와 원본 대비 변화량</td></tr>
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 1.</strong> 이 글에서 사용한 세 평가 축이다. 세 축은 서로 다른 능력을 보기 때문에 한 지표만으로 전체 결론을 내리지 않았다.</figcaption>
+  <figcaption><strong>Table 1.</strong> 평가별 문항 수와 비교 조건. 100문항 checkpoint 평가와 30문항 구성 평가는 별도 비교이므로 선택률을 직접 이어 읽지 않는다.</figcaption>
 </figure>
 
-상단 Figure 1은 이 평가 설계를 따라 전체 결과를 먼저 압축한 요약이다. 각 행은 서로 다른 단위의 지표이므로, 막대 길이는 행 안에서 두 모델의 상대 차이를 보여준다. 세부 해석은 이어지는 `Base`, `SFT`, `노이즈` 섹션에서 따로 풀어본다.
+추가 학습에는 Dettmers et al.의 **QLoRA**를 사용했다. 4-bit로 불러온 모델의 가중치는 고정하고 LoRA adapter를 학습하는 방식이다. 기록된 adapter·batch·생성 설정은 Appendix Table 3에 모았다. [[5]](#ref-qlora)
 
-## Base: 품질과 형식 제어
+### 출력 제약과 지표
 
-base 비교는 `beomi/KoAlpaca-v1.1a` holdout 100문항에서 진행했다. `Judge Preference`는 Gemma4를 `0.70` 비율로 더 자주 골랐다. 반면 `Char F1`과 `ROUGE-L`은 두 모델이 거의 같은 범위에 있었고, Gemma3가 아주 근소하게 높았다.
+모든 생성 평가는 한국어 일반 문장, 한 문단, 400자 이내, 최대 5문장을 요구했다. Markdown·제목·표·목록·불릿·코드·굵은 글씨는 금지했다.
 
-> **자동 지표 차이는 작았고, 형식 차이는 컸다**
->
-> 같은 출력 제약을 걸었는데도 Gemma4는 답을 짧게 닫고 형식을 더 잘 지켰다. 반면 Gemma3는 기준 답안과 겹치는 표현이 약간 많게 나온 대신 평균 출력이 길고 5문장 제한을 자주 넘겼다.
+판정기는 `gpt-oss-120b` GGUF를 llama.cpp로 실행했다. Judge Preference 비교에서는 기준 답안을 보여주지 않고 두 답변의 순서를 섞었다. 질문에 직접 답하는지, 사실적으로 무리한 설명이 적은지, 한국어가 자연스러운지, 출력 형식을 지키는지를 평가했다. [[4]](#ref-gpt-oss)
 
-따라서 base 결과는 단순한 품질 승패가 아니라, 작은 기준 답안 유사도 차이와 큰 지시 준수 차이가 함께 나온 사례로 읽어야 한다. 이 조건에서는 Gemma3의 형식 위반과 장황함이 `Judge Preference`를 끌어내린 주요 요인이었을 가능성이 크다. 자동 지표의 근소한 차이는 유의미한 품질 차이로 해석하기 어렵다.
+- **Judge Preference / Score:** Preference는 같은 질문에서 두 답변 중 선택된 비율이다. Score는 개별 답변에 부여한 1–10점의 평균이다. 형식 준수가 rubric에 포함되어 있어 내용 품질만의 지표는 아니다.
+- **Char F1 / ROUGE-L F1:** 기준 답안과의 문자 중복 및 순서를 유지한 공통 부분열을 측정한다. 표현 유사도이며 사실 정확도나 완결성을 직접 검증하지 않는다. ROUGE의 출처는 Lin의 지표 논문이다. [[6]](#ref-rouge)
+- **Violation:** 공통 출력 제약의 위반율로 낮을수록 좋다. Figure 1의 Format alignment는 이를 형식 준수율로 바꾼 값이다.
+- **Readability:** 같은 judge가 답변별로 자연스러움·질문 의도 복원·반복과 끊김·설명의 유지 정도를 1–10점으로 평가했다. 손상 입력의 평균과 원본 입력 대비 변화량을 따로 읽는다.
+
+## Results
+
+### 추가 SFT 전: judge 선택률과 형식 준수
+
+Table 2에서 Gemma4의 Preference는 0.70으로 높았고, Gemma3의 Char F1과 ROUGE-L F1은 소폭 높았다. 가장 큰 차이는 형식 위반율 0.11 대 0.90이었다. 평균 출력 길이도 353.2자 대 516.9자로 달랐다.
+
+Judge rubric이 형식 준수를 포함하므로 선택률 차이에 형식이 기여했을 가능성이 있다. 다만 형식을 맞춘 답변끼리의 비교나 내용만의 별도 판정이 없어 그 비중은 알 수 없다. 작은 표현 중복 차이 역시 품질 우위의 근거로 충분하지 않다.
 
 <figure class="table-figure table-figure--metrics">
   <div class="table-shell">
@@ -204,38 +86,40 @@ base 비교는 `beomi/KoAlpaca-v1.1a` holdout 100문항에서 진행했다. `Jud
           <th colspan="2">Output Control</th>
         </tr>
         <tr>
-          <th>Preference</th>
-          <th>Score</th>
-          <th>Char F1</th>
-          <th>ROUGE-L</th>
-          <th>Avg chars</th>
-          <th>Violation</th>
+          <th class="align-right">Preference</th>
+          <th class="align-right">Score</th>
+          <th class="align-right">Char F1</th>
+          <th class="align-right">ROUGE-L F1</th>
+          <th class="align-right">평균 글자 수</th>
+          <th class="align-right">Violation</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><strong>Gemma4</strong></td>
-          <td class="is-better">0.70</td>
-          <td class="is-better">6.25</td>
-          <td>0.5532</td>
-          <td>0.3175</td>
-          <td class="is-better">353.2</td>
-          <td class="is-better">0.11</td>
+          <td class="is-better align-right">0.70</td>
+          <td class="is-better align-right">6.25</td>
+          <td class="align-right">0.5532</td>
+          <td class="align-right">0.3175</td>
+          <td class="align-right">353.2</td>
+          <td class="is-better align-right">0.11</td>
         </tr>
         <tr>
           <td><strong>Gemma3</strong></td>
-          <td>0.30</td>
-          <td>4.86</td>
-          <td class="is-better">0.5644</td>
-          <td class="is-better">0.3268</td>
-          <td>516.9</td>
-          <td>0.90</td>
+          <td class="align-right">0.30</td>
+          <td class="align-right">4.86</td>
+          <td class="is-better align-right">0.5644</td>
+          <td class="is-better align-right">0.3268</td>
+          <td class="align-right">516.9</td>
+          <td class="align-right">0.90</td>
         </tr>
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 2.</strong> Base 조건의 100문항 비교다. <code>Reference Match</code> 차이는 작았고, 더 뚜렷한 차이는 <code>Judge Preference</code>와 출력 제약 준수에서 나타났다.</figcaption>
+  <figcaption><strong>Table 2.</strong> 추가 SFT 전 100문항 결과. Preference는 상대 선택률, Score는 개별 답변의 1–10점 평균이다. Char F1과 ROUGE-L F1은 기준 답안과의 표현 중복을 측정하며, Violation은 낮을수록 형식 위반이 적다.</figcaption>
 </figure>
+
+Sample 1은 형식 위반이 드러나는 실제 답변 일부다. 이 사례의 점수 차이를 전체 100문항의 원인 설명으로 일반화할 수는 없다.
 
 <figure class="sample-compare">
   <div class="sample-compare__question">
@@ -291,24 +175,18 @@ base 비교는 `beomi/KoAlpaca-v1.1a` holdout 100문항에서 진행했다. `Jud
       </div>
     </article>
   </div>
-  <figcaption><strong>Sample 1.</strong> Base 단계의 실제 답변 일부다. Gemma3가 더 길고 구조화된 답을 내기도 했지만, 이 조건에서는 Markdown과 번호 매기기를 쓰지 말라는 지시를 어겼다. 이런 형식 위반과 장황함이 점수 차이에 영향을 준 것으로 해석할 수 있다.</figcaption>
+  <figcaption><strong>Sample 1.</strong> 추가 SFT 전 실제 답변 일부. Gemma3의 번호 목록과 굵은 글씨는 공통 출력 제약을 어긴다. 표시 점수는 judge의 기록이며, 개별 설명의 사실성을 별도로 검증한 결과는 아니다.</figcaption>
 </figure>
 
-## SFT: 성능과 학습 효율
+### SFT checkpoint: 선택률과 표현 중복의 다른 움직임
 
-### 성능 비교
+Figure 2와 Table 3은 같은 100문항에서 base부터 step500까지 비교한 결과다. Gemma4의 Preference는 모든 checkpoint에서 높았지만, step50의 0.92에서 step500의 0.79로 낮아졌다. 이 비율은 매 단계에서 두 모델을 비교한 값이므로 한 모델의 절대 품질 변화로 읽을 수 없다. step500의 실제 출력과 judge 점수 예시는 Appendix Sample 1에 모았다.
 
-QLoRA learning curve에서는 base부터 step500까지 같은 평가셋으로 비교했다. `Judge Preference` 기준으로는 모든 stage에서 Gemma4가 우세했다. step50에서 `0.92`, step200에서 `0.85`, step500에서 `0.79`를 기록했다.
+두 모델 모두 base보다 형식 위반율이 낮아졌다. ROUGE-L F1은 step50에서 Gemma4가 높고, step200·500에서는 Gemma3가 소폭 높았다. Judge 선택률과 표현 중복이 일치하지 않는다는 관찰은 남지만, 반복 변동이 없는 이 표만으로 작은 차이의 유의성을 판정할 수는 없다.
 
-다만 자동 지표는 한 방향으로만 움직이지 않았다. `ROUGE-L`은 두 모델이 비슷한 범위에서 오갔고, step200과 step500에서는 Gemma3가 아주 근소하게 높았다. 그래서 이 결과는 "Gemma4가 모든 숫자에서 이겼다"가 아니라, "SFT 후 `Judge Preference`와 출력 제어는 Gemma4 쪽으로 기울었고, reference match 차이는 유의미한 품질 차이로 보기 어려웠다"로 읽는 편이 정확하다.
-
-> **SFT 후 품질 차이는 Judge Preference에서 더 분명했다**
->
-> Gemma4는 learning curve와 100-step 구성 비교 모두에서 더 자주 선택됐다. 반면 `ROUGE-L` 차이는 작아서 품질 우세의 근거로 삼기 어렵다. 따라서 SFT 성능 비교의 중심은 기준 답안 유사도가 아니라 `Judge Preference`와 출력 제어다.
-
-<figure class="media-figure">
+<figure class="media-figure media-figure--wide-visual">
   <img src="/assets/images/posts/gemma3-e4b-korean-sft/sft-learning-curve.svg" alt="QLoRA SFT 단계별 Judge Preference와 ROUGE-L 비교">
-  <figcaption><strong>Figure 2.</strong> QLoRA learning curve를 두 지표로 나눠 본 결과다. 왼쪽 <code>Judge Preference</code>는 같은 질문에서 judge가 해당 모델 답변을 선택한 비율이고, 오른쪽 <code>ROUGE-L</code>은 reference 답안과의 overlap이다. 두 패널은 축 범위가 다르므로 각 패널 안에서 방향성을 읽어야 한다. <code>Judge Preference</code>는 Gemma4 쪽으로 뚜렷했지만, ROUGE-L 차이는 유의미한 품질 차이로 보기 어려웠다.</figcaption>
+  <figcaption><strong>Figure 2.</strong> SFT checkpoint별 Preference와 ROUGE-L F1. 가로축은 base·50·200·500을 등간격으로 놓은 범주 축이므로 선의 기울기로 step당 변화 속도를 비교할 수 없다. 오른쪽 ROUGE-L F1 축은 0.29–0.34를 확대했으며, 두 패널의 척도는 다르다.</figcaption>
 </figure>
 
 <figure class="table-figure table-figure--metrics">
@@ -316,70 +194,68 @@ QLoRA learning curve에서는 base부터 step500까지 같은 평가셋으로 �
     <table class="metrics-table">
       <thead>
         <tr>
-          <th rowspan="2">Stage</th>
+          <th rowspan="2">Checkpoint</th>
           <th colspan="2">Judge Preference</th>
-          <th colspan="2">ROUGE-L</th>
+          <th colspan="2">ROUGE-L F1</th>
           <th colspan="2">Violation</th>
         </tr>
         <tr>
-          <th>Gemma4</th>
-          <th>Gemma3</th>
-          <th>Gemma4</th>
-          <th>Gemma3</th>
-          <th>Gemma4</th>
-          <th>Gemma3</th>
+          <th class="align-right">Gemma4</th>
+          <th class="align-right">Gemma3</th>
+          <th class="align-right">Gemma4</th>
+          <th class="align-right">Gemma3</th>
+          <th class="align-right">Gemma4</th>
+          <th class="align-right">Gemma3</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><strong>base</strong></td>
-          <td class="is-better">0.70</td>
-          <td>0.30</td>
-          <td>0.3175</td>
-          <td class="is-better">0.3268</td>
-          <td class="is-better">0.11</td>
-          <td>0.90</td>
+          <td class="is-better align-right">0.70</td>
+          <td class="align-right">0.30</td>
+          <td class="align-right">0.3175</td>
+          <td class="is-better align-right">0.3268</td>
+          <td class="is-better align-right">0.11</td>
+          <td class="align-right">0.90</td>
         </tr>
         <tr>
           <td><strong>step50</strong></td>
-          <td class="is-better">0.92</td>
-          <td>0.08</td>
-          <td class="is-better">0.3219</td>
-          <td>0.2942</td>
-          <td class="is-better">0.05</td>
-          <td>0.53</td>
+          <td class="is-better align-right">0.92</td>
+          <td class="align-right">0.08</td>
+          <td class="is-better align-right">0.3219</td>
+          <td class="align-right">0.2942</td>
+          <td class="is-better align-right">0.05</td>
+          <td class="align-right">0.53</td>
         </tr>
         <tr>
           <td><strong>step200</strong></td>
-          <td class="is-better">0.85</td>
-          <td>0.15</td>
-          <td>0.3270</td>
-          <td class="is-better">0.3329</td>
-          <td class="is-better">0.09</td>
-          <td>0.24</td>
+          <td class="is-better align-right">0.85</td>
+          <td class="align-right">0.15</td>
+          <td class="align-right">0.3270</td>
+          <td class="is-better align-right">0.3329</td>
+          <td class="is-better align-right">0.09</td>
+          <td class="align-right">0.24</td>
         </tr>
         <tr>
           <td><strong>step500</strong></td>
-          <td class="is-better">0.79</td>
-          <td>0.21</td>
-          <td>0.3289</td>
-          <td class="is-better">0.3326</td>
-          <td class="is-better">0.09</td>
-          <td>0.17</td>
+          <td class="is-better align-right">0.79</td>
+          <td class="align-right">0.21</td>
+          <td class="align-right">0.3289</td>
+          <td class="is-better align-right">0.3326</td>
+          <td class="is-better align-right">0.09</td>
+          <td class="align-right">0.17</td>
         </tr>
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 3.</strong> QLoRA learning curve 결과다. <code>Violation</code>은 출력 형식 제약을 어긴 비율이다. 낮을수록 좋다.</figcaption>
+  <figcaption><strong>Table 3.</strong> 동일한 100문항에서 비교한 SFT checkpoint별 집계값. Gemma4의 Preference는 step50에서 가장 높았고 이후 낮아졌다. 두 모델의 Violation은 base보다 낮았지만, 이 표는 반복 실행의 변동을 보여주지 않는다.</figcaption>
 </figure>
 
-100-step SFT 구성 비교는 답안 다양성 효과와 단순 반복 효과를 분리하기 위해 세 조건으로 나눴다.
+### SFT 답안 구성: 다중 답안 조건에서 줄어든 격차
 
-- 단일 답안(`single`): 질문마다 기준 답안 1개만 붙인 기본 구성
-- 다중 답안(`multi`): 같은 질문에 여러 답안 변형을 붙여 답안 다양성을 늘린 구성
-- 반복 대조군(`duplicate`): `multi`와 row 수를 맞추기 위해 `single` 데이터를 반복한 대조 구성
+Table 4는 별도 30문항에서 평가한 100-step 비교다. 질문마다 기준 답안 하나를 둔 **single**은 100 rows, 같은 질문에 여러 답안 변형을 둔 **multi**는 300 rows였다. **duplicate**는 single을 반복해 multi와 300 rows를 맞춘 대조군이다. Batch 16과 최대 길이 1,024를 공통으로 사용했다.
 
-이 비교에서도 `Judge Preference`와 `Judge Score`는 Gemma4가 우세했다. 단일 답안, 다중 답안, 반복 대조군 모두 Gemma4가 더 자주 선택됐고, `Judge Score`도 더 높았다. 다만 다중 답안 조건에서는 Gemma3의 `Judge Preference`가 `0.0667`에서 `0.3333`으로 올라 격차가 줄었다.
+Gemma4의 선택률과 평균 Score는 세 구성 모두 높았다. 다만 multi에서는 Gemma3의 Preference가 single의 0.0667에서 0.3333으로 올라 모델 간 격차가 줄었다. 개별 Score도 Gemma3는 3.8333에서 5.4667로, Gemma4는 7.1333에서 6.4667로 서로 다른 방향으로 움직였다.
 
 <figure class="table-figure table-figure--metrics">
   <div class="table-shell">
@@ -387,131 +263,64 @@ QLoRA learning curve에서는 base부터 step500까지 같은 평가셋으로 �
       <thead>
         <tr>
           <th rowspan="2">SFT 구성</th>
-          <th rowspan="2">Model</th>
+          <th rowspan="2">모델</th>
           <th colspan="2">Judge-based Eval</th>
         </tr>
         <tr>
-          <th>Preference</th>
-          <th>Score</th>
+          <th class="align-right">Preference</th>
+          <th class="align-right">Score</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><strong>single</strong></td>
           <td><strong>Gemma4</strong></td>
-          <td class="is-better">0.9333</td>
-          <td class="is-better">7.1333</td>
+          <td class="is-better align-right">0.9333</td>
+          <td class="is-better align-right">7.1333</td>
         </tr>
         <tr>
           <td><strong>single</strong></td>
           <td><strong>Gemma3</strong></td>
-          <td>0.0667</td>
-          <td>3.8333</td>
+          <td class="align-right">0.0667</td>
+          <td class="align-right">3.8333</td>
         </tr>
         <tr>
           <td><strong>multi</strong></td>
           <td><strong>Gemma4</strong></td>
-          <td class="is-better">0.6667</td>
-          <td class="is-better">6.4667</td>
+          <td class="is-better align-right">0.6667</td>
+          <td class="is-better align-right">6.4667</td>
         </tr>
         <tr>
           <td><strong>multi</strong></td>
           <td><strong>Gemma3</strong></td>
-          <td>0.3333</td>
-          <td>5.4667</td>
+          <td class="align-right">0.3333</td>
+          <td class="align-right">5.4667</td>
         </tr>
         <tr>
           <td><strong>duplicate</strong></td>
           <td><strong>Gemma4</strong></td>
-          <td class="is-better">0.9667</td>
-          <td class="is-better">7.7667</td>
+          <td class="is-better align-right">0.9667</td>
+          <td class="is-better align-right">7.7667</td>
         </tr>
         <tr>
           <td><strong>duplicate</strong></td>
           <td><strong>Gemma3</strong></td>
-          <td>0.0333</td>
-          <td>3.7000</td>
+          <td class="align-right">0.0333</td>
+          <td class="align-right">3.7000</td>
         </tr>
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 4.</strong> QLoRA 100-step SFT 구성별 <code>Judge Preference</code>와 <code>Judge Score</code> 비교다. 다중 답안 조건에서는 격차가 줄었지만, 선택률과 평균 점수는 세 구성 모두 Gemma4가 높았다.</figcaption>
+  <figcaption><strong>Table 4.</strong> 30문항에서 평가한 100-step SFT 구성 비교. Preference와 Score는 각각 상대 선택률과 개별 답변의 1–10점 평균이다. multi에서 모델 간 격차가 줄었으며, 두 모델의 답변이 함께 바뀌는 비교다.</figcaption>
 </figure>
 
-다중 답안 조건은 별도로 볼 만하다. 같은 질문에 여러 답안 변형을 보여줬을 때 Gemma3의 `Judge Preference`는 `0.0667 -> 0.3333`으로 올랐다. Gemma4도 여전히 이겼지만 `0.9333 -> 0.6667`로 격차가 줄었다. 그래서 Gemma3는 답안 다양성에 더 크게 반응한 것으로 보인다. 다만 그것이 최종 품질 우세로 전환되지는 않았다.
+이 결과는 답안 구성에 따라 모델 간 비교가 달라졌다는 탐색적 신호다. Pairwise 선택률은 상대 모델의 변화에도 영향을 받고, 문항별 결과와 반복 실행이 제시되어 있지 않다. 따라서 “Gemma3가 답안 다양성에 더 잘 반응한다”는 일반적 학습 특성까지 확정하기는 어렵다.
 
-<figure class="sample-compare">
-  <div class="sample-compare__question">
-    <strong>SFT sample</strong>
-    <p>여름에도 계곡이 시원한 이유는 무엇인가요? 계곡은 다른 물과 비교해서 왜 더 시원한 걸까요?</p>
-  </div>
-  <div class="sample-compare__grid">
-    <article class="sample-compare__card">
-      <div class="sample-compare__label">Gemma4</div>
-      <div class="sample-compare__body">
-        <p>계곡물이 다른 물보다 더 시원한 이유는 지표수를 따라 흐르면서 지하 깊은 곳에서 차가워진 물이 지표로 솟아나오기 때문이야. 이 과정에서 물은 오랜 시간 동안 땅속을 흐르면서 온도를 낮추고, 주변 공기와 접촉하면서 더 차가워져. 또한, 계곡은 주변 산림의 영향을 많이 받아서 그늘이 지고 바람이 잘 통하지 않아 더 시원하게 느껴지는 거야. 그래서 계곡물은 다른 물보다 더 시원하고 깨끗한 특성을 가지고 있지.</p>
-      </div>
-      <div class="sample-compare__scores" aria-label="Gemma4 SFT sample scores">
-        <div class="sample-compare__score-bar" style="--score: 90%;">
-          <span>Judge Score</span>
-          <i aria-hidden="true"><b></b></i>
-          <strong>9/10</strong>
-        </div>
-        <div class="sample-compare__score-bar" style="--score: 59.3%;">
-          <span>Char F1</span>
-          <i aria-hidden="true"><b></b></i>
-          <strong>0.593</strong>
-        </div>
-        <div class="sample-compare__score-bar" style="--score: 100%;">
-          <span>Format</span>
-          <i aria-hidden="true"><b></b></i>
-          <strong>Pass</strong>
-        </div>
-      </div>
-    </article>
-    <article class="sample-compare__card">
-      <div class="sample-compare__label">Gemma3</div>
-      <div class="sample-compare__body">
-        <p>계곡은 다른 물보다 시원한 이유는 지표면과 지하수면의 온도 차이 때문입니다. 지표면은 햇빛을 직접 받아 열이 가해지기 때문에 온도가 높고, 지하수면은 지표면보다 깊이 들어가 있어 햇빛을 받지 못하고 온도가 낮습니다. 따라서 계곡의 물은 지표면보다 온도가 낮아 시원하게 느껴집니다.</p>
-      </div>
-      <div class="sample-compare__scores" aria-label="Gemma3 SFT sample scores">
-        <div class="sample-compare__score-bar is-weak" style="--score: 70%;">
-          <span>Judge Score</span>
-          <i aria-hidden="true"><b></b></i>
-          <strong>7/10</strong>
-        </div>
-        <div class="sample-compare__score-bar is-weak" style="--score: 54.8%;">
-          <span>Char F1</span>
-          <i aria-hidden="true"><b></b></i>
-          <strong>0.548</strong>
-        </div>
-        <div class="sample-compare__score-bar" style="--score: 100%;">
-          <span>Format</span>
-          <i aria-hidden="true"><b></b></i>
-          <strong>Pass</strong>
-        </div>
-      </div>
-    </article>
-  </div>
-  <figcaption><strong>Sample 2.</strong> step500 SFT 후 샘플이다. 두 모델 모두 형식은 지켰다. Gemma4는 더 많은 요인을 연결해 설명했지만 일부 표현은 거칠고, Gemma3는 온도 차이 중심으로 더 짧게 답했다.</figcaption>
-</figure>
+### 100-step 학습 소요시간
 
-### 학습 효율 비교
+Table 5에서 Gemma4/Gemma3의 소요시간은 single 1348s/2411s, multi 1427s/2682s, duplicate 1510s/2683s였다. DGX Spark GB10에서 기록한 세 구성 모두 Gemma4가 짧았다.
 
-학습 효율도 위 세 구성의 100-step SFT 조건에서 비교했다. loss는 모델 간 절대값을 그대로 품질 순위로 바꾸면 안 된다. tokenizer와 출력 분포가 다르기 때문이다. 여기서는 같은 모델 안에서 loss가 내려갔는지, 그리고 같은 100-step 조건에서 어느 쪽이 더 빠르게 학습을 마쳤는지를 봤다.
-
-> **둘 다 학습됐지만, 같은 step은 Gemma4가 더 빨랐다**
->
-> loss 감소는 양쪽 모델 모두에서 SFT가 실제로 진행됐다는 확인용 신호다. 효율 비교에서 더 직접적인 차이는 runtime이었다. 같은 100-step 조건을 끝내는 데 걸린 시간은 세 구성 모두 Gemma4가 짧았다.
-
-<figure class="media-figure">
-  <img src="/assets/images/posts/gemma3-e4b-korean-sft/sft-efficiency.svg" alt="QLoRA 100-step SFT의 loss remaining과 runtime 비교">
-  <figcaption><strong>Figure 3.</strong> DGX Spark GB10에서 측정한 100-step QLoRA SFT 결과다. 왼쪽은 loss가 같은 run 안에서 얼마나 남았는지 보는 sanity check이고, 오른쪽은 같은 100-step을 끝내는 데 걸린 시간이다.</figcaption>
-</figure>
-
-Figure 3의 `Loss Remaining`은 마지막 step loss가 첫 step loss의 몇 퍼센트로 남았는지를 뜻한다. 낮을수록 같은 run 안에서 loss가 더 많이 줄었다는 의미지만, 모델 간 절대 품질 비교로 읽으면 안 된다. 여기서는 SFT가 실제로 진행됐는지 확인하는 sanity check로만 사용했다.
-
-결과는 두 가지로 읽을 수 있다. 먼저 세 구성 모두에서 마지막 step loss가 첫 step loss보다 크게 낮아졌으므로, 양쪽 모델 모두 SFT가 진행됐다는 점은 확인된다. 그러나 같은 100-step을 끝내는 시간은 모든 구성에서 Gemma4가 짧았다. 단일 답안은 `1348s` 대 `2411s`, 다중 답안은 `1427s` 대 `2682s`, 반복 대조군은 `1510s` 대 `2683s`였다. 따라서 이 실험에서 학습 효율 차이는 loss의 절대값이 아니라 runtime에서 더 분명하게 나타났다.
+같은 step·batch·최대 길이는 맞췄지만, tokenizer와 모델 구조가 다르고 실제 처리 토큰이나 연산량은 보고되어 있지 않다. 이 결과가 보여주는 것은 해당 실행 조건의 소요시간 차이다. 두 모델 모두 첫 step 대비 마지막 step의 loss는 낮아졌으나, 학습 데이터에 대한 loss 감소를 일반화 성능의 근거로 삼지는 않는다. Loss Remaining 도표는 Appendix Figure 1에 두었다.
 
 <figure class="table-figure table-figure--metrics">
   <div class="table-shell">
@@ -519,67 +328,67 @@ Figure 3의 `Loss Remaining`은 마지막 step loss가 첫 step loss의 몇 퍼�
       <thead>
         <tr>
           <th rowspan="2">SFT 구성</th>
-          <th rowspan="2">Model</th>
+          <th rowspan="2">모델</th>
           <th colspan="3">Training Signal</th>
         </tr>
         <tr>
-          <th>Step loss first->last</th>
-          <th>Train loss</th>
-          <th>Runtime</th>
+          <th class="align-right">Step loss<br><span class="table-note-inline">first → last</span></th>
+          <th class="align-right">Train loss</th>
+          <th class="align-right">Runtime</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><strong>single</strong></td>
           <td><strong>Gemma4</strong></td>
-          <td>16.05 -> 0.42</td>
-          <td>2.3239</td>
-          <td class="is-better">1348s</td>
+          <td class="align-right">16.05 -> 0.42</td>
+          <td class="align-right">2.3239</td>
+          <td class="is-better align-right">1348s</td>
         </tr>
         <tr>
           <td><strong>single</strong></td>
           <td><strong>Gemma3</strong></td>
-          <td>4.33 -> 0.04</td>
-          <td>0.9212</td>
-          <td>2411s</td>
+          <td class="align-right">4.33 -> 0.04</td>
+          <td class="align-right">0.9212</td>
+          <td class="align-right">2411s</td>
         </tr>
         <tr>
           <td><strong>multi</strong></td>
           <td><strong>Gemma4</strong></td>
-          <td>16.36 -> 1.23</td>
-          <td>2.6546</td>
-          <td class="is-better">1427s</td>
+          <td class="align-right">16.36 -> 1.23</td>
+          <td class="align-right">2.6546</td>
+          <td class="is-better align-right">1427s</td>
         </tr>
         <tr>
           <td><strong>multi</strong></td>
           <td><strong>Gemma3</strong></td>
-          <td>4.25 -> 0.57</td>
-          <td>1.2520</td>
-          <td>2682s</td>
+          <td class="align-right">4.25 -> 0.57</td>
+          <td class="align-right">1.2520</td>
+          <td class="align-right">2682s</td>
         </tr>
         <tr>
           <td><strong>duplicate</strong></td>
           <td><strong>Gemma4</strong></td>
-          <td>16.54 -> 0.51</td>
-          <td>2.4186</td>
-          <td class="is-better">1510s</td>
+          <td class="align-right">16.54 -> 0.51</td>
+          <td class="align-right">2.4186</td>
+          <td class="is-better align-right">1510s</td>
         </tr>
         <tr>
           <td><strong>duplicate</strong></td>
           <td><strong>Gemma3</strong></td>
-          <td>4.52 -> 0.04</td>
-          <td>0.9257</td>
-          <td>2683s</td>
+          <td class="align-right">4.52 -> 0.04</td>
+          <td class="align-right">0.9257</td>
+          <td class="align-right">2683s</td>
         </tr>
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 5.</strong> QLoRA 100-step SFT의 학습 신호와 runtime이다. 두 모델 모두 loss는 내려갔지만, 같은 step을 끝내는 데 걸린 시간은 Gemma4가 더 짧았다.</figcaption>
+  <figcaption><strong>Table 5.</strong> DGX Spark GB10에서 측정한 100-step SFT의 loss와 소요시간. Train loss는 기존 기록의 집계값이며 상세 집계 방식은 명시되어 있지 않다. 첫·마지막 step loss와 함께 학습 기록으로 보존하되, 모델 간 품질 순위로 해석하지 않는다.</figcaption>
 </figure>
 
-## 노이즈: 질문이 흔들릴 때
+### 입력 손상: 절대 점수와 하락폭의 분리
 
-노이즈 실험에서는 SFT된 모델에 실제 사용자 입력 오류에 가까운 질문을 넣어 봤다. 여기서 손상은 시스템 프롬프트나 템플릿이 아니라 질문 본문에만 적용했다. `Real typo`는 타이핑 오타와 띄어쓰기 붕괴, `ASR noise`는 음성 전사체처럼 구두점이 사라지거나 발음 유사 표현이 섞인 입력이다.
+SFT된 모델에 대해 50문항의 질문 본문만 손상시켰다. Table 6의 Real typo는 타이핑 오류와 띄어쓰기 붕괴, ASR noise는 음성 인식 전사체를 모사한 텍스트 오류다. 시스템 프롬프트와 출력 제약은 유지했다.
 
 <figure class="table-figure table-figure--comparison">
   <div class="table-shell">
@@ -587,7 +396,7 @@ Figure 3의 `Loss Remaining`은 마지막 step loss가 첫 step loss의 몇 퍼�
       <thead>
         <tr>
           <th>Noise</th>
-          <th>무엇을 흉내 냈나</th>
+          <th>모사한 입력 오류</th>
           <th>예시</th>
           <th>해석 범위</th>
         </tr>
@@ -603,28 +412,20 @@ Figure 3의 `Loss Remaining`은 마지막 step loss가 첫 step loss의 몇 퍼�
           <td><strong>ASR noise</strong></td>
           <td>음성 인식 전사체처럼 구두점이 사라지거나 발음 유사 표현이 섞인 입력</td>
           <td><code>어떻게 되나요</code> -> <code>어떡해되나요</code></td>
-          <td>말을 텍스트로 옮기는 과정의 가벼운 전사 오류</td>
+          <td>전사 오류를 모사한 텍스트 손상; 실제 음성 인식기 평가는 아님</td>
         </tr>
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 6.</strong> 현실형 노이즈 2종의 의미다. 두 조건 모두 질문 본문만 흔들고, 시스템 프롬프트와 출력 형식 제약은 그대로 유지했다.</figcaption>
+  <figcaption><strong>Table 6.</strong> 질문 본문에 적용한 두 입력 손상 유형. 시스템 프롬프트와 출력 형식 제약은 유지했다. ASR noise는 음성 인식 전사 오류를 모사한 텍스트 조건이다.</figcaption>
 </figure>
 
-결과는 두 층으로 읽어야 한다. 두 현실형 노이즈 조건 모두에서 raw 입력보다 손상 입력의 `Readability` 점수가 낮아졌다. 중요한 점은 손상된 입력 상태의 절대 `Readability`가 Gemma4 쪽에 더 높게 남았다는 것이다. 두 가지 현실형 노이즈 평균에서 Gemma4는 `5.50`, Gemma3는 `3.93`이었다.
+Table 7에서 손상 후 Readability는 두 조건 모두 Gemma4가 높았다. 두 조건의 평균은 Gemma4 5.50, Gemma3 3.93이었다. 그러나 Figure 3의 원본 대비 하락폭은 Gemma3가 더 작다. 따라서 **손상 후 더 높은 점수를 유지하는 모델**과 **원본 대비 점수 변화가 작은 모델**은 이 기록에서 다르다.
 
-> **둘 다 흔들렸지만, 흔들린 뒤의 품질은 Gemma4가 높았다**
->
-> 이 실험은 노이즈가 성능을 올리는지 보는 것이 아니다. 원래 질문과 손상 질문을 같은 모델 안에서 비교하고, 손상된 입력에서도 답변이 얼마나 읽을 만하게 남는지를 `Readability`로 본다. 두 현실형 노이즈 조건에서 손상 입력의 `Readability` 평균은 Gemma4가 더 높았다.
-
-<figure class="media-figure">
+<figure class="media-figure media-figure--wide-visual">
   <img src="/assets/images/posts/gemma3-e4b-korean-sft/robustness-contrast.svg" alt="손상 질문에서 모델별 Readability 평균과 raw 대비 변화량 비교">
-  <figcaption><strong>Figure 4.</strong> 왼쪽 패널은 손상 입력 답변의 <code>Readability</code> 평균, 즉 Table 7의 <code>Readability</code> 값이다. 높을수록 손상된 질문에서도 답변이 더 읽기 좋게 남았다는 뜻이다. 오른쪽 패널은 같은 질문셋에서 <code>Noise Avg - Raw Avg</code>로 계산한 raw 대비 변화량이다. 0에 가까울수록 raw 대비 하락폭이 작다.</figcaption>
+  <figcaption><strong>Figure 3.</strong> 왼쪽은 손상 입력 답변의 Readability 평균으로, 점수 척도는 1–10이고 표시 축은 0–8이다. 오른쪽은 같은 모델·질문셋에서 손상 입력 평균에서 원본 입력 평균을 뺀 변화량이다. 0에 가까울수록 하락폭이 작으며, 절대 점수와 하락폭은 서로 다른 비교다.</figcaption>
 </figure>
-
-따라서 노이즈 결과는 Figure 4의 두 패널을 함께 봐야 한다. 왼쪽은 손상된 입력을 받았을 때 어느 모델 답변이 더 읽을 만하게 남았는지를 보여준다. 오른쪽은 같은 모델 안에서 raw 대비 얼마나 흔들렸는지를 보여준다. 이 둘은 같은 결론을 말하는 지표가 아니다.
-
-Table 7은 손상 입력에서의 모델 간 차이를 원래 평가 지표 중심으로 다시 정리한 것이다. 같은 손상 질문에 대해 `gpt-oss-120b`가 1-10점으로 평가한 `Readability`, 기준 답안 overlap인 `Char F1`, 출력 형식 위반율인 `Violation`을 나란히 놓았다. raw 대비 하락폭은 Figure 4의 오른쪽 패널에서 따로 보고, 이 표에서는 손상된 입력을 받은 뒤 어느 모델의 답변이 더 읽을 만하게 남았는지를 본다.
 
 <figure class="table-figure table-figure--metrics">
   <div class="table-shell">
@@ -637,38 +438,40 @@ Table 7은 손상 입력에서의 모델 간 차이를 원래 평가 지표 중�
           <th colspan="2">Violation</th>
         </tr>
         <tr>
-          <th>G4</th>
-          <th>G3</th>
-          <th>G4</th>
-          <th>G3</th>
-          <th>G4</th>
-          <th>G3</th>
+          <th class="align-right">Gemma4</th>
+          <th class="align-right">Gemma3</th>
+          <th class="align-right">Gemma4</th>
+          <th class="align-right">Gemma3</th>
+          <th class="align-right">Gemma4</th>
+          <th class="align-right">Gemma3</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>Real typo</td>
-          <td class="is-better">5.32</td>
-          <td>3.86</td>
-          <td class="is-better">0.542</td>
-          <td>0.474</td>
-          <td class="is-better">0.14</td>
-          <td>0.32</td>
+          <td class="is-better align-right">5.32</td>
+          <td class="align-right">3.86</td>
+          <td class="is-better align-right">0.542</td>
+          <td class="align-right">0.474</td>
+          <td class="is-better align-right">0.14</td>
+          <td class="align-right">0.32</td>
         </tr>
         <tr>
           <td>ASR noise</td>
-          <td class="is-better">5.68</td>
-          <td>4.00</td>
-          <td class="is-better">0.534</td>
-          <td>0.496</td>
-          <td class="is-better">0.16</td>
-          <td>0.26</td>
+          <td class="is-better align-right">5.68</td>
+          <td class="align-right">4.00</td>
+          <td class="is-better align-right">0.534</td>
+          <td class="align-right">0.496</td>
+          <td class="is-better align-right">0.16</td>
+          <td class="align-right">0.26</td>
         </tr>
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 7.</strong> 현실형 손상 질문 2종의 모델 간 비교다. <code>G4</code>와 <code>G3</code>는 각각 Gemma4와 Gemma3를 줄인 표기다. <code>Readability</code>는 <code>gpt-oss-120b</code>가 평가한 1-10점 평균이고, <code>Char F1</code>은 기준 답안 overlap이다. 둘은 높을수록 좋고, <code>Violation</code>은 낮을수록 좋다. raw 대비 변화량은 Figure 4의 오른쪽 패널에서 따로 본다.</figcaption>
+  <figcaption><strong>Table 7.</strong> 50문항의 손상 입력 평가. Readability는 개별 답변의 1–10점 평균, Char F1은 기준 답안과의 문자 중복, Violation은 형식 위반율이다. 원본 입력 대비 변화량은 Figure 3에 별도로 표시했다.</figcaption>
 </figure>
+
+Sample 2는 오타가 섞인 동일 질문의 실제 출력이다. 반복과 설명 구성 차이를 볼 수 있지만, Readability는 개념 설명의 사실성을 별도로 검증한 점수가 아니다.
 
 <figure class="sample-compare">
   <div class="sample-compare__question">
@@ -723,20 +526,23 @@ Table 7은 손상 입력에서의 모델 간 차이를 원래 평가 지표 중�
       </div>
     </article>
   </div>
-  <figcaption><strong>Sample 3.</strong> 같은 Real typo 입력에 대한 Gemma4와 Gemma3의 실제 답변이다. 노이즈 전 원 질문은 “아로마와 허브의 차이는 무엇인가요? 아직도 아로마에 포함될 수 있는 식물들이 더 추가될 수 있나요?”였다. 두 모델 모두 답변 형식은 지켰지만, Gemma4는 아로마를 향과 추출물 중심으로, 허브를 식물 부위와 활용 중심으로 나누어 설명했다. Gemma3는 답변이 무너지지는 않았지만 아로마와 허브의 관계를 반복적으로 단순화해 개념 구분이 덜 선명했다.</figcaption>
+  <figcaption><strong>Sample 2.</strong> 같은 Real typo 입력에 대한 실제 답변. 원래 질문은 “아로마와 허브의 차이는 무엇인가요? 아직도 아로마에 포함될 수 있는 식물들이 더 추가될 수 있나요?”였다. Gemma3 답변에는 같은 정의의 반복이 보인다. Length Pass는 길이 조건의 판정이며 전체 형식이나 사실성 검증을 뜻하지 않는다.</figcaption>
 </figure>
 
-## 결론
+## 해석과 한계
 
-이 비교에서 가장 안정적으로 남는 결론은 단순하다. Gemma4는 base와 SFT 모두에서 `Judge Preference`와 `Judge Score`, 출력 형식 제어, 현실형 질문 손상 조건의 절대 `Readability`에서 더 강했다. SFT도 실제로 진행됐고, 100-step SFT 조건에서는 runtime도 더 짧았다.
+여러 비교 조건에서 관찰된 것은 Gemma4의 높은 judge 선택률과 낮은 형식 위반율이다. SFT 답안 구성을 바꾸면 격차가 달라졌고, 입력 손상 후 절대 Readability와 원본 대비 하락폭은 서로 다른 모델을 가리켰다. 한국어 instruction 평가에서 내용·형식·표현 중복·입력 변화에 대한 민감도를 구분해야 하는 이유를 보여주는 사례다.
 
-Gemma3의 장점은 더 좁게 써야 한다. `ROUGE-L`과 `Char F1`에서 보인 차이는 작아서 유의미한 품질 우세로 해석하기 어렵다. 더 분명하게 남는 신호는 같은 질문에 여러 답안 변형을 보여준 학습에서 개선폭이 더 크게 나타났다는 점이다. 하지만 그것도 최종 품질 우세나 일반적인 노이즈 안정성 우세로 넓히면 과장된다.
+결론의 범위는 다음 조건에 한정된다.
 
-> 4B급 한국어 SFT 비교에서 Gemma4는 `Judge Preference`, `Judge Score`, 형식 제어, 학습 효율, 현실형 질문 손상 조건의 절대 `Readability`에서 더 일관되게 앞섰다. Gemma3는 답안 다양성에 더 크게 반응하는 모습이 있었지만, 기준 답안 유사도 차이는 품질 우세로 보기 어려웠다.
+- **판정의 독립성:** 단일 judge를 사용했다. 형식과 내용의 기여를 분해하거나 인간 평가로 사실성을 검증한 결과는 제시되어 있지 않다.
+- **표본과 변동:** 평가 크기는 비교별 100·30·50문항이다. 현재 노트에 문항별 결과와 반복 실행 분포가 제시되어 있지 않아 신뢰구간이나 작은 차이의 안정성을 새로 계산하지 않았다.
+- **학습 비교:** 동일한 step 수가 동일한 계산 예산을 뜻하지는 않는다. SFT 구성의 관찰은 현재 데이터·모델·학습 설정의 범위를 넘어서 일반화하지 않는다.
+- **재현 정보:** 현재 노트에는 learning rate, 정확한 모델·데이터 revision, GGUF 파일, 모델별 thinking·sampling 설정, 동률 처리와 전체 judge prompt가 남아 있지 않다. 공개 리소스 링크는 출처를 확인해 주지만 당시 실행을 완전히 복원하지는 못한다.
 
-## Appendix: 실험 조건
+## Appendix: 기록된 실험 조건과 보조 자료
 
-본문에는 결론을 읽는 데 필요한 수치만 남겼다. 재현을 위해 필요한 조건은 아래에 따로 정리한다. 핵심은 같은 데이터 분할과 같은 판정 조건에서 `base`, `SFT`, 질문 본문 손상 평가를 분리해 본 것이다.
+Appendix Table 1–3은 기존 노트에 남아 있는 설정이다. 본문에서 축약한 데이터 분할·판정·학습 조건을 모았으며, 누락된 설정을 추정해 채우지는 않았다.
 
 <figure class="table-figure table-figure--comparison">
   <div class="table-shell">
@@ -766,7 +572,7 @@ Gemma3의 장점은 더 좁게 써야 한다. `ROUGE-L`과 `Char F1`에서 보�
         </tr>
         <tr>
           <td><strong>SFT 구성 비교 평가</strong></td>
-          <td>30문항 holdout, <code>single</code>, <code>multi</code>, <code>duplicate</code> arm 비교</td>
+          <td>30문항 holdout, <code>single</code>, <code>multi</code>, <code>duplicate</code> 구성 비교</td>
         </tr>
         <tr>
           <td><strong>질문 본문 손상 평가</strong></td>
@@ -775,7 +581,7 @@ Gemma3의 장점은 더 좁게 써야 한다. `ROUGE-L`과 `Char F1`에서 보�
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Appendix Table 1.</strong> 공통 데이터와 평가 분할 조건이다. 본문 수치는 모두 같은 seed와 holdout 방식에서 나온 결과만 사용했다.</figcaption>
+  <figcaption><strong>Appendix Table 1.</strong> 기존 노트에 기록된 데이터 분할과 평가 크기. 각 비교 안에서 같은 평가 index를 사용했다는 조건을 보존했다. 서로 크기가 다른 세 평가셋의 문항 관계까지 확인한 것은 아니다.</figcaption>
 </figure>
 
 <figure class="table-figure table-figure--comparison">
@@ -830,11 +636,11 @@ Gemma3의 장점은 더 좁게 써야 한다. `ROUGE-L`과 `Char F1`에서 보�
       <tbody>
         <tr>
           <td><strong>학습 방식</strong></td>
-          <td>QLoRA SFT; 4-bit로 base model을 load한 뒤 LoRA adapter만 학습</td>
+          <td>QLoRA SFT; 4-bit로 추가 SFT 전 모델을 불러온 뒤 LoRA adapter만 학습</td>
         </tr>
         <tr>
           <td><strong>Quantization</strong></td>
-          <td><code>BitsAndBytesConfig(load_in_4bit = true)</code>, <code>nf4</code>, double quant, <code>bfloat16</code> compute</td>
+          <td><code>BitsAndBytesConfig(load_in_4bit = true)</code><br><span class="table-note-inline"><code>nf4</code>, double quant, <code>bfloat16</code> compute</span></td>
         </tr>
         <tr>
           <td><strong>Adapter 설정</strong></td>
@@ -858,7 +664,7 @@ Gemma3의 장점은 더 좁게 써야 한다. `ROUGE-L`과 `Char F1`에서 보�
         </tr>
         <tr>
           <td><strong>100-step SFT batch</strong></td>
-          <td><code>per_device_batch_size = 16</code>, <code>gradient_accumulation_steps = 1</code>, <code>max_length = 1024</code></td>
+          <td><code>per_device_batch_size = 16</code><br><code>gradient_accumulation_steps = 1</code><br><code>max_length = 1024</code></td>
         </tr>
         <tr>
           <td><strong>출력 형식 제약</strong></td>
@@ -871,15 +677,101 @@ Gemma3의 장점은 더 좁게 써야 한다. `ROUGE-L`과 `Char F1`에서 보�
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Appendix Table 3.</strong> QLoRA SFT와 생성 조건이다. 서로 다른 모델의 절대 loss는 품질 비교가 아니라 학습이 실제로 일어났는지 확인하는 sanity check로만 사용했다.</figcaption>
+  <figcaption><strong>Appendix Table 3.</strong> 기록된 QLoRA SFT와 생성 설정. 학습률, 모델별 전체 생성 옵션과 정확한 revision은 이 표에 남아 있지 않아, 완전한 재현 명세로 볼 수는 없다.</figcaption>
 </figure>
+
+### 학습 신호의 보조 시각화
+
+<figure class="media-figure media-figure--wide-visual">
+  <img src="/assets/images/posts/gemma3-e4b-korean-sft/sft-efficiency.svg" alt="QLoRA 100-step SFT의 loss remaining과 runtime 비교">
+  <figcaption><strong>Appendix Figure 1.</strong> 100-step SFT의 loss 변화와 소요시간. Loss Remaining은 첫 step loss 대비 마지막 step loss의 백분율이며, 같은 실행 안의 loss 감소를 표시한다. 토큰화와 학습 대상 분포가 다른 모델 사이의 품질 척도로 사용할 수 없다.</figcaption>
+</figure>
+
+### SFT 출력과 judge 점수 예시
+
+<figure class="sample-compare">
+  <div class="sample-compare__question">
+    <strong>SFT sample</strong>
+    <p>여름에도 계곡이 시원한 이유는 무엇인가요? 계곡은 다른 물과 비교해서 왜 더 시원한 걸까요?</p>
+  </div>
+  <div class="sample-compare__grid">
+    <article class="sample-compare__card">
+      <div class="sample-compare__label">Gemma4</div>
+      <div class="sample-compare__body">
+        <p>계곡물이 다른 물보다 더 시원한 이유는 지표수를 따라 흐르면서 지하 깊은 곳에서 차가워진 물이 지표로 솟아나오기 때문이야. 이 과정에서 물은 오랜 시간 동안 땅속을 흐르면서 온도를 낮추고, 주변 공기와 접촉하면서 더 차가워져. 또한, 계곡은 주변 산림의 영향을 많이 받아서 그늘이 지고 바람이 잘 통하지 않아 더 시원하게 느껴지는 거야. 그래서 계곡물은 다른 물보다 더 시원하고 깨끗한 특성을 가지고 있지.</p>
+      </div>
+      <div class="sample-compare__scores" aria-label="Gemma4 SFT sample scores">
+        <div class="sample-compare__score-bar" style="--score: 90%;">
+          <span>Judge Score</span>
+          <i aria-hidden="true"><b></b></i>
+          <strong>9/10</strong>
+        </div>
+        <div class="sample-compare__score-bar" style="--score: 59.3%;">
+          <span>Char F1</span>
+          <i aria-hidden="true"><b></b></i>
+          <strong>0.593</strong>
+        </div>
+        <div class="sample-compare__score-bar" style="--score: 100%;">
+          <span>Format</span>
+          <i aria-hidden="true"><b></b></i>
+          <strong>Pass</strong>
+        </div>
+      </div>
+    </article>
+    <article class="sample-compare__card">
+      <div class="sample-compare__label">Gemma3</div>
+      <div class="sample-compare__body">
+        <p>계곡은 다른 물보다 시원한 이유는 지표면과 지하수면의 온도 차이 때문입니다. 지표면은 햇빛을 직접 받아 열이 가해지기 때문에 온도가 높고, 지하수면은 지표면보다 깊이 들어가 있어 햇빛을 받지 못하고 온도가 낮습니다. 따라서 계곡의 물은 지표면보다 온도가 낮아 시원하게 느껴집니다.</p>
+      </div>
+      <div class="sample-compare__scores" aria-label="Gemma3 SFT sample scores">
+        <div class="sample-compare__score-bar is-weak" style="--score: 70%;">
+          <span>Judge Score</span>
+          <i aria-hidden="true"><b></b></i>
+          <strong>7/10</strong>
+        </div>
+        <div class="sample-compare__score-bar is-weak" style="--score: 54.8%;">
+          <span>Char F1</span>
+          <i aria-hidden="true"><b></b></i>
+          <strong>0.548</strong>
+        </div>
+        <div class="sample-compare__score-bar" style="--score: 100%;">
+          <span>Format</span>
+          <i aria-hidden="true"><b></b></i>
+          <strong>Pass</strong>
+        </div>
+      </div>
+    </article>
+  </div>
+  <figcaption><strong>Appendix Sample 1.</strong> step500 이후의 실제 답변과 기록된 점수. 두 모델 모두 형식 판정은 Pass였다. 높은 Judge Score가 각 인과 설명의 사실성을 보증하지는 않으므로, 이 샘플은 정답 예시가 아니라 판정 결과의 해석 범위를 보여준다.</figcaption>
+</figure>
+
+## References
+
+<div class="reference-list" markdown="1">
+
+1. <span id="ref-gemma3"></span>Google DeepMind. *Gemma 3 4B instruction-tuned model*. 공식 모델카드: [google/gemma-3-4b-it](https://huggingface.co/google/gemma-3-4b-it).
+2. <span id="ref-gemma4"></span>Google DeepMind. *Gemma 4 E4B instruction-tuned model*. 공식 모델카드: [google/gemma-4-E4B-it](https://huggingface.co/google/gemma-4-E4B-it).
+3. <span id="ref-koalpaca"></span>beomi. *KoAlpaca-v1.1a*. Hugging Face 데이터셋: [beomi/KoAlpaca-v1.1a](https://huggingface.co/datasets/beomi/KoAlpaca-v1.1a).
+4. <span id="ref-gpt-oss"></span>OpenAI. *gpt-oss-120b*. 공식 모델카드: [openai/gpt-oss-120b](https://huggingface.co/openai/gpt-oss-120b).
+5. <span id="ref-qlora"></span>Tim Dettmers, Artidoro Pagnoni, Ari Holtzman, and Luke Zettlemoyer. *QLoRA: Efficient Finetuning of Quantized LLMs*. arXiv:2305.14314, 2023. [논문](https://arxiv.org/abs/2305.14314).
+6. <span id="ref-rouge"></span>Chin-Yew Lin. *ROUGE: A Package for Automatic Evaluation of Summaries*. Text Summarization Branches Out, pp. 74–81, Association for Computational Linguistics, 2004. [논문](https://aclanthology.org/W04-1013/).
+
+</div>
+
+## Experiment Resources
+
+<div class="reference-list" markdown="1">
+
+- ggml-org. [llama.cpp](https://github.com/ggml-org/llama.cpp). Judge GGUF 실행에 사용한 추론 소프트웨어의 공식 저장소.
+
+</div>
 
 ## Citation
 
 이 글을 인용할 때는 아래 형식을 사용할 수 있다.
 
 ```text
-Ilho Ahn, "4B급 Gemma3와 Gemma4 한국어 SFT 비교: 품질, 학습, 노이즈", Mini Research, Apr 2026.
+Ilho Ahn, "Gemma3 4B와 Gemma4 E4B의 한국어 SFT 비교", Mini Research, Apr 2026.
 ```
 
 또는 BibTeX 형식으로는 다음처럼 적을 수 있다.
@@ -887,7 +779,7 @@ Ilho Ahn, "4B급 Gemma3와 Gemma4 한국어 SFT 비교: 품질, 학습, 노이�
 ```bibtex
 @article{ahn2026gemma3gemma4korean,
   author = {Ilho Ahn},
-  title = {4B급 Gemma3와 Gemma4 한국어 SFT 비교: 품질, 학습, 노이즈},
+  title = {Gemma3 4B와 Gemma4 E4B의 한국어 SFT 비교},
   journal = {Mini Research},
   year = {2026},
   month = apr,

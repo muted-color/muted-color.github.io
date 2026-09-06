@@ -1,7 +1,8 @@
 ---
-title: "DPO로 본 단백질 변이 reranking의 preference learning 신호"
+lang: ko
+title: "단백질 변이 재정렬에서 DPO의 보완 신호: SQSTM 사례와 대조 실험"
 date: 2026-05-03 10:08:36 +0900
-last_modified_at: 2026-05-07 09:48:37 +0900
+last_modified_at: 2026-09-06 00:00:00 +0900
 hidden: true
 published: false
 publication_status: "unpublished"
@@ -9,52 +10,45 @@ hide_reason: "현재 결과만으로 preference learning의 protein variant rera
 categories: ["PROTEIN ML"]
 tags: [protein, proteingym, dms, dpo, preference-learning, reranking, protein-language-model, lora]
 lab_path: "experiment-lab/projects/proteingym-dms-dpo"
-excerpt: "ProteinGym DMS 후보 변이 reranking에서 DPO delta로 preference learning 신호가 남는 조건과 position baseline에 묻히는 조건을 분리한다."
-description: "ProteinGym DMS 후보 변이 reranking에서 preference learning 신호를 DPO delta로 측정하고, general fitness predictor가 아니라 reference-relative reranker로 남는 조건을 SQSTM, IF1, BLAT, KCNE1, MBD11, RASK binding 사례로 정리한 실험 노트."
+excerpt: "ProteinGym 변이 재정렬에서 SQSTM의 고정 조합 개선을 IF1·VG08 대조 조건과 비교하고, 위치 기준선 위에 남는 DPO 보완 신호의 범위를 살핀다."
+description: "ProteinGym DMS 후보 재정렬에서 SQSTM의 DPO·위치 기준선 조합 개선과 IF1·VG08 등의 대조 결과를 비교한다. 학습 쌍 구성, 동점 처리, 선호 방향 통제로 보완 신호의 범위와 한계를 정리한 실험 노트."
 permalink: /research/2026/05/03/proteingym-dms-dpo-reranking/
 image: /assets/images/posts/proteingym-dms-dpo-reranking/social-thumbnail.png
 image_alt: "ProteinGym DMS 후보 변이 reranking에서 DPO delta, position baseline, fixed hybrid를 비교한 소셜 썸네일"
 hero_image: /assets/images/posts/proteingym-dms-dpo-reranking/hero-dpo-context.svg
 hero_alt: "Same-position ProteinGym DMS reranking 조건에서 DPO delta와 Position baseline의 top-25 hit rate를 막대로 비교하고 Random과 Fixed hybrid를 marker로 표시한 차트"
-hero_caption: "<strong>Figure 1.</strong> same-position 및 fixed hybrid 점검에서 DPO delta, Position baseline, Fixed hybrid의 top-25 hit rate를 같은 축에 놓은 요약이다. 진한 보라 막대는 DPO delta, 해치 보라 막대는 position baseline, 하늘색 막대는 fixed hybrid, 회색 세로선은 random을 뜻한다. DPO delta가 random보다 높아도 position baseline보다 낮으면 보완 신호로 제한해 읽고, fixed hybrid가 position baseline을 넘는 조건은 현재 SQSTM으로 좁혀진다."
+hero_caption: "<strong>Figure 1.</strong> same-position 및 fixed hybrid 점검에서 DPO delta, Position baseline, Fixed hybrid의 top-25 hit rate를 같은 축에 놓은 요약이다. 진한 보라 막대는 DPO delta, 해치 보라 막대는 position baseline, 하늘색 막대는 fixed hybrid, 회색 세로선은 random을 뜻한다. DPO delta가 random보다 높아도 position baseline보다 낮으면 보완 신호로 제한해 읽고, fixed hybrid가 random과 position baseline을 모두 넘는 핵심 사례는 SQSTM이다. <a href='/assets/images/posts/proteingym-dms-dpo-reranking/hero-dpo-context.svg'>원본 그림 확대</a>."
 hero_frame: true
 hero_compact: true
 math: true
 ---
 
-Protein engineering에서 다음 후보를 고르는 일은 좋은 sequence를 새로 생성하는 문제만은 아니다. 이미 측정된 DMS(deep mutational scanning) 후보 집합 안에서도 어떤 변이를 먼저 볼지 정렬해야 한다. 이 분석은 ProteinGym DMS substitution 후보를 대상으로, preference learning 신호를 DPO delta로 구체화했을 때 high-fitness variant를 상위권으로 더 잘 올리는지 평가한다 <a class="citation-ref" href="#ref-proteingym" aria-label="Reference 1">[1]</a>.
+이미 측정된 단백질 변이 중 다음 실험 후보를 고를 때, DPO로 학습한 점수가 단순한 위치별 평균 fitness보다 도움이 되는가? 이 글은 단백질 변이 효과 벤치마크인 ProteinGym에서, 대규모 변이 측정 실험인 DMS(deep mutational scanning)의 아미노산 치환 후보를 다시 정렬하는 문제로 이 질문을 평가한다 <a class="citation-ref" href="#ref-proteingym" aria-label="Reference 1">[1]</a>. 핵심 사례인 **SQSTM에서는 position baseline과 DPO delta를 합친 fixed hybrid가 top-25 hit rate 0.813으로 position baseline 0.720을 넘었다.** DPO delta 단독 점수는 0.627로 position baseline보다 낮았다.
 
-평가 질문은 **DPO 학습 뒤 reference 대비 log-likelihood 변화량으로 후보를 다시 정렬했을 때, high-fitness 후보의 top-25 hit rate가 random 또는 raw likelihood보다 높아지는지, 그리고 그 이득이 position baseline 대비 보완 신호로도 남는지**다.
-
-비교에서 가장 중요한 기준선은 position baseline이다. 이 기준선은 변이가 어떤 amino acid로 바뀌었는지는 보지 않고, train split에서 mutation position별 평균 fitness만 계산해 eval 후보를 정렬한다. position-level tolerance는 DMS 해석에서 오래전부터 알려진 강한 신호이므로, DPO delta가 random을 넘는지만으로는 충분하지 않다.
-
-DPO delta의 효과는 조건부로 관찰됐다. 일부 assay에서는 random과 raw likelihood보다 high-fitness 후보를 더 위로 올렸지만, 많은 조건에서는 position baseline 자체가 더 강했다. 따라서 이 결과는 "preference learning이 protein fitness를 일반적으로 예측한다"는 주장보다, **DPO delta로 측정한 preference learning 신호가 reference-relative reranker로 작동할 수 있는 조건**을 구분한 결과로 해석한다.
-
-> **DMS**는 deep mutational scanning assay다. 이 분석에서는 이미 측정된 mutant 후보를 새로 생성하지 않고, 후보 집합 안에서 점수로 다시 정렬한다.
->
-> **DPO delta**는 final policy likelihood 자체가 아니라, DPO 이후 reference 대비 log-likelihood가 얼마나 움직였는지를 보는 reference-relative score다 <a class="citation-ref" href="#ref-dpo" aria-label="Reference 2">[2]</a>.
-
-{% include model-mention-cards.html label="사용한 주요 리소스" aria_label="사용한 핵심 데이터와 모델 리소스" models="ProteinGym v1 DMS|DMS substitutions|https://huggingface.co/datasets/OATML-Markslab/ProteinGym_v1;ProtGPT2|nferruz/ProtGPT2|https://huggingface.co/nferruz/ProtGPT2" %}
+DPO delta는 학습 모델이 기준 모델(reference)보다 각 후보에 부여하는 로그확률이 얼마나 달라졌는지를 나타낸다. Position baseline은 변이 위치별 평균 측정값으로 후보를 정렬하는 기준선이고, fixed hybrid는 두 점수를 각각 표준화해 같은 가중치로 더한 조합이다. Top-25 hit rate는 점수 상위 25개 후보 중 실제 DMS 측정값 상위 사분위에 드는 후보의 비율이며, 높을수록 좋다. 이 글의 fitness는 각 실험(assay)에서 측정한 기능 지표를 뜻한다.
 
 ## 요약
 
-- 이 글은 preference learning을 general fitness predictor로 주장하지 않고, DPO delta가 후보 집합 안에서 reranking 신호로 남는 조건을 평가한다.
-- DPO delta는 일부 assay/readout에서 random 또는 raw likelihood보다 높은 top-25 high-fitness hit rate를 보였다.
-- 핵심 기준은 position baseline이다. DPO delta가 random을 넘더라도 position baseline보다 낮으면 보완 신호로 제한해 읽는다.
-- 가장 안정적인 양성 조건은 SQSTM이다. IF1은 약한 양성, VG08/REV는 global-pair caution, BLAT/KCNE1/MBD11/RASK binding은 음성 또는 평탄한 경계로 남았다.
-- 후속 실험은 preference objective, reference policy, pair construction을 바꿔도 position baseline 위에 남는 reranking 신호가 반복되는지 확인하는 방향이 적절하다.
+- 평가 대상은 이미 측정된 DMS 후보의 reranking이다. 새로운 단백질 생성이나 assay 전반의 fitness 예측 성능을 검증한 결과는 아니다.
+- SQSTM의 same-position pair 조건에서 DPO delta는 0.627, position baseline은 0.720, fixed hybrid는 0.813이었다. 보완 신호의 핵심 근거는 마지막 조합 비교다.
+- IF1의 same-position DPO delta는 0.427로 random 0.253보다 높았지만, hybrid 0.653은 position baseline 0.760보다 낮았다.
+- VG08은 global pair 0.467에서 same-position pair 0.280으로 약해졌다. SQSTM의 양성 사례와 함께 pair 구성 의존성을 보여주는 반례다.
+- Same-position은 같은 변이 위치 안에서 학습 쌍을 만드는 조건이고, label-flip은 선호 방향을 뒤집는 통제다. 이것만으로 평가 순위에서 아미노산 종류의 효과와 위치 효과가 분리됐다고 할 수 없다.
+- Assay별로 가장 높은 성능의 학습 설정(best recipe)을 고른 탐색적 비교다. 토큰 길이 정규화에 따른 민감도와 독립 자료에서의 설정 선택 검증은 남아 있다.
+
+{% include model-mention-cards.html label="사용한 주요 리소스" aria_label="사용한 핵심 데이터와 모델 리소스" models="ProteinGym v1 DMS|DMS substitutions|https://huggingface.co/datasets/OATML-Markslab/ProteinGym_v1;ProtGPT2|nferruz/ProtGPT2|https://huggingface.co/nferruz/ProtGPT2" %}
 
 ## 문제 설정
 
-평가 범위는 preference learning의 일반적인 fitness 예측력이 아니라, **reference policy 대비 선호 이동이 high-fitness 후보를 같은 candidate set 안에서 더 위로 올리는지**로 제한한다. 이 글에서는 그 신호를 DPO delta로 측정한다. 따라서 평가 설계도 생성 성능이나 raw likelihood 개선보다, 같은 후보 집합 안의 reranking과 position baseline 대비 보완 신호에 맞춘다.
+평가 범위는 **기준 모델 대비 선호 변화가 높은 fitness의 후보를 같은 후보 집합 안에서 더 위로 올리는지**다. 따라서 DPO delta의 순위뿐 아니라 위치별 평균만 쓰는 기준선에 보완 정보를 더하는지도 확인한다.
 
-이 범위는 DPO의 학습 방식과 맞물린다. DPO는 절대적인 DMS score를 회귀하는 모델이 아니라, 같은 맥락에서 `chosen`이 `rejected`보다 더 선호되도록 policy와 reference의 log-ratio를 움직이는 pairwise preference 학습이다. 따라서 분석의 기본 단위도 절대 fitness 예측이 아니라, 고정된 후보 집합 안에서 reference 대비 선호 이동이 순서를 바꾸는지에 둔다.
+Rafailov et al.의 DPO(Direct Preference Optimization)는 선호 쌍을 이용하는 학습 방법이다 <a class="citation-ref" href="#ref-dpo" aria-label="Reference 2">[2]</a>. 같은 맥락에서 선호 후보인 `chosen`의 상대 점수를 비선호 후보인 `rejected`보다 높이도록 학습 모델과 기준 모델의 로그확률 비율을 조정한다. 이 실험에서도 절대적인 DMS 측정값을 회귀하지 않고, 두 후보 사이의 선호를 학습한다.
 
-DPO delta가 유효할 가능성이 있는 task는 고정된 후보 집합을 다시 정렬하는 문제다. position 평균만으로 high-fitness bin이 거의 설명되는 assay에서는 DPO delta가 추가할 여지가 작다. 반대로 같은 position 안에서도 chosen/rejected 방향이 유지되고, 특정 residue 또는 readout preference가 reference 대비 변화량으로 남는 assay라면 DPO delta를 보완 score로 쓸 가능성이 있다.
+위치별 평균만으로 높은 fitness의 후보를 대부분 찾을 수 있는 assay에서는 DPO delta가 더할 여지가 작다. 같은 위치에서도 아미노산 치환에 따른 차이가 남는다면 보완 점수로 쓸 가능성이 있다. 이는 아래 통제 비교로 확인할 가설이며, DPO 학습 방식 자체가 보장하는 성질은 아니다.
 
 ## 평가 설계
 
-평가 대상은 ProteinGym DMS substitution benchmark의 mutant candidate다. 실험에는 Hugging Face의 `OATML-Markslab/ProteinGym_v1` 중 `DMS_substitutions` split에서 뽑은 assay를 사용했다. 각 assay 안에서 DMS score가 높은 변이를 `chosen`, 낮은 변이를 `rejected`로 두고 preference pair를 만들었다. 기본 모델은 ProtGPT2 계열 causal protein language model이며, 학습은 LoRA adapter로 수행했다 <a class="citation-ref" href="#ref-protgpt2" aria-label="Reference 3">[3]</a><a class="citation-ref" href="#ref-lora" aria-label="Reference 4">[4]</a>. 비교한 recipe는 `base`, `SFT`, `base -> DPO`, `SFT -> DPO`다.
+평가 대상은 ProteinGym DMS substitution benchmark의 mutant candidate다. 실험에는 Hugging Face의 `OATML-Markslab/ProteinGym_v1` 중 `DMS_substitutions` split에서 뽑은 assay를 사용했다. 각 assay 안에서 DMS score가 높은 변이를 `chosen`, 낮은 변이를 `rejected`로 두고 preference pair를 만들었다. 기본 모델은 앞선 서열을 바탕으로 다음 토큰을 예측하는 ProtGPT2 단백질 언어 모델이며, 소수의 저랭크 행렬을 학습하는 LoRA adapter로 조정했다 <a class="citation-ref" href="#ref-protgpt2" aria-label="Reference 3">[3]</a><a class="citation-ref" href="#ref-lora" aria-label="Reference 4">[4]</a>. 비교한 학습 경로는 `base`, `SFT`, `base -> DPO`, `SFT -> DPO`다. Base는 기본 모델, SFT는 지도 미세조정이며, 화살표는 이어서 적용한 학습을 뜻한다.
 
 중심 score는 final policy의 raw likelihood가 아니다.
 
@@ -66,9 +60,9 @@ $$
 
 이 값은 sequence 자체가 얼마나 자연스럽게 보이는지를 재는 점수가 아니다. DPO 이후 reference model 대비 해당 sequence의 선호도가 얼마나 증가했는지를 나타낸다.
 
-Final policy likelihood만 쓰면 DPO 학습 전부터 reference model이 갖고 있던 protein language model prior가 그대로 섞인다. 그러면 높은 likelihood가 원래 자연스러운 sequence 때문인지, DPO가 high-fitness preference 방향으로 올렸기 때문인지 분리하기 어렵다. 같은 sequence에 대해 policy와 reference의 log-likelihood 차이를 보면, DPO 학습으로 새로 생긴 선호 이동만 분리할 수 있다.
+Final policy likelihood만 쓰면 DPO 학습 전부터 reference model이 갖고 있던 protein language model prior가 그대로 섞인다. 그러면 높은 likelihood가 원래 자연스러운 sequence 때문인지, DPO가 high-fitness preference 방향으로 올렸기 때문인지 분리하기 어렵다. 같은 sequence에 대해 policy와 reference의 log-likelihood 차이를 보면, reference 대비 모델 점수의 이동을 계산할 수 있다. 다만 이 차감이 생물학적 fitness 신호만 분리하거나 학습 중 생긴 모든 교란을 제거하지는 않는다.
 
-본문에서는 reranking용 operational score로 log-likelihood 차이만 사용했다. DPO 논문의 implicit reward에는 양의 scale factor가 붙지만, 고정된 양의 scale은 ranking을 바꾸지 않는다. 수치는 full sequence의 summed log-likelihood 차이인 `delta_sum_logprob`를 기준으로 하며, 같은 assay의 substitution 후보는 길이가 같아 length normalization이 메인 순위를 바꾸는 요인이 되지 않았다.
+본문에서는 reranking용 operational score로 log-likelihood 차이만 사용했다. DPO 논문의 implicit reward에는 양의 scale factor가 붙지만, 고정된 양의 scale은 ranking을 바꾸지 않는다. 수치는 full sequence의 summed log-likelihood 차이인 `delta_sum_logprob`를 기준으로 한다. 같은 assay의 substitution 후보는 amino-acid 길이가 같지만, ProtGPT2는 여러 잔기로 이루어진 oligomer를 token으로 사용하므로 token 수까지 같다고 보장할 수 없다 <a class="citation-ref" href="#ref-protgpt2" aria-label="Reference 3">[3]</a>. 따라서 amino-acid 길이로 나누는 경우와 token 수로 나누는 경우를 구분해야 하며, 후자의 순위 불변성은 현재 자료로 확인하지 못했다. 이는 기록된 summed-score 순위가 틀렸다는 뜻이 아니라, 정규화 방식에 대한 민감도가 미확인이라는 뜻이다.
 
 <figure class="table-figure table-figure--comparison">
   <div class="table-shell">
@@ -150,7 +144,7 @@ Final policy likelihood만 쓰면 DPO 학습 전부터 reference model이 갖고
         <tr>
           <td>Same-position</td>
           <td>같은 mutation position 안에서 q75/q25 pair를 다시 구성</td>
-          <td>global pair가 position shortcut을 탄 것인지 분리한다.</td>
+          <td>학습 pair 안의 position 차이를 제거한다. 평가 순위의 position 효과까지 제거하지는 않는다.</td>
         </tr>
         <tr>
           <td>High-fitness bin</td>
@@ -175,7 +169,7 @@ Final policy likelihood만 쓰면 DPO 학습 전부터 reference model이 갖고
 
 ## 결과
 
-결과는 다섯 층으로 나눠 읽는다. 먼저 DPO delta가 random보다 나은 조건을 확인하고, 그다음 position baseline 위에 남는지 분리한다. 이후 global pair에서 보인 양성 신호가 same-position pair에서도 유지되는지, preference 방향과 readout 변화에 민감한지 점검한다.
+SQSTM의 hybrid 개선을 중심으로, 각 통제가 답하는 질문을 구분한다. Raw likelihood와 delta는 점수 선택, position baseline과 hybrid는 보완 가치, same-position pair는 학습 pair 구성, label-flip은 선호 방향 민감도를 점검한다. 어느 한 비교도 나머지 비교를 대신하지 않는다.
 
 ### Random 개선과 position 기준 분리
 
@@ -188,7 +182,7 @@ Final policy likelihood만 쓰면 DPO 학습 전부터 reference model이 갖고
 
 이 비교는 DPO delta를 쓰는 이유를 실험적으로도 확인해 준다. IF1에서는 raw likelihood top-25가 `0.280`인 반면 `base -> DPO` delta는 `0.493`까지 올라갔고, SQSTM에서는 raw likelihood `0.360` 대비 `SFT -> DPO` delta가 `0.627`이었다. VG08도 raw likelihood는 `0.240`에 머물렀지만 `SFT -> DPO` delta는 `0.467`까지 올라갔다. 즉 DPO가 유용하게 작동한 조건에서는 final/reference model이 원래 높게 보던 sequence를 그대로 고른 것이 아니라, DPO 학습 뒤 reference 대비 likelihood가 움직인 방향이 high-fitness 후보와 더 잘 맞았다.
 
-반대로 MBD11처럼 raw likelihood 자체가 `0.427-0.440`으로 비교적 높고 position baseline이 `0.920`으로 강한 조건에서는 delta top-25가 `0.280-0.307`에 그쳤다. 이 경우 차감값을 쓰더라도 DPO가 position-level tolerance 위에 충분한 추가 신호를 만들지 못했다. 따라서 raw likelihood와 DPO delta를 함께 놓는 비교는 단순한 score 선택 문제가 아니라, DPO 학습으로 새로 생긴 preference shift가 실제 평가 landscape와 맞았는지 확인하는 진단이다.
+반대로 MBD11처럼 raw likelihood 자체가 `0.427-0.440`으로 비교적 높고 position baseline이 `0.920`으로 강한 조건에서는 delta top-25가 `0.280-0.307`에 그쳤다. 이 비교에서는 delta 단독 순위가 position baseline을 넘지 못했다. 추가 신호의 존재 여부는 별도 조합 비교와 구분해야 한다. 따라서 raw likelihood와 DPO delta를 함께 놓는 비교는 단순한 score 선택 문제가 아니라, DPO 학습으로 새로 생긴 preference shift가 실제 평가 landscape와 맞았는지 확인하는 진단이다.
 
 Table 3은 결과를 다섯 층으로 압축한다. 여기서 `random 대비 양성`은 top-25 hit-rate가 random보다 높다는 뜻이고, position 보완 여부는 position baseline 또는 fixed hybrid 비교로 따로 판단한다. 이 구분 때문에 IF1, VG08, REV처럼 random 기준에서는 좋아 보이는 조건도 SQSTM과 같은 결론 단위로 묶지 않는다.
 
@@ -231,7 +225,7 @@ Table 3은 결과를 다섯 층으로 압축한다. 여기서 `random 대비 양
         <tr>
           <td>position baseline 우세</td>
           <td>BLAT, KCNE1, MBD11, RASK binding, VKOR1 abundance</td>
-          <td>DPO delta가 약하거나 음수이고, position baseline이 더 강하게 남는다.</td>
+          <td>DPO delta의 random 대비 차이가 작거나 음수이고, position baseline이 더 강하게 남는다.</td>
         </tr>
       </tbody>
     </table>
@@ -241,13 +235,13 @@ Table 3은 결과를 다섯 층으로 압축한다. 여기서 `random 대비 양
 
 ### Position baseline 위에 남는 신호
 
-Position baseline은 train split에서 mutation position별 평균 fitness를 계산하고, eval 후보를 그 값으로 정렬한다. train에서 관측되지 않은 position은 이 baseline에서 마지막으로 밀리지만, 본문 핵심 조건들은 train/eval position overlap이 충분한 조건에서 해석했다. 단순한 baseline이지만 DPO 해석에는 중요하다. DPO delta가 random을 넘더라도 position baseline보다 낮으면, 그 신호가 residue substitution preference인지, 오래전부터 알려진 position-level tolerance에 묻힌 것인지 분리하기 어렵다.
+Position baseline은 train split에서 mutation position별 평균 fitness를 계산하고, eval 후보를 그 값으로 정렬한다. train에서 관측되지 않은 position은 이 baseline에서 마지막으로 밀리지만, 본문 핵심 조건들은 train/eval position overlap이 충분한 조건에서 해석했다. 단순한 baseline이지만 DPO 해석에는 중요하다. DPO delta가 random을 넘더라도 position baseline보다 낮으면, 그 신호가 residue substitution preference인지, 위치별 변이 허용도의 차이에 묻힌 것인지 분리하기 어렵다.
 
 Figure 3은 이 차이를 assay/recipe 단위로 보여준다. 대각선 위에 있는 점은 DPO delta가 position baseline보다 높은 조건이고, 아래에 있는 점은 position baseline이 더 강한 조건이다. 라벨이 붙은 진한 점은 본문 해석의 핵심 조건이고, 연한 점은 비교 맥락으로 함께 둔 recipe다.
 
 <figure class="media-figure media-figure--wide-visual">
   <img src="/assets/images/posts/proteingym-dms-dpo-reranking/delta-vs-position.svg" alt="DPO delta top-25 hit rate를 y축, position baseline top-25 hit rate를 x축에 놓고 assay recipe별 점을 대각선 기준으로 비교한 산점도">
-  <figcaption><strong>Figure 3.</strong> DPO delta와 position baseline의 top-25 hit rate를 같은 assay/recipe 단위로 비교한 산점도다. 대각선 위의 점은 DPO delta가 position baseline보다 높고, 아래의 점은 position baseline이 더 높다. 진한 라벨 점은 본문 핵심 조건, 연한 점은 비교 맥락이다. REV_HV1H2는 global pair 기준으로 대각선 위에 있지만, same-position 평가에서는 신호가 약해져 별도로 제한해 해석한다.</figcaption>
+  <figcaption><strong>Figure 3.</strong> DPO delta와 position baseline의 top-25 hit rate를 같은 assay/recipe 단위로 비교한 산점도다. 대각선 위의 점은 DPO delta가 position baseline보다 높고, 아래의 점은 position baseline이 더 높다. 진한 라벨 점은 본문 핵심 조건, 연한 점은 비교 맥락이다. REV_HV1H2는 global pair 기준으로 대각선 위에 있지만, same-position pair로 학습한 조건에서는 신호가 약해져 별도로 제한해 해석한다.</figcaption>
 </figure>
 
 SQSTM은 여기서 중요한 예외다. DPO delta 단독은 position baseline보다 낮지만, 두 신호를 고정된 방식으로 더하면 position baseline을 넘었다. 따라서 SQSTM의 의미는 DPO가 position baseline을 대체한다는 것이 아니라, position-level 신호 위에 얹을 수 있는 보완 정보가 남았다는 데 있다.
@@ -332,7 +326,7 @@ Table 4에서 결론 단위로 남는 조건은 SQSTM이다. IF1, RASK, VG08은 
 
 ### Pair 구성과 same-position 점검
 
-Global pair는 assay 전체에서 high-fitness 변이와 low-fitness 변이를 묶는다. 이 경우 DPO가 residue-level preference를 배웠을 수도 있지만, 단순히 좋은 position과 나쁜 position을 구분했을 수도 있다. 그래서 같은 mutation position 안에서만 chosen/rejected를 만드는 same-position pair를 따로 확인했다.
+Global pair는 assay 전체에서 high-fitness 변이와 low-fitness 변이를 묶는다. 이 경우 DPO가 residue-level preference를 배웠을 수도 있지만, 단순히 좋은 position과 나쁜 position을 구분했을 수도 있다. 그래서 같은 mutation position 안에서만 chosen/rejected를 만드는 same-position pair를 따로 확인했다. 이 통제는 학습 pair의 두 후보가 다른 위치에 있다는 쉬운 단서를 제거한다. 그러나 평가는 여전히 여러 position의 후보를 섞어 top-25를 고르므로, 평가에서 residue-level 효과가 분리됐다는 증명은 아니다. 이를 직접 확인하려면 position 내부의 held-out 순위나 position 조건부 평가가 추가로 필요하다.
 
 <figure class="table-figure table-figure--metrics">
   <div class="table-shell">
@@ -407,7 +401,7 @@ Global pair는 assay 전체에서 high-fitness 변이와 low-fitness 변이를 �
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 5.</strong> global pair와 same-position pair의 비교다. <code>Global / same-position</code>은 pair design을 바꾸기 전후의 DPO delta top-25 hit rate이고, <code>Same-position lift</code>는 same-position DPO delta의 random 대비 차이다. tie-aware p05/p50은 동점 후보를 random jitter로 반복 해소했을 때의 top-25 hit-rate 하한과 중앙값이다.</figcaption>
+  <figcaption><strong>Table 5.</strong> global pair와 same-position pair의 비교다. <code>Global / same-position</code>은 pair design을 바꾸기 전후의 DPO delta top-25 hit rate이고, <code>Same-position lift</code>는 same-position DPO delta의 random 대비 차이다. tie-aware p05/p50은 동점 후보의 순서를 무작위로 조금씩 바꿔 반복 계산한 top-25 hit-rate의 하위 분위수와 중앙값이다. 이는 동점 처리 민감도이며 통계적 신뢰구간은 아니다.</figcaption>
 </figure>
 
 Table 5에서는 IF1과 SQSTM의 근거 수준이 분리된다. IF1은 same-position DPO delta가 random보다 높지만, strict tie-aware p05가 random 근처까지 내려가고 hybrid도 position baseline을 넘지 못했다. SQSTM은 same-position 유지, label-flip control, fixed hybrid까지 함께 통과한 조건이다.
@@ -477,7 +471,7 @@ RASK abundance에서도 같은 방향의 control이 나왔다. true preference�
 
 ### Readout별 경계
 
-같은 단백질이어도 readout이 바뀌면 DPO 효과가 달라질 수 있다. 가장 선명한 예는 RASK다. RASK abundance는 random 대비 양성이었지만, RASK binding-DARPin_K55는 음수였다.
+같은 단백질이어도 측정 대상(readout)이 발현량이나 결합력 등으로 바뀌면 DPO 효과가 달라질 수 있다. 가장 선명한 예는 RASK다. RASK abundance는 random 대비 양성이었지만, RASK binding-DARPin_K55는 음수였다.
 
 <figure class="table-figure table-figure--comparison">
   <div class="table-shell">
@@ -532,65 +526,21 @@ Readout-dependent 신호는 readout이 바뀌면 항상 한쪽에서 효과가 �
 
 ## 해석과 결론
 
-### 작동 조건
+SQSTM은 same-position pair에서도 점수가 유지되고, label-flip에서 방향이 바뀌며, fixed hybrid가 position baseline보다 높았다는 세 관찰이 연결되는 사례다. IF1은 random 대비 신호에 그쳤고, VG08/REV는 pair 구성에 민감했다. BLAT, KCNE1, MBD11, RASK binding의 약하거나 평탄한 결과까지 포함하면, 현재 근거는 특정 assay에서의 보완 reranking 가치로 제한된다.
 
-현재 결과를 기준으로, DPO delta reranking 신호가 남은 조건은 다섯 가지다.
+Reference도 함께 비교해야 한다. IF1, REV, ENVZ same-position은 `base -> DPO`, SQSTM과 VG08은 `SFT -> DPO`가 더 강했다. 이 차이는 특정 reference의 생물학적 우월성보다 출발 모델과 학습 경로에 따라 delta의 의미가 달라짐을 보여준다. 후속 검증에서는 후보 집합과 position baseline을 고정하고 objective, reference, pair 구성을 하나씩 바꾸는 비교가 필요하다.
 
-<figure class="table-figure table-figure--comparison">
-  <div class="table-shell">
-    <table class="comparison-table">
-      <thead>
-        <tr>
-          <th>현재 실험에서 신호가 남은 조건</th>
-          <th>신호가 약해진 조건</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>학습 pair의 high/low 방향이 eval landscape에서도 유지된다.</td>
-          <td>functional constraint가 복잡해 단순 high/low pair가 일반화되지 않는다.</td>
-        </tr>
-        <tr>
-          <td>base reference와 SFT reference 중 더 맞는 출발점이 assay마다 다를 수 있다.</td>
-          <td>SFT -&gt; DPO 또는 base -&gt; DPO를 universal default처럼 둔다.</td>
-        </tr>
-        <tr>
-          <td>raw likelihood만으로는 부족하지만 DPO shift가 추가 정보를 줄 headroom이 있다.</td>
-          <td>position baseline이 이미 너무 강해 추가로 얻을 여지가 작다.</td>
-        </tr>
-        <tr>
-          <td>same-position pair에서도 신호가 유지된다.</td>
-          <td>global pair 양성 신호가 same-position에서 무너진다.</td>
-        </tr>
-        <tr>
-          <td>position baseline 위에 DPO delta를 얹었을 때 성능이 유지되거나 좋아진다.</td>
-          <td>DPO가 random 기준만 넘고 position baseline에는 크게 밀린다.</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <figcaption><strong>Table 8.</strong> 현재 실험에서 신호가 남은 조건과 약해진 조건이다. 이 표는 일반 적용 가이드가 아니라, 본문 조건에서 어떤 점검 항목이 결론을 갈랐는지 정리한 것이다.</figcaption>
-</figure>
+## 한계와 남은 검증
 
-이 기준에서 가장 안정적으로 남는 조건은 SQSTM이다. IF1은 같은 조건을 일부 통과하지만 position baseline 위의 보완 신호로는 남지 않았다. VG08과 REV는 global pair에서 나온 양성 신호를 same-position 평가 없이 residue-level 신호로 읽으면 과장된다. BLAT, KCNE1, MBD11, RASK binding처럼 음수 또는 평탄한 조건은 반대쪽 경계를 만든다. 즉 DPO delta는 assay 전반의 fitness predictor라기보다, reference policy 대비 선호 이동이 후보 순서를 유용하게 바꾸는 조건에서만 의미가 있다.
+Assay별 best recipe와 여러 readout을 탐색한 결과이므로 SQSTM의 조합 개선은 사전 고정된 범용 recipe의 검증과 다르다. Tie-aware 분위수는 동점 처리 민감도이며, 새로운 assay나 split에 대한 신뢰구간이 아니다. 주요 DPO 값이 3 seed 평균이어도 후보 선택과 recipe 선택의 불확실성을 모두 포함하지 않는다.
 
-Reference 선택도 단일 recipe로 고정하기 어렵다. 기존 ablation에서 IF1, REV, ENVZ same-position은 `base -> DPO`가 더 강했고, SQSTM과 VG08은 `SFT -> DPO`가 더 강했다. 따라서 이 글에서 말하는 reference 조건은 특정 reference가 생물학적으로 옳다는 뜻이 아니라, 같은 DPO objective라도 policy가 출발하는 reference family에 따라 delta 신호가 달라진다는 뜻이다.
+기록된 원고에는 assay별 후보 수·분할 규칙·seed별 점수·reference 및 학습 명세가 모두 갖춰져 있지 않고, best recipe를 선택한 split도 확인할 수 없다. 따라서 여기서는 기록된 aggregate와 통제 비교의 방향을 해석하며 독립 재현이나 선택 편향의 크기를 주장하지 않는다. 후보별 token 수와 정규화 후 순위도 확인할 수 없어, 수치 해석은 기록된 summed log-likelihood delta에 한정한다.
 
-방법론적으로도 결론은 같다. DPO를 이 문제에 쓰려면 final policy likelihood를 그대로 fitness score처럼 쓰지 않고, reference 대비 변화량인 DPO delta를 먼저 분리해야 한다. 그다음 random lift, same-position 유지, position baseline 비교, label-flip control, fixed hybrid 비교를 차례로 통과하는지 확인해야 한다. 이 필터를 통과하지 못하면 delta는 residue-level preference가 아니라 position effect나 pair design shortcut일 수 있다.
-
-### 결론과 후속 비교
-
-이 실험에서 찾은 의미는 preference learning이 protein fitness를 일반적으로 예측한다는 것이 아니다. DPO delta는 reference-relative score이고, 후보 집합 안에서의 reranking 신호다. SQSTM positive, IF1 weaker positive, BLAT/KCNE1/MBD11/RASK binding negative를 함께 놓으면 결론은 더 좁아진다. 이 글의 DPO 결과는 preference learning을 general fitness predictor가 아니라, reference 대비 선호 이동이 특정 조건에서 후보 순위를 보정하는 reranker로 다룰 때 해석 가능하다. 좋은 protein sequence를 새로 생성한다는 free generation 주장은 이 글의 범위 밖이다.
-
-DPO delta가 유효할 가능성이 있는 task는 다음처럼 제한된다. 첫째, 이미 주어진 DMS 후보 집합의 reranking이어야 한다. 둘째, position-level tolerance가 강하더라도 그것만으로 상위 후보가 완전히 설명되지 않아야 한다. 셋째, same-position pair에서도 preference 방향이 유지되어야 한다. 넷째, fixed hybrid처럼 position baseline 위에 delta를 얹었을 때 성능이 유지되거나 좋아져야 한다. 현재 데이터에서 이 조건을 가장 잘 통과한 사례는 SQSTM이고, IF1은 보조 양성, VG08/REV는 global-pair caution, BLAT/KCNE1/MBD11/RASK binding은 음성 경계로 남는다.
-
-후속 비교에서 가장 중요한 것은 SQSTM과 비슷하게 same-position 및 fixed hybrid에서 position baseline을 넘는 조건을 더 찾는 일이다. 현재 가장 안정적인 조건이 SQSTM 하나이므로, 같은 패턴이 반복되는 assay가 늘어나면 protein variant reranking에서 preference learning을 별도 실험 라인으로 가져갈 근거가 강해진다. 반대로 그런 조건이 늘지 않으면 DPO는 특정 landscape에서만 작동하는 조건부 reranker로 남는다.
-
-후속 실험은 DPO 하나로 닫기보다 preference objective, reference policy, pair construction을 분리해 비교하는 방향이 적절하다. 즉 같은 DMS 후보 집합에서 어떤 preference learning 신호가 position baseline 위에 남는지, 그리고 그 신호가 assay/readout을 바꿔도 반복되는지를 보는 reranking benchmark로 확장할 수 있다. 더 큰 protein LM baseline도 함께 필요하다. 현재 분석에서는 작은 `facebook/esm2_t6_8M_UR50D` zero-shot scoring만 간단 점검으로 확인했으므로, ProGen2-small이나 더 큰 ESM 계열과의 비교는 별도 실험으로 분리해 볼 만하다.
+더 큰 protein LM과의 비교도 남아 있다. 본문의 작은 ESM2-t6 zero-shot 점검은 강한 protein fitness predictor 전반을 대체하지 않는다. 우선순위는 SQSTM의 recipe를 독립 split에서 고정 검증하고, position 내부 순위와 hybrid 개선이 다른 assay에서도 반복되는지 확인하는 것이다.
 
 ## Appendix: 핵심 수치
 
-아래 표들은 본문 해석에 사용한 주요 DPO delta top-25 결과를 확인하기 위한 보조 표다. 본문 결론은 Table 3-8에서 이미 분리해 설명했으므로, 이 Appendix는 수치 조회와 재현 맥락을 복원할 때만 보면 된다. `DPO delta`는 3 seed 평균 top-25 high-fitness hit rate다. 첫 표는 핵심 reranking 사례, 둘째 표는 readout 및 negative boundary 사례만 따로 묶었다. 표 폭을 줄이기 위해 해석 문장은 넣지 않았고, 각 수치의 의미는 본문 결과 표와 함께 읽는다.
+아래 표들은 본문 해석에 사용한 주요 DPO delta top-25 결과를 확인하기 위한 보조 표다. 본문 결론은 Table 3-7에서 분리해 설명했으므로, 이 Appendix는 수치 조회와 재현 맥락을 복원할 때만 보면 된다. `DPO delta`는 3 seed 평균 top-25 high-fitness hit rate다. 첫 표는 핵심 reranking 사례, 둘째 표는 readout 및 negative boundary 사례만 따로 묶었다. 표 폭을 줄이기 위해 해석 문장은 넣지 않았고, 각 수치의 의미는 본문 결과 표와 함께 읽는다.
 
 <details class="appendix-detail">
   <summary>핵심 reranking 사례</summary>
@@ -738,6 +688,47 @@ DPO delta가 유효할 가능성이 있는 task는 다음처럼 제한된다. �
   </div>
 </details>
 
+<details class="appendix-detail">
+  <summary>후속 검증에서 확인할 조건</summary>
+  <div class="details-content">
+<figure class="table-figure table-figure--comparison">
+  <div class="table-shell">
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>현재 실험에서 신호가 남은 조건</th>
+          <th>신호가 약해진 조건</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>학습 pair의 high/low 방향이 eval landscape에서도 유지된다.</td>
+          <td>단순 high/low pair의 일반화가 약하다. 원인은 추가 검증이 필요하다.</td>
+        </tr>
+        <tr>
+          <td>base reference와 SFT reference 중 더 맞는 출발점이 assay마다 다를 수 있다.</td>
+          <td>SFT -&gt; DPO 또는 base -&gt; DPO를 universal default처럼 둔다.</td>
+        </tr>
+        <tr>
+          <td>raw likelihood만으로는 부족하지만 DPO shift가 추가 정보를 줄 headroom이 있다.</td>
+          <td>position baseline이 이미 너무 강해 추가로 얻을 여지가 작다.</td>
+        </tr>
+        <tr>
+          <td>same-position pair에서도 신호가 유지된다.</td>
+          <td>global pair 양성 신호가 same-position에서 무너진다.</td>
+        </tr>
+        <tr>
+          <td>position baseline 위에 DPO delta를 얹었을 때 성능이 유지되거나 좋아진다.</td>
+          <td>DPO가 random 기준만 넘고 position baseline에는 크게 밀린다.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <figcaption><strong>Appendix Table 3.</strong> 현재 실험에서 신호가 남은 조건과 약해진 조건이다. 이 표는 일반 적용 가이드가 아니라, 본문 조건에서 어떤 점검 항목이 결론을 갈랐는지 정리한 것이다.</figcaption>
+</figure>
+  </div>
+</details>
+
 ## References
 
 <div class="reference-list" markdown="1">
@@ -778,7 +769,7 @@ DPO delta가 유효할 가능성이 있는 task는 다음처럼 제한된다. �
 이 글을 인용할 때는 아래 형식을 사용할 수 있다.
 
 ```text
-Ilho Ahn, "DPO로 본 단백질 변이 reranking의 preference learning 신호", Mini Research, May 3, 2026.
+Ilho Ahn, "단백질 변이 재정렬에서 DPO의 보완 신호: SQSTM 사례와 대조 실험", Mini Research, May 3, 2026.
 ```
 
 또는 BibTeX 형식으로는 다음처럼 적을 수 있다.
@@ -786,7 +777,7 @@ Ilho Ahn, "DPO로 본 단백질 변이 reranking의 preference learning 신호",
 ```bibtex
 @article{ahn2026proteingymdmsdpo,
   author = {Ilho Ahn},
-  title = {DPO로 본 단백질 변이 reranking의 preference learning 신호},
+  title = {단백질 변이 재정렬에서 DPO의 보완 신호: SQSTM 사례와 대조 실험},
   journal = {Mini Research},
   year = {2026},
   month = may,

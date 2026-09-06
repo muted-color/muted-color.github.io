@@ -1,16 +1,17 @@
 ---
-title: "TrpB low-label fitness 예측에서 mutation-site local prior가 실패한 이유"
+lang: ko
+title: "TrpB low-label 후보 정렬에서 local prior의 방향성과 mutation count"
 date: 2026-04-19 10:50:00 +0900
-last_modified_at: 2026-05-09 00:00:00 +0900
+last_modified_at: 2026-09-06 00:00:00 +0900
 hidden: true
 published: false
 publication_status: "unpublished"
-hide_reason: "초기 가설이 mutation-pattern likelihood와 high-fitness discovery 신호를 같은 방향으로 놓았지만, TrpB two-to-many에서는 train-like local pattern과 higher-order fitness 탐색이 구조적으로 어긋날 수 있어 공개 글로 두지 않는다."
+hide_reason: "후보 구성과 prior weight 선택을 분리한 재현 근거가 부족해 탐색 초안으로 보존한다."
 categories: ["PROTEIN ML"]
 tags: [protein, trpb, flip2, esm2, fitness-prediction, regression, low-label, ranking, local-prior]
 lab_path: "experiment-lab/projects/trpb-local-fitness-diffusion"
 excerpt: "FLIP2 TrpB two-to-many 후보 라이브러리에서, 적은 fitness label로 학습한 ESM2/Ridge 점수와 mutation-site local prior를 결합해 top-64 후보 선택을 평가한다."
-description: "FLIP2 TrpB two-to-many에서 ESM2/Ridge fitness regression 점수에 mutation-site local prior를 더했을 때 후보 선택 성능이 낮아진 이유와 mutation count 교란을 정리한 실험 노트."
+description: "TrpB two-to-many에서 양의 empirical prior는 Hit@64를 낮췄고 제한 후보의 learned prior는 +0.012를 보였다. 부호·후보 구성·weight 선택을 분리해 해석한다."
 permalink: /research/2026/04/19/trpb-local-fitness-diffusion-prior-reranking/
 image: /assets/images/posts/trpb-local-fitness-diffusion/ig_084732e5ee398c9d0169ec379c3c208191a84cb93d2b26876b.png
 image_alt: "투명한 단백질 ribbon 구조와 sequence-like 분자 선을 함께 보여주는 low-label fitness 예측 글 대표 이미지"
@@ -21,11 +22,7 @@ math: true
 mermaid: true
 ---
 
-## 비공개 메모
-
-이 글은 공개하지 않는다. 핵심 이유는 결과가 약해서가 아니라, 초기 가설 배경이 충분히 정교하지 않았기 때문이다. 이 실험은 `mutation-site local prior`가 관찰된 mutable-site amino acid pattern의 그럴듯함을 잡으면, low-label ESM2/Ridge fitness ranking에서 high-fitness 후보 선택을 보조할 수 있다고 가정했다. 그러나 FLIP2 TrpB `two-to-many`는 `0/1/2`-mutation train label에서 `3/4`-mutation test 후보로 넘어가는 설정이며, 이 구조에서는 train-like pattern likelihood와 higher-order high-fitness discovery가 같은 방향으로 움직인다는 보장이 없다.
-
-따라서 이 글의 공개 가능한 결론은 제한적이다. 실험은 local prior나 mutation pattern 정보 일반의 무용성을 보인 것이 아니라, **pattern-only prior를 positive fitness bonus처럼 더하는 가설 자체가 TrpB `two-to-many`의 후보 공간 구조와 맞지 않았다**는 내부 실패 기록에 가깝다. 후속 실험은 prior를 전역 reward로 두기보다, mutation radius를 고정한 후보 공간 안의 약한 regularizer, oracle failure support signal, 또는 fitness-aware reranker로 역할을 다시 정의해야 한다.
+적은 fitness label로 학습한 점수에 mutation pattern의 그럴듯함을 더하면 상위 후보 선택이 좋아지는지 평가했다. 양의 empirical prior는 세 label budget 모두 Hit@64를 낮췄다. 음수 weight와 제한 후보의 learned prior는 서로 다른 조건의 진단이므로 하나의 원인 확인 실험으로 묶을 수 없다.
 
 Protein engineering에서는 fitness label이 충분하지 않은 경우가 많다. 변이 단백질을 만들고 기능이나 활성을 실험으로 측정하는 데 비용이 들기 때문에, 수십 개에서 수백 개 label만 보고 다음 후보를 골라야 하는 상황이 자주 생긴다.
 
@@ -43,12 +40,11 @@ Protein engineering에서는 fitness label이 충분하지 않은 경우가 많�
 
 ## 요약
 
-- ESM2/Ridge oracle은 적은 fitness label로 학습한 regression 점수다.
-- mutation-site local prior는 fitness 기준이 아니라 mutation pattern 기준의 보조 점수다.
-- 평가는 예측값 자체보다, 예측 점수로 고른 상위 64개 후보의 실제 fitness를 본다.
-- 전체 후보 풀에서 prior를 더하면 `Hit@64`가 세 label budget 모두에서 낮아졌다.
-- 음수 lambda에서 개선처럼 나타난 결과는 prior의 직접 효과라기보다, 순위가 특정 mutation count 후보 쪽으로 이동한 효과에 가까웠다.
-- `≤4-mutation` 후보만 남기면 학습된 prior `+0.25`가 평균 `Hit@64`를 `+0.012` 올렸지만, 효과로 주장하기 어려운 크기였다.
+- ESM2/Ridge는 fitness 예측값, local prior는 fitness label을 쓰지 않은 mutation pattern 점수다. 상위 64개 후보의 measured fitness로 평가한다.
+- 양의 empirical prior는 label budget 64/128/256 모두 Hit@64를 낮췄다(Table 4).
+- 음수 weight에서는 64/128 label의 Hit@64가 높아졌지만 4-mutation 후보로의 순위 이동과 prior 방향성의 기여는 분리되지 않았다.
+- 제한 후보의 learned prior `λ=+0.25`는 평균 Hit@64 `+0.012`를 보였다. 불확실성과 선택 비용 없이 크기만으로 유효성이나 무효성을 판정하지 않는다.
+- `≤4-mutation`은 exact count 통제가 아니다. 3/4-mutation 구성 차이가 남고, prior 종류·부호·weight 선택도 비교 간 달라진다.
 
 ## 문제와 가설
 
@@ -104,7 +100,7 @@ flowchart TB
   <figcaption><strong>Figure 1.</strong> baseline fitness regression score와 mutation-pattern prior를 함께 쓰는 후보 정렬 흐름이다. ESM2/Ridge는 sequence에서 fitness 예측값을 만들고, local prior는 mutable-site pattern의 그럴듯함을 점수화한다. 두 점수는 후보 풀 안에서 표준화된 뒤 최종 순위에 사용된다.</figcaption>
 </figure>
 
-### 평가 설계
+## 평가 설정
 
 평가에서는 fitness를 예측하는 점수와 mutation pattern을 보는 점수를 분리해서 읽는다. 이후 결과 해석에서도 prior 점수, mutation count, 후보 풀의 범위를 함께 확인했다.
 
@@ -114,7 +110,7 @@ flowchart TB
 - `Hit@64` 변화는 후보 풀의 mutation count 분포가 바뀌어도 크게 움직일 수 있다.
 - validation으로 고른 prior weight와 test 후보 선택 평가는 분리해서 봐야 한다.
 
-평가는 FLIP2 TrpB `two-to-many`의 test candidate library를 기준으로 했다. 각 후보에 ESM2/Ridge fitness 예측 점수와 local prior score를 매기고, 점수 조합이 실제 fitness 상위 후보를 더 잘 올리는지 비교했다.
+평가는 Didi et al.의 FLIP2 TrpB `two-to-many` test candidate library를 기준으로 했다 <a class="citation-ref" href="#ref-flip2">[3]</a>. 각 후보에 ESM2/Ridge fitness 예측 점수와 local prior score를 매기고, 점수 조합이 실제 fitness 상위 후보를 더 잘 올리는지 비교했다.
 
 FLIP2의 TrpB `two-to-many` split은 0/1/2-mutation 후보로 학습하고 higher-order 후보에서 일반화를 평가한다. 모델 출력은 fitness regression 값이지만, protein engineering에서 직접 필요한 것은 다음 round에서 먼저 만들고 측정할 후보를 고르는 일이다. 그래서 이 실험에서는 regression 값을 후보 선택 점수로 사용하고, 예측 점수로 정렬했을 때 실제 high-fitness 후보가 top-64에 얼마나 들어오는지 `Hit@64`로 본다.
 
@@ -145,7 +141,7 @@ FLIP2의 TrpB `two-to-many` split은 0/1/2-mutation 후보로 학습하고 highe
           <td><code>217,507</code></td>
         </tr>
         <tr>
-          <td><code>≤4-mutation</code> 후보</td>
+          <td>기존 기록의 <code>≤4-mutation</code> 제한 후보</td>
           <td><code>129,518</code></td>
         </tr>
         <tr>
@@ -178,7 +174,7 @@ FLIP2의 TrpB `two-to-many` split은 0/1/2-mutation 후보로 학습하고 highe
 
 중심 모델은 fitness regression이다. 이미 있는 TrpB 후보 라이브러리에 대해 두 점수를 계산했다. 하나는 fitness label로 학습한 `oracle_pred`이고, 다른 하나는 mutation pattern을 학습한 `prior_score`다. 마지막에는 두 점수를 섞어 후보 순서를 매기고, 상위 후보의 실제 fitness를 평가했다.
 
-`oracle_pred`는 frozen ESM2-35M embedding 위에 Ridge regression을 얹어 만든 fitness 예측값이다. ESM2는 학습하지 않고, 서열을 mean-pooled embedding으로 바꾼다. 그 위에서 label budget별 train label로 Ridge를 학습했다. validation label은 Ridge의 alpha와 최종 ranking 조합의 lambda 선택에만 썼고, test label은 최종 평가에만 사용했다.
+`oracle_pred`는 frozen ESM2-35M embedding 위에 Ridge regression을 얹어 만든 fitness 예측값이다. ESM2는 학습하지 않고, 서열을 mean-pooled embedding으로 바꾼다. 그 위에서 label budget별 train label로 Ridge를 학습했다. 기록된 선택 방침은 validation으로 Ridge의 alpha와 ranking weight를 고르고 test label은 평가에만 쓰는 것이다. 다만 보존된 집계로는 비교별 선택 split과 grid를 확인할 수 없으며, Table 7의 고정 weight `+0.25` 진단까지 validation 선택 결과로 간주하지 않는다.
 
 `prior_score`는 fitness 값을 맞히도록 학습하지 않는다. 후보가 관찰된 mutable-site amino acid pattern과 얼마나 잘 맞는지만 본다. 첫 비교에서는 위치별 amino acid 빈도를 세는 empirical local prior를 썼다. 이후 비교에서는 mutable-site string 일부를 mask하고 원래 amino acid를 맞히도록 학습한 작은 Transformer encoder prior를 썼다.
 
@@ -197,7 +193,7 @@ $$
 
 > $\mathcal{C}$는 같은 label budget과 seed에서 비교하는 후보 풀이고, $z_{\mathcal{C}}$는 그 후보 풀 안에서의 z-score 표준화다.
 >
-> $\lambda$는 prior 모델의 학습 파라미터가 아니라, 미리 정한 grid에서 validation 성능으로 고른 후보 정렬 weight다.
+> $\lambda$는 prior 모델의 학습 파라미터가 아니라 후보 정렬 weight다. 기록된 방침은 validation grid 선택이지만, 제한 후보의 `+0.25`는 별도 진단 조건이며 실제 선택 과정은 집계만으로 확인되지 않는다.
 >
 > 학습된 prior의 $\pi(x)$는 mutable-site string의 각 위치를 하나씩 가렸을 때 원래 amino acid를 얼마나 잘 복원하는지 더한 pseudo-log-likelihood다.
 
@@ -273,11 +269,7 @@ $$
 
 ## 결과
 
-판정은 다음과 같다. 전체 후보 풀에서 local prior를 보정 항처럼 더하는 방식은 prior 없는 ESM2/Ridge ranking보다 낮았다. 기준선은 `oracle_pred`만으로 후보를 정렬한 조건이며, `oracle_pred + local prior`의 `Hit@64`가 이보다 낮으면 prior 보정 실패로 읽는다.
-
-음수 lambda의 표면상 개선도 prior가 유효한 보정 신호라는 증거로 보기 어렵다. 이 숫자는 mutation pattern likelihood와 fitness ranking의 반대 방향 신호, 그리고 4-mutation 후보로의 순위 이동을 함께 포함한 결과로 읽어야 한다.
-
-후보 공간을 `≤4-mutation`으로 제한해도 평균 변화는 `Hit@64 +0.012`에 그쳤다. 이 크기는 효과로 보기 어렵고, 후보 선택 규칙을 바꿀 근거도 되지 않는다.
+결과는 세 비교로 나누어 읽는다. Table 4는 전체 후보 풀의 양의 empirical prior, Table 5는 음수 weight 진단, Table 7은 제한 후보의 learned prior `λ=+0.25`다. 후보 범위와 prior 종류·weight가 함께 달라질 수 있어, 표 사이의 차이는 mutation count 하나의 효과를 식별하지 않는다. 제한 후보의 평균 `Hit@64 +0.012`는 양의 관찰값으로 남기되 seed별 paired 차이와 불확실성 없이 채택 또는 기각으로 확대하지 않는다.
 
 첫 판정은 Table 4에서 나온다. 전체 후보 풀에서 ESM2/Ridge 기준 ranking과 empirical local prior를 더한 ranking의 원 지표값을 비교한다.
 
@@ -339,9 +331,9 @@ Table 4의 비교는 전체 TrpB test 후보 풀에서 **prior를 넣지 않은 
 
 따라서 **TrpB 전체 후보 풀에서 local prior를 fitness regression 점수에 바로 더하는 방식은 지지되지 않았다.** 깨진 가정은 `mutation pattern이 그럴듯한 후보 = fitness 상위 후보`라는 단순 대응이다.
 
-### 음수 lambda: mutation count 효과
+### 음수 lambda: 방향 반전과 후보 구성
 
-음수 lambda는 앞의 실패 원인을 확인하기 위한 진단 설정이다. ranking score에서 prior 항의 부호를 반대로 쓰기 때문에, 원래는 prior score가 높은 후보에 보상을 주지만 `lambda < 0`에서는 prior score가 낮은 후보가 상대적으로 위로 올라간다. 이 설정은 low-label 조건에서 큰 증가처럼 보였다.
+음수 lambda는 prior 방향성을 살펴보는 진단 설정이다. ranking score에서 prior 항의 부호를 반대로 쓰기 때문에, 원래는 prior score가 높은 후보에 보상을 주지만 `lambda < 0`에서는 prior score가 낮은 후보가 상대적으로 위로 올라간다. 이 설정은 low-label 조건에서 큰 증가처럼 보였다.
 
 > **음수 lambda**: positive prior 보정의 반대 방향에서 순위가 어떻게 움직이는지 보기 위한 진단 비교다. 좋은 선택 규칙을 제안하기보다, prior score와 후보 풀 구조가 어떻게 얽혀 있는지 확인하는 역할이다.
 
@@ -381,7 +373,7 @@ Table 4의 비교는 전체 TrpB test 후보 풀에서 **prior를 넣지 않은 
   <figcaption><strong>Table 5.</strong> 음수 lambda를 적용했을 때의 <code>Hit@64</code> 변화다. 64/128 label에서는 표면상 큰 증가가 나타났고, 이후 분석은 이 숫자의 원인을 분해하는 데 맞췄다.</figcaption>
 </figure>
 
-여기서 mutation count는 기준 서열에서 달라진 mutable-site 수를 뜻한다. 전체 후보 풀에서는 prior score가 높은 후보가 실제 fitness도 높다는 보장이 없었다. 오히려 반대로 움직이는 구간이 보였다. **음수 lambda에서 개선처럼 보인 결과는 단순히 prior를 뒤집어서 찾은 high-fitness 후보라기보다, 순위가 4-mutation 후보 쪽으로 이동한 효과를 크게 포함하고 있었다.**
+여기서 mutation count는 기준 서열에서 달라진 mutable-site 수를 뜻한다. 전체 후보 풀에서는 prior score가 높은 후보가 실제 fitness도 높다는 보장이 없었다. 오히려 반대로 움직이는 구간이 보였다. **음수 lambda의 Hit@64 상승과 4-mutation 후보 쪽으로의 순위 이동이 함께 관찰됐다. 이 집계만으로 후보 구성 변화가 상승분 중 얼마를 설명하는지 알 수 없다.**
 
 가능한 해석과 관찰에 맞는 설명을 분리하면 아래와 같다.
 
@@ -397,7 +389,7 @@ Table 4의 비교는 전체 TrpB test 후보 풀에서 **prior를 넣지 않은 
       <tbody>
         <tr>
           <td>음수 lambda가 fitness 상위 후보를 직접 찾았다.</td>
-          <td>순위가 4-mutation 후보 쪽으로 이동한 효과가 컸다.</td>
+          <td>4-mutation 후보로의 순위 이동이 함께 나타났으며 기여량은 분리되지 않았다.</td>
         </tr>
         <tr>
           <td>prior를 뒤집으면 유효한 보정 신호가 된다.</td>
@@ -406,16 +398,16 @@ Table 4의 비교는 전체 TrpB test 후보 풀에서 **prior를 넣지 않은 
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 6.</strong> 음수 lambda 결과를 다시 읽는 표다. Table 5의 개선에는 mutation count 효과가 크게 섞여 있었다.</figcaption>
+  <figcaption><strong>Table 6.</strong> 음수 lambda 결과를 다시 읽는 표다. Table 5의 개선과 후보 구성 이동이 함께 관찰됐지만 인과 기여는 확인되지 않았다.</figcaption>
 </figure>
 
-여기서 중요한 것은 음수 lambda 자체가 좋은 선택 규칙이라는 결론이 아니다. 전체 후보 풀에서는 prior score와 mutation count가 얽혀 있었고, 그 얽힘이 큰 성능 증가처럼 보이는 숫자를 만들었다. mutation count가 함께 변하는 후보 풀에서는 ranking metric을 후보 풀 구조와 함께 읽어야 한다.
+같은 mutation count 안의 순위 개선인지, count 사이의 선택 비중 변화인지 분리하는 비교가 필요하다.
 
-### mutation count 제한: 효과로 보기 어려운 양의 변화
+### 후보 범위 제한: 양수인 평균 변화
 
-mutation count를 통제하면 prior 보정의 남는 효과는 작았다. `≤4-mutation` 후보만 남기면 prior가 mutation count 분포를 바꾸는 효과를 줄이고, 같은 후보 공간 안에서의 순위 보정만 볼 수 있다.
+`≤4-mutation`은 mutation count의 상한이다. 3-mutation과 4-mutation을 동일 count로 맞추는 통제가 아니므로 구성 이동은 여전히 가능하다. Table 1에는 test 후보 217,507개와 제한 후보 129,518개가 기록되어 있다. 다만 공개 benchmark 설명만으로 이 필터와 각 후보의 mutation count 정의를 재구성할 수 없다. 두 집계는 보존하되 후보 목록·count 계산 기준을 확인하기 전에는 제거된 후보의 성격을 단정하지 않는다.
 
-Table 7은 후보를 `≤4-mutation`으로 제한한 뒤, 고정된 ESM2/Ridge 예측 점수와 학습된 prior `+0.25` 조건을 비교한 결과다. 30개 seed와 label budget `64 / 128 / 256`을 합친 `90`개 budget-seed 조합의 평균이다.
+Table 7은 기존 기록에서 `≤4-mutation` 제한 후보로 명명한 집합에 대해, 고정된 ESM2/Ridge 예측 점수와 학습된 prior `+0.25` 진단 조건을 비교한 결과다. 30개 seed와 label budget `64 / 128 / 256`을 합친 `90`개 budget-seed 조합의 평균이다.
 
 <figure class="table-figure table-figure--metrics">
   <div class="table-shell">
@@ -484,13 +476,13 @@ Table 7은 후보를 `≤4-mutation`으로 제한한 뒤, 고정된 ESM2/Ridge �
         </tr>
         <tr>
           <td>개선 숫자와 후보 풀 구조의 분리</td>
-          <td>음수 lambda 이득에는 mutation count 이동 효과가 크게 섞였다.</td>
+          <td>음수 lambda 상승과 mutation count 이동이 함께 관찰됐다.</td>
           <td>ranking metric 개선은 mutation count 같은 후보 구성 요인과 함께 움직일 수 있다.</td>
         </tr>
         <tr>
-          <td>후보 공간 통제 후 효과 크기</td>
+          <td>후보 범위 제한 후 평균 변화</td>
           <td><code>≤4-mutation</code>에서도 평균 변화는 <code>+0.012</code>에 그쳤다.</td>
-          <td>후보 공간을 맞춘 뒤에도 prior 효과를 주장하기에는 크기가 작았다.</td>
+          <td>exact count별 paired 결과와 불확실성을 확인해야 한다.</td>
         </tr>
       </tbody>
     </table>
@@ -502,9 +494,11 @@ Table 7은 후보를 `≤4-mutation`으로 제한한 뒤, 고정된 ESM2/Ridge �
 
 ### 결론 및 한계
 
-현재 단계의 결론은 local prior 채택이 아니라 기각에 가깝다. 전체 후보 풀에서 prior를 보정 항처럼 더하는 방식은 prior 없는 ESM2/Ridge ranking보다 낮았고, `≤4-mutation`으로 후보 공간을 고정해도 학습된 prior `+0.25`의 평균 변화는 `Hit@64 +0.012`에 그쳤다. 현재 기준에서는 `≤4-mutation` 후보에서 ESM2/Ridge 기준 점수만 쓰는 조건이 가장 안정적인 비교 기준으로 남는다.
+양의 empirical prior를 전체 후보 풀에 더하는 설정은 세 budget의 기준선을 넘지 못했다. Learned prior의 제한 후보 비교에서는 평균 Hit@64가 `+0.012` 높았으므로 local prior 전체의 무용성으로 일반화하지 않는다.
 
-이 실패는 mutation과 fitness가 무관하다는 뜻이 아니다. local prior가 학습한 mutation pattern likelihood가 high-fitness 후보를 올리는 fitness ranking 대리 신호로 충분하지 않았고, 전체 후보 풀에서는 prior score가 mutation count 구조와도 얽혀 있었다. 따라서 후속 실험은 prior를 더 정교하게 붙이기보다, pattern likelihood와 fitness ranking의 방향성이 후보 공간을 맞춘 뒤에도 유지되는지 먼저 확인해야 한다.
+원인 해석에는 공백이 남는다. Exact count별 top-64 구성과 성능이 없고 prior 종류·부호·weight가 비교 간 달라진다. 90개 budget-seed 조합도 같은 후보 라이브러리를 반복 사용한 결과이며 독립적인 90개 단백질 실험을 뜻하지 않는다.
+
+현재 확인 가능한 집계에는 각 비교의 후보 목록·mutation count 분포, prior 학습 서열 범위, 점수 표준화 집합, lambda 선택 grid와 validation/test 분리 내역, seed별 paired 지표가 포함되어 있지 않다. 따라서 후보 제한 효과, weight 선택의 독립성, 개선의 불확실성은 확인되지 않은 범위로 남긴다.
 
 ### 후속 검증 과제
 
@@ -553,7 +547,7 @@ Table 7은 후보를 `≤4-mutation`으로 제한한 뒤, 고정된 ESM2/Ridge �
 이 글을 인용할 때는 아래 형식을 사용할 수 있다.
 
 ```text
-Ilho Ahn, "TrpB low-label fitness 예측에서 mutation-site local prior가 실패한 이유", Mini Research, Apr 19, 2026.
+Ilho Ahn, "TrpB low-label 후보 정렬에서 local prior의 방향성과 mutation count", Mini Research, Apr 19, 2026.
 ```
 
 또는 BibTeX 형식으로는 다음처럼 적을 수 있다.
@@ -561,7 +555,7 @@ Ilho Ahn, "TrpB low-label fitness 예측에서 mutation-site local prior가 실�
 ```bibtex
 @article{ahn2026trpbmutationsitelocalprior,
   author = {Ilho Ahn},
-  title = {TrpB low-label fitness 예측에서 mutation-site local prior가 실패한 이유},
+  title = {TrpB low-label 후보 정렬에서 local prior의 방향성과 mutation count},
   journal = {Mini Research},
   year = {2026},
   month = apr,

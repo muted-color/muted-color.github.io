@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 610" role="img" aria-labelledby="title desc">
-  <title id="title">Sparse packed DPO cost and parity comparison</title>
-  <desc id="desc">A balanced three-panel chart comparing sparse packed DPO with dense packed training. Each panel has a large readout above a compact chart: cost panels show shorter sparse bars, and the held-out metric panel shows deltas near the zero line.</desc>
+  <title id="title">Sparse packed DPO recorded cost and held-out metric differences</title>
+  <desc id="desc">A balanced three-panel chart comparing sparse packed DPO with dense packed training. Each panel has a large readout above a compact chart: cost panels show shorter sparse bars, and the held-out metric panel shows recorded aggregate deltas near the zero line. These aggregates do not establish per-example numerical equivalence.</desc>
   <rect width="1040" height="610" fill="#ffffff"/>
 
   <defs>
@@ -18,7 +18,7 @@
 
   <g font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif">
     <text x="58" y="70" font-size="28" font-weight="760" fill="#111111">Sparse packed DPO</text>
-    <text x="58" y="104" font-size="18" font-weight="650" fill="#3f41ff">Lower training cost, held-out parity</text>
+    <text x="58" y="104" font-size="18" font-weight="650" fill="#3f41ff">Recorded cost and held-out metric differences</text>
     <text x="58" y="134" font-size="13" fill="#5f6672">Dense packed baseline. Qwen3-8B LoRA, 2-node FSDP.</text>
 
     <g transform="translate(58 174)">
@@ -27,7 +27,7 @@
       <line x1="628" y1="44" x2="628" y2="332" stroke="#e6e8ee" stroke-width="1"/>
 
       <g transform="translate(0 54)">
-        <text class="section" x="0" y="0">200-step stability</text>
+        <text class="section" x="0" y="0">200-step check</text>
 
         <g transform="translate(0 54)">
           <text class="large-blue" x="0" y="0">-19%</text>

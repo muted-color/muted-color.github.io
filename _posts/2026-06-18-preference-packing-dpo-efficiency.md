@@ -1,120 +1,119 @@
 ---
-title: "Where Sparse-Backed Preference Packing Reduced DPO Training Cost"
+title: "DPO Preference Packing: Dense Masks and Sparse Execution"
 date: 2026-06-18 14:18:00 +0900
-last_modified_at: 2026-06-18 23:30:00 +0900
+last_modified_at: 2026-09-06 09:26:32 +0900
+lang: en
 categories: ["LLM SYSTEMS"]
 tags: [llm, dpo, preference-learning, preference-packing, sparse-attention, flexattention, fsdp, lora, qwen3]
 lab_path: "projects/preference-packing-dpo-efficiency"
-excerpt: "A DPO efficiency note evaluating sparse-backed execution for prior preference packing and prefix sharing ideas."
-description: "A Qwen3-8B LoRA 2-node FSDP note evaluating prior preference packing and prefix sharing ideas as an implementation and measurement study, with DPO log-prob parity, dense-versus-sparse comparison, and bounded FSDP validation."
+excerpt: "A DPO systems note separating shared-prompt layout requirements from dense and sparse execution, with recorded Qwen3-8B training-cost comparisons."
+description: "A Qwen3-8B LoRA study reporting lower step time and allocated memory for sparse versus dense packed DPO, with small held-out metric differences and incomplete original validation records."
 permalink: /research/2026/06/18/preference-packing-dpo-efficiency/
 image: /assets/images/posts/preference-packing-dpo-efficiency/social-thumbnail.png
 image_alt: "A three-panel chart comparing sparse packed DPO cost bars against dense packed baselines and showing held-out metric deltas near zero"
 hero_image: /assets/images/posts/preference-packing-dpo-efficiency/hero-sparse-packing.svg
 hero_alt: "A three-panel chart comparing sparse packed DPO cost bars against dense packed baselines and plotting held-out metric deltas near zero"
-hero_caption: "<strong>Figure 1.</strong> Three-panel summary of the main result. Cost panels compare sparse packed bars against the dense packed baseline; the held-out panel plots DPO loss and reward accuracy deltas near the zero line."
+hero_caption: "<strong>Figure 1.</strong> Recorded sparse/dense packed cost ratios for the 200-step check and response-long repeats. The right panel shows aggregate held-out differences from the 200-step check; its separate metric scales and near-zero values do not establish log-probability or per-pair agreement. <a href='/assets/images/posts/preference-packing-dpo-efficiency/hero-sparse-packing.svg'>Open full-size figure</a>."
 hero_frame: true
 hero_compact: true
 math: true
 ---
 
-DPO has a simple-looking inefficiency: each preference pair usually evaluates the same prompt twice, once as `prompt + chosen` and once as `prompt + rejected` <a class="citation-ref" href="#ref-dpo" aria-label="Reference 3">[3]</a>. Shared-prefix preference training has direct prior work: Wang and Hegde studied DPO prefix sharing with a custom block-sparse attention mask, and Cho later framed a related shared-prompt layout as Preference Packing <a class="citation-ref" href="#ref-prefix-sharing" aria-label="Reference 1">[1]</a> <a class="citation-ref" href="#ref-preference-packing" aria-label="Reference 2">[2]</a>.
+Rafailov et al.'s Direct Preference Optimization (DPO) trains on a preferred and a rejected response to the same prompt <a class="citation-ref" href="#ref-dpo" aria-label="Reference 3">[3]</a>. A conventional pairwise layout processes that prompt twice. Sharing it removes duplicate tokens. Correctness requires keeping the responses independent; the resulting cost also depends on how the attention backend executes the mask.
 
-This note should be read as an implementation and measurement study, not a new preference-packing or prefix-sharing method. It evaluates a local path around those prior ideas: reproducing DPO response log-prob parity, separating dense masked packing from sparse-backed execution, and measuring whether the branch-aware mask reaches a backend that can skip masked branch blocks. The useful result is not “pack the prompt once and stop there.” Dense attention still computes masked branch blocks, while response-long cases became efficient in this implementation only when the branch-aware layout reached a backend that could skip those blocks.
-
-The main check used `Qwen/Qwen3-8B` + LoRA, 2-node FSDP, and bf16 <a class="citation-ref" href="#ref-qwen3-8b" aria-label="Reference 4">[4]</a> <a class="citation-ref" href="#ref-lora" aria-label="Reference 5">[5]</a>. In the 200-step stability run, the sparse-backed run preserved held-out DPO metric parity while reducing median step-time ratio to `0.8066` and rank-summed CUDA allocated memory ratio to `0.6490`. This is an **efficiency plus tested metric parity** result, not downstream win-rate or long-convergence evidence.
-
-> **Branch-aware masking** prevents the chosen and rejected branches from attending to each other. Prior prefix-sharing work also uses block-sparse masking to avoid cross-response contamination. If the branches can see each other, the packed layout no longer matches the original `prompt + response` log-prob computation.
->
-> **Rank-summed CUDA allocated memory** sums per-rank `torch.cuda.max_memory_allocated()` peaks after aligning them by optimizer step. This note does not use rank0 alone or a simple `2 * rank0` estimate.
-
-{% include model-mention-cards.html label="Main resources" aria_label="Main paper, model, and dataset resources for the preference packing experiment" models="Prefix Sharing for DPO|arXiv:2410.20305|https://arxiv.org/abs/2410.20305;Preference Packing|arXiv:2602.24082|https://arxiv.org/abs/2602.24082;Qwen3-8B|Qwen/Qwen3-8B|https://huggingface.co/Qwen/Qwen3-8B;H4 UltraFeedback|HuggingFaceH4/ultrafeedback_binarized|https://huggingface.co/datasets/HuggingFaceH4/ultrafeedback_binarized" %}
-
-## Contributions
-
-{% include model-mention-cards.html label="Code artifact" aria_label="Public GitHub repository and reusable trainer code" models="Public repository|muted-color/preference-packing-dpo-efficiency|https://github.com/muted-color/preference-packing-dpo-efficiency" %}
-
-The contribution boundary is intentionally narrow. Prior work covers the shared-prompt / shared-prefix layout, branch-aware masking, and block-sparse masking for DPO prefix sharing.
-
-This repository contributes an implementation and evaluation layer around that prior work: it reproduces the DPO response log-prob contract, packages a reusable TRL/LoRA trainer and collator, separates dense masked packing from sparse-backed execution in this code path, and validates the path on GB10 2-node FSDP runs.
+This note examines **response-context preservation and execution cost** in a trainer built with the TRL library and LoRA adapters. The main recorded comparison used Qwen3-8B on two GB10 nodes. Its 200-step sparse run used less step time and allocated memory than the dense packed run, while the reported held-out metric differences were small. The numerical validation records needed to establish implementation equivalence are no longer available for this revision.
 
 ## Summary
 
-- Dense packing adopted the prior layout but did not remove masked branch-block compute.
-- Correct DPO parity required branch-aware masking, aligned `position_ids`, and explicit response-token target-position log-prob gathering.
-- Sparse-backed execution reduced the cost left behind by dense masked packing in the tested response-long regime.
-- In the Qwen3-8B + LoRA 2-node FSDP 200-step check, the sparse-backed run had step-time ratio `0.8066`, rank-summed memory ratio `0.6490`, DPO loss delta `-0.0000118`, and reward accuracy delta `+0.00195`.
-- The claim is limited to efficiency plus tested held-out DPO metric parity.
+- Three paths separate the comparison: vanilla pairwise inputs, a shared prompt with dense masked attention, and the same packed layout with sparse block skipping.
+- In the 200-step Qwen3-8B + LoRA comparison, sparse/dense ratios were `0.8066` for median step time and `0.6490` for rank-summed CUDA allocated memory: reductions of **19.34%** and **35.10%** in those recorded measures.
+- Held-out sparse-minus-dense differences were `-0.0000118` in DPO loss and `+0.00195` in reward accuracy. Small aggregate differences do not establish token-level or per-pair agreement.
+- Short checks and response-long repeats also recorded lower cost. Reward-accuracy differences had opposite signs across the two UltraFeedback variants, so the evidence does not support a general quality improvement.
+- The scope is a finite-run implementation study. Original logs, complete configurations, and numerical parity-test outputs are unavailable; the retained summaries do not establish downstream quality or long-run convergence.
 
-## Evaluation Design
+{% include model-mention-cards.html label="Main resources" aria_label="Main paper, model, and dataset resources for the preference packing experiment" models="Prefix Sharing for DPO|arXiv:2410.20305|https://arxiv.org/abs/2410.20305;Preference Packing|arXiv:2602.24082|https://arxiv.org/abs/2602.24082;Qwen3-8B|Qwen/Qwen3-8B|https://huggingface.co/Qwen/Qwen3-8B;H4 UltraFeedback|HuggingFaceH4/ultrafeedback_binarized|https://huggingface.co/datasets/HuggingFaceH4/ultrafeedback_binarized" %}
 
-The evaluation has two checks. The first asks whether the prior packed / prefix-shared layout reproduces ordinary pairwise DPO response log-probs. The second asks whether this repository's implementation path turns the same branch structure into lower step time and memory under sparse-backed execution.
+## Experimental Setup
 
-This separation matters because dense packing and sparse-backed execution answer different questions. Dense masks can make a packed sequence correct, but they do not by themselves skip masked branch-block computation. Prior prefix-sharing work used block-sparse masking for this reason; this note measures a FlexAttention-backed path under the local trainer/FSDP setup <a class="citation-ref" href="#ref-prefix-sharing" aria-label="Reference 1">[1]</a> <a class="citation-ref" href="#ref-flexattention" aria-label="Reference 6">[6]</a>.
+### Prior work and implementation scope
 
-### Prior Layout Validation
+Wang and Hegde's prefix-sharing work already combined a shared prompt with branch-aware masking and FlexAttention block skipping. Cho's Preference Packing likewise studied a shared-prompt layout for preference optimization <a class="citation-ref" href="#ref-prefix-sharing" aria-label="Reference 1">[1]</a> <a class="citation-ref" href="#ref-preference-packing" aria-label="Reference 2">[2]</a>. The implementation work recorded here applied these ideas to a TRL trainer and collator, then compared dense and sparse execution under LoRA and distributed training.
 
-DPO loss depends on chosen/rejected response-token log-probs. A packed sequence is valid only if each response token sees the same context it would have seen in `prompt + response`.
+LoRA trains low-rank adapters while retaining the base weights; FSDP (Fully Sharded Data Parallel) distributes training state across devices. Table 1 lists the retained conditions for the main Qwen3-8B checks <a class="citation-ref" href="#ref-qwen3-8b" aria-label="Reference 4">[4]</a> <a class="citation-ref" href="#ref-lora" aria-label="Reference 5">[5]</a>.
+
+<figure class="table-figure table-figure--comparison">
+  <div class="table-shell">
+    <table class="comparison-table">
+      <thead><tr><th>Component</th><th>Recorded condition</th></tr></thead>
+      <tbody>
+        <tr><td>Model and adaptation</td><td><code>Qwen/Qwen3-8B</code>, LoRA, bf16</td></tr>
+        <tr><td>Distributed setting</td><td>Two GB10 nodes, FSDP, one GPU per node; <code>100GB</code> CUDA memory cap per node</td></tr>
+        <tr><td>Reference policy</td><td>Base model with adapters temporarily disabled through <code>model.disable_adapter()</code></td></tr>
+        <tr><td>200-step data</td><td>H4 UltraFeedback binarized, <code>512/512</code> train/eval slice</td></tr>
+        <tr><td>Measured outcomes</td><td>Step time, CUDA allocated memory, held-out DPO loss, reward margin, and reward accuracy</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <figcaption><strong>Table 1.</strong> Retained conditions for the main distributed comparisons. These are a partial experiment specification; missing settings are listed under Limitations.</figcaption>
+</figure>
+
+### Layout requirements
+
+Figure 2 separates input layout from backend execution. In the packed sequence, both responses use the same prompt, and each response can attend only to that prompt and its own preceding tokens.
 
 <figure class="media-figure media-figure--wide-visual">
   <img src="/assets/images/posts/preference-packing-dpo-efficiency/layout-comparison.svg" alt="Diagram comparing vanilla pairwise, dense packed prior layout, and sparse-backed packed execution">
   <figcaption><strong>Figure 2.</strong> Layout-level comparison of the three paths. Vanilla pairwise duplicates prompt-side work, dense packed uses the packed layout with dense masked attention, and the sparse-backed path passes the branch structure to sparse block skipping.</figcaption>
 </figure>
 
-A packed sequence is only useful if it also preserves the original target positions.
-
 ```text
 prompt + chosen_branch + rejected_branch
 ```
 
-Three pieces are required:
+The implementation account identifies three details needed to preserve the ordinary pairwise computation:
 
-- branch-aware causal masking between chosen and rejected responses;
-- `position_ids` aligned to the original `prompt + response` layout;
-- explicit response-token target-position gathering instead of a plain shifted-label loss.
+- **Branch-aware masking:** prevent either response from seeing the other response's tokens.
+- **Aligned positions:** give response tokens the same `position_ids` they would have in their separate `prompt + response` sequence.
+- **Explicit log-prob gathering:** select the logits that predict each response token, including the branch start.
 
-The first response token is the critical alignment case. It sits at a branch start in the packed sequence, but in the original layout it is predicted from the final prompt logits. The implementation therefore tracks response-token target positions directly.
+The last detail matters because the first token of either response is predicted from the final prompt logits. A simple one-position shift over the packed sequence would instead predict the rejected branch's first token from the end of the chosen branch.
 
-### Sparse Backend Validation
+These are the layout requirements described by the implementation. The prior note reported successful log-prob checks, but retained neither their maximum error and tolerance nor the tested cases or gradient comparisons. The available record therefore supports the implementation rationale, without independently establishing numerical equivalence.
 
-Dense masking gives correctness, not compute skipping. A dense attention path still forms the score matrix and then masks forbidden positions.
+### Dense and sparse execution
+
+The dense masked path can compute scores for positions it later masks:
 
 ```python
 scores = q @ k.T
 scores = scores.masked_fill(...)
 ```
 
-If `p` is prompt length and `r` is each response length, response-long settings can make packed dense attention more expensive:
+A simple score-matrix size proxy makes the length trade-off visible. For a prompt of length $p$ and two responses of equal length $r$:
 
 $$
-\mathrm{vanilla\ dense\ cost}=2(p+r)^2
+C_{\mathrm{pairwise}} = 2(p+r)^2
 $$
 
 $$
-\mathrm{packed\ dense\ cost}=(p+2r)^2
+C_{\mathrm{packed,dense}} = (p+2r)^2.
 $$
 
-For `p = 1024` and `r = 1024`, the packed/vanilla proxy ratio is `1.125`. Prompt-long / short-response settings favored packing, but balanced and response-long settings were weaker because packed sequence length increased faster than dense attention compute disappeared.
+At $p = 1024$ and $r = 1024$, the packed/pairwise proxy ratio is `1.125`. This is a dense attention-size illustration, not a total training-time prediction: it omits projections, feed-forward layers, communication, and backend-specific optimizations. Sharing the prompt can reduce those other token-dependent costs even when the dense attention proxy grows.
 
-In this implementation and measurement setting, sparse-backed execution changed the response-long cost profile. It passes the branch-aware layout as a FlexAttention block mask, so branch-crossing blocks can be skipped instead of only hidden by an additive mask. Prompt de-duplication and branch-block skipping then work together.
+FlexAttention can use a block mask to skip fully masked blocks <a class="citation-ref" href="#ref-flexattention" aria-label="Reference 6">[6]</a>. In the sparse packed path, that includes blocks crossing between response branches. This is the execution distinction examined in the recorded comparisons.
 
-### Measurement Scope
+### Reading the measurements
 
-The main public numbers use `Qwen/Qwen3-8B` + LoRA, bf16, 2-node FSDP with one GPU per node, and a `100GB` CUDA memory cap per node. The compared layouts are vanilla pairwise, dense packed, and sparse packed. Quality checks use held-out DPO loss, reward margin, and reward accuracy.
+Time and memory ratios divide the named numerator by its baseline; lower values mean lower recorded cost. All held-out deltas below are **sparse minus dense**. Reward accuracy tracks the fraction of pairs for which the chosen response has the higher implicit DPO reward; reward margin tracks that reward difference. They are preference-training diagnostics, not an external judge's assessment of generated answers. The exact tie rule and aggregation settings are not retained.
 
-Memory is reported as rank-aligned, rank-summed `torch.cuda.max_memory_allocated()`, not rank0 memory. The reported peak is the maximum per-step sum across ranks; it excludes allocator reserved memory, CPU/UMA host allocation, model-load peaks, and other system processes.
+Rank-summed memory was defined as the sum of per-rank `torch.cuda.max_memory_allocated()` peaks within each optimizer step, followed by the maximum of those step sums. Peaks on different ranks need not occur at the same instant. This measure excludes allocator reserved memory, CPU/UMA host allocation, model-load peaks, and other system processes; it is not total machine memory usage. The underlying peak-reset instrumentation cannot now be checked.
 
 ## Results
 
-### Prior Layout Reproduction
+### Short mechanism checks
 
-The first result is correctness, not speed. The packed layout reproduced the DPO log-prob contract only after three implementation details were made explicit: branch-aware causal masking, original-layout `position_ids`, and response-token target-position gathering.
-
-This reproduces the core layout requirement from prior preference packing / prefix sharing in a TRL/LoRA trainer path, and establishes that the trainer can evaluate the packed layout without silently changing the DPO objective.
-
-### Sparse-Backed Efficiency
-
-The sparse-backend check separates layout gains from block-skipping gains. Dense packing alone can help versus vanilla pairwise, but sparse-backed execution reduced both step time and memory further across the prompt-long, balanced, and response-long mechanism checks.
+Table 2 compares the three execution paths in 5-step checks labeled prompt-long, balanced, and response-long. Those labels describe the relative prompt/response lengths; their exact token-length settings are not retained. The medians indicate lower cost for sparse packing, but do not recover the individual regime results or timing variability.
 
 <figure class="table-figure table-figure--comparison table-figure--compact-metrics">
   <div class="table-shell">
@@ -122,58 +121,110 @@ The sparse-backend check separates layout gains from block-skipping gains. Dense
       <thead>
         <tr>
           <th>Comparison</th>
-          <th class="align-right">Median step ratio</th>
+          <th class="align-right">Median step-time<br><span class="table-note-inline">ratio</span></th>
           <th class="align-right">Rank-summed<br><span class="table-note-inline">memory ratio</span></th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>sparse packed vs dense packed</td>
+          <td>sparse packed /<br><span class="table-note-inline">dense packed</span></td>
           <td class="align-right"><code>0.7528</code></td>
           <td class="align-right"><code>0.6701</code></td>
         </tr>
         <tr>
-          <td>sparse packed vs vanilla pairwise</td>
+          <td>sparse packed /<br><span class="table-note-inline">vanilla pairwise</span></td>
           <td class="align-right"><code>0.6395</code></td>
           <td class="align-right"><code>0.6046</code></td>
         </tr>
         <tr>
-          <td>dense packed vs vanilla pairwise</td>
+          <td>dense packed /<br><span class="table-note-inline">vanilla pairwise</span></td>
           <td class="align-right"><code>0.8495</code></td>
           <td class="align-right"><code>0.9022</code></td>
         </tr>
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 1.</strong> A 5-step mechanism check separating vanilla pairwise, dense packed, and sparse packed layouts. Values are medians across prompt-long, balanced, and response-long checks. Dense packing helped versus vanilla pairwise, while sparse-backed execution produced larger step-time and memory gains.</figcaption>
+  <figcaption><strong>Table 2.</strong> Recorded 5-step mechanism checks. Each ratio divides the first layout by the second; lower is better. Values are medians across the three length regimes, so they summarize those checks rather than establish an improvement in every regime.</figcaption>
 </figure>
 
-The response-long repeat was the important stress case because dense-only packing had been weak there. With `64/192` train/eval slices, seeds `17` and `23`, and `20` steps per run, sparse-backed execution had median sparse/dense step ratio `0.7647` and rank-summed memory ratio `0.5968`. Mean reward accuracy delta was `+0.00260`, with range `[0.0, +0.00521]`.
+The response-long repeats extended the sparse/dense comparison to `20` steps per run, using `64/192` train/eval slices and seeds `17` and `23`. The recorded median step-time ratio was `0.7647`, and the rank-summed memory ratio was `0.5968`. Mean reward-accuracy delta was `+0.00260`, with range `[0.0, +0.00521]`. These two seeds support a repeat check in that setting; they are not repeats of the separate 200-step experiment.
 
-### Bounded Qwen3-8B FSDP Evidence
+### UltraFeedback comparisons
 
-Across Qwen3-8B + LoRA 2-node FSDP checks, sparse-backed execution stayed below dense packed training on time and rank-summed memory.
+Table 3 separates the two UltraFeedback variants rather than relying only on their aggregate <a class="citation-ref" href="#ref-argilla-ultrafeedback" aria-label="Reference 7">[7]</a> <a class="citation-ref" href="#ref-h4-ultrafeedback" aria-label="Reference 8">[8]</a>. The cost ratios were below one for both, while reward accuracy moved in opposite directions. These are two variants from the same dataset family, not two independent task families.
+
+<figure class="table-figure table-figure--metrics">
+  <div class="table-shell">
+    <table class="metrics-table metrics-table--numeric-columns">
+      <thead>
+        <tr><th>Dataset</th><th class="align-right">Step-time<br><span class="table-note-inline">ratio</span></th><th class="align-right">Rank-summed<br><span class="table-note-inline">memory ratio</span></th><th class="align-right">Reward accuracy<br><span class="table-note-inline">delta</span></th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Argilla UltraFeedback</td><td class="align-right"><code>0.8097</code></td><td class="align-right"><code>0.6521</code></td><td class="align-right"><code>+0.054688</code></td></tr>
+        <tr><td>H4 UltraFeedback</td><td class="align-right"><code>0.8005</code></td><td class="align-right"><code>0.6719</code></td><td class="align-right"><code>-0.015625</code></td></tr>
+        <tr><td>Recorded aggregate<br><span class="table-note-inline">median ratios; mean delta</span></td><td class="align-right"><code>0.8051</code></td><td class="align-right"><code>0.6620</code></td><td class="align-right"><code>+0.019531</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <figcaption><strong>Table 3.</strong> UltraFeedback comparisons labeled as 20-step runs in Figure 3. Cost ratios are sparse/dense; accuracy deltas are sparse minus dense. The positive mean accuracy delta does not describe both datasets.</figcaption>
+</figure>
+
+Average response lengths were roughly `338-416` tokens for training and `364-405` for evaluation. Exact slice sizes for these transfer checks are not retained in the text.
+
+Figure 3 collects the recorded distributed cost ratios. Its rows summarize different checks and should not be treated as a common set of repeated measurements. The additional larger-eval row has incomplete condition metadata, preserved separately in the Appendix.
 
 <figure class="media-figure media-figure--wide-visual">
   <img src="/assets/images/posts/preference-packing-dpo-efficiency/qwen3-fsdp-ratio-summary.svg" alt="Bar chart of sparse packed over dense packed step-time and rank-summed memory ratios across four Qwen3-8B FSDP checks">
-  <figcaption><strong>Figure 3.</strong> Qwen3-8B + LoRA 2-node FSDP sparse-backed results. Ratios are <code>sparse packed / dense packed</code>, so shorter bars are more efficient; blue bars show step time and gray bars show rank-summed memory.</figcaption>
+  <figcaption><strong>Figure 3.</strong> Recorded Qwen3-8B + LoRA 2-node FSDP cost comparisons. Ratios are <code>sparse packed / dense packed</code>, so shorter bars are more efficient; blue bars show step time and gray bars show rank-summed allocated memory. Rows summarize different checks.</figcaption>
 </figure>
 
-The UltraFeedback transfer check used two real preference datasets, not synthetic behavior checks. Argilla UltraFeedback had reward accuracy delta `+0.054688`, step ratio `0.8097`, and rank-summed memory ratio `0.6521`; H4 UltraFeedback had reward accuracy delta `-0.015625`, step ratio `0.8005`, and rank-summed memory ratio `0.6719` <a class="citation-ref" href="#ref-argilla-ultrafeedback" aria-label="Reference 7">[7]</a> <a class="citation-ref" href="#ref-h4-ultrafeedback" aria-label="Reference 8">[8]</a>. The aggregate was mean reward accuracy delta `+0.019531`, median step ratio `0.8051`, and median memory ratio `0.6620`. Average response lengths were roughly `338-416` tokens for train and `364-405` for eval.
+### The 200-step comparison
 
-The 200-step run strengthens finite-run stability evidence. It used the same Qwen3-8B + LoRA 2-node FSDP path on an H4 UltraFeedback binarized `512/512` train/eval slice.
+The longest recorded comparison used the H4 UltraFeedback `512/512` train/eval slice from Table 1. Table 4 separates execution cost from the held-out metric differences summarized in Figure 1. Cost values are sparse/dense ratios; held-out values are sparse-minus-dense deltas.
 
-Both the sparse-backed and dense-packed runs passed the same held-out metric and efficiency checks. Dense final loss was `0.69298`; sparse final loss was `0.69336`. Held-out DPO loss delta, sparse minus dense, was `-0.0000118`; reward accuracy delta was `+0.00195`; reward margin delta was `+0.0000236`. Median step ratio was `0.8066`, rank-summed memory ratio was `0.6490`, and max-rank memory ratio was `0.6046`.
+<figure class="table-figure table-figure--metrics table-figure--compact-metrics">
+  <div class="table-shell">
+    <table class="metrics-table metrics-table--compact-two-col">
+      <thead><tr><th>Measure</th><th class="align-right">Value</th></tr></thead>
+      <tbody>
+        <tr><td>Median step time</td><td class="align-right"><code>0.8066</code></td></tr>
+        <tr><td>Rank-summed<br><span class="table-note-inline">allocated memory</span></td><td class="align-right"><code>0.6490</code></td></tr>
+        <tr><td>Held-out DPO loss</td><td class="align-right"><code>-0.0000118</code></td></tr>
+        <tr><td>Held-out reward accuracy</td><td class="align-right"><code>+0.00195</code></td></tr>
+        <tr><td>Held-out reward margin</td><td class="align-right"><code>+0.0000236</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <figcaption><strong>Table 4.</strong> Recorded 200-step comparison. The first two rows are sparse/dense cost ratios; the remaining rows are sparse-minus-dense held-out deltas. No uncertainty interval or numerical equivalence threshold is available.</figcaption>
+</figure>
 
-This is still not a convergence claim; it only shows 200-step completion with the held-out DPO checks used here.
+The time and rank-summed memory ratios correspond to `19.34%` and `35.10%` reductions relative to dense packed training. They describe the reported step and allocation measures; without startup/compile timings they do not establish the reduction in end-to-end job time.
+
+The held-out deltas were small at this endpoint. Aggregate accuracy can remain close even if individual pair decisions change, and close loss values do not establish matching token log-probs or gradients. The result supports a recorded cost reduction with similar aggregate diagnostics in this finite run. The separately recorded, ambiguously labeled “final loss” values are retained in the Appendix and are not used to reconstruct held-out deltas.
 
 ## Limitations
 
-The result should be read as efficiency plus tested held-out metric parity, not as a downstream quality claim. It does not test human win-rate, generation quality, or long convergence beyond the 200-step stability run.
+- **Incomplete measurement records.** Absolute seconds per step and peak GB, timing variability, compile/warmup treatment, CUDA synchronization, and memory-reset details cannot be recovered from the retained summaries. This particularly limits interpretation of the 5-step checks.
+- **Incomplete training specification.** Effective pair batch size, accumulation, learning rate, DPO temperature, LoRA configuration, exact length/truncation settings, software/model/data revisions, and the seed/repeat count for the 200-step comparison are not retained. Only the response-long repeat explicitly records two seeds.
+- **Restricted baseline and quality claims.** The reported gains are within this implementation's comparisons. The actual vanilla/dense backend and matched optimization settings cannot be audited, so the results do not establish an advantage over an optimized SDPA or FlashAttention baseline. No human win-rate, generated-answer quality, or convergence beyond 200 steps was tested.
+- **Restricted implementation coverage.** The recorded reference path disables LoRA adapters. Full fine-tuning with a separate frozen reference model is outside this study. Hardware and data coverage remain limited to the reported GB10 setting and Intel Orca-style / UltraFeedback-family data.
 
-The implementation scope is also narrow. The reusable trainer targets LoRA/PEFT, with reference log-probs computed by temporarily disabling adapters through `model.disable_adapter()`. Full fine-tuning with a separate frozen reference model is not covered here.
+## Appendix: Incompletely specified records
 
-Hardware and data coverage remain limited to the reported GB10 2-node bf16 FSDP runs and Intel Orca-style / UltraFeedback-family preference data. Other model families, tokenizer behavior, length distributions, and backend configurations need separate audits.
+**Final loss.** The earlier note separately recorded dense `0.69298` and sparse `0.69336` as “final loss.” Their difference is `+0.00038`, whereas the explicitly labeled held-out DPO loss delta is `-0.0000118`. The final-loss evaluation split and aggregation are unknown. They may refer to a different statistic; the record does not justify relabeling them as training loss or treating them as the source of the held-out delta.
+
+**Max-rank memory.** An additional sparse/dense memory ratio of `0.6046` was labeled “max-rank.” Its exact aggregation across ranks and optimizer steps was not retained. The main comparison uses the rank-summed measure defined above.
+
+**Larger-eval row.** Figure 3 preserves an additional row labeled “Larger eval robustness,” with `512 / 256 / 256 eval`, step-time ratio `0.820`, and memory ratio `0.688`. The dataset-to-count mapping and aggregation cannot be recovered. These displayed, rounded ratios remain in the figure as a retained record, without using that row to claim broader evaluation coverage.
+
+## Experiment Resources
+
+<div class="reference-list" markdown="1">
+
+- **Available evidence:** numerical summaries and figures retained in this note. Original logs, full configurations, and numerical parity-test outputs were unavailable for the September 6, 2026 revision; no new training or evaluation was run.
+- **Implementation availability:** the [previously linked repository](https://github.com/muted-color/preference-packing-dpo-efficiency) returned HTTP 404 on unauthenticated access on September 6, 2026. It is not currently an accessible reproduction artifact.
+
+</div>
 
 ## References
 
@@ -185,7 +236,7 @@ Hardware and data coverage remain limited to the reported GB10 2-node bf16 FSDP 
   <li id="ref-dpo">Rafailov, Rafael et al. <strong>Direct Preference Optimization: Your Language Model is Secretly a Reward Model</strong>. arXiv:2305.18290, 2023. <a href="https://arxiv.org/abs/2305.18290">arXiv</a></li>
   <li id="ref-qwen3-8b">Qwen Team. <strong>Qwen3-8B</strong>. Hugging Face model repository. <a href="https://huggingface.co/Qwen/Qwen3-8B">Model card</a></li>
   <li id="ref-lora">Hu, Edward J. et al. <strong>LoRA: Low-Rank Adaptation of Large Language Models</strong>. arXiv:2106.09685, 2021. <a href="https://arxiv.org/abs/2106.09685">arXiv</a></li>
-  <li id="ref-flexattention">PyTorch. <strong>FlexAttention</strong>. PyTorch documentation. <a href="https://pytorch.org/docs/stable/nn.attention.flex_attention.html">Docs</a></li>
+  <li id="ref-flexattention">PyTorch. <strong>FlexAttention</strong>. PyTorch documentation. <a href="https://docs.pytorch.org/docs/stable/nn.attention.flex_attention.html">Docs</a></li>
   <li id="ref-argilla-ultrafeedback">Argilla. <strong>UltraFeedback Binarized Preferences Cleaned</strong>. Hugging Face dataset repository. <a href="https://huggingface.co/datasets/argilla/ultrafeedback-binarized-preferences-cleaned">Dataset card</a></li>
   <li id="ref-h4-ultrafeedback">Hugging Face H4. <strong>UltraFeedback Binarized</strong>. Hugging Face dataset repository. <a href="https://huggingface.co/datasets/HuggingFaceH4/ultrafeedback_binarized">Dataset card</a></li>
 </ol>
@@ -197,7 +248,7 @@ Hardware and data coverage remain limited to the reported GB10 2-node bf16 FSDP 
 Text citation:
 
 ```text
-Ilho Ahn, "Where Sparse-Backed Preference Packing Reduced DPO Training Cost", Mini Research, June 18, 2026.
+Ilho Ahn, "DPO Preference Packing: Dense Masks and Sparse Execution", Mini Research, June 18, 2026.
 ```
 
 BibTeX:
@@ -205,7 +256,7 @@ BibTeX:
 ```bibtex
 @article{ahn2026preferencepackingdpo,
   author = {Ilho Ahn},
-  title = {Where Sparse-Backed Preference Packing Reduced DPO Training Cost},
+  title = {DPO Preference Packing: Dense Masks and Sparse Execution},
   journal = {Mini Research},
   year = {2026},
   month = jun,

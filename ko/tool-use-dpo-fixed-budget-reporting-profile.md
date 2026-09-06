@@ -1,84 +1,142 @@
 ---
 layout: post
-title: "전문화된 Tool-Use DPO Recipe의 고정 예산 비교"
+title: "고정 예산 Tool-Use DPO: 호출 정확도와 추가 질문 판단"
 date: 2026-06-27 11:04:00 +0900
-last_modified_at: 2026-08-26 23:29:18 +0900
+last_modified_at: 2026-09-06 11:42:21 +0900
 lang: ko
 categories: ["LLM EVAL"]
 tags: [llm, tool-use, dpo, function-calling, bfcl, when2call, ifeval, qwen3]
 lab_host: "dgx3"
 lab_path: "projects/tool-use-dpo-negative-sources"
-excerpt: "동일한 DPO 예산에서도 전문화된 tool-use recipe는 서로 다른 평가 축을 변화시켰으며, filtering·source mixing·longer training은 이 trade-off를 일관되게 해소하지 못했다."
-description: "전문화된 Qwen3-8B tool-use DPO recipe를 고정 예산에서 비교하고, evaluation-axis transfer와 semantic filtering, mixed-source training, checkpoint별 guardrail trade-off를 점검한 미니 리서치 노트."
+excerpt: "두 Tool-use DPO 구성의 점수 차이가 반복됐다. 행동별 분석에서는 판단 중심 구성의 추가 질문 정답 증가와 다른 판단의 오류가 함께 나타났다."
+description: "학습 쌍과 업데이트 예산을 맞춘 Qwen3-8B DPO 비교에서 구성별 점수 차이의 반복성, 추가 질문 판단의 오류, 행동 라벨과 호출 정확도의 차이를 분석한다."
 permalink: /research/2026/06/27/tool-use-dpo-fixed-budget-reporting-profile/ko/
 translation_url: /research/2026/06/27/tool-use-dpo-fixed-budget-reporting-profile/
 image: /assets/images/posts/tool-use-dpo-fixed-budget-reporting-profile/hero-checkpoint-prism.png
-image_alt: "동일한 두 반투명 recipe 흐름이 투명한 checkpoint 프리즘을 지나 서로 다른 형태의 평가 신호 세 개로 나뉘는 장면"
+image_alt: "동일한 두 반투명 구성 흐름이 투명한 체크포인트 프리즘을 지나 서로 다른 형태의 평가 신호 세 개로 나뉘는 장면"
 hero_image: /assets/images/posts/tool-use-dpo-fixed-budget-reporting-profile/hero-checkpoint-prism.png
-hero_alt: "동일한 두 반투명 recipe 흐름이 투명한 checkpoint 프리즘을 지나 서로 다른 형태의 평가 신호 세 개로 나뉘는 장면"
+hero_alt: "동일한 두 반투명 구성 흐름이 투명한 체크포인트 프리즘을 지나 서로 다른 형태의 평가 신호 세 개로 나뉘는 장면"
 hero_frame: true
 hero_compact: true
 ---
 
-전문화된 tool-use DPO recipe는 training source와 가까운 평가 축을 개선하면서도 다른 tool-use 능력에서는 같은 개선으로 이어지지 않을 수 있다. 고정 예산에서 semantic filtering, source mixing, longer training이 이러한 specialization을 줄이는지도 함께 점검했다.
+도구 사용 학습은 **올바른 함수 호출을 구성하는 능력**과 **호출·추가 질문·답변 불가 중 행동을 고르는 능력**에 서로 다른 비중을 둘 수 있다. 이 글은 같은 `Qwen3-8B` 지도 학습 체크포인트에서 출발해 학습 쌍 수와 업데이트 수를 맞춘 두 DPO 구성을 비교하고, 어떤 행동 판단이 점수 차이를 만드는지 살펴본다 <a class="citation-ref" href="#ref-qwen3" aria-label="참고문헌 1">[1]</a>.
 
-`Qwen3-8B`를 기반으로 한 tool-use SFT checkpoint를 공통 reference로 두고 <a class="citation-ref" href="#ref-qwen3" aria-label="참고문헌 1">[1]</a>, 동일한 pair 예산과 optimizer step 예산에서 DPO negative recipe를 비교했다. 평가 질문은 function-call structure와 call-decision에 초점을 둔 recipe의 개선이 다른 평가 축에서도 유지되는지, 그리고 semantic filtering, 50:50 mixed-source recipe, longer training이 관찰된 trade-off를 줄이는지다. 이 글은 해당 조건을 점검한 실험 보고이며, 일반적인 recipe 순위나 새로운 reporting framework를 제안하지 않는다.
+함수 호출 구조 중심 구성은 BFCL 호출 정확도에서, 호출 판단 중심 구성은 When2Call macro F1에서 높았다. 이 집계 점수 차이는 여러 학습 시드와 한 번 재구성한 학습 쌍 집합에서도 반복됐다. 그러나 최초 50-step 실행을 행동 유형별로 보면, 호출 판단 중심 구성은 추가 질문이 필요한 경우를 더 많이 맞힌 반면 도구 호출과 답변 불가 판단은 더 적게 맞혔다. 높은 집계 점수를 이해하려면 행동별 차이를 함께 봐야 한다.
 
-> **Tool-use DPO**는 tool-call 출력이나 tool-use 판단에서 chosen/rejected pair를 구성하고, DPO로 policy를 업데이트하는 preference optimization 설정이다 <a class="citation-ref" href="#ref-dpo" aria-label="참고문헌 2">[2]</a>. 새로운 objective를 제안하지 않고, 고정 예산에서 specialized recipe, pair filtering, source mixing, checkpoint 조건에 따라 나타난 변화를 비교한다.
-
-{% include model-mention-cards.html label="주요 평가 리소스" aria_label="고정 예산 tool-use DPO audit의 주요 평가 리소스" models="Qwen3-8B|Qwen/Qwen3-8B|https://huggingface.co/Qwen/Qwen3-8B;When2Call|nvidia/When2Call|https://huggingface.co/datasets/nvidia/When2Call" %}
+> **Tool-use DPO**는 도구 사용의 선호·비선호 응답 쌍에 Rafailov et al.의 **Direct Preference Optimization (DPO)**를 적용한다 <a class="citation-ref" href="#ref-dpo" aria-label="참고문헌 2">[2]</a>. 이 글의 **학습 구성(recipe)**은 데이터 출처와 응답 쌍 구성 방식을 뜻한다. 공통 **SFT 기준선**은 DPO 전의 지도 학습 체크포인트이며, DPO의 고정 reference model로도 사용한다.
 
 ## 요약
 
-- 동일한 `3000`-pair, `375`-step 예산에서 function-call structure 중심 recipe는 BFCL core에서, call-decision 중심 recipe는 When2Call에서 더 높은 점수를 기록했다. 어느 recipe도 두 평가 축에서 모두 우세하지 않았다.
-- Semantic filtering의 변화는 작거나 불확실했다. 50:50 mixed-source condition도 각 specialist의 intended metric에 미치지 못했고, IFEval accuracy는 두 specialist보다 낮았다.
-- 두 quality-gated recipe 모두 final checkpoint의 IFEval accuracy가 50-step checkpoint보다 낮았지만, 불확실성을 고려하면 이를 일반적인 early-stopping 기준으로 해석할 수는 없다.
-- 평가 축의 방향은 추가 training seed 2개와 재구성한 pair pool에서도 유지됐다. 다만 prompt overlap과 단일 run인 mixed-source condition 때문에 robustness 해석은 제한적이다.
+- 각 구성은 `3000`개 학습 쌍으로 `375`번의 최적화 업데이트까지 학습했다. 대표 비교는 체크포인트 결과를 확인한 뒤 선택한 50-step 시점이다.
+- 그 시점의 품질 필터 적용 조건에서 구조 중심 구성은 BFCL core가 `3.33` 퍼센트포인트(pp) 높았고, 판단 중심 구성은 When2Call macro F1이 `5.31` pp 높았다. 두 방향은 3개 학습 시드와 한 번 재구성한 학습 쌍 집합에서도 유지됐다.
+- 최초 실행에서 구조 중심·판단 중심 구성의 추가 질문 정답 수는 각각 `32/100`개와 `57/100`개였다. 도구 호출은 `94`개와 `88`개, 답변 불가는 `66`개와 `64`개로 판단 중심 구성이 더 적게 맞혔다.
+- 두 구성의 질문과 선호(chosen) 응답은 다르고, 판단 중심 소스는 When2Call 계열이다. 따라서 학습 구성 단위의 비교이며 비선호(rejected) 응답의 오류 유형별 효과를 분리한 결과는 아니다.
+- 필터링·혼합·체크포인트 결과는 탐색적 보조 근거다. SFT의 생성 길이 조건이 일치하지 않아 기록된 기준선 대비 변화를 학습 효과로 해석할 수 없다.
 
-## 공개 산출물
+## 실험 설계
 
-{% include model-mention-cards.html label="GitHub 저장소" aria_label="Tool-use DPO 고정 예산 보고서 GitHub 저장소" models="Artifact release|muted-color/tool-use-dpo-fixed-budget-report|https://github.com/muted-color/tool-use-dpo-fixed-budget-report" %}
+공통 SFT 체크포인트는 xLAM/APIGen `70%`, ToolACE `20%`, When2Call `10%`로 학습했다. 두 주요 DPO 구성과 필터 미적용 대조군은 다음 설정을 공유한다 <a class="citation-ref" href="#ref-artifact-release" aria-label="참고문헌 3">[3]</a>.
 
-{% include model-mention-cards.html label="논문" aria_label="Tool-use DPO 고정 예산 보고서 논문 PDF" models="Paper PDF|paper.pdf|https://github.com/muted-color/tool-use-dpo-fixed-budget-report/blob/main/paper.pdf" %}
+- **학습 예산:** 실행당 선호 응답 쌍 `3000`개와 `375`번의 최적화 업데이트.
+- **최적화 설정:** beta `0.1`, learning rate `5e-6`, LoRA rank `16`, effective batch size `8`.
+- **체크포인트:** 선택한 50-step 시점과 전체 예산을 사용한 마지막 시점(final).
 
-결과 표와 Figure 1은 정리된 평가 출력과 집계 표가 포함된 공개 artifact 저장소에서 확인할 수 있다 <a class="citation-ref" href="#ref-artifact-release" aria-label="참고문헌 3">[3]</a>.
+학습 쌍 수와 업데이트 수는 같지만 데이터 분포·질문·손실을 계산하는 토큰 수는 다르다. 여기서 예산은 비교의 통제 조건이며, 계산 비용이 같음을 측정한 결과는 아니다.
 
-## 평가 설계
+### 학습 쌍 구성
 
-공통 Qwen3-8B tool-use SFT checkpoint를 기준으로 두 specialized DPO recipe와 각각의 동일 예산 ungated control을 비교한다. 모든 condition은 `3000` preference pair, `375` optimizer step, beta `0.1`, learning rate `5e-6`, LoRA rank `16`, effective batch size `8`을 사용한다. Pair 수와 optimizer step 수는 같지만 source distribution과 loss가 적용되는 token 수까지 동일하지는 않다.
+Table 1은 [고정 버전의 학습 쌍 구성 규칙](https://github.com/muted-color/tool-use-dpo-fixed-budget-report/blob/arxiv-v1/docs/negative_construction.md)을 정리한다. 선호 응답은 각 소스의 기준 응답을 사용하며, 구성 사이의 질문과 선호 응답은 일치시키지 않았다.
 
-평가는 세 축으로 나뉜다. **BFCL core**는 주로 함수 선택과 인자 정확성에 초점을 둔 function-call structure axis다 <a class="citation-ref" href="#ref-bfcl" aria-label="참고문헌 4">[4]</a>. **When2Call**은 tool call, follow-up question, unable-to-answer 같은 call-decision behavior를 평가한다 <a class="citation-ref" href="#ref-when2call" aria-label="참고문헌 5">[5]</a>. Public slice에는 direct-answer gold row가 없지만 frozen macro-F1 evaluator는 direct answer를 zero-support class로 포함하므로, 이 metric을 네 행동 유형이 균형 있게 포함된 macro F1으로 해석하지 않는다. **IFEval prompt-strict accuracy**는 주요 intended metric이 아니라, DPO가 instruction following을 얼마나 변화시키는지 측정하는 guardrail metric이다 <a class="citation-ref" href="#ref-ifeval" aria-label="참고문헌 6">[6]</a>.
+<figure class="table-figure table-figure--comparison">
+  <div class="table-shell">
+    <table class="comparison-table">
+      <thead>
+        <tr><th>학습 구성</th><th>학습 쌍 출처와 비선호 응답 구성</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>함수 호출 구조 중심 구성<br><span class="table-note-inline">Function-call structure</span></td>
+          <td>정답 도구 호출 응답을 변형해 함수 선택, 필수 인자나 값, 호출 수, 또는 응답의 의미에 영향을 주는 타입·스키마 오류를 만든다.<br><span class="table-note-inline">공개 산출물에서는 이 소스를 <code>noised_gold</code>로 표기한다.</span></td>
+        </tr>
+        <tr>
+          <td>호출 판단 중심 구성<br><span class="table-note-inline">Call decision</span></td>
+          <td>When2Call 계열의 판단 예제에서 기준 응답과 잘못된 호출·비호출, 불필요한 추가 질문, 응답 포기, 답변 완성 오류를 짝짓는다.<br><span class="table-note-inline">공개 산출물에서는 이 소스를 <code>behavior</code>로 표기한다.</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <figcaption><strong>Table 1.</strong> 데이터 소스별 학습 쌍 구성. 학습 쌍 수와 업데이트 수는 같지만 질문과 선호 응답은 다르다.</figcaption>
+</figure>
+
+**품질 필터 적용(quality-gated)** 조건은 모호하거나 동등한 응답 쌍, 허용 가능한 대안, 기준 응답의 오류가 의심되는 쌍을 제외한다. 각 소스는 선택된 예제 최소 `100`개에 대한 LLM 보조 홀드아웃 검토를 통과했다. 이는 사람이 정답을 부여한 절차가 아니라 LLM을 활용한 품질 관리다. **필터 미적용 대조군(ungated control)**은 이 의미적 품질 필터를 적용하기 전 집합에서 학습에 사용할 수 없는 쌍만 제외하고 추출한다.
+
+### 평가 표본과 지표
+
+Table 2는 평가 표본을 정리한다. BFCL은 호출 정확도를 <a class="citation-ref" href="#ref-bfcl" aria-label="참고문헌 4">[4]</a>, When2Call은 호출 판단 과제를 평가한다 <a class="citation-ref" href="#ref-when2call" aria-label="참고문헌 5">[5]</a>. **IFEval-style prompt-strict 진단**은 IFEval에서 파생한 지표다 <a class="citation-ref" href="#ref-ifeval" aria-label="참고문헌 6">[6]</a>. 로컬 평가기가 지원하는 지시를 모두 충족하면 해당 문항을 통과로 처리한다. 지원하지 않는 지시는 채점하지 않고, 지원되는 지시가 하나도 없는 문항은 제외한다.
+
+<figure class="table-figure table-figure--comparison">
+  <div class="table-shell">
+    <table class="comparison-table">
+      <thead>
+        <tr><th>평가 표본</th><th class="align-right">채점 문항 수</th><th>표본 선택과 채점</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>BFCL core</td>
+          <td class="align-right"><code>300</code></td>
+          <td>BFCL v3의 simple, multiple, parallel, irrelevance, live multiple에서 각각 앞쪽 60개 행을 사용한다.<br><span class="table-note-inline">고정된 로컬 parser와 평가기로 함수 호출의 exact match 여부를 채점한다.</span></td>
+        </tr>
+        <tr>
+          <td>When2Call</td>
+          <td class="align-right"><code>300</code></td>
+          <td>Test 설정의 MCQ split에서 tool-call, follow-up, unable-to-answer 예제를 각각 100개 사용한다.<br><span class="table-note-inline">Macro F1은 도구 호출 파싱과 고정된 텍스트 규칙으로 정한 행동 라벨을 사용한다. 응답 exact match는 tool-call 문항의 호출 내용도 확인한다.</span></td>
+        </tr>
+        <tr>
+          <td>IFEval-style<br><span class="table-note-inline">Prompt-strict accuracy</span></td>
+          <td class="align-right"><code>96</code></td>
+          <td>원본의 앞쪽 100개 prompt 중 지원되는 지시가 없는 4개를 제외한다.<br><span class="table-note-inline">각 prompt에서 평가기가 지원하는 지시를 모두 충족해야 통과한다.</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <figcaption><strong>Table 2.</strong> 고정된 평가 표본과 로컬 채점 정의. 공식 전체 벤치마크 점수가 아닌, 고정 표본에 대한 로컬 평가다.</figcaption>
+</figure>
+
+공개 지표 `When2Call_behavior_accuracy`는 채점 행의 `exact_match` 값을 평균한다. 호출 여부를 올바르게 판단해도 함수·인자·호출 수가 틀리면 이 지표에서는 실패할 수 있다. 이 글에서는 이를 **W2C 응답 exact match**로 표기한다. 반면 **행동 라벨 정확도(behavior-label accuracy)**는 `expected_behavior`와 `observed_behavior`를 비교하며, macro F1도 이 라벨을 사용한다. [공개 계산 코드](https://github.com/muted-color/tool-use-dpo-fixed-budget-report/blob/arxiv-v1/src/tool_use_dpo_negative_sources/bootstrap.py)는 두 채점 경로를 구분한다.
+
+고정된 macro-F1 평가기는 정답 예제가 없는 직접 답변(direct answer)도 분류 항목에 포함하고 `zero_division=0`을 적용한다. [데이터 범위 점검](https://github.com/muted-color/tool-use-dpo-fixed-budget-report/blob/arxiv-v1/docs/direct_answer_coverage.md)에서 라벨이 있는 테스트 데이터 `3,952`행에는 direct-answer 정답이 없었고, 별도로 확인한 학습 데이터 `24,000`행에는 행동 정답 라벨이 공개되지 않았다. 이 `27,952`행 점검이 모델 평가 표본 `300`개를 늘려 주거나 학습 데이터의 라벨 분포를 확인해 주는 것은 아니다.
+
+DPO 평가에는 deterministic decoding(`do_sample=false`)과 thinking 비활성화(`enable_thinking=false`)를 공통으로 사용한다. 95% 신뢰구간(CI)은 문항 ID로 조건 간 대응을 유지한 grouped percentile bootstrap `1000`회로 계산한다. 기록된 실행에 대한 평가 표본의 불확실성을 나타내며, 학습과 체크포인트 선택의 불확실성은 포함하지 않는다. 별도의 SFT 비교에는 Appendix A의 생성 길이 조건 제한이 적용된다.
 
 ## 결과
 
-결과는 BFCL과 When2Call의 evaluation-axis 차이, semantic quality gate의 downstream 효과, mixed-source 비교, checkpoint별 guardrail trade-off, seed 및 pair-pool robustness 범위로 구분한다.
+### 학습 구성별 차이와 반복 검증
 
-### 평가 축 비교
-
-Table 1은 탐색적으로 선택한 50-step checkpoint에서 function-call structure 중심 recipe와 call-decision 중심 recipe를 비교한다. 이 checkpoint는 분석 뒤 regression이 더 작은 보고 시점으로 선택했으며, 사전 등록된 선택이나 보편적인 early-stopping 규칙은 아니다. 값은 `function-call structure 중심 recipe - call-decision 중심 recipe`로 계산한 percentage-point delta다. BFCL 행이 양수이면 function-call structure 중심 recipe의 점수가 더 높고, When2Call 행이 음수이면 call-decision 중심 recipe의 점수가 더 높다. 표에서 `W2C`는 When2Call의 약자다.
+Table 3은 선택한 50-step에서 구조 중심 구성의 점수에서 판단 중심 구성의 점수를 뺀 차이다. BFCL의 양수는 구조 중심 구성이, When2Call(`W2C`)의 음수는 판단 중심 구성이 더 높다는 뜻이다. Quality-gated 조건에서 BFCL은 `0.713` 대 `0.680`, W2C macro F1은 `0.477` 대 `0.530`이었다.
 
 <figure class="table-figure table-figure--comparison">
   <div class="table-shell">
     <table class="comparison-table metrics-table metrics-table--numeric-columns">
       <thead>
         <tr>
-          <th>Condition</th>
-          <th>Metric</th>
-          <th class="align-right">Delta (pp)</th>
-          <th class="align-right">95% CI low</th>
-          <th class="align-right">95% CI high</th>
+          <th>조건</th>
+          <th>지표</th>
+          <th class="align-right">점수 차이 (pp)</th>
+          <th class="align-right">95% CI 하한</th>
+          <th class="align-right">95% CI 상한</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td rowspan="3">Semantic quality gate 적용</td>
+          <td rowspan="3">Quality-gated</td>
           <td>BFCL core</td>
           <td class="align-right"><code>+3.33</code></td>
           <td class="align-right"><code>+1.53</code></td>
           <td class="align-right"><code>+5.67</code></td>
         </tr>
         <tr>
-          <td>W2C behavior acc.</td>
+          <td>W2C 응답 exact match</td>
           <td class="align-right"><code>-6.67</code></td>
           <td class="align-right"><code>-10.75</code></td>
           <td class="align-right"><code>-3.02</code></td>
@@ -90,7 +148,7 @@ Table 1은 탐색적으로 선택한 50-step checkpoint에서 function-call stru
           <td class="align-right"><code>-2.34</code></td>
         </tr>
         <tr>
-          <td rowspan="2">Semantic quality gate 미적용 control</td>
+          <td rowspan="2">Ungated control</td>
           <td>BFCL core</td>
           <td class="align-right"><code>+2.67</code></td>
           <td class="align-right"><code>+1.02</code></td>
@@ -105,86 +163,72 @@ Table 1은 탐색적으로 선택한 50-step checkpoint에서 function-call stru
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 1.</strong> 선택한 50-step checkpoint에서 <code>function-call structure 중심 recipe - call-decision 중심 recipe</code>로 계산한 evaluation-axis delta와 grouped bootstrap CI다.</figcaption>
+  <figcaption><strong>Table 3.</strong> 대표 50-step 체크포인트의 구성 간 평가 축별 차이와 grouped bootstrap CI. 차이는 함수 호출 구조 중심 구성 점수에서 호출 판단 중심 구성 점수를 뺀 값이다.</figcaption>
 </figure>
 
-이 방향만으로 negative type의 인과 효과를 말할 수는 없다. Call-decision training source는 When2Call evaluation과 같은 task family에 속하며, recipe 사이의 prompt와 chosen response도 일치시키지 않았다. 따라서 측정된 gap은 데이터 소스 자체의 우위가 아니라 반복해서 관찰된 recipe profile로 해석한다.
-
-### Semantic quality gate의 역할
-
-Semantic filtering은 rejected output이 chosen output보다 실제로 나쁜지, schema-valid인지, 동등한 대안이 아닌지를 확인하는 pair-quality gate로 사용했다. 그러나 동일한 recipe에서 semantic quality gate 적용 condition과 미적용 control을 비교하면, Table 2의 downstream performance delta는 작거나 불확실하다.
+집계 점수 차이의 방향은 3개 학습 시드와 한 번 재구성한 학습 쌍 집합에서도 유지됐다(Table 4). 이는 평가한 설정 안에서 구성별 차이가 반복됨을 뒷받침한다. 다만 재구성한 집합도 원래 집합과 질문 일부를 공유하며, 이 검사로 데이터 소스의 효과와 질문 구성의 효과를 분리할 수는 없다.
 
 <figure class="table-figure table-figure--comparison">
   <div class="table-shell">
-    <table class="comparison-table metrics-table metrics-table--numeric-columns">
+    <table class="comparison-table">
       <thead>
         <tr>
-          <th>Recipe</th>
-          <th>Intended metric</th>
-          <th class="align-right">Delta (pp)</th>
-          <th class="align-right">95% CI</th>
+          <th>검사</th>
+          <th>관찰 결과</th>
+          <th>범위</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>Function-call structure</td>
-          <td>BFCL core</td>
-          <td class="align-right"><code>+0.33</code></td>
-          <td class="align-right"><code>[0.00, +1.08]</code></td>
+          <td>학습 시드</td>
+          <td>3개 시드에서 같은 방향이 유지됐다.<br><span class="table-note-inline">점수 차이 범위 (pp): BFCL <code>3.00–4.00</code>; W2C 응답 exact match <code>5.00–6.67</code>; W2C macro F1 <code>4.26–5.31</code>.</span></td>
+          <td>고정된 학습 쌍 집합에 한정.</td>
         </tr>
         <tr>
-          <td>Call decision</td>
-          <td>W2C macro F1</td>
-          <td class="align-right"><code>+0.55</code></td>
-          <td class="align-right"><code>[-0.83, +1.81]</code></td>
+          <td>재구성한 학습 쌍 집합</td>
+          <td>학습 쌍 ID와 내용 해시의 중복은 없었고, 질문 ID의 중복은 <code>401/3000</code>, <code>1337/3000</code>이었다.<br><span class="table-note-inline">재구성한 집합의 점수 차이 (pp): BFCL <code>3.33</code>; W2C 응답 exact match <code>6.33</code>; W2C macro F1 <code>5.04</code>.</span></td>
+          <td>재구성 1회; 원래 집합과 질문 일부를 공유.</td>
         </tr>
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 2.</strong> 동일 예산에서 <code>quality-gated condition - ungated control</code>로 계산한 downstream metric delta다.</figcaption>
+  <figcaption><strong>Table 4.</strong> 50-step의 구성별 집계 점수 차이. 점수 차이는 부호 없이 표시했다. BFCL은 구조 중심, 두 W2C 지표는 판단 중심 구성이 높다. Figure 1의 행동별 분석은 최초 실행에 대한 별도 분석이다.</figcaption>
 </figure>
 
-Table 2는 filtering 제거의 근거가 아니다. Tool-use negative에는 optional/default/no-op 차이, 무해한 normalization, 허용 가능한 대체 tool, chosen/reference가 의심스러운 사례가 쉽게 섞인다. Filtering을 performance gain으로 보고하려면 별도 근거가 필요하며, quality control과 downstream 변화는 분리해 보고한다.
+### 추가 질문 정답과 오판의 차이
 
-### Mixed-source recipe
+Figure 1은 품질 필터를 적용한 최초 50-step [구조 중심](https://github.com/muted-color/tool-use-dpo-fixed-budget-report/blob/arxiv-v1/results/per_example/primary/r028_step50.csv)·[판단 중심](https://github.com/muted-color/tool-use-dpo-fixed-budget-report/blob/arxiv-v1/results/per_example/primary/r029_step50.csv) 실행에서 행동 라벨의 정답 수를 다시 센 결과다. 두 파일은 문항 ID와 질문 해시가 같은 `300`문항을 담고 있다. 각 유형에 `100`문항이 있어 정답 수와 재현율(%)의 숫자가 같다. 이 유형별 분석은 구성당 한 번의 실행을 사후에 나눈 결과이며, 앞서 제시한 집계 점수의 반복 검증과 구분한다.
 
-50:50 mixed-source recipe는 두 specialized source를 결합하면 두 intended-axis gain을 함께 유지할 수 있는지 확인한다. 각 source에서 quality-gated pair `1500`개를 사용해 총 `3000` pair와 `375` optimizer step으로 예산을 맞췄다.
-
-50-step checkpoint에서 mixed-source recipe의 BFCL core는 `0.700`으로 function-call structure 중심 recipe의 `0.713`보다 낮았다. When2Call macro F1은 `0.513`으로 call-decision 중심 recipe의 `0.530`보다 낮았다. IFEval prompt-strict accuracy도 `0.521`로 두 specialized recipe의 `0.573`, `0.583`보다 낮았다. Mixed condition은 SFT baseline보다 두 intended axis를 모두 개선했지만, 각 specialist의 intended metric에 미치지 못했고 guardrail regression도 더 컸다. 이 예산에서 단순한 source mixing은 trade-off를 해소하지 못했다. 이 condition은 추가 seed나 reconstructed-pool replicate가 없는 단일 run이다.
-
-### Checkpoint와 guardrail trade-off
-
-Figure 1은 intended-axis gain과 IFEval prompt-strict regression을 함께 표시하고, Table 3은 이에 대응하는 absolute score를 제시한다. 동일한 recipe에서도 50-step checkpoint에서 final checkpoint로 이동하면 intended metric과 guardrail metric이 모두 달라진다.
-
-<figure class="media-figure media-figure--wide-visual">
-  <img src="/assets/images/posts/tool-use-dpo-fixed-budget-reporting-profile/pareto-2panel.svg" alt="IFEval prompt-strict delta와 BFCL core 또는 When2Call macro F1 delta를 비교한 두 패널 산점도. Function-call structure 중심 recipe와 call-decision 중심 recipe에서 semantic quality gate 적용 여부에 따른 지점을 50-step checkpoint부터 final checkpoint까지 연결한다.">
-  <figcaption><strong>Figure 1.</strong> Shared SFT baseline 대비 intended-metric gain과 IFEval prompt-strict delta를 함께 표시했다. 선 종류는 두 recipe를, marker 형태는 semantic quality gate 적용 condition과 미적용 control을 구분하며, 화살표는 50-step checkpoint에서 final checkpoint로 향한다. 축은 원 보고서와 동일한 percentage-point delta를 사용한다.</figcaption>
+<figure class="media-figure">
+  <img src="/assets/images/posts/tool-use-dpo-fixed-budget-reporting-profile/when2call-behavior-breakdown.svg" alt="정답 유형별 100문항 중 행동 라벨 정답 수. 구조 중심 대 판단 중심 구성은 도구 호출 94 대 88, 추가 질문 32 대 57, 답변 불가 66 대 64다.">
+  <figcaption><strong>Figure 1.</strong> 각 행동 유형의 100문항 중 정답 라벨을 선택한 수. 품질 필터를 적용한 최초 두 실행의 50-step 결과를 구조 중심, 판단 중심 순서로 비교한다. 축은 0–100이며 함수·인자 정확도는 포함하지 않는다. 구성당 한 번의 실행 결과로, 신뢰구간은 표시하지 않았다.</figcaption>
 </figure>
 
-50-step에서 final checkpoint로 이동할 때 function-call structure recipe의 BFCL gain은 `2.00` pp, IFEval accuracy는 `5.21` pp 감소했다(95% CI `[0.00, 10.42]`). Call-decision recipe의 When2Call macro F1은 `0.18` pp, IFEval accuracy는 `2.08` pp 감소했다(95% CI `[-2.08, 6.25]`). 두 IFEval interval 모두 0에 닿거나 포함했다.
+두 구성의 차이가 가장 큰 유형은 추가 질문이었다. 판단 중심 구성이 추가로 맞힌 추가 질문 `25`문항 중 구조 중심 구성은 `22`개를 도구 호출로, `3`개를 답변 불가로 분류했다. 이 유형에서 잘못된 도구 호출 라벨은 구조 중심 `61`개, 판단 중심 `36`개였다. 반대로 도구 호출이나 답변 불가가 정답인데 추가 질문으로 잘못 분류한 수는 각각 `3`개와 `20`개였다. 이 패턴은 판단 중심 구성이 필요한 정보를 되묻는 질문을 더 자주 선택하는 경향과 부합한다. 다만 불필요한 추가 질문도 더 많았다.
+
+여기서는 지표의 정의를 구분해야 한다. 행동 라벨 정확도는 구조 중심 구성 `192/300`(`64.00%`), 판단 중심 구성 `209/300`(`69.67%`)다. 응답 exact match는 이보다 낮은 `170/300`(`56.67%`), `190/300`(`63.33%`)로, 호출 여부는 맞혔지만 호출 내용이 틀린 사례가 각각 `22`개와 `19`개다. 판단 중심 구성의 macro F1이 `5.31` pp 높은 데에는 잘못된 호출이 적어 도구 호출 정밀도(precision)가 높은 영향도 있다. 반면 도구 호출 재현율(recall)은 구조 중심 `94%`, 판단 중심 `88%`로 판단 중심 구성이 낮았다.
+
+BFCL 차이도 일부 유형에 집중됐다. 구조 중심 구성이 더 맞힌 `10`문항은 live multiple(`+5`), multiple(`+2`), irrelevance(`+3`)에서 나왔고, simple과 parallel의 정답 수는 같았다. Irrelevance에서는 두 구성 모두 낮은 점수(`6/60`, `3/60`)를 보였다. 따라서 When2Call의 우위가 호출을 하지 말아야 하는 모든 상황에서 더 나은 판단을 뜻하지는 않는다.
+
+### 체크포인트·필터링·혼합의 탐색적 결과
+
+Table 5는 체크포인트별 점수와 소스를 혼합한 구성의 점수를 보여준다. 이 비교는 주요 구성 간 비교보다 반복 검증이 적다.
 
 <figure class="table-figure table-figure--comparison">
   <div class="table-shell">
     <table class="comparison-table metrics-table metrics-table--numeric-columns">
       <thead>
         <tr>
-          <th>Condition</th>
-          <th>Checkpoint</th>
+          <th>조건</th>
+          <th>체크포인트</th>
           <th class="align-right">BFCL core</th>
           <th class="align-right">W2C macro F1</th>
-          <th class="align-right">IFEval prompt-strict</th>
+          <th class="align-right">IFEval-style<br><span class="table-note-inline">Prompt-strict</span></th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>SFT baseline</td>
-          <td>Selected</td>
-          <td class="align-right"><code>0.667</code></td>
-          <td class="align-right"><code>0.481</code></td>
-          <td class="align-right"><code>0.635</code></td>
-        </tr>
-        <tr>
-          <td rowspan="2">Function-call structure</td>
+          <td rowspan="2">함수 호출 구조 중심 구성</td>
           <td>50 steps</td>
           <td class="align-right"><code>0.713</code></td>
           <td class="align-right"><code>0.477</code></td>
@@ -197,7 +241,7 @@ Figure 1은 intended-axis gain과 IFEval prompt-strict regression을 함께 표�
           <td class="align-right"><code>0.521</code></td>
         </tr>
         <tr>
-          <td rowspan="2">Call decision</td>
+          <td rowspan="2">호출 판단 중심 구성</td>
           <td>50 steps</td>
           <td class="align-right"><code>0.680</code></td>
           <td class="align-right"><code>0.530</code></td>
@@ -210,7 +254,7 @@ Figure 1은 intended-axis gain과 IFEval prompt-strict regression을 함께 표�
           <td class="align-right"><code>0.562</code></td>
         </tr>
         <tr>
-          <td>50:50 mixed source</td>
+          <td>50:50 소스 혼합</td>
           <td>50 steps</td>
           <td class="align-right"><code>0.700</code></td>
           <td class="align-right"><code>0.513</code></td>
@@ -219,58 +263,68 @@ Figure 1은 intended-axis gain과 IFEval prompt-strict regression을 함께 표�
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 3.</strong> SFT baseline과 quality-gated DPO condition의 absolute score다. 값은 높을수록 좋은 비율이며, IFEval prompt-strict accuracy는 guardrail axis다.</figcaption>
+  <figcaption><strong>Table 5.</strong> 품질 필터를 적용한 DPO 조건의 절대 점수. 모든 지표는 높을수록 좋으며, IFEval-style은 Table 2의 채점 정의를 따른다.</figcaption>
 </figure>
 
-Early checkpoint의 일반적 우위는 이 결과로 뒷받침되지 않는다. Final checkpoint를 자동으로 보고하면 intended-axis gain과 guardrail regression 사이의 trade-off가 가려질 수 있다. 이 설정에서는 checkpoint 선택도 실험 결과의 일부다.
+- **체크포인트:** 50-step에서 final로 갈 때 구조 중심 구성의 BFCL은 `-2.00` pp, IFEval-style은 `-5.21` pp 변했다(95% CI `[-10.42, 0.00]`). 판단 중심 구성의 W2C macro F1은 `-0.19` pp, IFEval-style은 `-2.08` pp 변했다(`[-6.25, +2.08]`). 각 목표 지표와 IFEval-style의 점추정치는 앞선 체크포인트가 높지만, 두 IFEval 구간 모두 0을 포함하고 50-step은 결과를 본 뒤 선택했다.
+- **필터링:** 50-step에서 quality-gated 점수에서 ungated 점수를 뺀 차이는 구조 중심 구성의 BFCL `+0.33` pp(`[0.00, +1.08]`), 판단 중심 구성의 W2C macro F1 `+0.55` pp(`[-0.83, +1.81]`)였다. 학습 쌍의 유효성 검사가 여기서 뚜렷한 후속 성능 향상으로 이어지지는 않았다.
+- **혼합:** `50:50` 실행은 소스당 `1500`쌍을 사용한다. BFCL과 W2C 점수는 두 전문화 구성 사이에 있고, IFEval-style(`0.521`)은 둘보다 낮다. 소스당 학습 쌍이 절반이고 혼합 실행의 반복 검사가 없어, 유해한 간섭이 입증된 것은 아니다.
 
-### Robustness와 coverage 범위
+## 해석과 적용 범위
+
+구조 중심 구성은 BFCL에서, 판단 중심 구성은 When2Call macro F1에서 높았고, 반복 검증에서도 집계 차이의 방향은 유지됐다. 데이터 소스와 관련된 전문화는 가능한 설명이다. Ross et al.의 When2Call도 이미 판단 중심 데이터와 preference optimization을 결합한다 <a class="citation-ref" href="#ref-when2call" aria-label="참고문헌 5">[5]</a>. 이 비교에서는 고정된 예산에서 점수 차이가 얼마나 나는지, 어떤 오류에서 차이가 나는지를 확인했다.
+
+최초 실행의 판단 중심 구성은 올바른 추가 질문과 잘못된 추가 질문이 모두 더 많았고, BFCL irrelevance 성능은 여전히 낮았다. 불필요한 호출의 비용이 큰 환경에서 구성을 선택하려면 이 오류 수와 불필요한 질문의 비용을 함께 봐야 한다. Macro F1만으로는 그 비용을 알 수 없다.
+
+- **원인 분리:** 학습 질문과 선호 응답이 달라 비선호 응답의 오류 유형을 차이의 원인으로 특정할 수 없다. 이를 확인하려면 질문과 선호 응답을 맞추고, 학습 소스 계열 밖에서도 평가해야 한다.
+- **측정과 반복:** 행동 라벨은 고정된 파싱·텍스트 규칙으로 정한다. 공개 행에는 생성 답변이 없어 의미적으로 적절한 응답인지는 이 분석으로 확인할 수 없다. 행동별 분석은 최초 실행에 한정되며, 3개 시드와 재구성한 학습 쌍 집합의 검증은 집계 차이를 확인한 것이다.
+- **범위:** 하나의 Qwen3-8B SFT 시작점과 하나의 QLoRA DPO 설정을 평가했다 <a class="citation-ref" href="#ref-lora" aria-label="참고문헌 7">[7]</a> <a class="citation-ref" href="#ref-qlora" aria-label="참고문헌 8">[8]</a>. 로컬 평가 표본, 직접 답변 정답의 부재, 사후 체크포인트 선택은 일반화를 제한한다. 아래 SFT 비교로 학습 때문에 지시 이행 능력이 하락했다고 확정할 수는 없다.
+
+## Appendix A. 기록된 SFT 비교
+
+[공개 IFEval 채점 행](https://github.com/muted-color/tool-use-dpo-fixed-budget-report/tree/arxiv-v1/results/per_example/ifeval)에는 SFT의 생성 텐서 길이가 `768`까지 기록돼 있지만, [DPO manifest](https://github.com/muted-color/tool-use-dpo-fixed-budget-report/blob/arxiv-v1/manifests/benchmark_manifest.yaml)의 IFEval 출력 상한은 `384`다. 길이에는 배치 padding이 포함되므로 개별 답변의 잘림 여부는 알 수 없지만, SFT 행 전체가 같은 상한에서 생성된 결과일 수는 없다. SFT의 정확한 생성 인자는 복원하지 못했다.
+
+Appendix Table 1은 기록된 점수 차이를 보존한다. SFT 점수는 BFCL `0.667`, W2C macro F1 `0.481`, IFEval-style `0.635`이며 변화량은 반올림 전 집계값으로 계산했다. 이 변화를 학습의 효과로 해석하려면 생성 길이 조건을 맞춘 비교가 필요하다.
 
 <figure class="table-figure table-figure--comparison">
   <div class="table-shell">
-    <table class="comparison-table">
+    <table class="comparison-table metrics-table metrics-table--numeric-columns">
       <thead>
         <tr>
-          <th>Check</th>
-          <th>Observed result</th>
-          <th>Scope</th>
+          <th>학습 구성<br><span class="table-note-inline">Quality-gated 조건 · 50 steps</span></th>
+          <th class="align-right">BFCL core<br><span class="table-note-inline">변화 (pp)</span></th>
+          <th class="align-right">W2C macro F1<br><span class="table-note-inline">변화 (pp)</span></th>
+          <th class="align-right">IFEval-style<br><span class="table-note-inline">Prompt-strict 변화 (pp)</span></th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>Training seeds</td>
-          <td>3개 seed에서 같은 방향이 유지됐다.<br><span class="table-note-inline">Gap 범위 (pp): BFCL <code>3.00–4.00</code>; W2C accuracy <code>5.00–6.67</code>; W2C macro F1 <code>4.26–5.31</code>.</span></td>
-          <td>고정 pair pool에 한정.</td>
+          <td>함수 호출 구조 중심 구성</td>
+          <td class="align-right"><code>+4.67</code></td>
+          <td class="align-right"><code>-0.45</code></td>
+          <td class="align-right"><code>-6.25</code><br><span class="table-note-inline">[-11.46, -1.04]</span></td>
         </tr>
         <tr>
-          <td>재구성한 pair pool</td>
-          <td>Pair-id와 content-hash overlap은 없었고, prompt-id overlap은 <code>401/3000</code>, <code>1337/3000</code>이었다.<br><span class="table-note-inline">재구성 pool gap (pp): BFCL <code>3.33</code>; W2C accuracy <code>6.33</code>; W2C macro F1 <code>5.04</code>.</span></td>
-          <td>재구성 1회; prompt는 독립적이지 않음.</td>
-        </tr>
-        <tr>
-          <td>When2Call coverage</td>
-          <td>Labeled row <code>27,952</code>개; direct-answer gold row <code>0</code>개.</td>
-          <td>포함된 decision slice 3종에 한정.</td>
+          <td>호출 판단 중심 구성</td>
+          <td class="align-right"><code>+1.33</code></td>
+          <td class="align-right"><code>+4.86</code></td>
+          <td class="align-right"><code>-5.21</code><br><span class="table-note-inline">[-11.46, 0.00]</span></td>
         </tr>
       </tbody>
     </table>
   </div>
-  <figcaption><strong>Table 4.</strong> Robustness 검사와 각 결과가 지지하는 범위.</figcaption>
+  <figcaption><strong>Appendix Table 1.</strong> 기록된 50-step DPO 점수에서 SFT 점수를 뺀 차이(pp). 대괄호는 공개된 IFEval prompt-strict bootstrap 95% 신뢰구간이다. 양수는 더 높은 점수다. 생성 길이 조건이 일치하지 않아 학습만의 효과로 귀속할 수 없다.</figcaption>
 </figure>
 
-## 해석
+지원되는 지시가 있는 IFEval `96`문항 중 SFT는 `61`개, 구조 중심 구성은 `55`개, 판단 중심 구성은 `56`개를 통과했다. SFT에서 실패했지만 DPO에서 통과한 문항은 구조 중심 1개, 판단 중심 1개였다. SFT에서 통과했지만 DPO에서 실패한 문항은 구조 중심 7개, 판단 중심 6개였다. 문항 ID·hash·지원 지시 수는 일치했다. 이는 생성 조건이 일치하지 않는 평가의 채점 상태 변화이며, bootstrap 구간이 이 교란을 없애 주지는 않는다.
 
-Tool-use DPO는 모든 평가 축을 일관되게 개선하지 않았다. Function-call structure 중심 recipe는 function-call correctness에서, call-decision 중심 recipe는 평가에 포함된 call-decision slice에서 더 큰 변화를 보였다. Semantic quality gate는 일반적인 downstream gain을 지지하지 않았고, 50:50 mixed-source recipe도 두 specialist의 intended metric과 더 나은 guardrail 결과를 동시에 달성하지 못했다. Longer training은 function-call recipe의 intended gain을 줄이고 IFEval regression을 키웠으며, call-decision recipe에서는 같은 방향의 point estimate가 더 큰 불확실성과 함께 관찰됐다.
+## 공개 산출물
 
-이 결과는 새로운 reporting framework를 입증하지 않는다. 다만 단일 metric이나 final checkpoint만으로는 recipe specialization, guardrail regression, sampling 범위가 가려질 수 있음을 보여준다. Recipe–Checkpoint Profile은 여기서 새로운 기여가 아니라 reporting implication으로 사용한다. 고정 예산, recipe, checkpoint, intended·guardrail metric, seed, pair-sampling 범위, overlap 결과를 함께 명시하는 방식이다.
+{% include model-mention-cards.html label="GitHub 저장소" aria_label="Tool-use DPO 고정 예산 보고서 GitHub 저장소" models="Artifact release|muted-color/tool-use-dpo-fixed-budget-report|https://github.com/muted-color/tool-use-dpo-fixed-budget-report" %}
 
-## 한계
+{% include model-mention-cards.html label="논문" aria_label="Tool-use DPO 고정 예산 보고서 논문 PDF" models="Paper PDF|paper.pdf|https://github.com/muted-color/tool-use-dpo-fixed-budget-report/blob/main/paper.pdf" %}
 
-DPO training pair는 recipe별 source distribution과 prompt를 서로 일치시키지 않았다. Call-decision 중심 recipe에서는 When2Call 계열의 data source와 evaluation family가 분리되지 않는다. 따라서 evaluation-axis pattern은 negative failure type 자체의 인과 효과나 어느 데이터 소스의 quality가 더 높은지를 보여 주는 결과가 아니라 고정 예산 recipe 비교다.
-
-고정 예산 조건에도 한계가 있다. Pair 수, optimizer step, DPO recipe, reference checkpoint는 고정했지만 token 수와 source distribution은 동일하지 않았다. 모든 DPO 결과는 하나의 Qwen3-8B SFT reference, 하나의 QLoRA DPO recipe, 하나의 pair/step 예산에서 나왔다 <a class="citation-ref" href="#ref-lora" aria-label="참고문헌 7">[7]</a> <a class="citation-ref" href="#ref-qlora" aria-label="참고문헌 8">[8]</a>. Mixed-source condition도 자체 seed 또는 reconstructed-pool replicate가 없는 단일 run이다.
-
-IFEval slice는 guardrail diagnostic으로 해석해야 한다. Bootstrap interval은 평가 표본의 불확실성을 다루지만, training stochasticity, data sampling, benchmark construction에서 오는 모든 불확실성을 포함하지는 않는다.
+고정 버전의 보고서에는 집계 표, 문항별 채점 행, 평가 manifest, bootstrap 결과가 포함된다 <a class="citation-ref" href="#ref-artifact-release" aria-label="참고문헌 3">[3]</a>. Figure 1과 행동 라벨 수는 그 공개 행을 추가로 분석한 결과다. 공개 자료로 점수 수준의 검증은 가능하지만, 원래 질문과 생성 답변은 포함되지 않는다.
 
 ## References
 
@@ -294,7 +348,7 @@ IFEval slice는 guardrail diagnostic으로 해석해야 한다. Bootstrap interv
 Text citation:
 
 ```text
-Ilho Ahn, "전문화된 Tool-Use DPO Recipe의 고정 예산 비교", Mini Research, June 27, 2026.
+Ilho Ahn, "고정 예산 Tool-Use DPO: 호출 정확도와 추가 질문 판단", Mini Research, June 27, 2026.
 ```
 
 BibTeX:
@@ -302,7 +356,7 @@ BibTeX:
 ```bibtex
 @article{ahn2026toolusedporeportingprofile,
   author = {Ilho Ahn},
-  title = {전문화된 Tool-Use DPO Recipe의 고정 예산 비교},
+  title = {고정 예산 Tool-Use DPO: 호출 정확도와 추가 질문 판단},
   journal = {Mini Research},
   year = {2026},
   month = jun,

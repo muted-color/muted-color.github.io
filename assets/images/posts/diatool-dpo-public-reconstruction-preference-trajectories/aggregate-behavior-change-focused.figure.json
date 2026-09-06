@@ -41,5 +41,10 @@
         "paper": [1.40, -2.80, 27.80, 8.70]
       }
     }
-  ]
+  ],
+  "typography": {
+    "figure_title_weight": 700,
+    "ordinary_text_weight": 400,
+    "implementation": "Custom SVG text weights follow editorial-systems-figure style tokens; existing measured geometry is unchanged."
+  }
 }

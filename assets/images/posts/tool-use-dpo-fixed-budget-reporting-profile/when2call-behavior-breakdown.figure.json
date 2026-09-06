@@ -1,0 +1,128 @@
+{
+  "layout": "grouped_bar",
+  "title": "When2Call: correct behavior labels",
+  "description": "Correct behavior-label predictions among 100 prompts per gold class in the original quality-gated step-50 comparison. Function-call structure: tool call 94, follow-up 32, unable to answer 66. Call decision: tool call 88, follow-up 57, unable to answer 64. Label equality excludes function and argument exact-match requirements. These are two DPO recipes, not a before-and-after comparison.",
+  "scale": "measured",
+  "palette": "editorial",
+  "canvas_height": 635,
+  "y_label": "Correct labels / 100 prompts",
+  "y_min": 0,
+  "y_max": 100,
+  "y_ticks": [
+    0,
+    25,
+    50,
+    75,
+    100
+  ],
+  "value_decimals": 0,
+  "categories": [
+    {
+      "id": "tool_call",
+      "label": "Tool call"
+    },
+    {
+      "id": "follow_up",
+      "label": "Follow-up"
+    },
+    {
+      "id": "unable",
+      "label": "Unable to answer"
+    }
+  ],
+  "series": [
+    {
+      "id": "structure",
+      "label": "Structure-focused",
+      "pattern": "hatch"
+    },
+    {
+      "id": "decision",
+      "label": "Decision-focused"
+    }
+  ],
+  "values": [
+    {
+      "category": "tool_call",
+      "series": "structure",
+      "value": 94
+    },
+    {
+      "category": "follow_up",
+      "series": "structure",
+      "value": 32
+    },
+    {
+      "category": "unable",
+      "series": "structure",
+      "value": 66
+    },
+    {
+      "category": "tool_call",
+      "series": "decision",
+      "value": 88
+    },
+    {
+      "category": "follow_up",
+      "series": "decision",
+      "value": 57
+    },
+    {
+      "category": "unable",
+      "series": "decision",
+      "value": 64
+    }
+  ],
+  "evidence": {
+    "source_commit": "3f4799ed830e6807d50f0e4b1457b346b2bbe37a",
+    "sources": [
+      {
+        "series": "structure",
+        "url": "https://github.com/muted-color/tool-use-dpo-fixed-budget-report/blob/3f4799ed830e6807d50f0e4b1457b346b2bbe37a/results/per_example/primary/r028_step50.csv"
+      },
+      {
+        "series": "decision",
+        "url": "https://github.com/muted-color/tool-use-dpo-fixed-budget-report/blob/3f4799ed830e6807d50f0e4b1457b346b2bbe37a/results/per_example/primary/r029_step50.csv"
+      }
+    ],
+    "filter": "benchmark == When2Call",
+    "group_by": "expected_behavior",
+    "correct_if": "expected_behavior == observed_behavior",
+    "class_size": 100
+  },
+  "rendering": {
+    "wrapper": "when2call-behavior-breakdown.py",
+    "body_font_size": 26,
+    "target_display_width": 328,
+    "purpose": "Compact 780px canvas keeps labels at least 10px at the narrow article image width."
+  },
+  "layout_geometry": {
+    "canvas": [
+      780,
+      635
+    ],
+    "plot_bounds": [
+      100,
+      210,
+      760,
+      510
+    ],
+    "shared_anchors": {
+      "title_x": 72,
+      "plot_x": 100,
+      "axis_y": 510
+    },
+    "legend_x": [
+      72,
+      420
+    ],
+    "grid_policy": "axes-and-zero-only",
+    "actual_display_width": 328,
+    "category_label_wrap": {
+      "unable": [
+        "Unable to",
+        "answer"
+      ]
+    }
+  }
+}

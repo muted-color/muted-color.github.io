@@ -26,6 +26,10 @@ exclude:
   - AGENTS.md
   - README.md
   - SEO.md
+  - WORKFLOW.md
+  - .agents
+  - .codex
+  - .github
   - Gemfile
   - Gemfile.lock
   - scripts

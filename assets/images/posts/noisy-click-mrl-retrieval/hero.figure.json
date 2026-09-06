@@ -1,0 +1,53 @@
+{
+  "layout": "custom_score_storage_scatter",
+  "title": "MRL quality–storage trade-off",
+  "description": "KO 100-query union-pool MAP@10 is 0.9430 at 768 dimensions and 0.9381 at 256 dimensions. For one million fp16 vectors, storage decreases from 1536 MB to 512 MB, or one third. Vector storage excludes index overhead; encoder output remains 768-dimensional. Local MAP@10 axis 0.930–0.950. No uncertainty interval supplied.",
+  "scale": "measured",
+  "palette": "editorial",
+  "source": "technical-reports/noisy-click-mrl-retrieval.md, Table 3",
+  "x_domain": [
+    0,
+    1800
+  ],
+  "y_domain": [
+    0.93,
+    0.95
+  ],
+  "points": [
+    {
+      "dimension": 768,
+      "storage_mb": 1536,
+      "map_at_10": 0.943
+    },
+    {
+      "dimension": 256,
+      "storage_mb": 512,
+      "map_at_10": 0.9381
+    }
+  ],
+  "layout_geometry": {
+    "canvas": [
+      1200,
+      620
+    ],
+    "outer_x": [
+      90,
+      1110
+    ],
+    "shared_anchors": {
+      "title_x": 90,
+      "plot_x": 190,
+      "axis_y": 485
+    },
+    "plot_bounds": [
+      190,
+      150,
+      1040,
+      485
+    ],
+    "grid_policy": "axes-only",
+    "actual_display_width": 600
+  },
+  "regeneration": "python -c \"import json; s=json.load(open('assets/images/posts/noisy-click-mrl-retrieval/hero.figure.json')); exec(s['generator_python'])\"",
+  "generator_python": "from pathlib import Path\nfrom html import escape\nx0,x1,y0,y1=190,1040,150,485\nsx=lambda x:x0+x/1800*(x1-x0)\nsy=lambda y:y1-(y-.93)/.02*(y1-y0)\na=['<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1200\" height=\"620\" viewBox=\"0 0 1200 620\" role=\"img\" aria-labelledby=\"title desc\">', '<title id=\"title\">'+escape(s['title'])+'</title>', '<desc id=\"desc\">'+escape(s['description'])+'</desc>', '<rect width=\"1200\" height=\"620\" fill=\"#FFFFFF\"/>', '<g font-family=\"Arial, sans-serif\" fill=\"#11120F\" font-weight=\"400\">']\ndef text(x,y,t,size=20,cls='',anchor='start',fill='#11120F',weight=400):\n a.append(f'<text x=\"{x:.2f}\" y=\"{y:.2f}\" font-size=\"{size}\" class=\"{cls}\" text-anchor=\"{anchor}\" fill=\"{fill}\" font-weight=\"{weight}\">{escape(t)}</text>')\ntext(90,64,s['title'],24,'figure-title',weight=700)\ntext(190,119,'Union-pool MAP@10 · KO 100 queries',22,'panel-title')\na.append(f'<line x1=\"{x0}\" y1=\"{y1}\" x2=\"{x1}\" y2=\"{y1}\" stroke=\"#B8BBB5\" stroke-width=\"1.5\" class=\"axis-x\" data-axis-id=\"score\"/>')\na.append(f'<line x1=\"{x0}\" y1=\"{y0}\" x2=\"{x0}\" y2=\"{y1}\" stroke=\"#B8BBB5\" stroke-width=\"1.5\" class=\"axis-y\" data-axis-id=\"score\"/>')\nfor v in [.93,.935,.94,.945,.95]:\n y=sy(v);text(174,y+7,f'{v:.3f}',20,'axis-tick','end','#686B66')\nfor v in [0,512,1024,1536]:\n x=sx(v);text(x,520,f'{v:,}',20,'axis-tick','middle','#686B66')\ntext(615,563,'fp16 vector storage for 1M items (MB)',22,'series-label','middle')\nfor pt in s['points']:\n x,y=sx(pt['storage_mb']),sy(pt['map_at_10']);c='#5E7FD8' if pt['dimension']==256 else '#686B66'\n a.append(f'<circle cx=\"{x:.2f}\" cy=\"{y:.2f}\" r=\"8\" fill=\"{c}\" class=\"data-mark\"/>')\n text(x,y-22,str(pt['dimension'])+'d · '+format(pt['map_at_10'],'.4f'),22,'value-label','middle',c)\na+=['</g>','</svg>']\nPath('assets/images/posts/noisy-click-mrl-retrieval/hero.svg').write_text('\\n'.join(a)+'\\n')\n"
+}
