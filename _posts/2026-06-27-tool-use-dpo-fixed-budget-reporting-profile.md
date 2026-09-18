@@ -354,7 +354,7 @@ The pinned report snapshot provides aggregate tables, prompt-level metric rows, 
 Text citation:
 
 ```text
-Ilho Ahn, "Fixed-Budget Tool-Use DPO: Call Correctness and Follow-Up Decisions", Mini Research, June 27, 2026.
+Ilho Ahn, "Fixed-Budget Tool-Use DPO: Call Correctness and Follow-Up Decisions", Ilho’s Notes, June 27, 2026.
 ```
 
 BibTeX:
@@ -363,7 +363,7 @@ BibTeX:
 @article{ahn2026toolusedporeportingprofile,
   author = {Ilho Ahn},
   title = {Fixed-Budget Tool-Use DPO: Call Correctness and Follow-Up Decisions},
-  journal = {Mini Research},
+  journal = {Ilho’s Notes},
   year = {2026},
   month = jun,
   url = {https://muted-color.github.io/research/2026/06/27/tool-use-dpo-fixed-budget-reporting-profile/}

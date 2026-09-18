@@ -248,7 +248,7 @@ The held-out deltas were small at this endpoint. Aggregate accuracy can remain c
 Text citation:
 
 ```text
-Ilho Ahn, "DPO Preference Packing: Dense Masks and Sparse Execution", Mini Research, June 18, 2026.
+Ilho Ahn, "DPO Preference Packing: Dense Masks and Sparse Execution", Ilho’s Notes, June 18, 2026.
 ```
 
 BibTeX:
@@ -257,7 +257,7 @@ BibTeX:
 @article{ahn2026preferencepackingdpo,
   author = {Ilho Ahn},
   title = {DPO Preference Packing: Dense Masks and Sparse Execution},
-  journal = {Mini Research},
+  journal = {Ilho’s Notes},
   year = {2026},
   month = jun,
   url = {https://muted-color.github.io/research/2026/06/18/preference-packing-dpo-efficiency/}

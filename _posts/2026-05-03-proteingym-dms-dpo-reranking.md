@@ -769,7 +769,7 @@ Assay별 best recipe와 여러 readout을 탐색한 결과이므로 SQSTM의 조
 이 글을 인용할 때는 아래 형식을 사용할 수 있다.
 
 ```text
-Ilho Ahn, "단백질 변이 재정렬에서 DPO의 보완 신호: SQSTM 사례와 대조 실험", Mini Research, May 3, 2026.
+Ilho Ahn, "단백질 변이 재정렬에서 DPO의 보완 신호: SQSTM 사례와 대조 실험", Ilho’s Notes, May 3, 2026.
 ```
 
 또는 BibTeX 형식으로는 다음처럼 적을 수 있다.
@@ -778,7 +778,7 @@ Ilho Ahn, "단백질 변이 재정렬에서 DPO의 보완 신호: SQSTM 사례�
 @article{ahn2026proteingymdmsdpo,
   author = {Ilho Ahn},
   title = {단백질 변이 재정렬에서 DPO의 보완 신호: SQSTM 사례와 대조 실험},
-  journal = {Mini Research},
+  journal = {Ilho’s Notes},
   year = {2026},
   month = may,
   url = {https://muted-color.github.io/research/2026/05/03/proteingym-dms-dpo-reranking/}

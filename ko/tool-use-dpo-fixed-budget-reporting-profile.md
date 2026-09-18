@@ -353,7 +353,7 @@ Appendix Table 2는 체크포인트별 점수와 소스를 혼합한 구성의 �
 Text citation:
 
 ```text
-Ilho Ahn, "고정 예산 Tool-Use DPO: 호출 정확도와 추가 질문 판단", Mini Research, June 27, 2026.
+Ilho Ahn, "고정 예산 Tool-Use DPO: 호출 정확도와 추가 질문 판단", Ilho’s Notes, June 27, 2026.
 ```
 
 BibTeX:
@@ -362,7 +362,7 @@ BibTeX:
 @article{ahn2026toolusedporeportingprofile,
   author = {Ilho Ahn},
   title = {고정 예산 Tool-Use DPO: 호출 정확도와 추가 질문 판단},
-  journal = {Mini Research},
+  journal = {Ilho’s Notes},
   year = {2026},
   month = jun,
   url = {https://muted-color.github.io/research/2026/06/27/tool-use-dpo-fixed-budget-reporting-profile/ko/}

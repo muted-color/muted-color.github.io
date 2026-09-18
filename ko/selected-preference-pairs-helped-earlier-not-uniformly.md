@@ -344,7 +344,7 @@ Epoch 1부터 3까지 training accuracy와 training reward margin의 변화량�
 Text citation:
 
 ```text
-Ilho Ahn, "Alignment Data Map: 공통 평가 쌍의 SimPO 경계 통과 시점과 모델별 차이", Mini Research, September 1, 2026.
+Ilho Ahn, "Alignment Data Map: 공통 평가 쌍의 SimPO 경계 통과 시점과 모델별 차이", Ilho’s Notes, September 1, 2026.
 ```
 
 BibTeX:
@@ -353,7 +353,7 @@ BibTeX:
 @article{ahn2026selectedpreferencepairsearlier,
   author = {Ilho Ahn},
   title = {Alignment Data Map: 공통 평가 쌍의 SimPO 경계 통과 시점과 모델별 차이},
-  journal = {Mini Research},
+  journal = {Ilho’s Notes},
   year = {2026},
   month = sep,
   url = {https://muted-color.github.io/research/2026/09/01/selected-preference-pairs-helped-earlier-not-uniformly/ko/}

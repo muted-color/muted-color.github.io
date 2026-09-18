@@ -398,7 +398,7 @@ Leave-one-assay-out 성격의 점검에서도 raw geometry 추가 차이는 양�
 이 글을 인용할 때는 아래 형식을 사용할 수 있다.
 
 ```text
-Ilho Ahn, "ProteinGym 6-assay에서 WT geometry의 보완 신호와 pLDDT gate 비용", Mini Research, May 9, 2026.
+Ilho Ahn, "ProteinGym 6-assay에서 WT geometry의 보완 신호와 pLDDT gate 비용", Ilho’s Notes, May 9, 2026.
 ```
 
 또는 BibTeX 형식으로는 다음처럼 적을 수 있다.
@@ -407,7 +407,7 @@ Ilho Ahn, "ProteinGym 6-assay에서 WT geometry의 보완 신호와 pLDDT gate �
 @article{ahn2026proteingymaf2plddt,
   author = {Ilho Ahn},
   title = {ProteinGym 6-assay에서 WT geometry의 보완 신호와 pLDDT gate 비용},
-  journal = {Mini Research},
+  journal = {Ilho’s Notes},
   year = {2026},
   month = may,
   url = {https://muted-color.github.io/research/2026/05/09/proteingym-af2-plddt-confidence-audit/}
