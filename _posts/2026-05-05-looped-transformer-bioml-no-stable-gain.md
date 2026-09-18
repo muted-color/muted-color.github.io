@@ -489,7 +489,7 @@ PINDER/contact의 음성 결과는 표본화된 interface-contact 설정에 한�
 이 글을 인용할 때는 아래 형식을 사용할 수 있다.
 
 ```text
-Ilho Ahn, "BioML에서 검증한 Looped Transformer: 안정적 개선으로 이어지지 않은 반복 구조", Mini Research, May 5, 2026.
+Ilho Ahn, "BioML에서 검증한 Looped Transformer: 안정적 개선으로 이어지지 않은 반복 구조", Ilho’s Notes, May 5, 2026.
 ```
 
 또는 BibTeX 형식으로는 다음처럼 적을 수 있다.
@@ -498,7 +498,7 @@ Ilho Ahn, "BioML에서 검증한 Looped Transformer: 안정적 개선으로 이�
 @article{ahn2026loopedtransformerbiomlnostablegain,
   author = {Ilho Ahn},
   title = {BioML에서 검증한 Looped Transformer: 안정적 개선으로 이어지지 않은 반복 구조},
-  journal = {Mini Research},
+  journal = {Ilho’s Notes},
   year = {2026},
   month = may,
   url = {https://muted-color.github.io/research/2026/05/05/looped-transformer-bioml-no-stable-gain/}

@@ -1,6 +1,6 @@
 ---
 layout: home
-title: Mini Research
+title: Ilho’s Notes
 eyebrow_author: true
 ---
 

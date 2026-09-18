@@ -547,7 +547,7 @@ Table 7은 기존 기록에서 `≤4-mutation` 제한 후보로 명명한 집합
 이 글을 인용할 때는 아래 형식을 사용할 수 있다.
 
 ```text
-Ilho Ahn, "TrpB low-label 후보 정렬에서 local prior의 방향성과 mutation count", Mini Research, Apr 19, 2026.
+Ilho Ahn, "TrpB low-label 후보 정렬에서 local prior의 방향성과 mutation count", Ilho’s Notes, Apr 19, 2026.
 ```
 
 또는 BibTeX 형식으로는 다음처럼 적을 수 있다.
@@ -556,7 +556,7 @@ Ilho Ahn, "TrpB low-label 후보 정렬에서 local prior의 방향성과 mutati
 @article{ahn2026trpbmutationsitelocalprior,
   author = {Ilho Ahn},
   title = {TrpB low-label 후보 정렬에서 local prior의 방향성과 mutation count},
-  journal = {Mini Research},
+  journal = {Ilho’s Notes},
   year = {2026},
   month = apr,
   url = {https://muted-color.github.io/research/2026/04/19/trpb-local-fitness-diffusion-prior-reranking/}

@@ -420,7 +420,7 @@ Appendix Table 4의 primary score는 기존 노트에 남아 있는 요약 점�
 이 글을 인용할 때는 아래 형식을 사용할 수 있다.
 
 ```text
-Ilho Ahn, "HSPC low-anchor 분류에서 scGPT 결합의 순위 성능과 calibration", Mini Research, Apr 21, 2026.
+Ilho Ahn, "HSPC low-anchor 분류에서 scGPT 결합의 순위 성능과 calibration", Ilho’s Notes, Apr 21, 2026.
 ```
 
 또는 BibTeX 형식으로는 다음처럼 적을 수 있다.
@@ -429,7 +429,7 @@ Ilho Ahn, "HSPC low-anchor 분류에서 scGPT 결합의 순위 성능과 calibra
 @article{ahn2026hspchierarchylineage,
   author = {Ilho Ahn},
   title = {HSPC low-anchor 분류에서 scGPT 결합의 순위 성능과 calibration},
-  journal = {Mini Research},
+  journal = {Ilho’s Notes},
   year = {2026},
   month = apr,
   url = {https://muted-color.github.io/research/2026/04/21/hspc-hierarchy-benchmark-lineage/}

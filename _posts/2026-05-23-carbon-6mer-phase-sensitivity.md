@@ -380,7 +380,7 @@ Appendix Table 1 summarizes the computations. The public source links identify t
 Text citation:
 
 ```text
-Ilho Ahn, "Carbon-3B: Measuring 6-mer Token Phase Sensitivity", Mini Research, May 23, 2026.
+Ilho Ahn, "Carbon-3B: Measuring 6-mer Token Phase Sensitivity", Ilho’s Notes, May 23, 2026.
 ```
 
 BibTeX:
@@ -391,7 +391,7 @@ BibTeX:
   title = {Carbon-3B: Measuring {6-mer} Token Phase Sensitivity},
   year = {2026},
   month = {May},
-  howpublished = {Mini Research},
+  howpublished = {Ilho’s Notes},
   url = {https://muted-color.github.io/research/2026/05/23/carbon-6mer-phase-sensitivity/}
 }
 ```

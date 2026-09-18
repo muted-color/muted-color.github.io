@@ -590,7 +590,7 @@ ProteinMPNN + ESMFold 평가는 이 edited backbone에 별도로 적용한다. �
 Text citation:
 
 ```text
-Ilho Ahn, "자연 단백질 core 주변의 국소 편집과 구조 복원: 4개 구조 pilot", Mini Research, May 14, 2026.
+Ilho Ahn, "자연 단백질 core 주변의 국소 편집과 구조 복원: 4개 구조 pilot", Ilho’s Notes, May 14, 2026.
 ```
 
 BibTeX:
@@ -601,7 +601,7 @@ BibTeX:
   title = {자연 단백질 core 주변의 국소 편집과 구조 복원: 4개 구조 pilot},
   year = {2026},
   month = {May},
-  howpublished = {Mini Research},
+  howpublished = {Ilho’s Notes},
   url = {https://muted-color.github.io/research/2026/05/14/natural-fold-prior-small-backbone-designability/}
 }
 ```

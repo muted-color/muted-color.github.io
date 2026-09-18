@@ -433,7 +433,7 @@ The core analysis can be rerun from the <a href="https://github.com/muted-color/
 Text citation:
 
 ```text
-Ilho Ahn, "Auditing Structural-Signal Interpretation in OpenBind Prediction Scores", Mini Research, May 10, 2026.
+Ilho Ahn, "Auditing Structural-Signal Interpretation in OpenBind Prediction Scores", Ilho’s Notes, May 10, 2026.
 ```
 
 BibTeX:
@@ -444,7 +444,7 @@ BibTeX:
   title = {Auditing Structural-Signal Interpretation in {OpenBind} Prediction Scores},
   year = {2026},
   month = {May},
-  howpublished = {Mini Research},
+  howpublished = {Ilho’s Notes},
   url = {https://muted-color.github.io/research/2026/05/10/openbind-affinity-baseline-audit/}
 }
 ```

@@ -427,7 +427,7 @@ This difference originally motivated the data diagnostics. It cannot quantify a 
 Text citation:
 
 ```text
-Ilho Ahn, "DiaTool-DPO Reconstruction: Preference Accuracy and Tool-Use Behavior", Mini Research, July 29, 2026.
+Ilho Ahn, "DiaTool-DPO Reconstruction: Preference Accuracy and Tool-Use Behavior", Ilho’s Notes, July 29, 2026.
 ```
 
 BibTeX:
@@ -436,7 +436,7 @@ BibTeX:
 @article{ahn2026diatooldpopublicreconstruction,
   author = {Ilho Ahn},
   title = {DiaTool-DPO Reconstruction: Preference Accuracy and Tool-Use Behavior},
-  journal = {Mini Research},
+  journal = {Ilho’s Notes},
   year = {2026},
   month = jul,
   url = {https://muted-color.github.io/research/2026/07/29/diatool-dpo-public-reconstruction-preference-trajectories/}

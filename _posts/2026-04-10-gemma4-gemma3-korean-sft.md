@@ -771,7 +771,7 @@ Appendix Table 1–3은 기존 노트에 남아 있는 설정이다. 본문에�
 이 글을 인용할 때는 아래 형식을 사용할 수 있다.
 
 ```text
-Ilho Ahn, "Gemma3 4B와 Gemma4 E4B의 한국어 SFT 비교", Mini Research, Apr 2026.
+Ilho Ahn, "Gemma3 4B와 Gemma4 E4B의 한국어 SFT 비교", Ilho’s Notes, Apr 2026.
 ```
 
 또는 BibTeX 형식으로는 다음처럼 적을 수 있다.
@@ -780,7 +780,7 @@ Ilho Ahn, "Gemma3 4B와 Gemma4 E4B의 한국어 SFT 비교", Mini Research, Apr 
 @article{ahn2026gemma3gemma4korean,
   author = {Ilho Ahn},
   title = {Gemma3 4B와 Gemma4 E4B의 한국어 SFT 비교},
-  journal = {Mini Research},
+  journal = {Ilho’s Notes},
   year = {2026},
   month = apr,
   url = {https://muted-color.github.io/research/2026/04/12/gemma3-e4b-korean-sft/}

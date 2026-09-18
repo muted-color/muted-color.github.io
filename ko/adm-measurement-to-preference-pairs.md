@@ -289,7 +289,7 @@ ADM 좌표는 reference answer와 텍스트 처리 방식에 의존하는 상대
 Text citation:
 
 ```text
-Ilho Ahn, "Alignment Data Map: 측정값에서 선호 학습 쌍까지", Mini Research, August 23, 2026.
+Ilho Ahn, "Alignment Data Map: 측정값에서 선호 학습 쌍까지", Ilho’s Notes, August 23, 2026.
 ```
 
 BibTeX:
@@ -298,7 +298,7 @@ BibTeX:
 @article{ahn2026admmeasurementpreferencepairs,
   author = {Ilho Ahn},
   title = {Alignment Data Map: 측정값에서 선호 학습 쌍까지},
-  journal = {Mini Research},
+  journal = {Ilho’s Notes},
   year = {2026},
   month = aug,
   url = {https://muted-color.github.io/research/2026/08/23/adm-measurement-to-preference-pairs/ko/}

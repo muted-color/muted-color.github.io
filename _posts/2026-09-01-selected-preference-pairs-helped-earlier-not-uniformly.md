@@ -346,7 +346,7 @@ Final-state movement uses the pooled initial-state distribution across the three
 Text citation:
 
 ```text
-Ilho Ahn, "Alignment Data Map: Timing of SimPO Boundary Crossings and Model-Specific Differences", Mini Research, September 1, 2026.
+Ilho Ahn, "Alignment Data Map: Timing of SimPO Boundary Crossings and Model-Specific Differences", Ilho’s Notes, September 1, 2026.
 ```
 
 BibTeX:
@@ -355,7 +355,7 @@ BibTeX:
 @article{ahn2026selectedpreferencepairsearlier,
   author = {Ilho Ahn},
   title = {Alignment Data Map: Timing of SimPO Boundary Crossings and Model-Specific Differences},
-  journal = {Mini Research},
+  journal = {Ilho’s Notes},
   year = {2026},
   month = sep,
   url = {https://muted-color.github.io/research/2026/09/01/selected-preference-pairs-helped-earlier-not-uniformly/}

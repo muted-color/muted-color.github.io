@@ -724,7 +724,7 @@ GB1 b192에서 LoRA는 fixed subset training-seed sweep std `0.1093`을 보였�
 이 글을 인용할 때는 아래 형식을 사용할 수 있다.
 
 ```text
-Ilho Ahn, "Low-label Protein Fitness 실험: Frozen ESM2와 LoRA의 label budget 비교", Mini Research, Apr 17, 2026.
+Ilho Ahn, "Low-label Protein Fitness 실험: Frozen ESM2와 LoRA의 label budget 비교", Ilho’s Notes, Apr 17, 2026.
 ```
 
 또는 BibTeX 형식으로는 다음처럼 적을 수 있다.
@@ -733,7 +733,7 @@ Ilho Ahn, "Low-label Protein Fitness 실험: Frozen ESM2와 LoRA의 label budget
 @article{ahn2026frozenesm2lora,
   author = {Ilho Ahn},
   title = {Low-label Protein Fitness 실험: Frozen ESM2와 LoRA의 label budget 비교},
-  journal = {Mini Research},
+  journal = {Ilho’s Notes},
   year = {2026},
   month = apr,
   url = {https://muted-color.github.io/research/2026/04/17/frozen-esm2-lora-low-label-protein-fitness/}

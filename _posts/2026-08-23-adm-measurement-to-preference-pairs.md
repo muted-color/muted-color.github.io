@@ -288,7 +288,7 @@ The follow-up compares HighAvg and Random across multiple seeds under a fixed up
 Text citation:
 
 ```text
-Ilho Ahn, "Alignment Data Map: From Measurements to Preference-Pair Supervision", Mini Research, August 23, 2026.
+Ilho Ahn, "Alignment Data Map: From Measurements to Preference-Pair Supervision", Ilho’s Notes, August 23, 2026.
 ```
 
 BibTeX:
@@ -297,7 +297,7 @@ BibTeX:
 @article{ahn2026admmeasurementpreferencepairs,
   author = {Ilho Ahn},
   title = {Alignment Data Map: From Measurements to Preference-Pair Supervision},
-  journal = {Mini Research},
+  journal = {Ilho’s Notes},
   year = {2026},
   month = aug,
   url = {https://muted-color.github.io/research/2026/08/23/adm-measurement-to-preference-pairs/}

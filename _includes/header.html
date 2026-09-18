@@ -2,7 +2,7 @@
   <div class="wrapper site-header-inner">
     {% unless page.layout == 'home' %}
       <a class="site-title" rel="author" href="{{ '/' | relative_url }}">
-        <span class="site-title-secondary">MINI RESEARCH</span>
+        <span class="site-title-secondary">{{ site.title | escape }}</span>
       </a>
     {% endunless %}
     <nav class="site-nav-lite" aria-label="Primary">
